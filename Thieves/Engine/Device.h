@@ -2,6 +2,7 @@
 
 
 // 인력 사무소
+// gpu에 접근을 하거나 리소스를 요청할 때 device를 이용해 작업
 class Device
 {
 public:
