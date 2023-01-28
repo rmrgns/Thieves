@@ -45,6 +45,18 @@
     <ClCompile Include="ConstantBuffer.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="TableDescriptorHeap.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="DepthStencilBuffer.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -78,6 +90,18 @@
       <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="ConstantBuffer.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="TableDescriptorHeap.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthStencilBuffer.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
       <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>
