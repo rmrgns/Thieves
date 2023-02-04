@@ -37,12 +37,13 @@ const char SC_PACKET_REMOVE_OBJECT = 5;		// 플레이어 제거
 const char SC_PACKET_CHAT = 6;				// 채팅
 const char SC_PACKET_LOGIN_FAIL = 7;		// 로그인 실패
 const char SC_PACKET_TIME = 8;
-const char SC_PACKET_POLICE_ATTACK = 9;	// 경찰 어택
+const char SC_PACKET_POLICE_ATTACK = 9;		// 경찰 어택
 const char SC_PACKET_PLAYER_ATTACK = 10;	// 플레이어 어택
 const char SC_PACKET_WIN = 11;				// win
 const char SC_PACKET_DEFEAT = 12;			// defeat
 const char SC_PACKET_STUN = 13;				// stun
 const char SC_PAKCET_INTERACTION = 14;		// 상호작용
+const char SC_PACKET_PHASE = 15;			// 페이즈 변경  
 
 struct cs_packet_sign_in {};
 struct cs_packet_sign_up {};
