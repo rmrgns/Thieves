@@ -21,7 +21,7 @@ public:
 	void End();
 
 private:
-	std::unique_ptr<PacketManager>m_Packet
+	std::unique_ptr<PacketManager>m_Packet;
 
 };
 

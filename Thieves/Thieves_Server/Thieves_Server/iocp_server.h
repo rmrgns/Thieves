@@ -14,11 +14,16 @@ public:
 	IOCPServer();
 	virtual ~IOCPServer();
 
+	// Server initaiallize
 	bool Init(const int);
+	
+	// Bind Listen
 	bool BindListen(const int);
 
-
+	// accept
 	virtual bool OnAccept(EXP_OVER* exp_over) { return false; };
+	
+	
 	virtual bool OnRecv(int c_id, EXP_OVER* exp_over, DWORD num_bytes) { return true; };
 	virtual void OnEvent(int c_id, EXP_OVER* exp_over) { return; };
 	virtual void Disconnect(int c_id) {}
