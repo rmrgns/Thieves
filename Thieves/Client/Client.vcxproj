@@ -78,14 +78,14 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)Engine\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Output\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Library/Include/;$(SolutionDir)Engine\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Library/Lib/;$(SolutionDir)Output\;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Output\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)Engine\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Output\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Library/Include/;$(SolutionDir)Engine\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Library/Lib/;$(SolutionDir)Output\;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Output\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -128,7 +128,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp14</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -146,7 +146,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp14</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -157,6 +157,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Engine\Timer.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Game.h" />
@@ -165,6 +166,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Engine\Timer.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="pch.cpp">
