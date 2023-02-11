@@ -33,6 +33,7 @@ using namespace Microsoft::WRL;
 #include <DirectXTex/DirectXTex.h>
 #include <DirectXTex/DirectXTex.inl>
 
+#include "FBX/fbxsdk.h"
 
 // 각종 lib
 #pragma comment(lib, "d3d12")
@@ -44,6 +45,16 @@ using namespace Microsoft::WRL;
 #pragma comment(lib, "DirectXTex\\DirectXTex_debug.lib")
 #else
 #pragma comment(lib, "DirectXTex\\DirectXTex.lib")
+#endif
+
+#ifdef _DEBUG
+#pragma comment(lib, "FBX\\debug\\libfbxsdk-md.lib")
+#pragma comment(lib, "FBX\\debug\\libxml2-md.lib")
+#pragma comment(lib, "FBX\\debug\\zlib-md.lib")
+#else
+#pragma comment(lib, "FBX\\release\\libfbxsdk-md.lib")
+#pragma comment(lib, "FBX\\release\\libxml2-md.lib")
+#pragma comment(lib, "FBX\\release\\zlib-md.lib")
 #endif
 
 // 각종 typedef
@@ -60,7 +71,7 @@ using Vec3		= DirectX::SimpleMath::Vector3;
 using Vec4		= DirectX::SimpleMath::Vector4;
 using Matrix	= DirectX::SimpleMath::Matrix;
 
-enum class CBV_REGISTER
+enum class CBV_REGISTER : uint8
 {
 	b0,
 	b1,
@@ -78,8 +89,24 @@ enum class SRV_REGISTER : uint8
 	t2,
 	t3,
 	t4,
+	t5,
+	t6,
+	t7,
+	t8,
+	t9,
 
 	END
+};
+
+enum class UAV_REGISTER : uint8
+{
+	u0 = static_cast<uint8>(SRV_REGISTER::END),
+	u1,
+	u2,
+	u3,
+	u4,
+
+	END,
 };
 
 enum
@@ -87,26 +114,36 @@ enum
 	SWAP_CHAIN_BUFFER_COUNT = 2,
 	CBV_REGISTER_COUNT = CBV_REGISTER::END,
 	SRV_REGISTER_COUNT = static_cast<uint8>(SRV_REGISTER::END) - CBV_REGISTER_COUNT,
-	REGISTER_COUNT = CBV_REGISTER_COUNT + SRV_REGISTER_COUNT,
-
+	CBV_SRV_REGISTER_COUNT = CBV_REGISTER_COUNT + SRV_REGISTER_COUNT,
+	UAV_REGISTER_COUNT = static_cast<uint8>(UAV_REGISTER::END) - CBV_SRV_REGISTER_COUNT,
+	TOTAL_REGISTER_COUNT = CBV_SRV_REGISTER_COUNT + UAV_REGISTER_COUNT
 };
 
 struct WindowInfo
 {
-	HWND	hwnd;		// 출력 윈도우
-	int32	width;		// 너비
-	int32	height;		// 높이
-	bool	windowed;	// 창모드 or 전체화면
+	HWND	hwnd; // 출력 윈도우
+	int32	width; // 너비
+	int32	height; // 높이
+	bool	windowed; // 창모드 or 전체화면
 };
 
 struct Vertex
 {
+	Vertex() {}
+
+	Vertex(Vec3 p, Vec2 u, Vec3 n, Vec3 t)
+		: pos(p), uv(u), normal(n), tangent(t)
+	{
+	}
+
 	Vec3 pos;
-	Vec4 color;
 	Vec2 uv;
+	Vec3 normal;
+	Vec3 tangent;
+	Vec4 weights;
+	Vec4 indices;
 };
 
-// 싱글톤패턴 생성
 #define DECLARE_SINGLE(type)		\
 private:							\
 	type() {}						\
@@ -121,9 +158,12 @@ public:								\
 #define GET_SINGLE(type)	type::GetInstance()
 
 #define DEVICE				GEngine->GetDevice()->GetDevice()
-#define CMD_LIST			GEngine->GetCmdQueue()->GetCmdList()
-#define RESOURCE_CMD_LIST	GEngine->GetCmdQueue()->GetResourceCmdList()
-#define ROOT_SIGNATURE		GEngine->GetRootSignature()->GetSignature()
+#define GRAPHICS_CMD_LIST	GEngine->GetGraphicsCmdQueue()->GetGraphicsCmdList()
+#define RESOURCE_CMD_LIST	GEngine->GetGraphicsCmdQueue()->GetResourceCmdList()
+#define COMPUTE_CMD_LIST	GEngine->GetComputeCmdQueue()->GetComputeCmdList()
+
+#define GRAPHICS_ROOT_SIGNATURE		GEngine->GetRootSignature()->GetGraphicsRootSignature()
+#define COMPUTE_ROOT_SIGNATURE		GEngine->GetRootSignature()->GetComputeRootSignature()
 
 #define INPUT				GET_SINGLE(Input)
 #define DELTA_TIME			GET_SINGLE(Timer)->GetDeltaTime()
@@ -132,7 +172,16 @@ public:								\
 
 struct TransformParams
 {
+	Matrix matWorld;
+	Matrix matView;
+	Matrix matProjection;
+	Matrix matWV;
 	Matrix matWVP;
+	Matrix matViewInv;
 };
 
 extern unique_ptr<class Engine> GEngine;
+
+// Utils
+wstring s2ws(const string& s);
+string ws2s(const wstring& s);
