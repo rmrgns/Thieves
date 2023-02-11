@@ -1,4 +1,5 @@
 #pragma once
+#include "Object.h"
 
 // 컴포넌트 종류
 // MONO_BEHAVIOUR가 항상 마지막에 나와야함
@@ -8,6 +9,7 @@ enum class COMPONENT_TYPE : uint8
 	TRANSFORM,
 	MESH_RENDERER,
 	CAMERA,
+	LIGHT,
 	// ...
 	MONO_BEHAVIOUR,
 	END,
@@ -21,7 +23,7 @@ enum
 class GameObject;
 class Transform;
 
-class Component
+class Component : public Object
 {
 public:
 	Component(COMPONENT_TYPE type);

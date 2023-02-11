@@ -20,7 +20,7 @@
 // - Double Buffering!
 
 // - [0] [1]
-// 현재 화면 [1]  <-> GPU 작업중 [1] BackBuffer
+// 현재 화면 [0]  <-> GPU 작업중 [1] BackBuffer
 
 class SwapChain
 {
@@ -30,22 +30,13 @@ public:
 	void SwapIndex();
 
 	ComPtr<IDXGISwapChain> GetSwapChain() { return _swapChain; }
-	ComPtr<ID3D12Resource> GetRenderTarget(int32 index) { return _rtvBuffer[index]; }
-
-	ComPtr<ID3D12Resource> GetBackRTVBuffer() { return _rtvBuffer[_backBufferIndex]; }
-	D3D12_CPU_DESCRIPTOR_HANDLE GetBackRTV() { return _rtvHandle[_backBufferIndex]; }
+	uint8 GetBackBufferIndex() { return _backBufferIndex; }
 
 private:
 	void CreateSwapChain(const WindowInfo& info, ComPtr<IDXGIFactory> dxgi, ComPtr<ID3D12CommandQueue> cmdQueue);
-	void CreateRTV(ComPtr<ID3D12Device> device);
 
 private:
 	ComPtr<IDXGISwapChain>	_swapChain;
-
-	ComPtr<ID3D12Resource>			_rtvBuffer[SWAP_CHAIN_BUFFER_COUNT];
-	ComPtr<ID3D12DescriptorHeap>	_rtvHeap;
-	D3D12_CPU_DESCRIPTOR_HANDLE		_rtvHandle[SWAP_CHAIN_BUFFER_COUNT];
-
 	uint32					_backBufferIndex = 0;
 };
 
