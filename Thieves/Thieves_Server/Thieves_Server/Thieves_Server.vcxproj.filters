@@ -36,6 +36,9 @@
     <ClCompile Include="ingame_server.cpp">
       <Filter>소스 파일\ingame_server</Filter>
     </ClCompile>
+    <ClCompile Include="db.cpp">
+      <Filter>소스 파일\db</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header.h">
@@ -55,6 +58,9 @@
     </ClInclude>
     <ClInclude Include="define.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="db.h">
+      <Filter>소스 파일\db</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
