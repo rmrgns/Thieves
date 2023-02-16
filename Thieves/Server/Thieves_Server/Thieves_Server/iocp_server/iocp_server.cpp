@@ -1,3 +1,6 @@
+// IOCP서버
+// 클라연결 연결, 이후 클라와 송수신 작업
+
 #include "header.h"
 #include "iocp_server.h"
 using namespace std;
@@ -10,6 +13,7 @@ IOCPServer::~IOCPServer()
 	WSACleanup();
 }
 
+// 윈도우소켓 초기화, 소켓 생성
 bool IOCPServer::Init(const int worker_num)
 {
 	WSADATA WSAData;
@@ -25,6 +29,7 @@ bool IOCPServer::Init(const int worker_num)
 	return true;
 }
 
+// 생성한 소켓 바인딩 후 LISTEN, IOCP포트 생성 및 클라이언트 연결대기
 bool IOCPServer::BindListen(const int port_num)
 {
 	SOCKADDR_IN server_addr;
@@ -51,8 +56,8 @@ bool IOCPServer::BindListen(const int port_num)
 	SOCKET c_socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED);
 	char	accept_buf[sizeof(SOCKADDR_IN) * 2 + 32 + 100];
 
-	*(reinterpret_cast<SOCKET*>(&accept_ex._net_buf)) = c_socket;
 	ZeroMemory(&accept_ex._wsa_over, sizeof(accept_ex._wsa_over));
+	*(reinterpret_cast<SOCKET*>(&accept_ex._net_buf)) = c_socket;
 	accept_ex._comp_op = COMP_OP::OP_ACCEPT;
 
 	AcceptEx(m_s_socket, c_socket, accept_buf, 0, sizeof(SOCKADDR_IN) + 16,
@@ -61,15 +66,18 @@ bool IOCPServer::BindListen(const int port_num)
 	return true;
 }
 
+// IOCP 작업자 쓰레드 생성
 void IOCPServer::CreateWorker()
 {
 	for (int i = 0; i < m_worker_num; ++i)
 		m_worker_threads.emplace_back([this]() {Worker(); });
 }
 
+// IOCP 쓰레드
 void IOCPServer::Worker()
 {
 	for (;;) {
+		// iocp 대기중인 작업
 		DWORD num_byte;
 		LONG64 iocp_key;
 		WSAOVERLAPPED* p_over;
@@ -130,6 +138,7 @@ void IOCPServer::error_display(int err_no)
 	LocalFree(lpMsgBuf);
 }
 
+// IOCP 쓰레드 생성
 bool IOCPServer::StartServer()
 {
 	CreateWorker();
@@ -137,6 +146,7 @@ bool IOCPServer::StartServer()
 	return true;
 }
 
+// 쓰레드 종료
 void IOCPServer::JoinThread()
 {
 	for (auto& th : m_worker_threads)
