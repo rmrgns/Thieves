@@ -16,25 +16,34 @@
     <Filter Include="소스 파일\iocp_server">
       <UniqueIdentifier>{9d5895af-0027-4044-9577-7bfe03456fab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\ingame_server">
-      <UniqueIdentifier>{42b7af90-58bf-448d-ac5c-ac2080bdd7a3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\lua_fucntion">
       <UniqueIdentifier>{e48cfdc6-5939-4d52-8368-c9eb08740edd}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\db">
       <UniqueIdentifier>{4abb6732-5d64-4c2f-ab70-cd9e26f4bf38}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\packet_manager">
+      <UniqueIdentifier>{3b22e8ac-8753-4a61-b600-89ce72c3b991}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\ingame_server">
+      <UniqueIdentifier>{42b7af90-58bf-448d-ac5c-ac2080bdd7a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="iocp_server.cpp">
+    <ClCompile Include="game_server\packet_manager.cpp">
+      <Filter>소스 파일\packet_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="iocp_server\iocp_server.cpp">
       <Filter>소스 파일\iocp_server</Filter>
     </ClCompile>
-    <ClCompile Include="ingame_server.cpp">
+    <ClCompile Include="game_server\ingame_server.cpp">
       <Filter>소스 파일\ingame_server</Filter>
+    </ClCompile>
+    <ClCompile Include="database\db.cpp">
+      <Filter>소스 파일\db</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -47,14 +56,20 @@
     <ClInclude Include="state.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="iocp_server.h">
-      <Filter>소스 파일\iocp_server</Filter>
-    </ClInclude>
-    <ClInclude Include="ingame_server.h">
-      <Filter>소스 파일\ingame_server</Filter>
-    </ClInclude>
     <ClInclude Include="define.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="game_server\packet_manager.h">
+      <Filter>소스 파일\packet_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="iocp_server\iocp_server.h">
+      <Filter>소스 파일\iocp_server</Filter>
+    </ClInclude>
+    <ClInclude Include="game_server\ingame_server.h">
+      <Filter>소스 파일\ingame_server</Filter>
+    </ClInclude>
+    <ClInclude Include="database\db.h">
+      <Filter>소스 파일\db</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

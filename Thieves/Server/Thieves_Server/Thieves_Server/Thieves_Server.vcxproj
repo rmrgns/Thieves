@@ -70,6 +70,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>C:\Users\doyou\Desktop\Thieves\Thieves\Server\Thieves_Server\Thieves_Server;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>C:\Users\doyou\Desktop\Thieves\Thieves\Server\Thieves_Server\Thieves_Server;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -104,10 +110,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\doyou\Desktop\Thieves\Thieves\Thieves_Server\Thieves_Server\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Users\doyou\Desktop\Thieves\Thieves\Thieves_Server\Thieves_Server\include</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -124,19 +132,24 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Users\doyou\Desktop\Thieves\Thieves\Thieves_Server\Thieves_Server\include</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ingame_server.cpp" />
-    <ClCompile Include="iocp_server.cpp" />
+    <ClCompile Include="database\db.cpp" />
+    <ClCompile Include="game_server\ingame_server.cpp" />
+    <ClCompile Include="game_server\packet_manager.cpp" />
+    <ClCompile Include="iocp_server\iocp_server.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="database\db.h" />
     <ClInclude Include="define.h" />
+    <ClInclude Include="game_server\ingame_server.h" />
+    <ClInclude Include="game_server\packet_manager.h" />
+    <ClInclude Include="iocp_server\iocp_server.h" />
     <ClInclude Include="state.h" />
     <ClInclude Include="header.h" />
-    <ClInclude Include="ingame_server.h" />
-    <ClInclude Include="iocp_server.h" />
     <ClInclude Include="protocol.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

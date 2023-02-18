@@ -1,6 +1,6 @@
 #pragma once
 
-const short PORT_NUM = 9000;
+const short SERVER_PORT = 7777;
 
 // ¸Ê Å©±â
 

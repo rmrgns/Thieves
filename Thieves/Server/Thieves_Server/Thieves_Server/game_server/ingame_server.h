@@ -1,5 +1,5 @@
 #pragma once
-#include "iocp_server.h"
+#include "iocp_server/iocp_server.h"
 
 class PacketManager;
 class InGameServer :
@@ -16,12 +16,12 @@ public:
 
 	// Timer 부분 함수 한번 다시 봐봐야 겠음
 	void CreateTimer();
-	void Dotimer(HANDLE hiocp);
+	void DoTimer(HANDLE hiocp);
 	void Run();
 	void End();
 
 private:
-	std::unique_ptr<PacketManager>m_Packet;
+	std::unique_ptr<PacketManager>m_PacketManager;
 
 };
 
