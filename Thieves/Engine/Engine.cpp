@@ -7,6 +7,7 @@
 #include "SceneManager.h"
 #include "Light.h"
 #include "Resources.h"
+#include "InstancingManager.h"
 
 void Engine::Init(const WindowInfo& info)
 {
@@ -17,10 +18,12 @@ void Engine::Init(const WindowInfo& info)
 	_scissorRect = CD3DX12_RECT(0, 0, info.width, info.height);
 
 	_device->Init();
-	_cmdQueue->Init(_device->GetDevice(), _swapChain);
-	_swapChain->Init(info, _device->GetDevice(), _device->GetDXGI(), _cmdQueue->GetCmdQueue());
+	_graphicscmdQueue->Init(_device->GetDevice(), _swapChain);
+	_computeCmdQueue->Init(_device->GetDevice());
+	_swapChain->Init(info, _device->GetDevice(), _device->GetDXGI(), _graphicscmdQueue->GetCmdQueue());
 	_rootSignature->Init();
-	_tableDescHeap->Init(256);
+	_graphicsDescHeap->Init(256);
+	_computeDescHeap->Init();
 
 	CreateConstantBuffer(CBV_REGISTER::b0, sizeof(LightParams), 1);
 	CreateConstantBuffer(CBV_REGISTER::b1, sizeof(TransformParams), 256);
@@ -40,6 +43,7 @@ void Engine::Update()
 	GET_SINGLE(Input)->Update();
 	GET_SINGLE(Timer)->Update();
 	GET_SINGLE(SceneManager)->Update();
+	GET_SINGLE(InstancingManager)->ClearBuffer();
 
 	Render();
 
@@ -57,12 +61,12 @@ void Engine::Render()
 
 void Engine::RenderBegin()
 {
-	_cmdQueue->RenderBegin(&_viewport, &_scissorRect);
+	_graphicscmdQueue->RenderBegin();
 }
 
 void Engine::RenderEnd()
 {
-	_cmdQueue->RenderEnd();
+	_graphicscmdQueue->RenderEnd();
 }
 
 void Engine::ResizeWindow(int32 width, int32 height)
@@ -118,6 +122,24 @@ void Engine::CreateRenderTargetGroups()
 
 		_rtGroups[static_cast<uint8>(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)] = make_shared<RenderTargetGroup>();
 		_rtGroups[static_cast<uint8>(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)]->Create(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN, rtVec, dsTexture);
+	}
+	
+	// Shadow Group
+	{
+		vector<RenderTarget> rtVec(RENDER_TARGET_SHADOW_GROUP_MEMBER_COUNT);
+
+		rtVec[0].target = GET_SINGLE(Resources)->CreateTexture(L"ShadowTarget",
+			DXGI_FORMAT_R32_FLOAT, 4096, 4096,
+			CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+			D3D12_HEAP_FLAG_NONE, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
+
+		shared_ptr<Texture> shadowDepthTexture = GET_SINGLE(Resources)->CreateTexture(L"ShadowDepthStencil",
+			DXGI_FORMAT_D32_FLOAT, 4096, 4096,
+			CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+			D3D12_HEAP_FLAG_NONE, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
+
+		_rtGroups[static_cast<uint8>(RENDER_TARGET_GROUP_TYPE::SHADOW)] = make_shared<RenderTargetGroup>();
+		_rtGroups[static_cast<uint8>(RENDER_TARGET_GROUP_TYPE::SHADOW)]->Create(RENDER_TARGET_GROUP_TYPE::SHADOW, rtVec, shadowDepthTexture);
 	}
 
 	// Deferred Group

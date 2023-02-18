@@ -7,15 +7,15 @@ class MeshRenderer;
 class Camera;
 class Light;
 class MonoBehaviour;
-
+class ParticleSystem;
+class Terrain;
+class BaseCollider;
 
 class GameObject : public Object, public enable_shared_from_this<GameObject>
 {
 public:
 	GameObject();
 	virtual ~GameObject();
-
-	void Init();
 
 	void Awake();
 	void Start();
@@ -29,6 +29,9 @@ public:
 	shared_ptr<MeshRenderer> GetMeshRenderer();
 	shared_ptr<Camera> GetCamera();
 	shared_ptr<Light> GetLight();
+	shared_ptr<ParticleSystem> GetParticleSystem();
+	shared_ptr<Terrain> GetTerrain();
+	shared_ptr<BaseCollider> GetCollider();
 
 	void AddComponent(shared_ptr<Component> component);
 
@@ -38,11 +41,15 @@ public:
 	void SetLayerIndex(uint8 layer) { _layerIndex = layer; }
 	uint8 GetLayerIndex() { return _layerIndex; }
 
+	void SetStatic(bool flag) { _static = flag; }
+	bool IsStatic() { return _static; }
+
 private:
 	array<shared_ptr<Component>, FIXED_COMPONENT_COUNT> _components;
 	vector<shared_ptr<MonoBehaviour>> _scripts;
 
 	bool _checkFrustum = true;
 	uint8 _layerIndex = 0;
+	bool _static = true;
 };
 

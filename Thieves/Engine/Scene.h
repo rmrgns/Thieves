@@ -12,9 +12,18 @@ public:
 	void LateUpdate();
 	void FinalUpdate();
 
+	shared_ptr<class Camera> GetMainCamera();
+
 	void Render();
+
+	void ClearRTV();
+
+	void RenderShadow();
+	void RenderDeferred();
 	void RenderLights();
 	void RenderFinal();
+
+	void RenderForward();
 
 private:
 	void PushLightData();

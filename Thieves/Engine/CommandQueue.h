@@ -3,23 +3,26 @@
 class SwapChain;
 class DescriptorHeap;
 
-// 커맨드 패턴에 사용하는 큐
-class CommandQueue
+// ************************
+// GraphicsCommandQueue
+// ************************
+
+class GraphicsCommandQueue
 {
 public:
-	~CommandQueue();
+	~GraphicsCommandQueue();
 
 	void Init(ComPtr<ID3D12Device> device, shared_ptr<SwapChain> swapChain);
 	void WaitSync();
 
-	void RenderBegin(const D3D12_VIEWPORT* vp, const D3D12_RECT* rect);
+	void RenderBegin();
 	void RenderEnd();
 
 	void FlushResourceCommandQueue();
 
-	ComPtr<ID3D12CommandQueue> GetCmdQueue() { return _cmdQueue; }
-	ComPtr<ID3D12GraphicsCommandList> GetCmdList() { return _cmdList; }
-	ComPtr<ID3D12GraphicsCommandList> GetResourceCmdList() { return	_resCmdList; }
+	ComPtr<ID3D12CommandQueue>			GetCmdQueue()			{ return _cmdQueue; }
+	ComPtr<ID3D12GraphicsCommandList>	GetGraphicsCmdList()	{ return _cmdList; }
+	ComPtr<ID3D12GraphicsCommandList>	GetResourceCmdList()	{ return _resCmdList; }
 
 private:
 	// CommandQueue : DX12에 등장
@@ -42,3 +45,28 @@ private:
 	
 };
 
+// ************************
+// ComputeCommandQueue
+// ************************
+
+class ComputeCommandQueue
+{
+public:
+	~ComputeCommandQueue();
+
+	void Init(ComPtr<ID3D12Device> device);
+	void WaitSync();
+	void FlushComputeCommandQueue();
+
+	ComPtr<ID3D12CommandQueue>			GetCmdQueue()		{ return _cmdQueue; }
+	ComPtr<ID3D12GraphicsCommandList>	GetComputeCmdList() { return _cmdList; }
+
+private:
+	ComPtr<ID3D12CommandQueue>			_cmdQueue;
+	ComPtr<ID3D12CommandAllocator>		_cmdAlloc;
+	ComPtr<ID3D12GraphicsCommandList>	_cmdList;
+
+	ComPtr<ID3D12Fence>					_fence;
+	uint32								_fenceValue = 0;
+	HANDLE								_fenceEvent = INVALID_HANDLE_VALUE;
+};
