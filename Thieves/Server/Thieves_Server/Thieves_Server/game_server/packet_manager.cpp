@@ -81,10 +81,12 @@ void PacketManager::CreateDBThread()
 {
 }
 
+// 비동기로 DB작업을 실행하는 Thread
 void PacketManager::DBThread()
 {
 }
 
+// case에 따른 DB 로그인 가입을 판단하는 함수
 void PacketManager::ProcessDBTask(db_task& dt)
 {
 }

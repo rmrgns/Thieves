@@ -125,6 +125,7 @@ void IOCPServer::Worker()
 
 }
 
+// 에러확인
 void IOCPServer::error_display(int err_no)
 {
 	WCHAR* lpMsgBuf;

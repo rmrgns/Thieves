@@ -56,8 +56,6 @@ bool DB::Init()
 	return true;
 }
 
-
-
 void DB::HandleDiagnosticRecord(SQLHANDLE hHandle, SQLSMALLINT hType, RETCODE RetCode)
 {
 	SQLSMALLINT iRec = 0;
