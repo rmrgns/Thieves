@@ -56,6 +56,100 @@ bool DB::Init()
 	return true;
 }
 
+// 아이디 비밀번호 데이터베이스 저장하는 함수
+// 저장하면 LOGINFAIL_TYPE::OK 반환 실패시 DB_ERROR 반환
+// name과 password를 wchar_t타입으로 변환하여 저장
+//exec를 데이터베이스로 전달하여 저장프로시저를 실행
+LOGINFAIL_TYPE DB::SaveData(char* name, char* password)
+{
+	wchar_t exec[256];
+	wchar_t wname[MAX_NAME_SIZE];
+	wchar_t wpassword[MAX_NAME_SIZE];
+	LOGINFAIL_TYPE ret = LOGINFAIL_TYPE::OK;
+	size_t len;
+	mbstowcs_s(&len, wname, MAX_NAME_SIZE, name, MAX_NAME_SIZE);
+	mbstowcs_s(&len, wpassword, MAX_NAME_SIZE, password, MAX_PASSWORD_SIZE);
+	wsprintf(exec, L"EXEC insert_user_info @Param1=N'%ls',@Param2=%ls", wname, wpassword);
+	wcout << exec << endl;
+	//retcode = SQLAllocHandle(SQL_HANDLE_STMT, hdbc, &hstmt);
+	retcode = SQLExecDirect(hstmt, (SQLWCHAR*)exec, SQL_NTS);
+	if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
+	{
+		cout << "seccess" << endl;
+	}
+	else
+	{
+		HandleDiagnosticRecord(hstmt, SQL_HANDLE_STMT, retcode);
+		ret = LOGINFAIL_TYPE::DB_ERROR;
+	}
+	if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO) {
+		//메모리 해제
+		SQLCloseCursor(hstmt);
+		SQLFreeStmt(hstmt, SQL_UNBIND);
+	}
+	return ret;
+}
+
+// 데이터베이스에서 로그인 데이터를 확인하는 함수
+LOGINFAIL_TYPE DB::CheckLoginData(char* name, char* password)
+{
+	wchar_t exec[256];
+	wchar_t wname[MAX_NAME_SIZE];
+	size_t len;
+	LOGINFAIL_TYPE ret = LOGINFAIL_TYPE::OK;
+	mbstowcs_s(&len, wname, MAX_NAME_SIZE, name, MAX_NAME_SIZE);
+	wsprintf(exec, L"EXEC select_user_info @Param1=N'%ls'", wname);
+	wcout << exec << endl;
+	retcode = SQLExecDirect(hstmt, (SQLWCHAR*)exec, SQL_NTS);
+	if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
+	{
+		retcode = SQLBindCol(hstmt, 1, SQL_C_WCHAR, m_id, MAX_NAME_SIZE + 1, &cb_id);
+		retcode = SQLBindCol(hstmt, 2, SQL_C_WCHAR, m_password, MAX_PASSWORD_SIZE + 1, &cb_password);
+
+		retcode = SQLFetch(hstmt);
+		if (retcode == SQL_ERROR || retcode == SQL_SUCCESS_WITH_INFO)
+		{
+			HandleDiagnosticRecord(hstmt, SQL_HANDLE_STMT, retcode);
+			ret= LOGINFAIL_TYPE::DB_ERROR;
+		}
+		if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
+		{
+			if (cb_id == 0) ret = LOGINFAIL_TYPE::NO_ID;
+			else if (false == CompWcMc(reinterpret_cast<wchar_t*>(m_password), password))
+				ret = LOGINFAIL_TYPE::WRONG_PASSWORD;
+		}
+		if (retcode == SQL_NO_DATA)
+		{
+			ret = LOGINFAIL_TYPE::NO_ID;
+			SQLCloseCursor(hstmt);
+			SQLFreeStmt(hstmt, SQL_UNBIND);
+		}
+
+
+	}
+	else {
+		HandleDiagnosticRecord(hstmt, SQL_HANDLE_STMT, retcode);
+		ret = LOGINFAIL_TYPE::DB_ERROR;
+	}
+	if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO) {
+		//SQLCancel(hstmt);
+		SQLCloseCursor(hstmt);
+		SQLFreeStmt(hstmt, SQL_UNBIND);
+	}
+	return ret;
+}
+
+// wchar_t형 변수와 char형 변수를 비교하여 같으면 true 다르면 false를 반환하는 함수
+bool DB::CompWcMc(wchar_t* wc, char* mc)
+{
+	wstring comp_wc{ wc };
+	comp_wc.erase(remove(comp_wc.begin(), comp_wc.end(), ' '), comp_wc.end());
+	string a{ mc };
+	wstring comp_mc{ a.begin(),a.end() };
+	if (comp_wc.compare(comp_mc) == 0)return true;
+	return false;
+}
+
 void DB::HandleDiagnosticRecord(SQLHANDLE hHandle, SQLSMALLINT hType, RETCODE RetCode)
 {
 	SQLSMALLINT iRec = 0;
