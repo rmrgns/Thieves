@@ -11,6 +11,7 @@
 #include "Light.h"
 
 #include "TestCameraScript.h"
+#include "TestObjectMove.h"
 #include "Resources.h"
 #include "ParticleSystem.h"
 #include "Terrain.h"
@@ -202,12 +203,13 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		obj->SetName(L"OBJ");
 		obj->AddComponent(make_shared<Transform>());
 		obj->AddComponent(make_shared<SphereCollider>());
+		obj->AddComponent(make_shared<TestObjectMove>());
 		obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
 		obj->GetTransform()->SetLocalPosition(Vec3(0, 0.f, 500.f));
 		obj->SetStatic(false);
 		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
 		{
-			shared_ptr<Mesh> sphereMesh = GET_SINGLE(Resources)->LoadSphereMesh();
+			shared_ptr<Mesh> sphereMesh = GET_SINGLE(Resources)->LoadCubeMesh();
 			meshRenderer->SetMesh(sphereMesh);
 		}
 		{
@@ -220,6 +222,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		scene->AddGameObject(obj);
 	}
 #pragma endregion
+
+
 
 #pragma region Terrain
 	{
@@ -238,8 +242,10 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 #pragma endregion
 
+
+
 #pragma region UI_Test
-	for (int32 i = 0; i < 6; ++i)
+	for (int32 i = 0; i < 1; ++i)
 	{
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
 		obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
@@ -257,7 +263,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 			shared_ptr<Texture> texture;
 			if (i < 3)
 				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->GetRTTexture(i);
-			else if (i < 5)
+			else if (i < 4)
 				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::LIGHTING)->GetRTTexture(i - 3);
 			else
 				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::SHADOW)->GetRTTexture(0);
@@ -270,6 +276,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		scene->AddGameObject(obj);
 	}
 #pragma endregion
+
+
 
 #pragma region Directional Light
 	{

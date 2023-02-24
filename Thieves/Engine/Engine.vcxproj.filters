@@ -141,6 +141,9 @@
     <ClCompile Include="SphereCollider.cpp">
       <Filter>Object\Component\Collider</Filter>
     </ClCompile>
+    <ClCompile Include="TestObjectMove.cpp">
+      <Filter>Object\Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -256,6 +259,9 @@
     </ClInclude>
     <ClInclude Include="BaseCollider.h">
       <Filter>Object\Component\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="TestObjectMove.h">
+      <Filter>Object\Test</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

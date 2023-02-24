@@ -15,7 +15,7 @@ public:
 	const Vec3& GetLocalPosition() { return _localPosition; }
 	const Vec3& GetLocalRotation() { return _localRotation; }
 	const Vec3& GetLocalScale() { return _localScale; }
-
+	
 	// TEMP
 	float GetBoundingSphereRadius() { return max(max(_localScale.x, _localScale.y), _localScale.z); }
 
@@ -41,7 +41,7 @@ public:
 
 private:
 	// Parent ±‚¡ÿ
-	Vec3 _localPosition = {};
+	Vec3 _localPosition = {0.f,0.f,0.f};
 	Vec3 _localRotation = {};
 	Vec3 _localScale = { 1.f, 1.f, 1.f };
 
