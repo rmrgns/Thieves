@@ -121,6 +121,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	SetLayerName(1, L"UI");
 #pragma endregion
 
+	shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+
 #pragma region ComputeShader
 	{
 		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"ComputeShader");
@@ -276,8 +278,6 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		scene->AddGameObject(obj);
 	}
 #pragma endregion
-
-
 
 #pragma region Directional Light
 	{

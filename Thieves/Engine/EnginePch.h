@@ -26,13 +26,14 @@ namespace fs = std::filesystem;
 #include <DirectXMath.h>
 #include <DirectXPackedVector.h>
 #include <DirectXColors.h>
+#include <WindowsX.h>
 using namespace DirectX;
 using namespace DirectX::PackedVector;
 using namespace Microsoft::WRL;
 
 #include <DirectXTex/DirectXTex.h>
 #include <DirectXTex/DirectXTex.inl>
-
+#include <MathHelper/MathHelper.h>
 
 // 각종 lib
 #pragma comment(lib, "d3d12")
@@ -114,6 +115,8 @@ struct WindowInfo
 	int32	width;		// 너비
 	int32	height;		// 높이
 	bool	windowed;	// 창모드 or 전체화면
+	WPARAM	wparam;
+	LPARAM	lparam;
 };
 
 struct Vertex

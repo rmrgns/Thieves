@@ -144,6 +144,9 @@
     <ClCompile Include="TestObjectMove.cpp">
       <Filter>Object\Test</Filter>
     </ClCompile>
+    <ClCompile Include="..\Library\Include\MathHelper\MathHelper.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -262,6 +265,9 @@
     </ClInclude>
     <ClInclude Include="TestObjectMove.h">
       <Filter>Object\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Library\Include\MathHelper\MathHelper.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
