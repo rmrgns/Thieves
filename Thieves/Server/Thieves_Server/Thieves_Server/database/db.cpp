@@ -15,6 +15,7 @@ DB::DB()
 
 DB::~DB()
 {
+	cout << "db 종료 " << endl;
 	SQLFreeHandle(SQL_HANDLE_STMT, hstmt);
 	SQLDisconnect(hdbc);
 	SQLFreeHandle(SQL_HANDLE_DBC, hdbc);
@@ -23,6 +24,7 @@ DB::~DB()
 
 bool DB::Init()
 {
+	cout << "db 실행 " << endl;
 	retcode = SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &henv);
 
 	// Set the ODBC version environment attribute  

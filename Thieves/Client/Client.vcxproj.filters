@@ -18,6 +18,9 @@
     <Filter Include="소스 파일\Server">
       <UniqueIdentifier>{c70363b7-1386-467a-b357-4b5ee48fcc42}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Server\network">
+      <UniqueIdentifier>{290e1e28-f8a8-4740-96fc-3ee7ec15cdde}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -44,11 +47,11 @@
     <ClInclude Include="server\define.h">
       <Filter>소스 파일\Server</Filter>
     </ClInclude>
-    <ClInclude Include="server\network.h">
-      <Filter>소스 파일\Server</Filter>
-    </ClInclude>
     <ClInclude Include="server\protocol.h">
       <Filter>소스 파일\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="server\network.h">
+      <Filter>소스 파일\Server\network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -78,7 +81,7 @@
       <Filter>소스 파일\Utils</Filter>
     </ClCompile>
     <ClCompile Include="server\network.cpp">
-      <Filter>소스 파일\Server</Filter>
+      <Filter>소스 파일\Server\network</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
