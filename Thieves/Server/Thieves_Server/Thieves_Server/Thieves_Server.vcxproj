@@ -71,10 +71,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\doyou\Desktop\Thieves\Thieves\Server\Thieves_Server\Thieves_Server;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\doyou\Desktop\Thieves\Thieves\Server\Thieves_Server\Thieves_Server;C:\Users\doyou\OneDrive\바탕 화면\졸작\Thieves\Thieves\Thieves\Server\Thieves_Server\Thieves_Server;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Users\doyou\Desktop\Thieves\Thieves\Server\Thieves_Server\Thieves_Server;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\doyou\Desktop\Thieves\Thieves\Server\Thieves_Server\Thieves_Server;C:\Users\doyou\OneDrive\바탕 화면\졸작\Thieves\Thieves\Thieves\Server\Thieves_Server\Thieves_Server;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
