@@ -638,6 +638,26 @@ void Resources::CreateDefaultMaterial()
 		Add<Material>(L"GameObject", material);
 	}
 
+	// LoginScreen
+	{
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Deferred");
+		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"Login", L"..\\Resources\\Texture\\thieves_login.jpg");
+		shared_ptr<Material> material = make_shared<Material>();
+		material->SetShader(shader);
+		material->SetTexture(0, texture);
+		Add<Material>(L"LoginScreen", material);
+	}
+
+	// ThiefIcon
+	{
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Deferred");
+		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"ThiefIcon", L"..\\Resources\\Texture\\thief_icon.jpg");
+		shared_ptr<Material> material = make_shared<Material>();
+		material->SetShader(shader);
+		material->SetTexture(0, texture);
+		Add<Material>(L"ThiefIcon", material);
+	}
+
 	// Shadow
 	{
 		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Shadow");

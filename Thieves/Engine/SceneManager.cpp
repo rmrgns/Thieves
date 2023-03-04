@@ -12,6 +12,7 @@
 
 #include "TestCameraScript.h"
 #include "TestObjectMove.h"
+#include "LoginScript.h"
 #include "Resources.h"
 #include "ParticleSystem.h"
 #include "Terrain.h"
@@ -38,8 +39,25 @@ void SceneManager::LoadScene(wstring sceneName)
 {
 	// TODO : 기존 Scene 정리
 	// TODO : 파일에서 Scene 정보 로드
+	if (_activeScene != nullptr)
+	{
+		_activeScene.reset();
+	}
 
-	_activeScene = LoadTestScene();
+	if (sceneName == L"LoginScene")
+	{
+		_activeScene = LoadLoginScene();
+		
+	}
+	else if (sceneName == L"GameScene")
+	{
+		_activeScene = LoadTestScene();
+	}
+	else
+	{
+		return;
+	}
+
 
 	_activeScene->Awake();
 	_activeScene->Start();
@@ -108,6 +126,7 @@ shared_ptr<GameObject> SceneManager::Pick(int32 screenX, int32 screenY)
 		{
 			minDistance = distance;
 			picked = gameObject;
+			GET_SINGLE(SceneManager)->LoadScene(L"GameScene");
 		}
 	}
 
@@ -222,6 +241,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		dynamic_pointer_cast<SphereCollider>(obj->GetCollider())->SetCenter(Vec3(0.f, 0.f, 0.f));
 		obj->AddComponent(meshRenderer);
 		scene->AddGameObject(obj);
+
 	}
 #pragma endregion
 
@@ -295,40 +315,40 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 #pragma endregion
 
-#pragma region Point Light
-	{
-		shared_ptr<GameObject> light = make_shared<GameObject>();
-		light->AddComponent(make_shared<Transform>());
-		light->GetTransform()->SetLocalPosition(Vec3(0.f, 100.f, 150.f));
-		light->AddComponent(make_shared<Light>());
-		//light->GetLight()->SetLightDirection(Vec3(-1.f, -1.f, 0));
-		light->GetLight()->SetLightType(LIGHT_TYPE::POINT_LIGHT);
-		light->GetLight()->SetDiffuse(Vec3(0.0f, 0.5f, 0.0f));
-		light->GetLight()->SetAmbient(Vec3(0.0f, 0.3f, 0.0f));
-		light->GetLight()->SetSpecular(Vec3(0.0f, 0.3f, 0.0f));
-		light->GetLight()->SetLightRange(200.f);
-
-		scene->AddGameObject(light);
-	}
-#pragma endregion
-
-#pragma region Spot Light
-	{
-		shared_ptr<GameObject> light = make_shared<GameObject>();
-		light->AddComponent(make_shared<Transform>());
-		light->GetTransform()->SetLocalPosition(Vec3(75.f, 0.f, 150.f));
-		light->AddComponent(make_shared<Light>());
-		light->GetLight()->SetLightDirection(Vec3(-1.f, 0, 0));
-		light->GetLight()->SetLightType(LIGHT_TYPE::SPOT_LIGHT);
-		light->GetLight()->SetDiffuse(Vec3(0.0f, 0.f, 0.5f));
-		light->GetLight()->SetAmbient(Vec3(0.0f, 0.0f, 0.1f));
-		light->GetLight()->SetSpecular(Vec3(0.0f, 0.0f, 0.1f));
-		light->GetLight()->SetLightRange(200.f);
-		light->GetLight()->SetLightAngle(3.14f / 2);
-
-		scene->AddGameObject(light);
-	}
-#pragma endregion
+//#pragma region Point Light
+//	{
+//		shared_ptr<GameObject> light = make_shared<GameObject>();
+//		light->AddComponent(make_shared<Transform>());
+//		light->GetTransform()->SetLocalPosition(Vec3(0.f, 100.f, 150.f));
+//		light->AddComponent(make_shared<Light>());
+//		//light->GetLight()->SetLightDirection(Vec3(-1.f, -1.f, 0));
+//		light->GetLight()->SetLightType(LIGHT_TYPE::POINT_LIGHT);
+//		light->GetLight()->SetDiffuse(Vec3(0.0f, 0.5f, 0.0f));
+//		light->GetLight()->SetAmbient(Vec3(0.0f, 0.3f, 0.0f));
+//		light->GetLight()->SetSpecular(Vec3(0.0f, 0.3f, 0.0f));
+//		light->GetLight()->SetLightRange(200.f);
+//
+//		scene->AddGameObject(light);
+//	}
+//#pragma endregion
+//
+//#pragma region Spot Light
+//	{
+//		shared_ptr<GameObject> light = make_shared<GameObject>();
+//		light->AddComponent(make_shared<Transform>());
+//		light->GetTransform()->SetLocalPosition(Vec3(75.f, 0.f, 150.f));
+//		light->AddComponent(make_shared<Light>());
+//		light->GetLight()->SetLightDirection(Vec3(-1.f, 0, 0));
+//		light->GetLight()->SetLightType(LIGHT_TYPE::SPOT_LIGHT);
+//		light->GetLight()->SetDiffuse(Vec3(0.0f, 0.f, 0.5f));
+//		light->GetLight()->SetAmbient(Vec3(0.0f, 0.0f, 0.1f));
+//		light->GetLight()->SetSpecular(Vec3(0.0f, 0.0f, 0.1f));
+//		light->GetLight()->SetLightRange(200.f);
+//		light->GetLight()->SetLightAngle(3.14f / 2);
+//
+//		scene->AddGameObject(light);
+//	}
+//#pragma endregion
 
 //#pragma region ParticleSystem
 //	{
@@ -340,6 +360,112 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 //		scene->AddGameObject(particle);
 //	}
 //#pragma endregion
+	return scene;
+}
+
+shared_ptr<Scene> SceneManager::LoadLoginScene()
+{
+#pragma region LayerMask
+	SetLayerName(0, L"Default");
+
+#pragma endregion
+
+	shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+	shared_ptr<Scene> scene = make_shared<Scene>();
+
+#pragma region Camera
+	{
+		shared_ptr<GameObject> camera = make_shared<GameObject>();
+		camera->SetName(L"Main_Camera");
+		camera->AddComponent(make_shared<Transform>());
+		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45도
+
+		camera->GetCamera()->SetFar(10000.f);
+		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+
+		scene->AddGameObject(camera);
+	}
+#pragma endregion
+
+#pragma region LoginScreen
+	{
+		float width = static_cast<float>(GEngine->GetWindow().width);
+		float height = static_cast<float>(GEngine->GetWindow().height);
+		shared_ptr<GameObject> obj = make_shared<GameObject>();
+		obj->SetName(L"LOGINSCREEN");
+		obj->AddComponent(make_shared<Transform>());
+		obj->AddComponent(make_shared<LoginScript>());
+		obj->GetTransform()->SetLocalScale(Vec3(width / 7.0f, height / 7.0f, 100.f));
+		obj->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 100.f));
+		obj->SetStatic(false);
+		
+		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+		{
+			shared_ptr<Mesh> ScreenMesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+			meshRenderer->SetMesh(ScreenMesh);
+		}
+		{
+			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"LoginScreen");
+			meshRenderer->SetMaterial(material->Clone());
+		}
+		obj->AddComponent(meshRenderer);
+		scene->AddGameObject(obj);
+		
+	}
+#pragma endregion
+
+#pragma region ThiefIcon
+	{
+		
+		shared_ptr<GameObject> obj = make_shared<GameObject>();
+		obj->SetName(L"THIEFICON");
+		obj->AddComponent(make_shared<Transform>());
+		obj->AddComponent(make_shared<TestObjectMove>());
+		obj->GetTransform()->SetLocalScale(Vec3(10.f, 10.f, 10.f));
+		obj->GetTransform()->SetLocalPosition(Vec3(-20.f, -15.f, 50.f));
+		obj->SetStatic(false);
+
+		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+		{
+			shared_ptr<Mesh> ScreenMesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+			meshRenderer->SetMesh(ScreenMesh);
+		}
+		{
+			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"ThiefIcon");
+			meshRenderer->SetMaterial(material->Clone());
+		}
+		obj->AddComponent(meshRenderer);
+		scene->AddGameObject(obj);
+
+	}
+#pragma endregion
+
+#pragma region Directional Light
+	{
+		shared_ptr<GameObject> light = make_shared<GameObject>();
+		light->AddComponent(make_shared<Transform>());
+		light->GetTransform()->SetLocalPosition(Vec3(0, 1000, 500));
+		light->AddComponent(make_shared<Light>());
+		light->GetLight()->SetLightDirection(Vec3(0, -1, 1.f));
+		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
+		light->GetLight()->SetDiffuse(Vec3(1.f, 1.f, 1.f));
+		light->GetLight()->SetAmbient(Vec3(0.1f, 0.1f, 0.1f));
+		light->GetLight()->SetSpecular(Vec3(0.1f, 0.1f, 0.1f));
+
+		scene->AddGameObject(light);
+	}
+#pragma endregion
+
+	//#pragma region ParticleSystem
+	//	{
+	//		shared_ptr<GameObject> particle = make_shared<GameObject>();
+	//		particle->AddComponent(make_shared<Transform>());
+	//		particle->AddComponent(make_shared<ParticleSystem>());
+	//		particle->SetCheckFrustum(false);
+	//		particle->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 100.f));
+	//		scene->AddGameObject(particle);
+	//	}
+	//#pragma endregion
 
 	return scene;
 }

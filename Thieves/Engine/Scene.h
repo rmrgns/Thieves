@@ -17,13 +17,13 @@ public:
 	void Render();
 
 	void ClearRTV();
-
 	void RenderShadow();
 	void RenderDeferred();
 	void RenderLights();
 	void RenderFinal();
-
 	void RenderForward();
+
+
 
 private:
 	void PushLightData();
@@ -31,6 +31,7 @@ private:
 public:
 	void AddGameObject(shared_ptr<GameObject> gameObject);
 	void RemoveGameObject(shared_ptr<GameObject> gameObject);
+	void RemoveAllGameObjects();
 
 	const vector<shared_ptr<GameObject>>& GetGameObjects() { return _gameObjects; }
 

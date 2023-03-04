@@ -19,14 +19,14 @@
     <Filter Include="Object\Component">
       <UniqueIdentifier>{de64ef39-d104-4aa6-ad80-651cf1742c8b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object\Test">
-      <UniqueIdentifier>{84de148f-21fb-42e7-a8b6-52fcd96ae59a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Object\Resource">
       <UniqueIdentifier>{c5612518-9c4d-408d-926a-9312743d39fa}</UniqueIdentifier>
     </Filter>
     <Filter Include="Object\Component\Collider">
       <UniqueIdentifier>{6b953dcd-63c0-4d99-8eb7-3fa771d39aef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Script">
+      <UniqueIdentifier>{84de148f-21fb-42e7-a8b6-52fcd96ae59a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -94,7 +94,7 @@
       <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="TestCameraScript.cpp">
-      <Filter>Object\Test</Filter>
+      <Filter>Object\Script</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Object\Component</Filter>
@@ -142,10 +142,10 @@
       <Filter>Object\Component\Collider</Filter>
     </ClCompile>
     <ClCompile Include="TestObjectMove.cpp">
-      <Filter>Object\Test</Filter>
+      <Filter>Object\Script</Filter>
     </ClCompile>
-    <ClCompile Include="..\Library\Include\MathHelper\MathHelper.cpp">
-      <Filter>Utils</Filter>
+    <ClCompile Include="LoginScript.cpp">
+      <Filter>Object\Script</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -216,7 +216,7 @@
       <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="TestCameraScript.h">
-      <Filter>Object\Test</Filter>
+      <Filter>Object\Script</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Object\Component</Filter>
@@ -264,10 +264,10 @@
       <Filter>Object\Component\Collider</Filter>
     </ClInclude>
     <ClInclude Include="TestObjectMove.h">
-      <Filter>Object\Test</Filter>
+      <Filter>Object\Script</Filter>
     </ClInclude>
-    <ClInclude Include="..\Library\Include\MathHelper\MathHelper.h">
-      <Filter>Utils</Filter>
+    <ClInclude Include="LoginScript.h">
+      <Filter>Object\Script</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

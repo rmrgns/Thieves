@@ -33,7 +33,6 @@ using namespace Microsoft::WRL;
 
 #include <DirectXTex/DirectXTex.h>
 #include <DirectXTex/DirectXTex.inl>
-#include <MathHelper/MathHelper.h>
 
 // °¢Á¾ lib
 #pragma comment(lib, "d3d12")

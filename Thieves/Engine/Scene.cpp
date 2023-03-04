@@ -205,3 +205,11 @@ void Scene::RemoveGameObject(shared_ptr<GameObject> gameObject)
 	if (findIt != _gameObjects.end())
 		_gameObjects.erase(findIt);
 }
+
+void Scene::RemoveAllGameObjects()
+{
+	//_cameras.clear();
+	_lights.clear();
+	_gameObjects.clear();
+}
+

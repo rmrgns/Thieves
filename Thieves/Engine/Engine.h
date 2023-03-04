@@ -36,6 +36,10 @@ public:
 	void RenderEnd();
 
 	void ResizeWindow(int32 width, int32 height);
+
+	void SetTemp(int temp) { _temp = temp; }
+	void CheckChangeScene();
+
 private:
 	void ShowFps();
 	void CreateConstantBuffer(CBV_REGISTER reg, uint32 bufferSize, uint32 count);
@@ -57,5 +61,7 @@ private:
 
 	vector<shared_ptr<ConstantBuffer>> _constantBuffers;
 	array<shared_ptr<RenderTargetGroup>, RENDER_TARGET_GROUP_COUNT> _rtGroups;
+
+	int _temp{};
 };
 

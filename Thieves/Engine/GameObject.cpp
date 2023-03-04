@@ -71,6 +71,7 @@ void GameObject::LateUpdate()
 
 	for (shared_ptr<MonoBehaviour>& script : _scripts)
 	{
+		
 		script->LateUpdate();
 	}
 }

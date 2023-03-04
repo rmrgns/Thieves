@@ -21,8 +21,9 @@ void TestObjectMove::LateUpdate()
 	Vec3 pos = GetTransform()->GetLocalPosition();
 
 	if (INPUT->GetButton(KEY_TYPE::UP))
+	{
 		pos += GetTransform()->GetLook() * _speed * DELTA_TIME;
-
+	}
 	if (INPUT->GetButton(KEY_TYPE::DOWN))
 		pos -= GetTransform()->GetLook() * _speed * DELTA_TIME;
 
@@ -65,5 +66,13 @@ void TestObjectMove::LateUpdate()
 		const POINT& pos = INPUT->GetMousePos();
 		GET_SINGLE(SceneManager)->Pick(pos.x, pos.y);
 	}
+
+	//if (INPUT->GetButton(KEY_TYPE::G))
+	//{
+	//	
+	//		pos += GetTransform()->GetRight() * _speed * DELTA_TIME;
+	//	
+	//}
+
 	GetTransform()->SetLocalPosition(pos);
 }

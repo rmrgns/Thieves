@@ -32,7 +32,7 @@ void Engine::Init(const WindowInfo& info)
 	CreateRenderTargetGroups();
 	
 	ResizeWindow(info.width, info.height);
-
+	
 	GET_SINGLE(Input)->Init(info.hwnd);
 	GET_SINGLE(Timer)->Init();
 	GET_SINGLE(Resources)->Init();
@@ -48,12 +48,20 @@ void Engine::Update()
 	Render();
 
 	ShowFps();
+
+	if (GET_SINGLE(SceneManager)->GetCheckChangeScene())
+	{
+		//GET_SINGLE(Timer)->WaitFrames(120, 1.0f / 60.f);
+		GET_SINGLE(SceneManager)->LoadScene(L"GameScene");
+		_temp = 2;
+
+	}
 }
 
 void Engine::Render()
 {
 	RenderBegin();
-
+	
 	GET_SINGLE(SceneManager)->Render();
 
 	RenderEnd();

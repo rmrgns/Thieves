@@ -21,7 +21,9 @@ enum class KEY_TYPE
 	Y = 'Y',
 	V = 'V',
 	N = 'N',
-	
+
+	G = 'G',
+
 	LBUTTON = VK_LBUTTON,
 	RBUTTON = VK_RBUTTON,
 };
@@ -58,9 +60,7 @@ public:
 
 	const POINT& GetMousePos() { return _mousePos; }
 
-	virtual void OnMouseDown(WPARAM btnState, int x, int y);
-	virtual void OnMouseUp(WPARAM btnState, int x, int y);
-	virtual void OnMouseMove(WPARAM btnState, int x, int y);
+	
 private:
 	inline KEY_STATE GetState(KEY_TYPE key) { return _states[static_cast<uint8>(key)]; }
 	
@@ -69,8 +69,6 @@ private:
 	vector<KEY_STATE> _states;
 	POINT _mousePos = {};
 
-	float mTheta = 1.5f * XM_PI;
-	float mPhi = XM_PIDIV4;
-	float mRadius = 5.0f;
+	
 };
 

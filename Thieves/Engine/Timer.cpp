@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "Timer.h"
+#include <chrono>
+#include <thread>
 
 void Timer::Init()
 {
