@@ -1,7 +1,5 @@
 #pragma once
 
-// [계약서 / 결재]
-
 class RootSignature
 {
 public:
@@ -15,8 +13,8 @@ private:
 	void CreateComputeRootSignature();
 
 private:
-	ComPtr<ID3D12RootSignature>		_graphicsRootSignature;
-	ComPtr<ID3D12RootSignature>		_computeRootSignature;
-	D3D12_STATIC_SAMPLER_DESC		_samplerDesc;
+	D3D12_STATIC_SAMPLER_DESC	_samplerDesc; 
+	ComPtr<ID3D12RootSignature>	_graphicsRootSignature;	
+	ComPtr<ID3D12RootSignature>	_computeRootSignature;
 };
 

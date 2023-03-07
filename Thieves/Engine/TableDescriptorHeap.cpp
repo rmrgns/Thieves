@@ -11,14 +11,14 @@ void GraphicsDescriptorHeap::Init(uint32 count)
 	_groupCount = count;
 
 	D3D12_DESCRIPTOR_HEAP_DESC desc = {};
-	desc.NumDescriptors = count * (CBV_SRV_REGISTER_COUNT - 1);		// 전역으로 분리한 b0를 제외
+	desc.NumDescriptors = count * (CBV_SRV_REGISTER_COUNT - 1); // b0는 전역
 	desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 
 	DEVICE->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&_descHeap));
 
 	_handleSize = DEVICE->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	_groupSize = _handleSize * (CBV_SRV_REGISTER_COUNT - 1);		// 전역으로 분리한 b0를 제외
+	_groupSize = _handleSize * (CBV_SRV_REGISTER_COUNT - 1); // b0는 전역
 }
 
 void GraphicsDescriptorHeap::Clear()
@@ -55,7 +55,7 @@ void GraphicsDescriptorHeap::CommitTable()
 
 D3D12_CPU_DESCRIPTOR_HANDLE GraphicsDescriptorHeap::GetCPUHandle(CBV_REGISTER reg)
 {
-	return GetCPUHandle(static_cast<uint32>(reg));
+	return GetCPUHandle(static_cast<uint8>(reg));
 }
 
 D3D12_CPU_DESCRIPTOR_HANDLE GraphicsDescriptorHeap::GetCPUHandle(SRV_REGISTER reg)

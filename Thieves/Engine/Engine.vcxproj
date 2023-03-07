@@ -23,7 +23,7 @@
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{b2d38117-c266-4689-907e-da6555e0f684}</ProjectGuid>
     <RootNamespace>Engine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -85,14 +85,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)Output\</OutDir>
-    <IncludePath>$(SolutionDir)Library/Include/;$(SolutionDir)Library/Include/FBX;$(SolutionDir)Library/Include/DirectX-Tex;$(IncludePath)</IncludePath>
-    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Library/Include/;$(SolutionDir)Library/Include/FBX;$(SolutionDir)Library/Include/DirectX-Tex</IncludePath>
+    <LibraryPath>$(SolutionDir)Library/Include/FBX;$(SolutionDir)Library/Include/DirectX-Tex</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)Output\</OutDir>
-    <IncludePath>$(SolutionDir)Library/Include/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Library/Include/;$(SolutionDir)Library/Include/FBX;$(SolutionDir)Library/Include/DirectX-Tex</IncludePath>
+    <LibraryPath>$(SolutionDir)Library/Include/FBX;$(SolutionDir)Library/Include/DirectX-Tex</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -199,6 +199,7 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="MeshData.h" />
     <ClInclude Include="MeshRenderer.h" />
     <ClInclude Include="MonoBehaviour.h" />
     <ClInclude Include="Object.h" />
@@ -217,6 +218,7 @@
     <ClInclude Include="TableDescriptorHeap.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="TestCameraScript.h" />
+    <ClInclude Include="TestDragon.h" />
     <ClInclude Include="TestObjectMove.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Timer.h" />
@@ -241,6 +243,7 @@
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="MeshData.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
     <ClCompile Include="MonoBehaviour.cpp" />
     <ClCompile Include="Object.cpp" />
@@ -264,6 +267,7 @@
     <ClCompile Include="TableDescriptorHeap.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="TestCameraScript.cpp" />
+    <ClCompile Include="TestDragon.cpp" />
     <ClCompile Include="TestObjectMove.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -273,10 +277,12 @@
     <None Include="SimpleMath.inl" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\Resources\Shader\animation.fx" />
     <FxCompile Include="..\Resources\Shader\compute.fx" />
     <FxCompile Include="..\Resources\Shader\deferred.fx" />
     <FxCompile Include="..\Resources\Shader\forward.fx" />
     <FxCompile Include="..\Resources\Shader\lighting.fx" />
+    <FxCompile Include="..\Resources\Shader\math.fx" />
     <FxCompile Include="..\Resources\Shader\params.fx" />
     <FxCompile Include="..\Resources\Shader\particle.fx" />
     <FxCompile Include="..\Resources\Shader\shadow.fx" />

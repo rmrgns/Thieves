@@ -35,7 +35,6 @@ using namespace Microsoft::WRL;
 
 #include "FBX/fbxsdk.h"
 
-
 // 각종 lib
 #pragma comment(lib, "d3d12")
 #pragma comment(lib, "dxgi")
@@ -53,8 +52,8 @@ using namespace Microsoft::WRL;
 #pragma comment(lib, "FBX\\debug\\libxml2-md.lib")
 #pragma comment(lib, "FBX\\debug\\zlib-md.lib")
 #else
-#pragma comment(lib, "FBX\\release\\libfbxsdk-md.lib")
-#pragma comment(lib, "FBX\\release\\libxml2-md.lib")
+#pragma comment(lib, "FBX\\release\libfbxsdk-md.lib")
+#pragma comment(lib, "FBX\\release\libxml2-md.lib")
 #pragma comment(lib, "FBX\\release\\zlib-md.lib")
 #endif
 
@@ -72,7 +71,7 @@ using Vec3		= DirectX::SimpleMath::Vector3;
 using Vec4		= DirectX::SimpleMath::Vector4;
 using Matrix	= DirectX::SimpleMath::Matrix;
 
-enum class CBV_REGISTER
+enum class CBV_REGISTER : uint8
 {
 	b0,
 	b1,
@@ -122,10 +121,10 @@ enum
 
 struct WindowInfo
 {
-	HWND	hwnd;		// 출력 윈도우
-	int32	width;		// 너비
-	int32	height;		// 높이
-	bool	windowed;	// 창모드 or 전체화면
+	HWND	hwnd; // 출력 윈도우
+	int32	width; // 너비
+	int32	height; // 높이
+	bool	windowed; // 창모드 or 전체화면
 };
 
 struct Vertex
@@ -141,9 +140,10 @@ struct Vertex
 	Vec2 uv;
 	Vec3 normal;
 	Vec3 tangent;
+	Vec4 weights;
+	Vec4 indices;
 };
 
-// 싱글톤패턴 생성
 #define DECLARE_SINGLE(type)		\
 private:							\
 	type() {}						\
@@ -189,5 +189,6 @@ struct AnimFrameParams
 
 extern unique_ptr<class Engine> GEngine;
 
+// Utils
 wstring s2ws(const string& s);
 string ws2s(const wstring& s);

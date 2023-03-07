@@ -1,9 +1,7 @@
 #pragma once
 #include "Object.h"
 
-// 컴포넌트 종류
-// MONO_BEHAVIOUR가 항상 마지막에 나와야함
-// MONO_BEHAVIOUR를 제외한 나머지 타입은 고유한 번호를 가지며 1개씩만 존재
+
 enum class COMPONENT_TYPE : uint8
 {
 	TRANSFORM,
@@ -26,6 +24,8 @@ enum
 
 class GameObject;
 class Transform;
+class MeshRenderer;
+class Animator;
 
 class Component : public Object
 {
@@ -46,6 +46,8 @@ public:
 
 	shared_ptr<GameObject> GetGameObject();
 	shared_ptr<Transform> GetTransform();
+	shared_ptr<MeshRenderer> GetMeshRenderer();
+	shared_ptr<Animator> GetAnimator();
 
 private:
 	friend class GameObject;

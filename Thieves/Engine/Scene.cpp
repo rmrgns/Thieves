@@ -62,11 +62,11 @@ void Scene::Render()
 
 	ClearRTV();
 
-	RenderShadow();
-
+	RenderShadow(); 
+	
 	RenderDeferred();
 
-	RenderLights();
+	RenderLights();	
 
 	RenderFinal();
 
