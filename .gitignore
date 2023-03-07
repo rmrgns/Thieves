@@ -411,3 +411,5 @@ Server/bin-int/
 *.idb
 # Visual Studio files and folder
 .vs/
+
+*.cso
