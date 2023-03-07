@@ -49,13 +49,8 @@ void Engine::Update()
 
 	ShowFps();
 
-	if (GET_SINGLE(SceneManager)->GetCheckChangeScene())
-	{
-		//GET_SINGLE(Timer)->WaitFrames(120, 1.0f / 60.f);
-		GET_SINGLE(SceneManager)->LoadScene(L"GameScene");
-		_temp = 2;
+	CheckChangeScene();
 
-	}
 }
 
 void Engine::Render()
@@ -85,6 +80,26 @@ void Engine::ResizeWindow(int32 width, int32 height)
 	RECT rect = { 0, 0, width, height };
 	::AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, false);
 	::SetWindowPos(_window.hwnd, 0, 100, 100, width, height, 0);
+}
+
+void Engine::CheckChangeScene()
+{
+	if (GET_SINGLE(SceneManager)->GetCheckChangeScene())
+	{
+		if (_changeScene == L"Game")
+		{ 
+			//GET_SINGLE(Timer)->WaitFrames(120, 1.0f / 60.f);
+			GET_SINGLE(SceneManager)->LoadScene(L"GameScene");
+			_changeScene = L"";
+		}
+		else if (_changeScene == L"Login")
+		{
+			GET_SINGLE(SceneManager)->LoadScene(L"LoginScene");
+			_changeScene = L"";
+		}
+
+		GET_SINGLE(SceneManager)->SetCheckChangeScene(false);
+	}
 }
 
 void Engine::ShowFps()

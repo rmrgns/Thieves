@@ -19,10 +19,15 @@ LoginScript::~LoginScript()
 
 void LoginScript::LateUpdate()
 {
-	if (INPUT->GetButton(KEY_TYPE::A))
+	if (INPUT->GetButton(KEY_TYPE::O))
 	{
-		GET_SINGLE(SceneManager)->
-		GEngine->SetTemp(1);
+		GET_SINGLE(SceneManager)->SetCheckChangeScene(true);
+		GEngine->SetChangeScene(L"Game");
 	}
 
+	if (INPUT->GetButton(KEY_TYPE::P))
+	{
+		GET_SINGLE(SceneManager)->SetCheckChangeScene(true);
+		GEngine->SetChangeScene(L"Login");
+	}
 }

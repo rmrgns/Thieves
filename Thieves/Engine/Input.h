@@ -24,6 +24,9 @@ enum class KEY_TYPE
 
 	G = 'G',
 
+	O = 'O',
+	P = 'P',
+
 	LBUTTON = VK_LBUTTON,
 	RBUTTON = VK_RBUTTON,
 };

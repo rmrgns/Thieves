@@ -2,6 +2,15 @@
 
 class Scene;
 
+enum class CURRENT_SCENE
+{
+	NONE,
+	LOGIN,
+	GAME,
+	// ...
+	END
+};
+
 enum
 {
 	MAX_LAYER = 32,

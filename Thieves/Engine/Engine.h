@@ -37,8 +37,8 @@ public:
 
 	void ResizeWindow(int32 width, int32 height);
 
-	void SetTemp(int temp) { _temp = temp; }
-	void CheckChangeScene();
+	void SetChangeScene(wstring changeScene) { _changeScene = changeScene; }
+	virtual void CheckChangeScene();
 
 private:
 	void ShowFps();
@@ -62,6 +62,6 @@ private:
 	vector<shared_ptr<ConstantBuffer>> _constantBuffers;
 	array<shared_ptr<RenderTargetGroup>, RENDER_TARGET_GROUP_COUNT> _rtGroups;
 
-	int _temp{};
+	wstring _changeScene{};
 };
 
