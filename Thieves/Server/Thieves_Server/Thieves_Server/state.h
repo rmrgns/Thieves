@@ -24,6 +24,13 @@ enum class STATE {
 	ST_INGAME
 };
 
+enum class ROOM_STATE
+{
+	RT_FREE,
+	RT_INGAME,
+	RT_RESET
+};
+
 // ท๋ ป๓ลย
 enum class ROOM_TYPE {
 	RT_FREE,

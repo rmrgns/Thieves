@@ -8,7 +8,9 @@ const int MAX_NAME_SIZE = 20;		// 아이디 사이즈
 const int MAX_PASSWORD_SIZE = 20;	// 비밀 번호 사이즈
 const int MAX_CHAT_SIZE = 100;		// 채팅 사이즈
 
-const int MAX_USER = 8;			// 동접 가능 인원
+const int MAX_ROOM_SIZE = 1000;		// 방 최대 크기
+
+const int MAX_USER = MAX_ROOM_SIZE * 8;		// 동접 가능 인원
 
 
 // 경찰 NPC의 갯수

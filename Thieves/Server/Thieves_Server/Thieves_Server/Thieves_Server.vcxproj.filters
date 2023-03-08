@@ -28,6 +28,9 @@
     <Filter Include="소스 파일\ingame_server">
       <UniqueIdentifier>{42b7af90-58bf-448d-ac5c-ac2080bdd7a3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\room">
+      <UniqueIdentifier>{a47666b3-c574-4b26-a91f-46316cb6b242}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -44,6 +47,12 @@
     </ClCompile>
     <ClCompile Include="database\db.cpp">
       <Filter>소스 파일\db</Filter>
+    </ClCompile>
+    <ClCompile Include="room_manager.cpp">
+      <Filter>소스 파일\room</Filter>
+    </ClCompile>
+    <ClCompile Include="room.cpp">
+      <Filter>소스 파일\room</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +79,12 @@
     </ClInclude>
     <ClInclude Include="database\db.h">
       <Filter>소스 파일\db</Filter>
+    </ClInclude>
+    <ClInclude Include="room_manager.h">
+      <Filter>소스 파일\room</Filter>
+    </ClInclude>
+    <ClInclude Include="room.h">
+      <Filter>소스 파일\room</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

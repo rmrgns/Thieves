@@ -40,7 +40,7 @@ bool DB::Init()
 				SQLSetConnectAttr(hdbc, SQL_LOGIN_TIMEOUT, (SQLPOINTER)5, 0);
 
 				// Connect to data source  
-				retcode = SQLConnect(hdbc, (SQLWCHAR*)L"thieves_db_odbc", SQL_NTS, (SQLWCHAR*)NULL, 0, NULL, 0);
+				retcode = SQLConnect(hdbc, (SQLWCHAR*)L"Thieves", SQL_NTS, (SQLWCHAR*)NULL, 0, NULL, 0);
 
 				// Allocate statement handle  
 				if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO) {

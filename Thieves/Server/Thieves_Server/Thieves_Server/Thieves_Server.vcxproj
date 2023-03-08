@@ -141,6 +141,8 @@
     <ClCompile Include="game_server\packet_manager.cpp" />
     <ClCompile Include="iocp_server\iocp_server.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="room.cpp" />
+    <ClCompile Include="room_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="database\db.h" />
@@ -148,6 +150,8 @@
     <ClInclude Include="game_server\ingame_server.h" />
     <ClInclude Include="game_server\packet_manager.h" />
     <ClInclude Include="iocp_server\iocp_server.h" />
+    <ClInclude Include="room.h" />
+    <ClInclude Include="room_manager.h" />
     <ClInclude Include="state.h" />
     <ClInclude Include="header.h" />
     <ClInclude Include="protocol.h" />
