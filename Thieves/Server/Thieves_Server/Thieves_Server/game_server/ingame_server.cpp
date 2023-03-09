@@ -1,6 +1,7 @@
-#include "header.h"
+
 #include "ingame_server.h"
 #include "packet_manager.h"
+#include "pch.h"
 using namespace std;
 
 // 생성자 함수 PacketManager를 초기화

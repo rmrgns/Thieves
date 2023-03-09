@@ -1,7 +1,7 @@
 // IOCP서버
 // 클라연결 연결, 이후 클라와 송수신 작업
 
-#include "header.h"
+#include "pch.h"
 #include "iocp_server.h"
 using namespace std;
 IOCPServer::IOCPServer()
@@ -105,7 +105,7 @@ void IOCPServer::Worker()
 		case COMP_OP::OP_SEND: {
 			if (num_byte != exp_over->_wsa_buf.len) {
 				Disconnect(client_id);
-				cout << "Send " << endl;
+				cout << "Send :dis" << endl;
 			}
 			delete exp_over;
 			break;

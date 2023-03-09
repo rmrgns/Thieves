@@ -21,6 +21,7 @@ public:
 
 	// SendPacket
 	void SendMovePacket(int c_id, int mover);
+	void SendLoginFailPacket(SOCKET&, int reason);
 	void SendSignInOK(int c_id);
 	void SendSignUpOK(int c_id);
 	void SendPutObjPakcet(int c_id, int obj_id, OBJ_TYPE obj_type);
@@ -47,6 +48,10 @@ public:
 	
 
 private:
+	RoomManager* m_room_manager;
+	DB* m_db;
+	std::thread db_thread;
+
 	void ProcessSignIn(int c_id, unsigned char* p);
 	void ProcessSignUp(int c_id, unsigned char* p);
 	void ProcessAttack(int c_id, unsigned char* p);

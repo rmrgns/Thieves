@@ -1,20 +1,78 @@
 #include "packet_manager.h"
-#include "room_manager.h"
+#include "room/room_manager.h"
+#include "../database/db.h"
+#include "pch.h"
 PacketManager::PacketManager()
 {
-
+	m_room_manager = new RoomManager;
+	m_db = new DB;
 }
 
 void PacketManager::Init()
 {
+	m_room_manager->InitRoom();
+
+	m_db->Init();
 }
 
 void PacketManager::ProcessPacket(int c_id, unsigned char* p)
 {
+	unsigned char packet_type = p[1];
+
+	switch (packet_type) {
+	case CS_PACKET_SIGN_IN: {
+		ProcessSignIn(c_id, p);
+		break;
+	}
+	case CS_PACKET_SIGN_UP: {
+		ProcessSignUp(c_id, p);
+		break;
+	}
+	case CS_PACKET_MOVE: {
+		ProcessMove(c_id, p);
+		break;
+	}
+	case CS_PACKET_ATTACK: {
+		ProcessAttack(c_id, p);
+		break;
+	}
+	case CS_PACKET_MATCHING: {
+		ProcessMatching(c_id, p);
+		break;
+	}
+	case CS_PACKET_HIT: {
+		ProcessHit(c_id, p);
+		break;
+	}
+	case CS_PACKET_GAME_START: {
+		ProcessGameStart(c_id, p);
+		break;
+	}
+	}
 }
 
-void PacketManager::ProcessAccept(HANDLE, SOCKET&, EXP_OVER*)
+void PacketManager::ProcessAccept(HANDLE hiocp, SOCKET& s_socket, EXP_OVER* exp_over)
 {
+	std::cout << "Accept process" << std::endl;
+	SOCKET c_socket = *(reinterpret_cast<SOCKET*>(exp_over->_net_buf));
+	int new_id = -1;// = MoveObjManager::GetInst()->GetNewID();
+	if (-1 == new_id) {
+		std::cout << "Maxmum user overflow. Accept aborted.\n";
+		SendLoginFailPacket(c_socket, static_cast<int>(LOGINFAIL_TYPE::FULL));
+	}
+	else {
+		//Player* cl = MoveObjManager::GetInst()->GetPlayer(new_id);
+		//cl->SetID(new_id);
+		//cl->Init(c_socket);
+		//CreateIoCompletionPort(reinterpret_cast<HANDLE>(c_socket), hiocp, new_id, 0);
+		//cl->DoRecv();
+	}
+	ZeroMemory(&exp_over->_wsa_over, sizeof(exp_over->_wsa_over));
+	c_socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED);
+
+	*(reinterpret_cast<SOCKET*>(exp_over->_net_buf)) = c_socket;
+	AcceptEx(s_socket, c_socket, exp_over->_net_buf + 8, 0, sizeof(SOCKADDR_IN) + 16,
+		sizeof(SOCKADDR_IN) + 16, NULL, &exp_over->_wsa_over);
 }
 
 void PacketManager::ProcessRecv(int, EXP_OVER*, DWORD)
@@ -25,6 +83,15 @@ void PacketManager::SendMovePacket(int c_id, int mover)
 {
 }
 
+void PacketManager::SendLoginFailPacket(SOCKET& c_socket, int reason)
+{
+	sc_packet_login_fail packet;
+	packet.size = sizeof(packet);
+	packet.type = SC_PACKET_LOGIN_FAIL;
+	packet.reason = reason;
+	EXP_OVER* ex_over = new EXP_OVER(COMP_OP::OP_SEND, sizeof(packet), &packet);
+	int ret = WSASend(c_socket, &ex_over->_wsa_buf, 1, 0, 0, &ex_over->_wsa_over, NULL);
+}
 void PacketManager::SendSignInOK(int c_id)
 {
 }

@@ -31,6 +31,18 @@
     <Filter Include="소스 파일\room">
       <UniqueIdentifier>{a47666b3-c574-4b26-a91f-46316cb6b242}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\object">
+      <UniqueIdentifier>{d9124090-5e3e-49f5-8dd6-75fdf0e1c043}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\object\moveobj_manager">
+      <UniqueIdentifier>{1b62fe5c-4b61-464d-8271-a056ae018ac0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\object\moveobj_manager\move_object">
+      <UniqueIdentifier>{ee5e4619-29b4-4553-a57a-75bbb345c36b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\vec">
+      <UniqueIdentifier>{c5ca59dc-8f02-46e3-b7b5-00352a6866cb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -53,6 +65,18 @@
     </ClCompile>
     <ClCompile Include="room.cpp">
       <Filter>소스 파일\room</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="moveobj_manager.cpp">
+      <Filter>소스 파일\object\moveobj_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>소스 파일\object\moveobj_manager\move_object</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy.cpp">
+      <Filter>소스 파일\object\moveobj_manager\move_object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -85,6 +109,33 @@
     </ClInclude>
     <ClInclude Include="room.h">
       <Filter>소스 파일\room</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="moveobj_manager.h">
+      <Filter>소스 파일\object\moveobj_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="object.h">
+      <Filter>소스 파일\object\moveobj_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="vec3.h">
+      <Filter>헤더 파일\vec</Filter>
+    </ClInclude>
+    <ClInclude Include="move_object.h">
+      <Filter>소스 파일\object\moveobj_manager\move_object</Filter>
+    </ClInclude>
+    <ClInclude Include="vec2.h">
+      <Filter>헤더 파일\vec</Filter>
+    </ClInclude>
+    <ClInclude Include="vec4.h">
+      <Filter>헤더 파일\vec</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>소스 파일\object\moveobj_manager\move_object</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy.h">
+      <Filter>소스 파일\object\moveobj_manager\move_object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

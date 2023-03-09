@@ -1,4 +1,4 @@
-
+#include "pch.h"
 #include "room_manager.h"
 #include "room.h"
 void RoomManager::InitRoom()

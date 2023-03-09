@@ -1,12 +1,17 @@
 #include "room.h"
-#include <chrono>
-
+#include "pch.h"
 Room::Room(int room_id)
 {
 }
 
 Room::~Room()
- 
+{
+}
+
+void Room::Init(int user_num)
+{
+	max_user = user_num;
+	max_npc = 7;
 	curr_round = 0;
 }
 

@@ -38,15 +38,25 @@ enum class ROOM_TYPE {
 	RT_RESET
 };
 
+enum class OBJ_TYPE
+{
+	OT_MAPOBJ,
+	OT_SPAWN_AREA,
+	OT_ACTIViTY_AREA,
+	OT_BASE,
+	OT_PLAYER,
+	OT_POLICE
+};
+
 enum class ENEMY_STATE {
 
 };
 
-enum class OBJ_TYPE {
-	OT_MAPOBJ,
-	OT_SPAWN_AREA,
-
-};
+//enum class OBJ_TYPE {
+//	OT_MAPOBJ,
+//	OT_SPAWN_AREA,
+//
+//};
 
 enum class LOGINFAIL_TYPE {
 	OK,

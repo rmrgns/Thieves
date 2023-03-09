@@ -7,6 +7,9 @@
 
 #include "protocol.h"
 #include "state.h"
+#include "vec/vec2.h"
+#include "vec/vec3.h"
+#include "vec/vec4.h"
 
 extern "C" {
 #include "include\lua.h"
