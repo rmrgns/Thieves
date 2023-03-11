@@ -10,5 +10,6 @@ public:
 	virtual void LateUpdate() override;
 
 private:
-	float		_speed = 20.f;
+	float		_speed = 10.f;
+	float		_objectTranslationSpeed = 10.f;
 };

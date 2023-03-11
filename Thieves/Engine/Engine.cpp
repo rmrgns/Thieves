@@ -89,6 +89,8 @@ void Engine::CheckChangeScene()
 		if (_changeScene == L"Game")
 		{ 
 			//GET_SINGLE(Timer)->WaitFrames(120, 1.0f / 60.f);
+			
+			SetCursorPos((_window.width + 150) / 2, (_window.height + 180) / 2);
 			GET_SINGLE(SceneManager)->LoadScene(L"GameScene");
 			_changeScene = L"";
 		}

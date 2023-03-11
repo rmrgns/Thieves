@@ -10,6 +10,8 @@
 #include "Shader.h"
 #include "ParticleSystem.h"
 #include "InstancingManager.h"
+#include "Input.h"
+#include "Timer.h"
 
 Matrix Camera::S_MatView;
 Matrix Camera::S_MatProjection;
@@ -32,6 +34,43 @@ void Camera::FinalUpdate()
 		_matProjection = ::XMMatrixPerspectiveFovLH(_fov, _width / _height, _near, _far);
 	else
 		_matProjection = ::XMMatrixOrthographicLH(_width * _scale, _height * _scale, _near, _far);
+
+	const POINT& point = INPUT->GetMousePos();	// 현재 마우스좌표를 point변수에 저장
+
+	// rotation 예시
+	{
+		if (point.x > 0 && point.x < GEngine->GetWindow().width - 15)
+		{
+			if (point.x > INPUT->GetPrevMousePos().x)
+			{
+				Vec3 rotation = GetTransform()->GetLocalRotation();
+				rotation.y += DELTA_TIME * (point.x - INPUT->GetPrevMousePos().x) * _mouseRotateSpeed;
+				GetTransform()->SetLocalRotation(rotation);
+			}
+			else if (point.x < INPUT->GetPrevMousePos().x)
+			{
+				Vec3 rotation = GetTransform()->GetLocalRotation();
+				rotation.y -= DELTA_TIME * (INPUT->GetPrevMousePos().x - point.x) * _mouseRotateSpeed;
+				GetTransform()->SetLocalRotation(rotation);
+			}
+		}
+
+		if (point.y > 0 && point.y < GEngine->GetWindow().height - 40)
+		{
+			if (point.y > INPUT->GetPrevMousePos().y)
+			{
+				Vec3 rotation = GetTransform()->GetLocalRotation();
+				rotation.x += DELTA_TIME * (point.y - INPUT->GetPrevMousePos().y) * _mouseRotateSpeed;
+				GetTransform()->SetLocalRotation(rotation);
+			}
+			else if (point.y < INPUT->GetPrevMousePos().y)
+			{
+				Vec3 rotation = GetTransform()->GetLocalRotation();
+				rotation.x -= DELTA_TIME * (INPUT->GetPrevMousePos().y - point.y) * _mouseRotateSpeed;
+				GetTransform()->SetLocalRotation(rotation);
+			}
+		}}
+	INPUT->SetPrevMousePos(point);	// Input class의 _prevMousePos에 point의 좌표를 저장
 
 	//_frustum.FinalUpdate();
 }
