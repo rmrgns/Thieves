@@ -111,6 +111,9 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\doyou\Desktop\Thieves\Thieves\Thieves_Server\Thieves_Server\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -126,6 +129,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,20 +143,37 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="database\db.cpp" />
+    <ClCompile Include="enemy.cpp" />
     <ClCompile Include="game_server\ingame_server.cpp" />
     <ClCompile Include="game_server\packet_manager.cpp" />
     <ClCompile Include="iocp_server\iocp_server.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="moveobj_manager.cpp" />
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="player.cpp" />
+    <ClCompile Include="room.cpp" />
+    <ClCompile Include="room_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="database\db.h" />
     <ClInclude Include="define.h" />
+    <ClInclude Include="enemy.h" />
     <ClInclude Include="game_server\ingame_server.h" />
     <ClInclude Include="game_server\packet_manager.h" />
     <ClInclude Include="iocp_server\iocp_server.h" />
+    <ClInclude Include="moveobj_manager.h" />
+    <ClInclude Include="move_object.h" />
+    <ClInclude Include="object.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="player.h" />
+    <ClInclude Include="room.h" />
+    <ClInclude Include="room_manager.h" />
     <ClInclude Include="state.h" />
     <ClInclude Include="header.h" />
     <ClInclude Include="protocol.h" />
+    <ClInclude Include="vec2.h" />
+    <ClInclude Include="vec3.h" />
+    <ClInclude Include="vec4.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
