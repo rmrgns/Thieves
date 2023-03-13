@@ -66,7 +66,7 @@ private:
 	Frustum _frustum;
 	uint32	_cullingMask = 0;
 
-	float	_mouseRotateSpeed = 1.f;
+	float	_mouseRotateSpeed = 0.5f;
 
 private:
 	vector<shared_ptr<GameObject>>	_vecDeferred;

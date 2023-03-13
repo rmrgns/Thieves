@@ -35,6 +35,7 @@ public:
 	shared_ptr<Scene> GetActiveScene() { return _activeScene; }
 	bool GetCheckChangeScene() { return _checkChangeScene; }
 	void SetCheckChangeScene(bool check) { _checkChangeScene = check; }
+	CURRENT_SCENE GetCurrentScene() { return _currentScene; }
 
 private:
 	shared_ptr<Scene> LoadTestScene();
@@ -44,6 +45,7 @@ private:
 	shared_ptr<Scene> _activeScene;
 	bool _checkChangeScene = false;
 	wstring _changeSceneName = L"";
+	CURRENT_SCENE _currentScene = CURRENT_SCENE::NONE;
 
 	array<wstring, MAX_LAYER> _layerNames;
 	map<wstring, uint8> _layerIndex;

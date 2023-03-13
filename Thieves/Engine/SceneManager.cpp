@@ -47,11 +47,12 @@ void SceneManager::LoadScene(wstring sceneName)
 	if (sceneName == L"LoginScene")
 	{
 		_activeScene = LoadLoginScene();
-		
+		_currentScene = CURRENT_SCENE::LOGIN;
 	}
 	else if (sceneName == L"GameScene")
 	{
 		_activeScene = LoadTestScene();
+		_currentScene = CURRENT_SCENE::GAME;
 	}
 	else
 	{

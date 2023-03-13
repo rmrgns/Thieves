@@ -35,42 +35,10 @@ void Camera::FinalUpdate()
 	else
 		_matProjection = ::XMMatrixOrthographicLH(_width * _scale, _height * _scale, _near, _far);
 
-	const POINT& point = INPUT->GetMousePos();	// 현재 마우스좌표를 point변수에 저장
-
-	// rotation 예시
+	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
 	{
-		if (point.x > 0 && point.x < GEngine->GetWindow().width - 15)
-		{
-			if (point.x > INPUT->GetPrevMousePos().x)
-			{
-				Vec3 rotation = GetTransform()->GetLocalRotation();
-				rotation.y += DELTA_TIME * (point.x - INPUT->GetPrevMousePos().x) * _mouseRotateSpeed;
-				GetTransform()->SetLocalRotation(rotation);
-			}
-			else if (point.x < INPUT->GetPrevMousePos().x)
-			{
-				Vec3 rotation = GetTransform()->GetLocalRotation();
-				rotation.y -= DELTA_TIME * (INPUT->GetPrevMousePos().x - point.x) * _mouseRotateSpeed;
-				GetTransform()->SetLocalRotation(rotation);
-			}
-		}
-
-		if (point.y > 0 && point.y < GEngine->GetWindow().height - 40)
-		{
-			if (point.y > INPUT->GetPrevMousePos().y)
-			{
-				Vec3 rotation = GetTransform()->GetLocalRotation();
-				rotation.x += DELTA_TIME * (point.y - INPUT->GetPrevMousePos().y) * _mouseRotateSpeed;
-				GetTransform()->SetLocalRotation(rotation);
-			}
-			else if (point.y < INPUT->GetPrevMousePos().y)
-			{
-				Vec3 rotation = GetTransform()->GetLocalRotation();
-				rotation.x -= DELTA_TIME * (INPUT->GetPrevMousePos().y - point.y) * _mouseRotateSpeed;
-				GetTransform()->SetLocalRotation(rotation);
-			}
-		}}
-	INPUT->SetPrevMousePos(point);	// Input class의 _prevMousePos에 point의 좌표를 저장
+		CameraRotation();
+	}
 
 	//_frustum.FinalUpdate();
 }
@@ -184,4 +152,33 @@ void Camera::Render_Shadow()
 	{
 		gameObject->GetMeshRenderer()->RenderShadow();
 	}
+}
+
+void Camera::CameraRotation()
+{
+	const POINT& point = INPUT->GetMousePos();	// 현재 마우스좌표를 point변수에 저장
+	float mouseX = static_cast<float>(point.x);	// point변수의 값을 float값으로 변경
+	float mouseY = static_cast<float>(point.y);
+
+	const POINT& prevPoint = INPUT->GetPrevMousePos();	// 이전 마우스좌표를 prevPoint변수에 저장
+	float prevMouseX = static_cast<float>(prevPoint.x);	// prevPoint변수의 값을 float값으로 변경
+	float prevMouseY = static_cast<float>(prevPoint.y);
+
+	RECT rect{};
+	GetClientRect(GEngine->GetWindow().hwnd, &rect);
+
+	// rotation 예시
+	{
+		if ((mouseX > 0.f && mouseX < rect.right) && (mouseY > 0.f && mouseY < rect.bottom))
+		{
+			Vec3 rotation = GetTransform()->GetLocalRotation();
+			rotation.y += DELTA_TIME * (mouseX - prevMouseX) * _mouseRotateSpeed;
+			rotation.x += DELTA_TIME * (mouseY - prevMouseY) * _mouseRotateSpeed;
+			GetTransform()->SetLocalRotation(rotation);
+		}
+
+
+
+	}
+	INPUT->SetPrevMousePos(point);	// Input class의 _prevMousePos에 point의 좌표를 저장
 }

@@ -84,13 +84,14 @@ void Engine::ResizeWindow(int32 width, int32 height)
 
 void Engine::CheckChangeScene()
 {
+	RECT rect{};
+	GetWindowRect(GEngine->GetWindow().hwnd, &rect);
+
 	if (GET_SINGLE(SceneManager)->GetCheckChangeScene())
 	{
 		if (_changeScene == L"Game")
-		{ 
-			//GET_SINGLE(Timer)->WaitFrames(120, 1.0f / 60.f);
-			
-			SetCursorPos((_window.width + 150) / 2, (_window.height + 180) / 2);
+		{	
+			SetCursorPos((rect.left + rect.right) / 2, (rect.top + rect.bottom) / 2);
 			GET_SINGLE(SceneManager)->LoadScene(L"GameScene");
 			_changeScene = L"";
 		}
