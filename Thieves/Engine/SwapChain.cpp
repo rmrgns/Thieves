@@ -11,7 +11,7 @@ void SwapChain::Init(const WindowInfo& info, ComPtr<ID3D12Device> device, ComPtr
 void SwapChain::Present()
 {
 	// Present the frame.
-	_swapChain->Present(0, 0);
+	_swapChain->Present(1, 0);
 }
 
 void SwapChain::SwapIndex()
