@@ -7,6 +7,7 @@ enum class OBJECT_TYPE : uint8
 	COMPONENT,
 	MATERIAL,
 	MESH,
+	MESH_DATA,
 	SHADER,
 	TEXTURE,
 
@@ -32,7 +33,6 @@ public:
 	uint32 GetID() { return _id; }
 
 	// TODO : Instantiate
-	// object의 클론을 만드는 기능
 
 protected:
 	friend class Resources;

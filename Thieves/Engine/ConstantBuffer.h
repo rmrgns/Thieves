@@ -10,7 +10,7 @@ enum class CONSTANT_BUFFER_TYPE : uint8
 
 enum
 {
-	CCONSTANT_BUFFER_COUNT = static_cast<uint8>(CONSTANT_BUFFER_TYPE::END)
+	CONSTANT_BUFFER_COUNT = static_cast<uint8>(CONSTANT_BUFFER_TYPE::END)
 };
 
 class ConstantBuffer

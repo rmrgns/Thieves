@@ -28,8 +28,7 @@ public:
 
 	float GetWidth() { return static_cast<float>(_desc.Width); }
 	float GetHeight() { return static_cast<float>(_desc.Height); }
-public:
-	
+
 private:
 	ScratchImage			 		_image;
 	D3D12_RESOURCE_DESC				_desc;

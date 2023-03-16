@@ -27,7 +27,10 @@ enum class KEY_TYPE
 	O = 'O',	// temp : GameScene전환
 	P = 'P',	// temp : LoginScene전환
 
-
+	KEY_1 = '1',
+	KEY_2 = '2',
+	KEY_3 = '3',
+	KEY_4 = '4',
 
 	LBUTTON = VK_LBUTTON,
 	RBUTTON = VK_RBUTTON,
@@ -62,7 +65,7 @@ public:
 	bool GetButtonDown(KEY_TYPE key) { return GetState(key) == KEY_STATE::DOWN; }
 	// 맨 처음 눌렀다 뗐을 때
 	bool GetButtonUp(KEY_TYPE key) { return GetState(key) == KEY_STATE::UP; }
-
+	
 	const POINT& GetMousePos() { return _mousePos; }
 	const POINT& GetPrevMousePos() { return _prevMousePos; }
 	void SetPrevMousePos(POINT prevMousePos) { _prevMousePos = prevMousePos; }

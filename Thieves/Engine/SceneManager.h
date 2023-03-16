@@ -13,7 +13,7 @@ enum class CURRENT_SCENE
 
 enum
 {
-	MAX_LAYER = 32,
+	MAX_LAYER = 32
 };
 
 class SceneManager

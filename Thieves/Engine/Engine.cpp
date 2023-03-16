@@ -11,16 +11,16 @@
 
 void Engine::Init(const WindowInfo& info)
 {
-	_window = info;
+	_window = info;	
 
 	// 그려질 화면 크기를 설정
 	_viewport = { 0, 0, static_cast<FLOAT>(info.width), static_cast<FLOAT>(info.height), 0.0f, 1.0f };
 	_scissorRect = CD3DX12_RECT(0, 0, info.width, info.height);
 
 	_device->Init();
-	_graphicscmdQueue->Init(_device->GetDevice(), _swapChain);
+	_graphicsCmdQueue->Init(_device->GetDevice(), _swapChain);
 	_computeCmdQueue->Init(_device->GetDevice());
-	_swapChain->Init(info, _device->GetDevice(), _device->GetDXGI(), _graphicscmdQueue->GetCmdQueue());
+	_swapChain->Init(info, _device->GetDevice(), _device->GetDXGI(), _graphicsCmdQueue->GetCmdQueue());
 	_rootSignature->Init();
 	_graphicsDescHeap->Init(256);
 	_computeDescHeap->Init();
@@ -28,9 +28,9 @@ void Engine::Init(const WindowInfo& info)
 	CreateConstantBuffer(CBV_REGISTER::b0, sizeof(LightParams), 1);
 	CreateConstantBuffer(CBV_REGISTER::b1, sizeof(TransformParams), 256);
 	CreateConstantBuffer(CBV_REGISTER::b2, sizeof(MaterialParams), 256);
-	
+
 	CreateRenderTargetGroups();
-	
+
 	ResizeWindow(info.width, info.height);
 	
 	GET_SINGLE(Input)->Init(info.hwnd);
@@ -64,12 +64,12 @@ void Engine::Render()
 
 void Engine::RenderBegin()
 {
-	_graphicscmdQueue->RenderBegin();
+	_graphicsCmdQueue->RenderBegin();
 }
 
 void Engine::RenderEnd()
 {
-	_graphicscmdQueue->RenderEnd();
+	_graphicsCmdQueue->RenderEnd();
 }
 
 void Engine::ResizeWindow(int32 width, int32 height)
@@ -125,6 +125,7 @@ void Engine::CreateConstantBuffer(CBV_REGISTER reg, uint32 bufferSize, uint32 co
 	_constantBuffers.push_back(buffer);
 }
 
+
 void Engine::CreateRenderTargetGroups()
 {
 	// DepthStencil
@@ -149,7 +150,7 @@ void Engine::CreateRenderTargetGroups()
 		_rtGroups[static_cast<uint8>(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)] = make_shared<RenderTargetGroup>();
 		_rtGroups[static_cast<uint8>(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)]->Create(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN, rtVec, dsTexture);
 	}
-	
+
 	// Shadow Group
 	{
 		vector<RenderTarget> rtVec(RENDER_TARGET_SHADOW_GROUP_MEMBER_COUNT);

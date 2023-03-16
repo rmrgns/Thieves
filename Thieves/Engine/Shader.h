@@ -9,7 +9,6 @@ enum class SHADER_TYPE : uint8
 	PARTICLE,
 	COMPUTE,
 	SHADOW,
-
 };
 
 enum class RASTERIZER_TYPE : uint8
@@ -65,7 +64,7 @@ public:
 
 	void CreateGraphicsShader(const wstring& path, ShaderInfo info = ShaderInfo(), ShaderArg arg = ShaderArg());
 	void CreateComputeShader(const wstring& path, const string& name, const string& version);
-
+	
 	void Update();
 
 	SHADER_TYPE GetShaderType() { return _info.shaderType; }
@@ -87,10 +86,10 @@ private:
 	// GraphicsShader
 	ComPtr<ID3DBlob>					_vsBlob;
 	ComPtr<ID3DBlob>					_hsBlob;
-	ComPtr<ID3DBlob>					_dsBlob;
+	ComPtr<ID3DBlob>					_dsBlob;	
 	ComPtr<ID3DBlob>					_gsBlob;
 	ComPtr<ID3DBlob>					_psBlob;
-	ComPtr<ID3DBlob>					_errBlob;
+	ComPtr<ID3DBlob>					_errBlob;	
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC  _graphicsPipelineDesc = {};
 
 	// ComputeShader
