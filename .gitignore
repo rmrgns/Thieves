@@ -411,6 +411,5 @@ Server/bin-int/
 # Visual Studio files and folder
 .vs/
 
-
-Engine.lib
+Output/
 *.cso
