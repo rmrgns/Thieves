@@ -412,5 +412,5 @@ Server/bin-int/
 .vs/
 
 
-Engine.lib
+Output/Engine.lib
 *.cso
