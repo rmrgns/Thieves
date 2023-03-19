@@ -6,6 +6,9 @@
 void Game::Init(const WindowInfo& info)
 {
 	GEngine->Init(info);
+
+
+
 	GET_SINGLE(SceneManager)->LoadScene(L"LoginScene");
 }
 

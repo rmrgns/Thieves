@@ -21,6 +21,18 @@
     <Filter Include="소스 파일\Server\network">
       <UniqueIdentifier>{290e1e28-f8a8-4740-96fc-3ee7ec15cdde}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Server\packet_manager">
+      <UniqueIdentifier>{2ef57ae5-0821-4fdf-b27d-4e2ef68c8153}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Server\send_manager">
+      <UniqueIdentifier>{2e291387-04fe-4be1-9acd-f65394e1d8ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Server\thieves_packet">
+      <UniqueIdentifier>{5cbe4b85-83ce-4a29-a192-d427915bb995}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Server\network_obj_manager">
+      <UniqueIdentifier>{aa842f23-493f-424c-b9bc-1d5032558776}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -44,14 +56,29 @@
     <ClInclude Include="..\Engine\Timer.h">
       <Filter>소스 파일\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="server\define.h">
-      <Filter>소스 파일\Server</Filter>
-    </ClInclude>
     <ClInclude Include="server\protocol.h">
       <Filter>소스 파일\Server</Filter>
     </ClInclude>
     <ClInclude Include="server\network.h">
       <Filter>소스 파일\Server\network</Filter>
+    </ClInclude>
+    <ClInclude Include="send_manager.h">
+      <Filter>소스 파일\Server\send_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="packet_manager.h">
+      <Filter>소스 파일\Server\packet_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="thieves_packet.h">
+      <Filter>소스 파일\Server\thieves_packet</Filter>
+    </ClInclude>
+    <ClInclude Include="network_obj_manager.h">
+      <Filter>소스 파일\Server\network_obj_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="server\define.h">
+      <Filter>소스 파일\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="ptr.h">
+      <Filter>소스 파일\Server</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -82,6 +109,18 @@
     </ClCompile>
     <ClCompile Include="server\network.cpp">
       <Filter>소스 파일\Server\network</Filter>
+    </ClCompile>
+    <ClCompile Include="send_manager.cpp">
+      <Filter>소스 파일\Server\send_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="packet_manager.cpp">
+      <Filter>소스 파일\Server\packet_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="thieves_packet.cpp">
+      <Filter>소스 파일\Server\thieves_packet</Filter>
+    </ClCompile>
+    <ClCompile Include="network_obj_manaver.cpp">
+      <Filter>소스 파일\Server\network_obj_manager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

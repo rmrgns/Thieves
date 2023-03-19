@@ -96,7 +96,7 @@ struct sc_packet_sign_in_ok {
 	unsigned char size;
 	char type;
 	int		id;
-	float	x, y, z;
+
 };
 struct sc_packet_sign_up_ok {
 	unsigned char size;
