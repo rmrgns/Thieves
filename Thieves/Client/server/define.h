@@ -1,5 +1,5 @@
 #pragma once
-
+//#include <winsock2.h>
 #include <WS2tcpip.h>
 #include <MSWSock.h>
 #pragma comment (lib, "WS2_32.LIB")

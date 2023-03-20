@@ -3,7 +3,7 @@
 #pragma comment(lib, "Engine.lib")
 
 #include "EnginePch.h"
-//#include "../Client/server/define.h"
+#include "../Client/server/define.h"
 #include <iostream>
 #include <string_view>
 #include <typeinfo>

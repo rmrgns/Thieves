@@ -4,6 +4,7 @@
 #define _HAS_STD_BYTE 0
 
 // °¢Á¾ include
+#include <WS2tcpip.h>
 #include <windows.h>
 #include <tchar.h>
 #include <memory>
