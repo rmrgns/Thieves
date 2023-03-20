@@ -33,6 +33,9 @@
     <Filter Include="소스 파일\Server\network_obj_manager">
       <UniqueIdentifier>{aa842f23-493f-424c-b9bc-1d5032558776}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Server\massage">
+      <UniqueIdentifier>{9fc3a3c4-b8d6-4ff0-bc43-d11614c897c1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -56,25 +59,28 @@
     <ClInclude Include="..\Engine\Timer.h">
       <Filter>소스 파일\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="server\protocol.h">
-      <Filter>소스 파일\Server</Filter>
+    <ClInclude Include="server\packet\packet_manager.h">
+      <Filter>소스 파일\Server\packet_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="server\sendmanager\send_manager.h">
+      <Filter>소스 파일\Server\send_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="server\massage\message._event_info.h">
+      <Filter>소스 파일\Server\massage</Filter>
+    </ClInclude>
+    <ClInclude Include="server\packet\thieves_packet.h">
+      <Filter>소스 파일\Server\thieves_packet</Filter>
+    </ClInclude>
+    <ClInclude Include="server\network_obj_manager.h">
+      <Filter>소스 파일\Server\network_obj_manager</Filter>
     </ClInclude>
     <ClInclude Include="server\network.h">
       <Filter>소스 파일\Server\network</Filter>
     </ClInclude>
-    <ClInclude Include="send_manager.h">
-      <Filter>소스 파일\Server\send_manager</Filter>
-    </ClInclude>
-    <ClInclude Include="packet_manager.h">
-      <Filter>소스 파일\Server\packet_manager</Filter>
-    </ClInclude>
-    <ClInclude Include="thieves_packet.h">
-      <Filter>소스 파일\Server\thieves_packet</Filter>
-    </ClInclude>
-    <ClInclude Include="network_obj_manager.h">
-      <Filter>소스 파일\Server\network_obj_manager</Filter>
-    </ClInclude>
     <ClInclude Include="server\define.h">
+      <Filter>소스 파일\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="server\protocol.h">
       <Filter>소스 파일\Server</Filter>
     </ClInclude>
     <ClInclude Include="ptr.h">
@@ -110,16 +116,19 @@
     <ClCompile Include="server\network.cpp">
       <Filter>소스 파일\Server\network</Filter>
     </ClCompile>
-    <ClCompile Include="send_manager.cpp">
-      <Filter>소스 파일\Server\send_manager</Filter>
-    </ClCompile>
-    <ClCompile Include="packet_manager.cpp">
+    <ClCompile Include="server\packet\packet_manager.cpp">
       <Filter>소스 파일\Server\packet_manager</Filter>
     </ClCompile>
-    <ClCompile Include="thieves_packet.cpp">
+    <ClCompile Include="server\sendmanager\send_manager.cpp">
+      <Filter>소스 파일\Server\send_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="server\massage\massage_event_info.cpp">
+      <Filter>소스 파일\Server\massage</Filter>
+    </ClCompile>
+    <ClCompile Include="server\packet\thieves_packet.cpp">
       <Filter>소스 파일\Server\thieves_packet</Filter>
     </ClCompile>
-    <ClCompile Include="network_obj_manaver.cpp">
+    <ClCompile Include="server\network_obj_manaver.cpp">
       <Filter>소스 파일\Server\network_obj_manager</Filter>
     </ClCompile>
   </ItemGroup>
