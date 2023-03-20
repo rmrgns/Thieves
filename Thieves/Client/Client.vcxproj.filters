@@ -27,14 +27,23 @@
     <Filter Include="소스 파일\Server\send_manager">
       <UniqueIdentifier>{2e291387-04fe-4be1-9acd-f65394e1d8ca}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Server\thieves_packet">
-      <UniqueIdentifier>{5cbe4b85-83ce-4a29-a192-d427915bb995}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\Server\network_obj_manager">
       <UniqueIdentifier>{aa842f23-493f-424c-b9bc-1d5032558776}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\Server\massage">
       <UniqueIdentifier>{9fc3a3c4-b8d6-4ff0-bc43-d11614c897c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Thieves_server">
+      <UniqueIdentifier>{3ca13017-7afc-46f4-81c1-f0ca0cd8b1c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Thieves_server\thieves_send_manager">
+      <UniqueIdentifier>{ead25523-01f3-40ad-b860-915d93f1163e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Thieves_server\thieves_packet_manager">
+      <UniqueIdentifier>{5cbe4b85-83ce-4a29-a192-d427915bb995}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Thieves_server\thieves_message">
+      <UniqueIdentifier>{d9e3d50f-2342-40bf-8ed9-65fa4b17cace}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -68,11 +77,8 @@
     <ClInclude Include="server\massage\message._event_info.h">
       <Filter>소스 파일\Server\massage</Filter>
     </ClInclude>
-    <ClInclude Include="server\packet\thieves_packet.h">
-      <Filter>소스 파일\Server\thieves_packet</Filter>
-    </ClInclude>
-    <ClInclude Include="server\network_obj_manager.h">
-      <Filter>소스 파일\Server\network_obj_manager</Filter>
+    <ClInclude Include="server\packet\thieves_packet_manager.h">
+      <Filter>소스 파일\Thieves_server\thieves_packet_manager</Filter>
     </ClInclude>
     <ClInclude Include="server\network.h">
       <Filter>소스 파일\Server\network</Filter>
@@ -85,6 +91,21 @@
     </ClInclude>
     <ClInclude Include="ptr.h">
       <Filter>소스 파일\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="server\network_obj_manager.h">
+      <Filter>소스 파일\Server\network_obj_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="network_object.h">
+      <Filter>소스 파일\Server\network</Filter>
+    </ClInclude>
+    <ClInclude Include="thieves_send_manager.h">
+      <Filter>소스 파일\Thieves_server\thieves_send_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="game_info.h">
+      <Filter>소스 파일\Thieves_server</Filter>
+    </ClInclude>
+    <ClInclude Include="thieves_message_event_info.h">
+      <Filter>소스 파일\Thieves_server\thieves_message</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -125,11 +146,17 @@
     <ClCompile Include="server\massage\massage_event_info.cpp">
       <Filter>소스 파일\Server\massage</Filter>
     </ClCompile>
-    <ClCompile Include="server\packet\thieves_packet.cpp">
-      <Filter>소스 파일\Server\thieves_packet</Filter>
+    <ClCompile Include="server\packet\thieves_packet_manager.cpp">
+      <Filter>소스 파일\Thieves_server\thieves_packet_manager</Filter>
     </ClCompile>
-    <ClCompile Include="server\network_obj_manaver.cpp">
+    <ClCompile Include="server\network_obj_manager.cpp">
       <Filter>소스 파일\Server\network_obj_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="thieves_send_manager.cpp">
+      <Filter>소스 파일\Thieves_server\thieves_send_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="thieves_message_event_info.cpp">
+      <Filter>소스 파일\Thieves_server\thieves_message</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
