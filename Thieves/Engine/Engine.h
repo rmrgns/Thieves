@@ -36,14 +36,18 @@ public:
 	void RenderEnd();
 
 	void ResizeWindow(int32 width, int32 height);
+	POINT GetWindowCenter() { return _windowCenter; }
+	POINT GetClientCenter() { return _clientCenter; }
 
 	void SetChangeScene(wstring changeScene) { _changeScene = changeScene; }
 	virtual void CheckChangeScene();
+
 
 private:
 	void ShowFps();
 	void CreateConstantBuffer(CBV_REGISTER reg, uint32 bufferSize, uint32 count);
 	void CreateRenderTargetGroups();
+	void CreateScreenCenter();
 
 private:
 	// 그려질 화면 크기 관련
@@ -63,5 +67,8 @@ private:
 	array<shared_ptr<RenderTargetGroup>, RENDER_TARGET_GROUP_COUNT> _rtGroups;
 
 	wstring _changeScene{};
+	POINT _windowCenter{};
+	POINT _clientCenter{};
+
 };
 

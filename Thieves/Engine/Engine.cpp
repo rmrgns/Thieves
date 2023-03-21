@@ -32,7 +32,8 @@ void Engine::Init(const WindowInfo& info)
 	CreateRenderTargetGroups();
 
 	ResizeWindow(info.width, info.height);
-	
+	CreateScreenCenter();
+
 	GET_SINGLE(Input)->Init(info.hwnd);
 	GET_SINGLE(Timer)->Init();
 	GET_SINGLE(Resources)->Init();
@@ -84,14 +85,12 @@ void Engine::ResizeWindow(int32 width, int32 height)
 
 void Engine::CheckChangeScene()
 {
-	RECT rect{};
-	GetWindowRect(GEngine->GetWindow().hwnd, &rect);
 
 	if (GET_SINGLE(SceneManager)->GetCheckChangeScene())
 	{
 		if (_changeScene == L"Game")
 		{	
-			SetCursorPos((rect.left + rect.right) / 2, (rect.top + rect.bottom) / 2);
+			SetCursorPos(_windowCenter.x, _windowCenter.y);
 			GET_SINGLE(SceneManager)->LoadScene(L"GameScene");
 			_changeScene = L"";
 		}
@@ -109,8 +108,13 @@ void Engine::ShowFps()
 {
 	uint32 fps = GET_SINGLE(Timer)->GetFps();
 
+	RECT rect{};
+	GetWindowRect(GEngine->GetWindow().hwnd, &rect);
+	RECT rect1;
+	GetClientRect(GEngine->GetWindow().hwnd, &rect1);
 	WCHAR text[100] = L"";
-	::wsprintf(text, L"FPS : %d", fps);
+	//::wsprintf(text, L"FPS : %d, x:%d y:%d", fps, INPUT->GetMousePos().x , INPUT->GetMousePos().y);
+	::wsprintf(text, L"FPS : %d, x:%d y:%d, mx:%d my:%d", fps, (rect1.left + rect1.right) / 2, (rect1.top + rect1.bottom) / 2, INPUT->GetMousePos().x, INPUT->GetMousePos().y);
 
 	::SetWindowText(_window.hwnd, text);
 }
@@ -209,4 +213,19 @@ void Engine::CreateRenderTargetGroups()
 		_rtGroups[static_cast<uint8>(RENDER_TARGET_GROUP_TYPE::LIGHTING)] = make_shared<RenderTargetGroup>();
 		_rtGroups[static_cast<uint8>(RENDER_TARGET_GROUP_TYPE::LIGHTING)]->Create(RENDER_TARGET_GROUP_TYPE::LIGHTING, rtVec, dsTexture);
 	}
+}
+
+void Engine::CreateScreenCenter()
+{
+	// WindowÀÇ Áß¾Ó ÁÂÇ¥¸¦ ÀúÀå
+	RECT rectWindow;
+	GetWindowRect(GEngine->GetWindow().hwnd, &rectWindow);
+	_windowCenter.x = (rectWindow.left + rectWindow.right) / 2;
+	_windowCenter.y = (rectWindow.top + rectWindow.bottom) / 2;
+
+	// ClientÀÇ Áß¾Ó ÁÂÇ¥¸¦ ÀúÀå
+	RECT rectClient;
+	GetClientRect(GEngine->GetWindow().hwnd, &rectClient);
+	_clientCenter.x = (rectClient.left + rectClient.right) / 2;
+	_clientCenter.y = (rectClient.top + rectClient.bottom) / 2 - 11;
 }
