@@ -31,13 +31,9 @@ void LoginScript::LateUpdate()
 		GEngine->SetChangeScene(L"Login");
 	}
 
-	if (INPUT->GetButtonDown(KEY_TYPE::RBUTTON))
+	if (INPUT->GetButton(KEY_TYPE::ESC))
 	{
-
-		//GET_SINGLE(SceneManager)->SetCheckChangeScene(true);
-		//GEngine->SetChangeScene(L"Game");
-		//const POINT& pos = INPUT->GetMousePos();
-		//GET_SINGLE(SceneManager)->Pick(pos.x, pos.y);
+		PostQuitMessage(0);
 	}
 
 }
