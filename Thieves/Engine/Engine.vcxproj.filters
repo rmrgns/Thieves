@@ -156,8 +156,11 @@
     <ClCompile Include="MeshData.cpp">
       <Filter>Object\Resource</Filter>
     </ClCompile>
+    <ClCompile Include="Network.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
     <ClCompile Include="TestDragon.cpp">
-      <Filter>Object\Test</Filter>
+      <Filter>Object\Script</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -290,8 +293,11 @@
     <ClInclude Include="MeshData.h">
       <Filter>Object\Resource</Filter>
     </ClInclude>
+    <ClInclude Include="Network.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
     <ClInclude Include="TestDragon.h">
-      <Filter>Object\Test</Filter>
+      <Filter>Object\Script</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

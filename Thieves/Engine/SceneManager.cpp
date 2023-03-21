@@ -223,7 +223,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 #pragma endregion
 
 #pragma region Terrain
-	/*{
+	{
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
 		obj->AddComponent(make_shared<Transform>());
 		obj->AddComponent(make_shared<Terrain>());
@@ -236,7 +236,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		obj->SetCheckFrustum(false);
 
 		scene->AddGameObject(obj);
-	}*/
+	}
 #pragma endregion
 
 #pragma region UI_Test

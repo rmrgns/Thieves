@@ -128,7 +128,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
     ShowWindow(hWnd, nCmdShow);
     UpdateWindow(hWnd);
-
+    ShowCursor(FALSE);
     GWindowInfo.hwnd = hWnd;
 
     return TRUE;
