@@ -45,7 +45,7 @@ const char SC_PACKET_STUN = 13;				// stun
 const char SC_PAKCET_INTERACTION = 14;		// 상호작용
 const char SC_PACKET_PHASE = 15;			// 페이즈 변경  
 
-#pragma pack (push, 1)
+//#pragma pack (push, 1)
 struct cs_packet_test {
 	unsigned char size;
 	char	type;

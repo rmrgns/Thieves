@@ -95,17 +95,14 @@
     <ClInclude Include="server\network_obj_manager.h">
       <Filter>소스 파일\Server\network_obj_manager</Filter>
     </ClInclude>
-    <ClInclude Include="network_object.h">
-      <Filter>소스 파일\Server\network</Filter>
-    </ClInclude>
     <ClInclude Include="thieves_send_manager.h">
       <Filter>소스 파일\Thieves_server\thieves_send_manager</Filter>
     </ClInclude>
-    <ClInclude Include="game_info.h">
-      <Filter>소스 파일\Thieves_server</Filter>
-    </ClInclude>
     <ClInclude Include="thieves_message_event_info.h">
       <Filter>소스 파일\Thieves_server\thieves_message</Filter>
+    </ClInclude>
+    <ClInclude Include="server\thieves_server\game_info.h">
+      <Filter>소스 파일\Thieves_server</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -152,11 +149,11 @@
     <ClCompile Include="server\network_obj_manager.cpp">
       <Filter>소스 파일\Server\network_obj_manager</Filter>
     </ClCompile>
-    <ClCompile Include="thieves_send_manager.cpp">
-      <Filter>소스 파일\Thieves_server\thieves_send_manager</Filter>
-    </ClCompile>
-    <ClCompile Include="thieves_message_event_info.cpp">
+    <ClCompile Include="server\thieves_server\thieves_massage\thieves_message_event_info.cpp">
       <Filter>소스 파일\Thieves_server\thieves_message</Filter>
+    </ClCompile>
+    <ClCompile Include="server\thieves_server\thieves_send\thieves_send_manager.cpp">
+      <Filter>소스 파일\Thieves_server\thieves_send_manager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

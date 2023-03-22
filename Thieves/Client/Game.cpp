@@ -8,7 +8,7 @@ void Game::Init(const WindowInfo& info)
 {
 	GEngine->Init(info);
 	//Network::GetInst()->Init(CreateUPtr<RevivePacketManager>(), CreateUPtr<ReviveSendManager>());
-	Network::GetInst()->CreateWorker();
+	//Network::GetInst()->CreateWorker();
 
 	GET_SINGLE(SceneManager)->LoadScene(L"LoginScene");
 }

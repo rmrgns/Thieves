@@ -5,6 +5,7 @@
 
 // °¢Á¾ include
 #include <WS2tcpip.h>
+#include <MSWSock.h>
 #include <windows.h>
 #include <tchar.h>
 #include <memory>

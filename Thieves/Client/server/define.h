@@ -4,10 +4,10 @@
 #include <MSWSock.h>
 #pragma comment (lib, "WS2_32.LIB")
 #pragma comment (lib, "MSWSock.LIB")
-#include <DirectXMath.h>
-
+//
+////
 #include"protocol.h"
-const int BUFSIZE = 4096;
+const int BUFSIZE = 2048;
 
 enum class COMP_OP {
 	OP_RECV,
@@ -22,6 +22,8 @@ public:
 	WSABUF		  _wsa_buf;
 	unsigned char _net_buf[BUFSIZE];
 public:
+	/*EXP_OVER() {}
+	~EXP_OVER() {}*/
 	EXP_OVER(COMP_OP comp_op, char num_bytes, void* mess) : _comp_op(comp_op)
 	{
 		ZeroMemory(&_wsa_over, sizeof(_wsa_over));

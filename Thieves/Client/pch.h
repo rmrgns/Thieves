@@ -3,7 +3,7 @@
 #pragma comment(lib, "Engine.lib")
 
 #include "EnginePch.h"
-#include "../Client/server/define.h"
+
 #include <iostream>
 #include <string_view>
 #include <typeinfo>
@@ -18,7 +18,7 @@
 #include <limits>
 #include <filesystem>
 #include <bitset>
-
+#include "../Client/server/define.h"
 #include "../Client/ptr.h"
-#include "../Client/Resource.h"
+//#include "../Client/Resource.h"
 
