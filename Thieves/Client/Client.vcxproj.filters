@@ -45,6 +45,15 @@
     <Filter Include="소스 파일\Thieves_server\thieves_message">
       <UniqueIdentifier>{d9e3d50f-2342-40bf-8ed9-65fa4b17cace}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Server\core">
+      <UniqueIdentifier>{613a40f4-f154-4e43-b8ab-4aad271255d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Server\event">
+      <UniqueIdentifier>{5c6be49d-aa1e-4303-b421-a1c32741c01b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Server\event\event_core">
+      <UniqueIdentifier>{c69c32ed-2b9b-4f89-8959-c7f1e14ba677}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -104,6 +113,21 @@
     <ClInclude Include="server\thieves_server\game_info.h">
       <Filter>소스 파일\Thieves_server</Filter>
     </ClInclude>
+    <ClInclude Include="packet_helper.h">
+      <Filter>소스 파일\Server\packet_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="packet_event_manager.h">
+      <Filter>소스 파일\Server\event</Filter>
+    </ClInclude>
+    <ClInclude Include="evnet_system.h">
+      <Filter>소스 파일\Server\event\event_core</Filter>
+    </ClInclude>
+    <ClInclude Include="event_manager.h">
+      <Filter>소스 파일\Server\event\event_core</Filter>
+    </ClInclude>
+    <ClInclude Include="event_info.h">
+      <Filter>소스 파일\Server\event\event_core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -154,6 +178,15 @@
     </ClCompile>
     <ClCompile Include="server\thieves_server\thieves_send\thieves_send_manager.cpp">
       <Filter>소스 파일\Thieves_server\thieves_send_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="packet_helper.cpp">
+      <Filter>소스 파일\Server\packet_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="packet_event_manager.cpp">
+      <Filter>소스 파일\Server\event</Filter>
+    </ClCompile>
+    <ClCompile Include="event_system.cpp">
+      <Filter>소스 파일\Server\event\event_core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

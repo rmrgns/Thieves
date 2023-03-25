@@ -44,6 +44,8 @@ const char SC_PACKET_DEFEAT = 12;			// defeat
 const char SC_PACKET_STUN = 13;				// stun
 const char SC_PAKCET_INTERACTION = 14;		// 상호작용
 const char SC_PACKET_PHASE = 15;			// 페이즈 변경  
+const char SC_PACKET_TEST = 16;
+
 
 //#pragma pack (push, 1)
 struct cs_packet_test {
@@ -92,3 +94,9 @@ struct sc_packet_win {};
 struct sc_packet_defeat {};
 struct sc_packet_stun {};
 struct sc_pakcet_interaction {};
+
+struct sc_packet_test {
+	unsigned char size;
+	char type;
+	int id;
+};
