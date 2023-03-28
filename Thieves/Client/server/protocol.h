@@ -44,12 +44,39 @@ const char SC_PACKET_DEFEAT = 12;			// defeat
 const char SC_PACKET_STUN = 13;				// stun
 const char SC_PAKCET_INTERACTION = 14;		// 상호작용
 const char SC_PACKET_PHASE = 15;			// 페이즈 변경  
+const char SC_PACKET_TEST = 16;
 
-struct cs_packet_sign_in {};
-struct cs_packet_sign_up {};
-struct cs_packet_move {};
-struct cs_packet_attack {};
-struct cs_packet_chat {};
+
+//#pragma pack (push, 1)
+struct cs_packet_test {
+	unsigned char size;
+	char	type;
+	int		id;
+	float	x, y, z;
+};
+struct cs_packet_sign_in {
+	unsigned char size;
+	char type;
+	char name[MAX_NAME_SIZE];
+	char password[MAX_PASSWORD_SIZE];
+};
+struct cs_packet_sign_up {
+	unsigned char size;
+	char	type;
+	char	name[MAX_NAME_SIZE];
+	char	password[MAX_PASSWORD_SIZE];
+};
+struct cs_packet_move {
+
+};
+struct cs_packet_attack {
+
+};
+struct cs_packet_chat {
+	unsigned char size;
+	char	type;
+	char	message[MAX_CHAT_SIZE];
+};
 struct cs_packet_hit {};
 struct cs_packet_game_start {};
 
@@ -67,3 +94,9 @@ struct sc_packet_win {};
 struct sc_packet_defeat {};
 struct sc_packet_stun {};
 struct sc_pakcet_interaction {};
+
+struct sc_packet_test {
+	unsigned char size;
+	char type;
+	int id;
+};
