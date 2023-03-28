@@ -1,6 +1,4 @@
-<<<<<<< Updated upstream
-#include "pch.h"
-=======
+
 #include "pch.h"
 
 //#include <include/client_core.h>
@@ -123,4 +121,3 @@
 //	}
 //
 //}
->>>>>>> Stashed changes

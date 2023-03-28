@@ -1,8 +1,8 @@
 #pragma once
-#include "../define.h"
+#include "server/define.h"
 
 
-#include "server/massage/message_event_info.h"
+#include "server/message/message_event_info.h"
 class SendManager
 {
 public:

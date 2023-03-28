@@ -1,10 +1,8 @@
-<<<<<<< Updated upstream
-#include "pch.h"
-=======
+
 #include "pch.h"
 
-#include "server/thieves_server/thieves_send/thieves_send_manager.h"
-#include "server/thieves_server/thieves_massage/thieves_message_event_info.h"
+#include "thieves_server/thieves_send/thieves_send_manager.h"
+#include "thieves_server/thieves_message/thieves_message_event_info.h"
 
 //void ThievesSendManager::ProcessSend(const SOCKET& s_socket, const client_fw::SPtr<client_fw::MessageEventInfo>& message)
 //{
@@ -144,4 +142,3 @@
 //	packet.type = CS_PACKET_DAMAGE_CHEAT;
 //	SendPacket(s_socket, sizeof(packet), &packet);
 //}
->>>>>>> Stashed changes

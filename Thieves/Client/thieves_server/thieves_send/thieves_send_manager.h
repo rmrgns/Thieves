@@ -1,6 +1,5 @@
 #pragma once
-<<<<<<< Updated upstream
-=======
+
 #include "server/send_manager/send_manager.h"
 
 class ThievesSendManager :
@@ -20,4 +19,3 @@ public:
     //void SendGameStartPacket(const SOCKET& s_socket);
     //void SendDamageCheatPacket(const SOCKET& s_socket);
 };
->>>>>>> Stashed changes

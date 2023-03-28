@@ -1,6 +1,5 @@
 #pragma once
-<<<<<<< Updated upstream
-=======
+
 //#include <client/event/messageevent/message_event_info.h>
 #include "server/protocol.h"
 #include <mutex>
@@ -239,4 +238,3 @@ class NetworkMoveObj;
 //    public:
 //        GameDefeatEventInfo(UINT event_id);
 //    };
->>>>>>> Stashed changes

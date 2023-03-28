@@ -1,50 +1,5 @@
 // 이벤트 시스템 구현 코드
-<<<<<<< Updated upstream
-#include "../Client/pch.h"
 
-#include ""
-
-namespace client_fw
-{
-	EventSystem* EventSystem::s_event_system = nullptr;
-
-	EventSystem::EventSystem(const WPtr<Window>& window)
-	{
-		EventSystem::s_event_system = this;
-		m_input_manager = CreateUPtr<InputManager>(window);
-		m_input_event_manager = CreateUPtr<InputEventManager>();
-		m_ui_event_manager = CreateUPtr<UIEventManager>();
-		m_message_event_manager = CreateUPtr<MessageEventManager>();
-		m_packet_event_manager = CreateUPtr<PacketEventManager>();
-	}
-
-	EventSystem::~EventSystem()
-	{
-	}
-
-	void EventSystem::ExecuteEvent()
-	{
-		m_input_manager->Update();
-		m_packet_event_manager->ExecuteEventReceivedFromServer();
-		eInputMode mode = Input::GetInputMode();
-		if (mode != eInputMode::kInActive)
-		{
-			m_ui_event_manager->ExecuteEvent();
-			m_input_event_manager->ExecuteEvent();
-		}
-		m_message_event_manager->ExecuteEvent();
-	}
-
-	void EventSystem::Update()
-	{
-		m_input_manager->UpdateForNextFrame();
-	}
-
-	void EventSystem::SendEventToServer()
-	{
-		m_packet_event_manager->SendEventToServer();
-	}
-=======
 #include "pch.h"
 
 //#include ""
@@ -89,7 +44,7 @@ namespace client_fw
 //	{
 //		m_packet_event_manager->SendEventToServer();
 //	}
->>>>>>> Stashed changes
+
 
 	/*void EventSystem::ChangeInputState(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
@@ -123,10 +78,8 @@ namespace client_fw
 			m_input_manager->ChangeIMEText(wParam, lParam);
 			break;
 		}
-<<<<<<< Updated upstream
-	}*/
-}
-=======
+
+
 	}
 }*/
->>>>>>> Stashed changes
+
