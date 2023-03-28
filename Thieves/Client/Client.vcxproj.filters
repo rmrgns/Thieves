@@ -48,6 +48,9 @@
     <Filter Include="소스 파일\thieves_server\thieves_send">
       <UniqueIdentifier>{55ccc657-a28c-4a11-9365-cb858f263354}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\server\core">
+      <UniqueIdentifier>{5b3b6f29-7ed7-436f-a152-26378e47b527}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">

@@ -1,9 +1,7 @@
 #pragma once
-<<<<<<< Updated upstream
-#include "../Client/ptr.h"
-=======
+
 #include "ptr.h"
->>>>>>> Stashed changes
+
 #include <wtypes.h>
 
 namespace client_fw
