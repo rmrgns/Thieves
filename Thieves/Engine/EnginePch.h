@@ -36,6 +36,12 @@ using namespace Microsoft::WRL;
 #include <DirectXTex/DirectXTex.h>
 #include <DirectXTex/DirectXTex.inl>
 
+<<<<<<< Updated upstream
+=======
+#include "FBX/fbxsdk.h"
+
+
+>>>>>>> Stashed changes
 // °¢Á¾ lib
 #pragma comment(lib, "d3d12")
 #pragma comment(lib, "dxgi")

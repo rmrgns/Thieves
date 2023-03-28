@@ -4,13 +4,25 @@
 #include "SceneManager.h"
 #include "../Client/server/network.h"
 
+#include "server/network/network.h"
+#include "server/send_manager/send_manager.h"
+#include "server/packet/packet_manager.h"
+
+#include "server/thieves_server/thieves_packet/thieves_packet_manager.h"
+#include "server/thieves_server/thieves_send/thieves_send_manager.h"
+
 void Game::Init(const WindowInfo& info)
 {
+
+	
 	GEngine->Init(info);
 	Network::GetInst()->Init(CreateUPtr<RevivePacketManager>(), CreateUPtr<ReviveSendManager>());
 	Network::GetInst()->CreateWorker();
 
 	GET_SINGLE(SceneManager)->LoadScene(L"LoginScene");
+
+	Network::GetInst()->Init(client_fw::CreateUPtr<ThievesPacketManager>(), client_fw::CreateUPtr<ThievesSendManager>());
+	Network::GetInst()->CreateWorker();
 }
 
 void Game::Update()

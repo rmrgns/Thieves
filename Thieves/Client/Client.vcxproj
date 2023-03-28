@@ -133,6 +133,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/Ylsymbol %(AdditionalOptions)</AdditionalOptions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>C:\Users\doyou\OneDrive\바탕 화면\졸작\Thieves\Thieves\Thieves\Client;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -152,6 +153,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/Ylsymbol %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>C:\Users\doyou\OneDrive\바탕 화면\졸작\Thieves\Thieves\Thieves\Client;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -172,6 +174,7 @@
     <ClInclude Include="packet_event_manager.h" />
     <ClInclude Include="packet_helper.h" />
     <ClInclude Include="pch.h" />
+<<<<<<< Updated upstream
     <ClInclude Include="ptr.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
@@ -213,6 +216,31 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClInclude>
+=======
+    <ClInclude Include="ptr.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="server\define.h" />
+    <ClInclude Include="server\event\event_core\event_info.h" />
+    <ClInclude Include="server\event\event_core\event_manager.h" />
+    <ClInclude Include="server\event\event_core\evnet_system.h" />
+    <ClInclude Include="server\event\packet_event_manager.h" />
+    <ClInclude Include="server\massage\message_event_info.h" />
+    <ClInclude Include="server\massage\message_event_manager.h" />
+    <ClInclude Include="server\massage\message_helper.h" />
+    <ClInclude Include="server\network\network.h" />
+    <ClInclude Include="server\network\network_move_object.h" />
+    <ClInclude Include="server\network\network_object.h" />
+    <ClInclude Include="server\network\network_obj_manager.h" />
+    <ClInclude Include="server\packet\packetevent\packet_event_manager.h" />
+    <ClInclude Include="server\packet\packetevent\packet_helper.h" />
+    <ClInclude Include="server\packet\packet_manager.h" />
+    <ClInclude Include="server\protocol.h" />
+    <ClInclude Include="server\send_manager\send_manager.h" />
+    <ClInclude Include="server\thieves_server\game_info.h" />
+    <ClInclude Include="server\thieves_server\thieves_massage\thieves_message_event_info.h" />
+    <ClInclude Include="server\thieves_server\thieves_packet\thieves_packet_manager.h" />
+    <ClInclude Include="server\thieves_server\thieves_send\thieves_send_manager.h" />
+>>>>>>> Stashed changes
     <ClInclude Include="targetver.h" />
     <ClInclude Include="thieves_message_event_info.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -236,6 +264,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+<<<<<<< Updated upstream
     <ClCompile Include="server\massage\massage_event_info.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
@@ -268,6 +297,23 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
+=======
+    <ClCompile Include="server\event\event_core\event_system.cpp" />
+    <ClCompile Include="server\event\packet_event_manager.cpp" />
+    <ClCompile Include="server\massage\message_event_info.cpp" />
+    <ClCompile Include="server\massage\message_event_manager.cpp" />
+    <ClCompile Include="server\massage\message_helper.cpp" />
+    <ClCompile Include="server\network\network.cpp" />
+    <ClCompile Include="server\network\network_move_object.cpp" />
+    <ClCompile Include="server\network\network_obj_manager.cpp" />
+    <ClCompile Include="server\packet\packetevent\packet_event_manager.cpp" />
+    <ClCompile Include="server\packet\packetevent\packet_helper.cpp" />
+    <ClCompile Include="server\packet\packet_manager.cpp" />
+    <ClCompile Include="server\send_manager\send_manager.cpp" />
+    <ClCompile Include="server\thieves_server\thieves_massage\thieves_message_event_info.cpp" />
+    <ClCompile Include="server\thieves_server\thieves_packet\thieves_packet_manager.cpp" />
+    <ClCompile Include="server\thieves_server\thieves_send\thieves_send_manager.cpp" />
+>>>>>>> Stashed changes
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc" />

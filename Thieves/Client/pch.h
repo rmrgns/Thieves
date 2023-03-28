@@ -18,7 +18,13 @@
 #include <limits>
 #include <filesystem>
 #include <bitset>
+<<<<<<< Updated upstream
 #include "../Client/server/define.h"
 #include "../Client/ptr.h"
 //#include "../Client/Resource.h"
 
+=======
+#include "Resource.h"
+#include "../Client/server/define.h"
+#include "../Client/ptr.h"
+>>>>>>> Stashed changes

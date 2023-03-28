@@ -1,7 +1,7 @@
 #include "pch.h"
 
 #include "network.h"
-#include "../server/packet/packet_manager.h"
+#include "server/packet/packet_manager.h"
 using namespace std;
 
 using namespace std;

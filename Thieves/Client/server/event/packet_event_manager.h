@@ -1,7 +1,11 @@
 #pragma once
 #include <concurrent_queue.h>
 #include <unordered_map>
+<<<<<<< Updated upstream
 #include "../Client/ptr.h"
+=======
+#include "ptr.h"
+>>>>>>> Stashed changes
 #include <minwindef.h>
 
 namespace client_fw
