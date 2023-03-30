@@ -13,7 +13,7 @@ using namespace client_fw;
 
 void ThievesPacketManager::Init()
 {
-	//m_obj_map = unordered_map<int, client_fw::SPtr<NetworkMoveObj>>();
+	m_obj_map = unordered_map<int, client_fw::SPtr<NetworkMoveObj>>();
 	//TEST
 	RegisterRecvFunction(SC_PACKET_TEST, [this](int c_id, unsigned char* p) {ProcessTest(c_id, p); });
 }
@@ -22,6 +22,8 @@ void ThievesPacketManager::ProcessTest(int c_id, unsigned char* p)
 {
 	sc_packet_test* packet = reinterpret_cast<sc_packet_test*>(p);
 	//PacketHelper::RegisterPacketEventToActor(CreateSPtr<TestMessageEventInfo>())
+//	PacketHelper::RegisterPacketEventToActor(CreateSPtr<thieves::TestMessageEventInfo>(HashCode("testmove"), packet->speed, packet->x, packet->y, packet->z), packet->id);
+//	Vec3 recv_pos{ packet->x,packet->y,packet->z };
 }
 
 void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)

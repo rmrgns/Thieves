@@ -32,6 +32,9 @@ enum class KEY_TYPE
 	KEY_3 = '3',
 	KEY_4 = '4',
 
+	// packet test
+	L = 'L',
+
 	ESC = VK_ESCAPE,
 
 	LBUTTON = VK_LBUTTON,

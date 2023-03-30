@@ -7,6 +7,7 @@
 #include "Timer.h"
 #include "SceneManager.h"
 #include "Engine.h"
+#include "thieves_server/thieves_packet/thieves_packet_manager.h"
 
 TestObjectMove::TestObjectMove()
 {
@@ -58,6 +59,12 @@ void TestObjectMove::LateUpdate()
 		Vec3 rotation = GetTransform()->GetLocalRotation();
 		rotation.y -= DELTA_TIME * 1.f;
 		GetTransform()->SetLocalRotation(rotation);
+	}
+
+	// Test packet
+	if (INPUT->GetButton(KEY_TYPE::L))
+	{
+
 	}
 
 	if (INPUT->GetButtonDown(KEY_TYPE::LBUTTON))

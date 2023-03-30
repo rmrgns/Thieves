@@ -189,6 +189,11 @@ void PacketManager::SendPhasePacket(int c_id, int curr_phase)
 
 void PacketManager::End()
 {
+	MoveObjManager::GetInst()->DestroyObject();
+	if (MoveObjManager::GetInst())delete MoveObjManager::GetInst();
+	if (m_db)delete m_db;
+	//if (m_db2)delete m_db2;
+	if (m_room_manager)delete m_room_manager;
 }
 
 void PacketManager::Disconnect(int c_id)
