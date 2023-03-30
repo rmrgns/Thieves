@@ -20,6 +20,7 @@ public:
 	void ProcessRecv(int, EXP_OVER*, DWORD);
 
 	// SendPacket
+	void SendTestPacket(int c_id, int mover, float x, float y, float z);
 	void SendMovePacket(int c_id, int mover);
 	void SendLoginFailPacket(SOCKET&, int reason);
 	void SendSignInOK(int c_id);
@@ -51,6 +52,8 @@ private:
 	RoomManager* m_room_manager;
 	DB* m_db;
 	std::thread db_thread;
+	
+
 
 	void ProcessSignIn(int c_id, unsigned char* p);
 	void ProcessSignUp(int c_id, unsigned char* p);

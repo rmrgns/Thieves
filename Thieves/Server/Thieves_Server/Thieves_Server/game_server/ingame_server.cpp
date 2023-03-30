@@ -39,6 +39,11 @@ void InGameServer::OnEvent(int c_id, EXP_OVER* exp_over)
 		delete exp_over;
 		return;
 	}*/
+
+	switch (exp_over->_comp_op)
+	{
+		//case COMP_OP::OP
+	}
 	
 }
 
@@ -66,8 +71,6 @@ void InGameServer::CreateTimer()
 // 게임 서버를 시작하는 함수 서버시작, 타이머쓰레드 생성, DB쓰레드 생성, 쓰레드 조인 동작
 void InGameServer::Run()
 {
-
-
 	StartServer();
 	CreateTimer();
 	m_PacketManager->CreateDBThread();

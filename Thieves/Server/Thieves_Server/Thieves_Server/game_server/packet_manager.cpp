@@ -1,15 +1,24 @@
+#include <map>
+#include <set>
+#include <bitset>
+#include "pch.h"
+
 #include "packet_manager.h"
 #include "room/room_manager.h"
-#include "../database/db.h"
-#include "pch.h"
+#include "room/room.h"
+#include "database/db.h"
+#include "object/moveobj_manager.h"
+
 PacketManager::PacketManager()
 {
 	m_room_manager = new RoomManager;
 	m_db = new DB;
+
 }
 
 void PacketManager::Init()
 {
+//	MoveObjManager::GetInst()->InitPlayer();
 	m_room_manager->InitRoom();
 
 	m_db->Init();
@@ -55,17 +64,18 @@ void PacketManager::ProcessAccept(HANDLE hiocp, SOCKET& s_socket, EXP_OVER* exp_
 {
 	std::cout << "Accept process" << std::endl;
 	SOCKET c_socket = *(reinterpret_cast<SOCKET*>(exp_over->_net_buf));
-	int new_id = -1;// = MoveObjManager::GetInst()->GetNewID();
+	int new_id = 0;
+	//int new_id = MoveObjManager::GetInst()->GetNewID();
 	if (-1 == new_id) {
 		std::cout << "Maxmum user overflow. Accept aborted.\n";
 		SendLoginFailPacket(c_socket, static_cast<int>(LOGINFAIL_TYPE::FULL));
 	}
 	else {
-		//Player* cl = MoveObjManager::GetInst()->GetPlayer(new_id);
-		//cl->SetID(new_id);
-		//cl->Init(c_socket);
-		//CreateIoCompletionPort(reinterpret_cast<HANDLE>(c_socket), hiocp, new_id, 0);
-		//cl->DoRecv();
+		/*Player* cl = MoveObjManager::GetInst()->GetPlayer(new_id);
+		cl->SetID(new_id);
+		cl->Init(c_socket);
+		CreateIoCompletionPort(reinterpret_cast<HANDLE>(c_socket), hiocp, new_id, 0);
+		cl->DoRecv();*/
 	}
 	ZeroMemory(&exp_over->_wsa_over, sizeof(exp_over->_wsa_over));
 	c_socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED);
@@ -75,8 +85,57 @@ void PacketManager::ProcessAccept(HANDLE hiocp, SOCKET& s_socket, EXP_OVER* exp_
 		sizeof(SOCKADDR_IN) + 16, NULL, &exp_over->_wsa_over);
 }
 
-void PacketManager::ProcessRecv(int, EXP_OVER*, DWORD)
+void PacketManager::ProcessRecv(int c_id , EXP_OVER* exp_over, DWORD num_bytes)
 {
+	if (num_bytes == 0) {
+		Disconnect(c_id);
+		std::cout << "잘못된 정보" << std::endl;
+	}
+//	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	//int remain_data = num_bytes + cl->m_prev_size;
+	//unsigned char* packet_start = exp_over->_net_buf;
+	//int packet_size = packet_start[0];
+	//if (packet_size == 0)std::cout << "packet_size가 0" << cl->GetID();
+	//while (packet_size <= remain_data) {
+	//	ProcessPacket(c_id, packet_start);
+	//	remain_data -= packet_size;
+	//	packet_start += packet_size;
+	//	if (remain_data > 0) packet_size = packet_start[0];
+	//	else break;
+	//}
+	//if (0 < remain_data) {
+	//	cl->m_prev_size = remain_data;
+	//	memcpy(&exp_over->_net_buf, packet_start, remain_data);
+	//}
+	//if (remain_data == 0)cl->m_prev_size = 0;
+	//cl->DoRecv();
+}
+
+//void PacketManager::UpdateObjMove()//일단 보류
+//{
+//	for (int i = 0; i < MAX_USER; ++i)
+//	{
+//		for (int j = 0; j <= NPC_ID_END; ++j) {
+//			//이후에 조건 추가
+//			if (i != j)
+//				SendMovePacket(i, j);
+//		}
+//	}
+//	SetTimerEvent(0, 0, EVENT_TYPE::EVENT_PLAYER_MOVE, 10);
+//}
+
+// Send test PAcket
+void PacketManager::SendTestPacket(int c_id, int mover, float x, float y, float z)
+{
+	sc_packet_test packet;
+	packet.size = sizeof(packet);
+	packet.type = SC_PACKET_TEST;
+	packet.id = mover;
+	packet.x = x;
+	packet.y = y;
+	packet.z = z;
+
+	MoveObjManager::GetInst()->GetPlayer(c_id)->DoSend(sizeof(packet), &packet);
 }
 
 void PacketManager::SendMovePacket(int c_id, int mover)
