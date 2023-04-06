@@ -162,6 +162,7 @@
     <ClCompile Include="TestDragon.cpp">
       <Filter>Object\Script</Filter>
     </ClCompile>
+    <ClCompile Include="Font.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -299,6 +300,7 @@
     <ClInclude Include="TestDragon.h">
       <Filter>Object\Script</Filter>
     </ClInclude>
+    <ClInclude Include="Font.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">

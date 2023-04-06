@@ -36,4 +36,14 @@ void LoginScript::LateUpdate()
 		PostQuitMessage(0);
 	}
 
+	if (INPUT->GetButtonUp(KEY_TYPE::ENTER))
+	{
+		
+		if (INPUT->GetUserID() == INPUT->GetServerID())
+		{
+			GET_SINGLE(SceneManager)->SetCheckChangeScene(true);
+			GEngine->SetChangeScene(L"Game");
+		}
+		INPUT->InitUserId();
+	}
 }

@@ -33,11 +33,11 @@ enum class KEY_TYPE
 	KEY_4 = '4',
 
 	ESC = VK_ESCAPE,
+	ENTER = VK_RETURN,
 
 	LBUTTON = VK_LBUTTON,
 	RBUTTON = VK_RBUTTON,
-
-	
+	SHF = VK_SHIFT,
 };
 
 enum class KEY_STATE
@@ -74,6 +74,10 @@ public:
 	const POINT& GetPrevMousePos() { return _prevMousePos; }
 	void SetPrevMousePos(POINT prevMousePos) { _prevMousePos = prevMousePos; }
 	
+	wstring GetUserID() const { return _userID; }
+	void InitUserId() { _userID = L""; }
+
+	wstring GetServerID() const { return _serverID; }
 private:
 	inline KEY_STATE GetState(KEY_TYPE key) { return _states[static_cast<uint8>(key)]; }
 	
@@ -82,6 +86,7 @@ private:
 	vector<KEY_STATE> _states;
 	POINT _mousePos = {};
 	POINT _prevMousePos = {};
-	
+	wstring _userID;
+	wstring _serverID = L"TEST";
 };
 

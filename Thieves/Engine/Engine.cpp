@@ -113,9 +113,11 @@ void Engine::ShowFps()
 	RECT rect1;
 	GetClientRect(GEngine->GetWindow().hwnd, &rect1);
 	WCHAR text[100] = L"";
+	WCHAR temp[50] = L"qwesADQWCXDQWDSACX";
 	//::wsprintf(text, L"FPS : %d, x:%d y:%d", fps, INPUT->GetMousePos().x , INPUT->GetMousePos().y);
-	::wsprintf(text, L"FPS : %d, x:%d y:%d, mx:%d my:%d", fps, (rect1.left + rect1.right) / 2, (rect1.top + rect1.bottom) / 2, INPUT->GetMousePos().x, INPUT->GetMousePos().y);
-
+	//::wsprintf(text, L"FPS : %d, x:%d y:%d, mx:%d my:%d", fps, (rect1.left + rect1.right) / 2, (rect1.top + rect1.bottom) / 2, INPUT->GetMousePos().x, INPUT->GetMousePos().y);
+	::wsprintf(text, L"FPS : %d, ID : %s", fps, INPUT->GetUserID());
+	
 	::SetWindowText(_window.hwnd, text);
 }
 
@@ -229,3 +231,18 @@ void Engine::CreateScreenCenter()
 	_clientCenter.x = (rectClient.left + rectClient.right) / 2;
 	_clientCenter.y = (rectClient.top + rectClient.bottom) / 2 - 11;
 }
+
+//void Engine::CreateD3D11On12Device()
+//{
+//	ComPtr<ID3D11Device> d3d11Device = nullptr;
+//	ComPtr<ID3D11DeviceContext> d3d11DeviceContext;
+//	D3D11On12CreateDevice(GEngine->GetDevice()->GetDevice().Get(), D3D11_CREATE_DEVICE_BGRA_SUPPORT,
+//		nullptr, 0, reinterpret_cast<IUnknown**>(_graphicsCmdQueue.get()), 1, 0,
+//		&d3d11Device, &d3d11DeviceContext, nullptr);
+//
+//	
+//}
+//
+//void Engine::CreateD2DDevice()
+//{
+//}
