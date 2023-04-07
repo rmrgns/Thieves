@@ -19,8 +19,14 @@ using namespace std;
 namespace fs = std::filesystem;
 
 #include "d3dx12.h"
+
+// text출력을 위한 include
 #include <d3d11.h>
 #include <d3d11on12.h>
+#include <d2d1.h>
+#include <d2d1_3.h>
+#include <dwrite.h>
+
 #include "SimpleMath.h"
 #include <d3d12.h>
 #include <wrl.h>
@@ -29,6 +35,7 @@ namespace fs = std::filesystem;
 #include <DirectXMath.h>
 #include <DirectXPackedVector.h>
 #include <DirectXColors.h>
+#include <DirectXCollision.h>
 #include <WindowsX.h>
 using namespace DirectX;
 using namespace DirectX::PackedVector;
@@ -44,6 +51,9 @@ using namespace Microsoft::WRL;
 #pragma comment(lib, "dxgi")
 #pragma comment(lib, "dxguid")
 #pragma comment(lib, "d3dcompiler")
+#pragma comment(lib, "dwrite")
+#pragma comment(lib, "d2d1")
+#pragma comment(lib, "d3d11")
 
 #ifdef _DEBUG
 #pragma comment(lib, "DirectXTex\\DirectXTex_debug.lib")

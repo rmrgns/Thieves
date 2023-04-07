@@ -231,17 +231,110 @@ void Engine::CreateScreenCenter()
 	_clientCenter.y = (rectClient.top + rectClient.bottom) / 2 - 11;
 }
 
-//void Engine::CreateD3D11On12Device()
-//{
-//	ComPtr<ID3D11Device> d3d11Device = nullptr;
-//	ComPtr<ID3D11DeviceContext> d3d11DeviceContext;
-//	D3D11On12CreateDevice(GEngine->GetDevice()->GetDevice().Get(), D3D11_CREATE_DEVICE_BGRA_SUPPORT,
-//		nullptr, 0, reinterpret_cast<IUnknown**>(_graphicsCmdQueue.get()), 1, 0,
-//		&d3d11Device, &d3d11DeviceContext, nullptr);
-//
-//	
-//}
-//
-//void Engine::CreateD2DDevice()
-//{
-//}
+void Engine::CreateD3D11On12Device()
+{
+	ComPtr<ID3D11Device> d3d11Device = nullptr;
+	D3D11On12CreateDevice(_device->GetDevice().Get(), D3D11_CREATE_DEVICE_BGRA_SUPPORT,
+		nullptr, 0, reinterpret_cast<IUnknown**>(_graphicsCmdQueue->GetCmdQueue().GetAddressOf()), 1, 0,
+		&d3d11Device, &_d3d11DeviceContext, nullptr);
+
+	d3d11Device.As(&_d3d11On12Device);
+}
+
+void Engine::CreateD2DDevice()
+{
+	// Create D2D/DWrite components.
+	D2D1_FACTORY_OPTIONS d2dFactoryOptions{};
+	D2D1_DEVICE_CONTEXT_OPTIONS deviceOptions = D2D1_DEVICE_CONTEXT_OPTIONS_NONE;
+	D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, __uuidof(ID2D1Factory3), &d2dFactoryOptions, &_d2dFactory);
+	ComPtr<IDXGIDevice> dxgiDevice;
+	_d3d11On12Device.As(&dxgiDevice);
+	_d2dFactory->CreateDevice(dxgiDevice.Get(), &_d2dDevice);
+	_d2dDevice->CreateDeviceContext(deviceOptions, &_d2dDeviceContext);
+	DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), &_dWriteFactory);
+}
+
+void Engine::CreateRenderTargetView()
+{// Query the desktop's dpi settings, which will be used to create D2D's render targets.
+	float dpiX;
+	float dpiY;
+#pragma warning(push)
+#pragma warning(disable : 4996) // GetDesktopDpi is deprecated.
+	_d2dFactory->GetDesktopDpi(&dpiX, &dpiY);
+#pragma warning(pop)
+
+	D2D1_BITMAP_PROPERTIES1 bitmapProperties = D2D1::BitmapProperties1(
+		D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW,
+		D2D1::PixelFormat(DXGI_FORMAT_UNKNOWN, D2D1_ALPHA_MODE_PREMULTIPLIED),
+		dpiX,
+		dpiY
+	);
+
+	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle{ _rtGroups->GetCPUDescriptorHandleForHeapStart() };
+	for (UINT i = 0; i < FrameCount; ++i)
+	{
+		m_swapChain->GetBuffer(i, IID_PPV_ARGS(&m_renderTargets[i]));
+		m_device->CreateRenderTargetView(m_renderTargets[i].Get(), NULL, rtvHandle);
+
+		// Create a wrapped 11On12 resource of this back buffer. Since we are 
+		// rendering all D3D12 content first and then all D2D content, we specify 
+		// the In resource state as RENDER_TARGET - because D3D12 will have last 
+		// used it in this state - and the Out resource state as PRESENT. When 
+		// ReleaseWrappedResources() is called on the 11On12 device, the resource 
+		// will be transitioned to the PRESENT state.
+		D3D11_RESOURCE_FLAGS d3d11Flags = { D3D11_BIND_RENDER_TARGET };
+		DX::ThrowIfFailed(m_d3d11On12Device->CreateWrappedResource(
+			m_renderTargets[i].Get(),
+			&d3d11Flags,
+			D3D12_RESOURCE_STATE_RENDER_TARGET,
+			D3D12_RESOURCE_STATE_PRESENT,
+			IID_PPV_ARGS(&m_wrappedBackBuffers[i])
+		));
+
+		// Create a render target for D2D to draw directly to this back buffer.
+		ComPtr<IDXGISurface> surface;
+		DX::ThrowIfFailed(m_wrappedBackBuffers[i].As(&surface));
+		DX::ThrowIfFailed(m_d2dDeviceContext->CreateBitmapFromDxgiSurface(
+			surface.Get(),
+			&bitmapProperties,
+			&m_d2dRenderTargets[i]
+		));
+
+		rtvHandle.Offset(m_rtvDescriptorSize);
+
+		// 명령할당자 생성
+		DX::ThrowIfFailed(m_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&m_commandAllocators[i])));
+	}
+}
+
+void Engine::OnRender()
+{
+	PopulateCommandList();
+	ID3D12CommandList* ppCommandList[] = { m_commandList.Get() };
+	m_commandQueue->ExecuteCommandLists(_countof(ppCommandList), ppCommandList);
+	Render2D();
+	DX::ThrowIfFailed(m_swapChain->Present(1, 0));
+	WaitForPreviousFrame();
+}
+
+void Engine::Render2D() const
+{
+	// Acquire our wrapped render target resource for the current back buffer.
+	_d3d11On12Device->AcquireWrappedResources(_wrappedBackBuffers[_frameIndex].GetAddressOf(), 1);
+
+	// Render text directly to the back buffer.
+	_d2dDeviceContext->SetTarget(_d2dRenderTargets[_frameIndex].Get());
+	_d2dDeviceContext->BeginDraw();
+
+	if (m_scene) m_scene->Render2D(_d2dDeviceContext);
+
+	DX::ThrowIfFailed(_d2dDeviceContext->EndDraw());
+
+	// Release our wrapped render target resource. Releasing 
+	// transitions the back buffer resource to the state specified
+	// as the OutState when the wrapped resource was created.
+	_d3d11On12Device->ReleaseWrappedResources(_wrappedBackBuffers[_frameIndex].GetAddressOf(), 1);
+
+	// Flush to submit the 11 command list to the shared command queue.
+	_d3d11DeviceContext->Flush();
+}

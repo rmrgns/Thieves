@@ -48,8 +48,9 @@ private:
 	void CreateConstantBuffer(CBV_REGISTER reg, uint32 bufferSize, uint32 count);
 	void CreateRenderTargetGroups();
 	void CreateScreenCenter();		
-	//void CreateD3D11On12Device();	// 11on12 디바이스 생성
-	//void CreateD2DDevice();			// D2D, DWrite 생성
+	void CreateD3D11On12Device();	// 11on12 디바이스 생성
+	void CreateD2DDevice();			// D2D, DWrite 생성
+
 private:
 	// 그려질 화면 크기 관련
 	WindowInfo		_window;
@@ -70,5 +71,12 @@ private:
 	wstring _changeScene{};
 	POINT _windowCenter{};
 	POINT _clientCenter{};
+
+	ComPtr<ID3D11On12Device>	_d3d11On12Device;
+	ComPtr<ID3D11DeviceContext> _d3d11DeviceContext;
+	ComPtr<ID2D1Factory3>		_d2dFactory;
+	ComPtr<ID2D1Device2>		_d2dDevice;
+	ComPtr<ID2D1DeviceContext2> _d2dDeviceContext = nullptr;
+	ComPtr<IDWriteFactory>		_dWriteFactory = nullptr;
 };
 
