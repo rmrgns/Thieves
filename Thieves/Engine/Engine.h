@@ -47,10 +47,13 @@ private:
 	void ShowFps();
 	void CreateConstantBuffer(CBV_REGISTER reg, uint32 bufferSize, uint32 count);
 	void CreateRenderTargetGroups();
-	void CreateScreenCenter();		
+	void CreateScreenCenter();	
+
 	void CreateD3D11On12Device();	// 11on12 디바이스 생성
 	void CreateD2DDevice();			// D2D, DWrite 생성
-
+	void CreateRenderTargetView();
+	void OnRender();
+	void Render2D() const;
 private:
 	// 그려질 화면 크기 관련
 	WindowInfo		_window;
