@@ -27,6 +27,7 @@ void LoginScript::LateUpdate()
 
 	if (INPUT->GetButton(KEY_TYPE::P))
 	{
+		INPUT->InitUserId();
 		GET_SINGLE(SceneManager)->SetCheckChangeScene(true);
 		GEngine->SetChangeScene(L"Login");
 	}
@@ -46,4 +47,5 @@ void LoginScript::LateUpdate()
 		}
 		INPUT->InitUserId();
 	}
+	
 }

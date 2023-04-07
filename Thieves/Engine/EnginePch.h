@@ -12,6 +12,7 @@
 #include <array>
 #include <list>
 #include <map>
+#include <iostream>	// temp
 using namespace std;
 
 #include <filesystem>

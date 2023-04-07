@@ -80,7 +80,7 @@ void Engine::ResizeWindow(int32 width, int32 height)
 
 	RECT rect = { 0, 0, width, height };
 	::AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, false);
-	::SetWindowPos(_window.hwnd, 0, 100, 100, width, height, 0);
+	::SetWindowPos(_window.hwnd, 0, 1000, 100, width, height, 0);
 }
 
 void Engine::CheckChangeScene()
@@ -113,10 +113,9 @@ void Engine::ShowFps()
 	RECT rect1;
 	GetClientRect(GEngine->GetWindow().hwnd, &rect1);
 	WCHAR text[100] = L"";
-	WCHAR temp[50] = L"qwesADQWCXDQWDSACX";
 	//::wsprintf(text, L"FPS : %d, x:%d y:%d", fps, INPUT->GetMousePos().x , INPUT->GetMousePos().y);
-	//::wsprintf(text, L"FPS : %d, x:%d y:%d, mx:%d my:%d", fps, (rect1.left + rect1.right) / 2, (rect1.top + rect1.bottom) / 2, INPUT->GetMousePos().x, INPUT->GetMousePos().y);
-	::wsprintf(text, L"FPS : %d, ID : %s", fps, INPUT->GetUserID());
+	::wsprintf(text, L"FPS : %d, x:%d y:%d, mx:%d my:%d", fps, (rect1.left + rect1.right) / 2, (rect1.top + rect1.bottom) / 2, INPUT->GetMousePos().x, INPUT->GetMousePos().y);
+
 	
 	::SetWindowText(_window.hwnd, text);
 }
