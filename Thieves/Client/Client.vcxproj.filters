@@ -44,15 +44,6 @@
     <ClInclude Include="..\Engine\Timer.h">
       <Filter>소스 파일\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="server\define.h">
-      <Filter>소스 파일\Server</Filter>
-    </ClInclude>
-    <ClInclude Include="server\protocol.h">
-      <Filter>소스 파일\Server</Filter>
-    </ClInclude>
-    <ClInclude Include="server\network.h">
-      <Filter>소스 파일\Server\network</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -79,9 +70,6 @@
     </ClCompile>
     <ClCompile Include="..\Engine\Timer.cpp">
       <Filter>소스 파일\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="server\network.cpp">
-      <Filter>소스 파일\Server\network</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
