@@ -9,6 +9,7 @@
 #include "Transform.h"
 #include "Camera.h"
 #include "Light.h"
+#include "Physics.h"
 
 #include "TestCameraScript.h"
 #include "TestObjectMove.h"
@@ -240,7 +241,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 #pragma endregion
 
 #pragma region UI_Test
-	for (int32 i = 0; i < 1; i++)
+	for (int32 i = 0; i < 6; i++)
 	{
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
 		obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
@@ -273,25 +274,48 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 #pragma endregion
 
-#pragma region FBX
+#pragma region Object
 	{
-		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Dragon.fbx");
-
-		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-
-		for (auto& gameObject : gameObjects)
+		shared_ptr<GameObject> obj = make_shared<GameObject>();
+		obj->AddComponent(make_shared<Transform>());
+		obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
+		obj->GetTransform()->SetLocalPosition(Vec3(0, 0.f, 500.f));
+		obj->SetStatic(false);
+		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
 		{
-			gameObject->SetName(L"Dragon");
-			gameObject->SetCheckFrustum(false);
-			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 300.f));
-			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-			gameObject->AddComponent(make_shared<TestObjectMove>());
-			scene->AddGameObject(gameObject);
-			gameObject->AddComponent(make_shared<TestDragon>());
-
+			shared_ptr<Mesh> sphereMesh = GET_SINGLE(Resources)->LoadSphereMesh();
+			meshRenderer->SetMesh(sphereMesh);
 		}
+		{
+			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
+			meshRenderer->SetMaterial(material->Clone());
+		}
+		obj->AddComponent(meshRenderer);
+		obj->AddComponent(make_shared<Physics>());
+		obj->GetPhysics()->SetGravity(true);
+		scene->AddGameObject(obj);
 	}
 #pragma endregion
+
+//#pragma region FBX
+//	{
+//		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Dragon.fbx");
+//
+//		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+//
+//		for (auto& gameObject : gameObjects)
+//		{
+//			gameObject->SetName(L"Dragon");
+//			gameObject->SetCheckFrustum(false);
+//			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 300.f));
+//			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+//			gameObject->AddComponent(make_shared<TestObjectMove>());
+//			scene->AddGameObject(gameObject);
+//			gameObject->AddComponent(make_shared<TestDragon>());
+//
+//		}
+//	}
+//#pragma endregion
 
 #pragma region Directional Light
 	{
@@ -302,8 +326,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		light->GetLight()->SetLightDirection(Vec3(0, -1, 1.f));
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
 		light->GetLight()->SetDiffuse(Vec3(1.f, 1.f, 1.f));
-		light->GetLight()->SetAmbient(Vec3(0.1f, 0.1f, 0.1f));
-		light->GetLight()->SetSpecular(Vec3(0.1f, 0.1f, 0.1f));
+		light->GetLight()->SetAmbient(Vec3(0.5f, 0.5f, 0.5f));
+		light->GetLight()->SetSpecular(Vec3(1.f, 1.f, 1.f));
 
 		scene->AddGameObject(light);
 	}
