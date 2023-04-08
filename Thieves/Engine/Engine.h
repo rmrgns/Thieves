@@ -42,6 +42,10 @@ public:
 	void SetChangeScene(wstring changeScene) { _changeScene = changeScene; }
 	virtual void CheckChangeScene();
 
+	ComPtr<ID2D1Factory> Getd2dFactory() { return _d2dFactory; }
+	ComPtr<ID3D11On12Device> Getd3d11On12Device() { return _d3d11On12Device; }
+	ComPtr<ID2D1DeviceContext2> Getd2dDeviceContext() {	return _d2dDeviceContext; }
+	ComPtr<ID3D11DeviceContext> Getd3d11DeviceContext() { return _d3d11DeviceContext; }
 
 private:
 	void ShowFps();
@@ -51,9 +55,7 @@ private:
 
 	void CreateD3D11On12Device();	// 11on12 디바이스 생성
 	void CreateD2DDevice();			// D2D, DWrite 생성
-	void CreateRenderTargetView();
-	void OnRender();
-	void Render2D() const;
+
 private:
 	// 그려질 화면 크기 관련
 	WindowInfo		_window;
@@ -75,10 +77,10 @@ private:
 	POINT _windowCenter{};
 	POINT _clientCenter{};
 
-	ComPtr<ID3D11On12Device>	_d3d11On12Device;
-	ComPtr<ID3D11DeviceContext> _d3d11DeviceContext;
-	ComPtr<ID2D1Factory3>		_d2dFactory;
-	ComPtr<ID2D1Device2>		_d2dDevice;
+	ComPtr<ID3D11On12Device>	_d3d11On12Device = nullptr;
+	ComPtr<ID3D11DeviceContext> _d3d11DeviceContext = nullptr;
+	ComPtr<ID2D1Factory3>		_d2dFactory = nullptr;
+	ComPtr<ID2D1Device2>		_d2dDevice = nullptr;
 	ComPtr<ID2D1DeviceContext2> _d2dDeviceContext = nullptr;
 	ComPtr<IDWriteFactory>		_dWriteFactory = nullptr;
 };

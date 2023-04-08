@@ -43,7 +43,7 @@ using namespace Microsoft::WRL;
 
 #include <DirectXTex/DirectXTex.h>
 #include <DirectXTex/DirectXTex.inl>
-
+#include <DebugCheck/PlatformHelpers.h>
 #include "FBX/fbxsdk.h"
 
 // °¢Á¾ lib

@@ -41,6 +41,10 @@ public:
 	void WaitTargetToResource();
 	void WaitResourceToTarget();
 
+	D3D12_CPU_DESCRIPTOR_HANDLE GetRTVHeap() { return _rtvHeapBegin; }
+
+	void Render2D() const;
+
 private:
 	RENDER_TARGET_GROUP_TYPE		_groupType;
 	vector<RenderTarget>			_rtVec;
@@ -56,5 +60,9 @@ private:
 private:
 	D3D12_RESOURCE_BARRIER			_targetToResource[8];
 	D3D12_RESOURCE_BARRIER			_resourceToTarget[8];
+
+private:
+	ComPtr<ID3D11Resource>	_wrappedBackBuffer[SWAP_CHAIN_BUFFER_COUNT];
+	ComPtr<ID2D1Bitmap1>	_d2dRenderTargets[SWAP_CHAIN_BUFFER_COUNT];
 };
 

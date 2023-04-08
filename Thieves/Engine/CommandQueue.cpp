@@ -108,6 +108,8 @@ void GraphicsCommandQueue::RenderEnd()
 	ID3D12CommandList* cmdListArr[] = { _cmdList.Get() };
 	_cmdQueue->ExecuteCommandLists(_countof(cmdListArr), cmdListArr);
 
+
+
 	_swapChain->Present();
 
 	// Wait until frame commands are complete.  This waiting is inefficient and is
