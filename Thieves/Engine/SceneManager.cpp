@@ -292,7 +292,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		}
 		obj->AddComponent(meshRenderer);
 		obj->AddComponent(make_shared<Physics>());
-		obj->GetPhysics()->SetGravity(true);
+		obj->GetPhysics()->SetGravity(false);
 		scene->AddGameObject(obj);
 	}
 #pragma endregion

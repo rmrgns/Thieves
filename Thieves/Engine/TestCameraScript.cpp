@@ -7,6 +7,7 @@
 #include "Timer.h"
 #include "SceneManager.h"
 #include "Engine.h"
+#include "Physics.h"
 
 TestCameraScript::TestCameraScript()
 {
@@ -22,7 +23,7 @@ void TestCameraScript::LateUpdate()
 
 	if (INPUT->GetButton(KEY_TYPE::W))
 		pos += GetTransform()->GetLook() * _speed * DELTA_TIME;
-
+	
 	if (INPUT->GetButton(KEY_TYPE::S))
 		pos -= GetTransform()->GetLook() * _speed * DELTA_TIME;
 
