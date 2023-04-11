@@ -34,7 +34,7 @@ const char CS_PACKET_CHAT = 5;				// 채팅
 const char CS_PACKET_HIT = 6;				// 피격
 const char CS_PACKET_GAME_START = 7;		// 게임 시작
 const char CS_PACKET_MATCHING = 8;
-
+const char CS_PACKET_TEST = 9;
 // SC
 const char SC_PACKET_SIGN_IN_OK = 1;		// 로그인 OK
 const char SC_PACKET_SIGN_UP_OK = 2;		// 가입 OK

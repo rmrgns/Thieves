@@ -29,9 +29,9 @@ namespace client_fw
 		void SendEventToServer();
 
 	public:
-	//	void RegisterPacketEventToActor(SPtr<MessageEventInfo>&& message, UINT id);
-	//	void RegisterPacketEventToLevel(SPtr<MessageEventInfo>&& message);
-	//	void RegisterPacketEventToServer(SPtr<MessageEventInfo>&& message);
+		void RegisterPacketEventToActor(SPtr<MessageEventInfo>&& message, UINT id);
+		void RegisterPacketEventToLevel(SPtr<MessageEventInfo>&& message);
+		void RegisterPacketEventToServer(SPtr<MessageEventInfo>&& message);
 
 		void ConnectActorToServer(const SPtr<Actor>& actor, UINT id);
 		SPtr<Actor> DisconnectActorFromServer(UINT id);

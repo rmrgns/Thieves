@@ -14,10 +14,12 @@ public:
 	virtual ~ThievesPacketManager() = default;
 
 	virtual void Init()override;
-	
+
+	void ProcessTest(int c_id, unsigned char* p);
+
 	void ProcessMove(int c_id, unsigned char* p);
 	void ProcessSignin(int c_id, unsigned char* p);
-	void ProcessTest(int c_id, unsigned char* p);
+
 	// 추가필요
 
 

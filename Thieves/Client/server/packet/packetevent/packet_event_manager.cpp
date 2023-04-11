@@ -8,13 +8,13 @@
 
 namespace client_fw
 {
-	//PacketEventManager::PacketEventManager()
-	//{
-	//}
+	PacketEventManager::PacketEventManager()
+	{
+	}
 
-	//PacketEventManager::~PacketEventManager()
-	//{
-	//}
+	PacketEventManager::~PacketEventManager()
+	{
+	}
 
 	////서버로 부터 수신된 메시지 이벤트 처리
 	// //현재 실행 중인 레벨 객체와 연결된 액터들에게 패킷 이벤트를 전달합니다.
@@ -79,22 +79,22 @@ namespace client_fw
 
 	////ACTOR
 	// 액터 객체에 패킷 이벤트를 등록하는 함수입니다. 액터의 ID 값과 함께 이벤트 메시지를 매개변수로 받습니다.
-	//void PacketEventManager::RegisterPacketEventToActor(SPtr<MessageEventInfo>&& message, UINT id)
-	//{
-	//	m_server_send_message_to_actor_queue.push({ message, id });
-	//}
+	void PacketEventManager::RegisterPacketEventToActor(SPtr<MessageEventInfo>&& message, UINT id)
+	{
+		m_server_send_message_to_actor_queue.push({ message, id });
+	}
 	//// LEVEL
 	// //레벨 객체에 패킷 이벤트를 등록하는 함수입니다. 이벤트 메시지를 매개변수로 받습니다.
-	//void PacketEventManager::RegisterPacketEventToLevel(SPtr<MessageEventInfo>&& message)
-	//{
-	//	m_server_send_message_to_level_queue.push(message);
-	//}
+	void PacketEventManager::RegisterPacketEventToLevel(SPtr<MessageEventInfo>&& message)
+	{
+		m_server_send_message_to_level_queue.push(message);
+	}
 	////SERVER packet event
 	////  서버에 패킷 이벤트를 등록하는 함수입니다. 이벤트 메시지를 매개변수로 받습니
-	//void PacketEventManager::RegisterPacketEventToServer(SPtr<MessageEventInfo>&& message)
-	//{
-	//	m_server_receive_message_queue.push(message);
-	//}
+	void PacketEventManager::RegisterPacketEventToServer(SPtr<MessageEventInfo>&& message)
+	{
+		m_server_receive_message_queue.push(message);
+	}
 
 	//// Acotr를 서버에 연결하는 기능
 	//// 액터 객체를 서버에 연결하는 함수입니다. 액터의 ID 값과 함께 액터 포인터를 매개변수로 받습니다.

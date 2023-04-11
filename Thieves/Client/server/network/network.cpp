@@ -42,10 +42,6 @@ bool Network::Init(client_fw::UPtr<PacketManager>&& packet_manager, client_fw::U
 		Network::error_display(WSAGetLastError());
 		return false;
 	}
-	
-	
-	
-	
     return true;
 }
 
@@ -68,8 +64,6 @@ bool Network::Connect()
 	m_hiocp = CreateIoCompletionPort(INVALID_HANDLE_VALUE, 0, NULL, 0);
 	CreateIoCompletionPort(reinterpret_cast<HANDLE>(m_s_socket), m_hiocp, m_id, 0);
 
-
-
 	return true;
 }
 
@@ -78,7 +72,7 @@ void Network::Worker()
 {
 	if (false == Connect())
 	{
-		//cout << "Failed to Connect" << endl;
+		cout << "Failed to Connect" << endl;
 		return;
 	}
 	while (m_iswork) {
@@ -105,7 +99,7 @@ void Network::Worker()
 		switch (exp_over->_comp_op) {
 		case COMP_OP::OP_RECV: {
 			cout << "recv" << endl;
-			//OnRecv(client_id, exp_over, num_byte, m_s_socket);
+			OnRecv(client_id, exp_over, num_byte, m_s_socket);
 
 			break;
 		}
@@ -130,13 +124,13 @@ void Network::Worker()
 // Recv 패킷 처리
 void Network::OnRecv(int client_id, EXP_OVER* exp_over, DWORD num_byte, SOCKET& socket)
 {
-	/*m_packet_manager->ProcessRecv(client_id, exp_over, num_byte, socket);*/
+	m_packet_manager->ProcessRecv(client_id, exp_over, num_byte, socket);
 }
 
-//void Network::SendMessageToServer(const client_fw::SPtr<client_fw::MessageEventInfo>& message)
-//{
-//	m_send_manager->ProcessSend(m_s_socket, message);
-//}
+void Network::SendMessageToServer(const client_fw::SPtr<client_fw::MessageEventInfo>& message)
+{
+	m_send_manager->ProcessSend(m_s_socket, message);
+}
 
 //void Network::SendMovePacket()
 //{

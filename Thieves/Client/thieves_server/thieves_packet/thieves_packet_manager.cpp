@@ -21,9 +21,13 @@ void ThievesPacketManager::Init()
 void ThievesPacketManager::ProcessTest(int c_id, unsigned char* p)
 {
 	sc_packet_test* packet = reinterpret_cast<sc_packet_test*>(p);
+	
+	
 	//PacketHelper::RegisterPacketEventToActor(CreateSPtr<TestMessageEventInfo>())
-//	PacketHelper::RegisterPacketEventToActor(CreateSPtr<thieves::TestMessageEventInfo>(HashCode("testmove"), packet->speed, packet->x, packet->y, packet->z), packet->id);
-//	Vec3 recv_pos{ packet->x,packet->y,packet->z };
+	//PacketHelper::RegisterPacketEventToActor(CreateSPtr<thieves::TestMessageEventInfo>(HashCode("testmove"),  packet->x, packet->y, packet->z), packet->id);
+	//Vec3 recv_pos{ packet->x,packet->y,packet->z };
+
+
 }
 
 void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)

@@ -8,7 +8,8 @@ class ThievesSendManager :
 public:
     ThievesSendManager() = default;
     virtual ~ThievesSendManager() = default;
-    //virtual void ProcessSend(const SOCKET& s_socket, const client_fw::SPtr<client_fw::MessageEventInfo>& message)override;
+    virtual void ProcessSend(const SOCKET& s_socket, const client_fw::SPtr<client_fw::MessageEventInfo>& message)override;
+    void SendTestPacket(const SOCKET& s_socket);
     //virtual void SendMovePacket(const SOCKET& s_socket, const client_fw::Vec3& position, const client_fw::Quaternion& rotation)override;
     //void SendSignInPacket(const SOCKET& s_socket, char*, char*);
     //void SendSignUPPacket(const SOCKET& s_socket, char*, char*);

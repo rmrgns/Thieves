@@ -51,6 +51,27 @@
     <Filter Include="소스 파일\server\core">
       <UniqueIdentifier>{5b3b6f29-7ed7-436f-a152-26378e47b527}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\serverFW">
+      <UniqueIdentifier>{d94643b4-d83e-491c-a612-e1b61b890147}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\serverFW\packet">
+      <UniqueIdentifier>{7c9ae954-26ac-4ea1-a975-5a6d18593878}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\serverFW\message">
+      <UniqueIdentifier>{19a68740-abc6-4571-80c0-3ac87981a2dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\serverFW\send">
+      <UniqueIdentifier>{dae6d84d-5fe7-48bc-9216-cb45b63aa612}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\serverFW\network">
+      <UniqueIdentifier>{abceb09a-58a8-4c78-901c-6e9a44af1099}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\serverFW\event">
+      <UniqueIdentifier>{f8fdd93a-4e87-4f6c-87a6-2a1b0f07b9d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\serverFW\core">
+      <UniqueIdentifier>{a3c56e1b-5f40-4f96-98af-ff3c1263afc6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -107,15 +128,6 @@
     <ClInclude Include="server\message\message_helper.h">
       <Filter>소스 파일\server\message</Filter>
     </ClInclude>
-    <ClInclude Include="server\event\event_info.h">
-      <Filter>소스 파일\server\event</Filter>
-    </ClInclude>
-    <ClInclude Include="server\event\event_manager.h">
-      <Filter>소스 파일\server\event</Filter>
-    </ClInclude>
-    <ClInclude Include="server\event\evnet_system.h">
-      <Filter>소스 파일\server\event</Filter>
-    </ClInclude>
     <ClInclude Include="server\define.h">
       <Filter>소스 파일\server</Filter>
     </ClInclude>
@@ -137,6 +149,8 @@
     <ClInclude Include="ptr.h">
       <Filter>소스 파일\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="IocpNetworkManager.h" />
+    <ClInclude Include="NetworkManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -194,9 +208,6 @@
     <ClCompile Include="server\message\message_helper.cpp">
       <Filter>소스 파일\server\message</Filter>
     </ClCompile>
-    <ClCompile Include="server\event\event_system.cpp">
-      <Filter>소스 파일\server\event</Filter>
-    </ClCompile>
     <ClCompile Include="thieves_server\thieves_send\thieves_send_manager.cpp">
       <Filter>소스 파일\thieves_server\thieves_send</Filter>
     </ClCompile>
@@ -205,6 +216,12 @@
     </ClCompile>
     <ClCompile Include="thieves_server\thieves_message\thieves_message_event_info.cpp">
       <Filter>소스 파일\thieves_server\thieves_message</Filter>
+    </ClCompile>
+    <ClCompile Include="IocpNetworkManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkManager.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
