@@ -69,6 +69,6 @@ private:
 	wstring _changeScene{};
 	POINT _windowCenter{};
 	POINT _clientCenter{};
-
+	Vec3 rotation;
 };
 

@@ -114,8 +114,10 @@ void Engine::ShowFps()
 	GetClientRect(GEngine->GetWindow().hwnd, &rect1);
 	WCHAR text[100] = L"";
 	//::wsprintf(text, L"FPS : %d, x:%d y:%d", fps, INPUT->GetMousePos().x , INPUT->GetMousePos().y);
-	::wsprintf(text, L"FPS : %d, x:%d y:%d, mx:%d my:%d", fps, (rect1.left + rect1.right) / 2, (rect1.top + rect1.bottom) / 2, INPUT->GetMousePos().x, INPUT->GetMousePos().y);
-
+	//::wsprintf(text, L"FPS : %d, x:%d y:%d, mx:%d my:%d", fps, (rect1.left + rect1.right) / 2, (rect1.top + rect1.bottom) / 2, INPUT->GetMousePos().x, INPUT->GetMousePos().y);
+	rotation = GET_SINGLE(SceneManager)->Gettemprotation();
+	::_stprintf_s(text, L"FPS : %d, x:%f, y:%f, z:%f", fps, rotation.x, rotation.y, rotation.z);
+	//::wsprintf(text, L"FPS : %d, x:%f, y:%f, z:%f", fps, 12.345f, rotation.y, rotation.z);
 	::SetWindowText(_window.hwnd, text);
 }
 

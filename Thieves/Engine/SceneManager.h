@@ -31,6 +31,8 @@ public:
 
 	shared_ptr<class GameObject> Pick(int32 screenX, int32 screenY);
 
+	Vec3 Gettemprotation() { return temprotation; }
+
 public:
 	shared_ptr<Scene> GetActiveScene() { return _activeScene; }
 	bool GetCheckChangeScene() { return _checkChangeScene; }
@@ -49,5 +51,6 @@ private:
 
 	array<wstring, MAX_LAYER> _layerNames;
 	map<wstring, uint8> _layerIndex;
+	Vec3		temprotation;
 };
 

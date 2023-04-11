@@ -141,5 +141,51 @@ void TestCameraScript::LateUpdate()
 	//	INPUT->SetPrevMousePos(point);	// Input class의 _prevMousePos에 point의 좌표를 저장
 	//}
 
+	// 카메라 마우스제어 on/off (temp code)
+	if (INPUT->GetButtonDown(KEY_TYPE::L))
+	{
+		if (_checkCameraRotation == true)
+			_checkCameraRotation = false;
+		else
+			_checkCameraRotation = true;
+	}
+
+	// 카메라 마우스제어
+	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME && _checkCameraRotation == true)
+	{
+		CameraRotation();
+	}
+
 	GetTransform()->SetLocalPosition(pos);
+}
+
+
+void TestCameraScript::CameraRotation()
+{
+	const POINT& point = INPUT->GetMousePos();	// 현재 마우스좌표를 point변수에 저장
+	float mouseX = static_cast<float>(point.x);	// point변수의 값을 float값으로 변경
+	float mouseY = static_cast<float>(point.y);
+
+	POINT WindowCenter = GEngine->GetWindowCenter();
+	SetCursorPos(WindowCenter.x, WindowCenter.y);
+
+	POINT ClientCenter = GEngine->GetClientCenter();
+
+	float viewMouseX = static_cast<float>(ClientCenter.x);
+	float viewMouseY = static_cast<float>(ClientCenter.y);
+
+	// rotation
+	Vec3 rotation = GetTransform()->GetLocalRotation();
+	
+	rotation.x += DELTA_TIME * (mouseY - viewMouseY) * _mouseRotateSpeed;
+	rotation.y += DELTA_TIME * (mouseX - viewMouseX) * _mouseRotateSpeed;
+	if (rotation.x < -1.575f)
+	{
+		rotation.x = -1.575f;
+	}
+	if (rotation.x > 1.575f)
+	{
+		rotation.x = 1.575f;
+	}
+	GetTransform()->SetLocalRotation(rotation);
 }

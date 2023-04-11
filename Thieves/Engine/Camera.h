@@ -48,8 +48,6 @@ public:
 	Matrix& GetViewMatrix() { return _matView; }
 	Matrix& GetProjectionMatrix() { return _matProjection; }
 
-	virtual void CameraRotation();
-
 private:
 	PROJECTION_TYPE _type = PROJECTION_TYPE::PERSPECTIVE;
 
@@ -65,8 +63,6 @@ private:
 
 	Frustum _frustum;
 	uint32	_cullingMask = 0;
-
-	float	_mouseRotateSpeed = 0.2f;
 
 private:
 	vector<shared_ptr<GameObject>>	_vecDeferred;

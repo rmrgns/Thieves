@@ -26,6 +26,7 @@ enum class KEY_TYPE
 
 	O = 'O',	// temp : GameScene전환
 	P = 'P',	// temp : LoginScene전환
+	L = 'L',
 
 	KEY_1 = '1',
 	KEY_2 = '2',

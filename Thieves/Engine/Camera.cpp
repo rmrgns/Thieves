@@ -35,12 +35,6 @@ void Camera::FinalUpdate()
 	else
 		_matProjection = ::XMMatrixOrthographicLH(_width * _scale, _height * _scale, _near, _far);
 
-
-	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
-	{
-		CameraRotation();
-	}
-
 	//_frustum.FinalUpdate();
 }
 
@@ -152,29 +146,5 @@ void Camera::Render_Shadow()
 	for (auto& gameObject : _vecShadow)
 	{
 		gameObject->GetMeshRenderer()->RenderShadow();
-	}
-}
-
-void Camera::CameraRotation()
-{
-	const POINT& point = INPUT->GetMousePos();	// 현재 마우스좌표를 point변수에 저장
-	float mouseX = static_cast<float>(point.x);	// point변수의 값을 float값으로 변경
-	float mouseY = static_cast<float>(point.y);
-
-	POINT WindowCenter = GEngine->GetWindowCenter();
-	SetCursorPos(WindowCenter.x, WindowCenter.y);
-
-	POINT ClientCenter = GEngine->GetClientCenter();
-
-	float viewMouseX = static_cast<float>(ClientCenter.x);
-	float viewMouseY = static_cast<float>(ClientCenter.y);
-
-	// rotation
-	{
-
-		Vec3 rotation = GetTransform()->GetLocalRotation();
-		rotation.x += DELTA_TIME * (mouseY - viewMouseY) * _mouseRotateSpeed;
-		rotation.y += DELTA_TIME * (mouseX - viewMouseX) * _mouseRotateSpeed;
-		GetTransform()->SetLocalRotation(rotation);
 	}
 }
