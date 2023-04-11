@@ -15,6 +15,17 @@ void Timer::Update()
 	::QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&currentCount));
 
 	_deltaTime = (currentCount - _prevCount) / static_cast<float>(_frequency);
+
+	// 프레임 제한 코드
+	if (_lockFPS > 0.0f)
+	{
+		while (_deltaTime < (1.0f / _lockFPS))
+		{
+			::QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&currentCount));
+			_deltaTime = float((currentCount - _prevCount) / static_cast<float>(_frequency));
+		}
+	}
+
 	_prevCount = currentCount;
 
 	_frameCount++;

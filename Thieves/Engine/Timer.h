@@ -1,6 +1,5 @@
 #pragma once
 
-
 class Timer
 {
 	DECLARE_SINGLE(Timer);
@@ -21,5 +20,8 @@ private:
 	uint32	_frameCount = 0;
 	float	_frameTime = 0.f;
 	uint32	_fps = 0;
+
+	// 프레임 제한
+	float	_lockFPS = 60.0f;
 };
 
