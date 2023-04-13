@@ -23,8 +23,6 @@ public:
 	void RenderFinal();
 	void RenderForward();
 
-
-
 private:
 	void PushLightData();
 

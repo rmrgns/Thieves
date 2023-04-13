@@ -64,36 +64,37 @@ void RenderTargetGroup::Create(RENDER_TARGET_GROUP_TYPE groupType, vector<Render
 
 	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle{ _rtvHeap->GetCPUDescriptorHandleForHeapStart() };
 	int8 i = GEngine->GetSwapChain()->GetBackBufferIndex();
-	{
-		GEngine->GetSwapChain()->GetSwapChain()->GetBuffer(i, IID_PPV_ARGS(GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)->GetRTTexture(i)->GetTex2D().GetAddressOf()));
-		DEVICE->CreateRenderTargetView(GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)->GetRTTexture(i)->GetTex2D().Get(), NULL, rtvHandle);
+	ComPtr<ID3D11Resource> _wrappedBackBuffer = GEngine->GetWrappedBackBuffer(i);
+	//{
+	//	GEngine->GetSwapChain()->GetSwapChain()->GetBuffer(i, IID_PPV_ARGS(GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)->GetRTTexture(i)->GetTex2D().GetAddressOf()));
+	//	DEVICE->CreateRenderTargetView(GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)->GetRTTexture(i)->GetTex2D().Get(), NULL, rtvHandle);
 
-		// Create a wrapped 11On12 resource of this back buffer. Since we are 
-		// rendering all D3D12 content first and then all D2D content, we specify 
-		// the In resource state as RENDER_TARGET - because D3D12 will have last 
-		// used it in this state - and the Out resource state as PRESENT. When 
-		// ReleaseWrappedResources() is called on the 11On12 device, the resource 
-		// will be transitioned to the PRESENT state.
+	//	// Create a wrapped 11On12 resource of this back buffer. Since we are 
+	//	// rendering all D3D12 content first and then all D2D content, we specify 
+	//	// the In resource state as RENDER_TARGET - because D3D12 will have last 
+	//	// used it in this state - and the Out resource state as PRESENT. When 
+	//	// ReleaseWrappedResources() is called on the 11On12 device, the resource 
+	//	// will be transitioned to the PRESENT state.
 		D3D11_RESOURCE_FLAGS d3d11Flags = { D3D11_BIND_RENDER_TARGET };
 		ThrowIfFailed(GEngine->Getd3d11On12Device()->CreateWrappedResource(
 			GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)->GetRTTexture(i)->GetTex2D().Get(),
 			&d3d11Flags,
 			D3D12_RESOURCE_STATE_RENDER_TARGET,
 			D3D12_RESOURCE_STATE_PRESENT,
-			IID_PPV_ARGS(_wrappedBackBuffer[i].GetAddressOf())
+			IID_PPV_ARGS(&_wrappedBackBuffer)
 		));
 
 		// Create a render target for D2D to draw directly to this back buffer.
 		ComPtr<IDXGISurface> surface;
-		ThrowIfFailed(_wrappedBackBuffer[i].As(&surface));
+		ThrowIfFailed(_wrappedBackBuffer.As(&surface));
 		ThrowIfFailed(GEngine->Getd2dDeviceContext()->CreateBitmapFromDxgiSurface(
 			surface.Get(),
 			&bitmapProperties,
-			&_d2dRenderTargets[i]
+			&GEngine->GetD2dRenderTargets(i)
 		));
-
+		
 		rtvHandle.Offset(_rtvHeapSize);
-	}
+	//}
 }
 
 void RenderTargetGroup::OMSetRenderTargets(uint32 count, uint32 offset)
@@ -148,26 +149,4 @@ void RenderTargetGroup::WaitTargetToResource()
 void RenderTargetGroup::WaitResourceToTarget()
 {
 	GRAPHICS_CMD_LIST->ResourceBarrier(_rtCount, _resourceToTarget);
-}
-
-void RenderTargetGroup::Render2D() const
-{
-	// Acquire our wrapped render target resource for the current back buffer.
-	GEngine->Getd3d11On12Device()->AcquireWrappedResources(_wrappedBackBuffer[GEngine->GetSwapChain()->GetBackBufferIndex()].GetAddressOf(), 1);
-
-	// Render text directly to the back buffer.
-	GEngine->Getd2dDeviceContext()->SetTarget(_d2dRenderTargets[GEngine->GetSwapChain()->GetBackBufferIndex()].Get());
-	GEngine->Getd2dDeviceContext()->BeginDraw();
-	//shared_ptr<Scene> m_scene = GET_SINGLE(SceneManager)->GetActiveScene();
-	//if (GET_SINGLE(SceneManager)->GetActiveScene()) GET_SINGLE(SceneManager)->GetActiveScene()->Render(GEngine->Getd2dDeviceContext());
-
-	ThrowIfFailed(GEngine->Getd2dDeviceContext()->EndDraw());
-
-	// Release our wrapped render target resource. Releasing 
-	// transitions the back buffer resource to the state specified
-	// as the OutState when the wrapped resource was created.
-	GEngine->Getd3d11On12Device()->ReleaseWrappedResources(_wrappedBackBuffer[GEngine->GetSwapChain()->GetBackBufferIndex()].GetAddressOf(), 1);
-
-	// Flush to submit the 11 command list to the shared command queue.
-	GEngine->Getd3d11DeviceContext()->Flush();
 }
