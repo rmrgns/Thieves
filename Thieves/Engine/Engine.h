@@ -10,6 +10,9 @@
 #include "TableDescriptorHeap.h"
 #include "Texture.h"
 #include "RenderTargetGroup.h"
+#include "Text.h"
+
+#include "TextObject.h"
 
 class Engine
 {
@@ -26,9 +29,12 @@ public:
 	shared_ptr<RootSignature> GetRootSignature() { return _rootSignature; }
 	shared_ptr<GraphicsDescriptorHeap> GetGraphicsDescHeap() { return _graphicsDescHeap; }
 	shared_ptr<ComputeDescriptorHeap> GetComputeDescHeap() { return _computeDescHeap; }
+	shared_ptr<Text> GetText() { return _text; }
 
 	shared_ptr<ConstantBuffer> GetConstantBuffer(CONSTANT_BUFFER_TYPE type) { return _constantBuffers[static_cast<uint8>(type)]; }
 	shared_ptr<RenderTargetGroup> GetRTGroup(RENDER_TARGET_GROUP_TYPE type) { return _rtGroups[static_cast<uint8>(type)]; }
+
+	//shared_ptr<TextObject> GetText() { return _TextObject; }
 
 public:
 	void Render();
@@ -41,22 +47,12 @@ public:
 
 	void SetChangeScene(wstring changeScene) { _changeScene = changeScene; }
 	virtual void CheckChangeScene();
-
-	ComPtr<ID2D1Factory> Getd2dFactory() { return _d2dFactory; }
-	ComPtr<ID3D11On12Device> Getd3d11On12Device() { return _d3d11On12Device; }
-	ComPtr<ID2D1DeviceContext2> Getd2dDeviceContext() {	return _d2dDeviceContext; }
-	ComPtr<ID3D11DeviceContext> Getd3d11DeviceContext() { return _d3d11DeviceContext; }
-	ComPtr<ID3D11Resource>	GetWrappedBackBuffer(int8 i) const { return _wrappedBackBuffer[i]; }
-	ComPtr<ID2D1Bitmap1>	GetD2dRenderTargets(int8 i) const { return _d2dRenderTargets[i]; }
 	
 private:
 	void ShowFps();
 	void CreateConstantBuffer(CBV_REGISTER reg, uint32 bufferSize, uint32 count);
 	void CreateRenderTargetGroups();
 	void CreateScreenCenter();	
-
-	void CreateD3D11On12Device();	// 11on12 디바이스 생성
-	void CreateD2DDevice();			// D2D, DWrite 생성
 
 private:
 	// 그려질 화면 크기 관련
@@ -71,6 +67,9 @@ private:
 	shared_ptr<RootSignature> _rootSignature = make_shared<RootSignature>();
 	shared_ptr<GraphicsDescriptorHeap> _graphicsDescHeap = make_shared<GraphicsDescriptorHeap>();
 	shared_ptr<ComputeDescriptorHeap> _computeDescHeap = make_shared<ComputeDescriptorHeap>();
+	shared_ptr<Text> _text = make_shared<Text>();
+
+	//shared_ptr<TextObject> _TextObject = make_shared<TextObject>();
 
 	vector<shared_ptr<ConstantBuffer>> _constantBuffers;
 	array<shared_ptr<RenderTargetGroup>, RENDER_TARGET_GROUP_COUNT> _rtGroups;
@@ -78,14 +77,5 @@ private:
 	wstring _changeScene{};
 	POINT _windowCenter{};
 	POINT _clientCenter{};
-
-	ComPtr<ID3D11On12Device>	_d3d11On12Device = nullptr;
-	ComPtr<ID3D11DeviceContext> _d3d11DeviceContext = nullptr;
-	ComPtr<ID2D1Factory3>		_d2dFactory = nullptr;
-	ComPtr<ID2D1Device2>		_d2dDevice = nullptr;
-	ComPtr<ID2D1DeviceContext2> _d2dDeviceContext = nullptr;
-	ComPtr<IDWriteFactory>		_dWriteFactory = nullptr;
-	ComPtr<ID3D11Resource>	_wrappedBackBuffer[SWAP_CHAIN_BUFFER_COUNT];
-	ComPtr<ID2D1Bitmap1>	_d2dRenderTargets[SWAP_CHAIN_BUFFER_COUNT];
 };
 

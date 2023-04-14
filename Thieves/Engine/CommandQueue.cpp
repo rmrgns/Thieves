@@ -103,12 +103,12 @@ void GraphicsCommandQueue::RenderEnd()
 
 	_cmdList->ResourceBarrier(1, &barrier);
 	_cmdList->Close();
-
+	
 	// 커맨드 리스트 수행
 	ID3D12CommandList* cmdListArr[] = { _cmdList.Get() };
 	_cmdQueue->ExecuteCommandLists(_countof(cmdListArr), cmdListArr);
 
-	//Render2D();
+	
 
 	_swapChain->Present();
 
@@ -131,30 +131,6 @@ void GraphicsCommandQueue::FlushResourceCommandQueue()
 
 	_resCmdAlloc->Reset();
 	_resCmdList->Reset(_resCmdAlloc.Get(), nullptr);
-}
-
-
-void GraphicsCommandQueue::Render2D() const
-{
-	
-	// Acquire our wrapped render target resource for the current back buffer.
-	GEngine->Getd3d11On12Device()->AcquireWrappedResources(GEngine->GetWrappedBackBuffer(GEngine->GetSwapChain()->GetBackBufferIndex()).GetAddressOf(), 1);
-
-	// Render text directly to the back buffer.
-	GEngine->Getd2dDeviceContext()->SetTarget(GEngine->GetD2dRenderTargets(GEngine->GetSwapChain()->GetBackBufferIndex()).Get());
-	GEngine->Getd2dDeviceContext()->BeginDraw();
-	//shared_ptr<Scene> m_scene = GET_SINGLE(SceneManager)->GetActiveScene();
-	//if (GET_SINGLE(SceneManager)->GetActiveScene()) GET_SINGLE(SceneManager)->GetActiveScene()->Render(GEngine->Getd2dDeviceContext());
-
-	ThrowIfFailed(GEngine->Getd2dDeviceContext()->EndDraw());
-
-	// Release our wrapped render target resource. Releasing 
-	// transitions the back buffer resource to the state specified
-	// as the OutState when the wrapped resource was created.
-	GEngine->Getd3d11On12Device()->ReleaseWrappedResources(GEngine->GetWrappedBackBuffer(GEngine->GetSwapChain()->GetBackBufferIndex()).GetAddressOf(), 1);
-
-	// Flush to submit the 11 command list to the shared command queue.
-	GEngine->Getd3d11DeviceContext()->Flush();
 }
 
 // ************************

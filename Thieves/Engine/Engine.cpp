@@ -8,6 +8,9 @@
 #include "Light.h"
 #include "Resources.h"
 #include "InstancingManager.h"
+#include "Text.h"
+
+#include "TextObject.h"
 
 void Engine::Init(const WindowInfo& info)
 {
@@ -24,14 +27,12 @@ void Engine::Init(const WindowInfo& info)
 	_rootSignature->Init();
 	_graphicsDescHeap->Init(256);
 	_computeDescHeap->Init();
+	
 
 	CreateConstantBuffer(CBV_REGISTER::b0, sizeof(LightParams), 1);
 	CreateConstantBuffer(CBV_REGISTER::b1, sizeof(TransformParams), 256);
 	CreateConstantBuffer(CBV_REGISTER::b2, sizeof(MaterialParams), 256);
-
-	CreateD3D11On12Device();
-	CreateD2DDevice();
-
+	_text->Init();
 	CreateRenderTargetGroups();
 
 
@@ -55,7 +56,7 @@ void Engine::Update()
 	ShowFps();
 
 	CheckChangeScene();
-
+	//_TextObject->Render(_d2dDeviceContext);
 }
 
 void Engine::Render()
@@ -63,7 +64,7 @@ void Engine::Render()
 	RenderBegin();
 	
 	GET_SINGLE(SceneManager)->Render();
-
+	
 	RenderEnd();
 }
 
@@ -233,28 +234,4 @@ void Engine::CreateScreenCenter()
 	GetClientRect(GEngine->GetWindow().hwnd, &rectClient);
 	_clientCenter.x = (rectClient.left + rectClient.right) / 2;
 	_clientCenter.y = (rectClient.top + rectClient.bottom) / 2 - 11;
-}
-
-void Engine::CreateD3D11On12Device()
-{
-	ComPtr<ID3D11Device> d3d11Device = nullptr;
-	ThrowIfFailed(D3D11On12CreateDevice(_device->GetDevice().Get(), D3D11_CREATE_DEVICE_BGRA_SUPPORT,
-		nullptr, 0, reinterpret_cast<IUnknown**>(_graphicsCmdQueue->GetCmdQueue().GetAddressOf()), 1, 0,
-		&d3d11Device, &_d3d11DeviceContext, nullptr));
-	
-	ThrowIfFailed(d3d11Device.As(&_d3d11On12Device));
-}
-
-void Engine::CreateD2DDevice()
-{
-	// Create D2D/DWrite components.
-	D2D1_FACTORY_OPTIONS d2dFactoryOptions{};
-	D2D1_DEVICE_CONTEXT_OPTIONS deviceOptions = D2D1_DEVICE_CONTEXT_OPTIONS_NONE;
-	ThrowIfFailed(D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, __uuidof(ID2D1Factory3),
-		&d2dFactoryOptions, &_d2dFactory));
-	ComPtr<IDXGIDevice> dxgiDevice;
-	ThrowIfFailed(_d3d11On12Device.As(&dxgiDevice));
-	ThrowIfFailed(_d2dFactory->CreateDevice(dxgiDevice.Get(), &_d2dDevice));
-	ThrowIfFailed(_d2dDevice->CreateDeviceContext(deviceOptions, &_d2dDeviceContext));
-	ThrowIfFailed(DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), &_dWriteFactory));
 }
