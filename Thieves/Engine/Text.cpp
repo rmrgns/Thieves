@@ -51,7 +51,10 @@ void Text::CreateD2DDevice()
 
 void Text::CreateTextInfo()
 {
+	// 텍스트 색깔
 	ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Aqua), _solidColorBrush.GetAddressOf()));
+	
+	// 텍스트 폰트 설정
 	ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"Verdana", nullptr,
 		DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_ITALIC, DWRITE_FONT_STRETCH_NORMAL,
 		25, L"en-us", _writeTextFormat.GetAddressOf()));
