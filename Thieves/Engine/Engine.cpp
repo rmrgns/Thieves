@@ -27,12 +27,12 @@ void Engine::Init(const WindowInfo& info)
 	_rootSignature->Init();
 	_graphicsDescHeap->Init(256);
 	_computeDescHeap->Init();
-	
+	_text->Init();
 
 	CreateConstantBuffer(CBV_REGISTER::b0, sizeof(LightParams), 1);
 	CreateConstantBuffer(CBV_REGISTER::b1, sizeof(TransformParams), 256);
 	CreateConstantBuffer(CBV_REGISTER::b2, sizeof(MaterialParams), 256);
-	_text->Init();
+	
 	CreateRenderTargetGroups();
 
 
@@ -56,7 +56,6 @@ void Engine::Update()
 	ShowFps();
 
 	CheckChangeScene();
-	//_TextObject->Render(_d2dDeviceContext);
 }
 
 void Engine::Render()
@@ -64,7 +63,7 @@ void Engine::Render()
 	RenderBegin();
 	
 	GET_SINGLE(SceneManager)->Render();
-	
+
 	RenderEnd();
 }
 
@@ -219,6 +218,9 @@ void Engine::CreateRenderTargetGroups()
 		_rtGroups[static_cast<uint8>(RENDER_TARGET_GROUP_TYPE::LIGHTING)] = make_shared<RenderTargetGroup>();
 		_rtGroups[static_cast<uint8>(RENDER_TARGET_GROUP_TYPE::LIGHTING)]->Create(RENDER_TARGET_GROUP_TYPE::LIGHTING, rtVec, dsTexture);
 	}
+
+	// text ·»´õÅ¸°Ù»ý¼º
+	_text->CreateRenderTarget();
 }
 
 void Engine::CreateScreenCenter()

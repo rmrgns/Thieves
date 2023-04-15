@@ -461,7 +461,5 @@ shared_ptr<Scene> SceneManager::LoadLoginScene()
 	//	}
 	//#pragma endregion
 
-	
-
 	return scene;
 }

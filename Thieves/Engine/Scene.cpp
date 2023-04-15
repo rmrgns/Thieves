@@ -71,8 +71,6 @@ void Scene::Render()
 	RenderFinal();
 
 	RenderForward();
-
-	
 }
 
 void Scene::ClearRTV()

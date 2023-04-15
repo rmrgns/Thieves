@@ -42,12 +42,12 @@ void Input::Update()
 				if (isgraph(key))
 					_userID += key;
 				// 프롬프트 창 출력 코드
-				{
+				/*{
 					system("cls");
 					cout << "UserID : ";
 					wcout << INPUT->GetUserID();
 					cout << endl;
-				}
+				}*/
 			}
 		}
 		else

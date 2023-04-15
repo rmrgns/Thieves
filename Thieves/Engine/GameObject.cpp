@@ -9,6 +9,7 @@
 #include "Terrain.h"
 #include "BaseCollider.h"
 #include "Animator.h"
+#include "TextObject.h"
 
 GameObject::GameObject() : Object(OBJECT_TYPE::GAMEOBJECT)
 {
@@ -139,6 +140,12 @@ shared_ptr<Animator> GameObject::GetAnimator()
 {
 	shared_ptr<Component> component = GetFixedComponent(COMPONENT_TYPE::ANIMATOR);
 	return static_pointer_cast<Animator>(component);
+}
+
+shared_ptr<TextObject> GameObject::GetTextObject()
+{
+	shared_ptr<Component> component = GetFixedComponent(COMPONENT_TYPE::TEXTOBJECT);
+	return static_pointer_cast<TextObject>(component);
 }
 
 void GameObject::AddComponent(shared_ptr<Component> component)

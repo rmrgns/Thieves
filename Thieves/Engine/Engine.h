@@ -68,6 +68,7 @@ private:
 	shared_ptr<GraphicsDescriptorHeap> _graphicsDescHeap = make_shared<GraphicsDescriptorHeap>();
 	shared_ptr<ComputeDescriptorHeap> _computeDescHeap = make_shared<ComputeDescriptorHeap>();
 	shared_ptr<Text> _text = make_shared<Text>();
+	shared_ptr<TextObject> _textObject = make_shared<TextObject>();
 
 	//shared_ptr<TextObject> _TextObject = make_shared<TextObject>();
 
