@@ -26,7 +26,37 @@ void SceneManager::Update()
 {
 	if (_activeScene == nullptr)
 		return;
-
+	if (_currentScene == CURRENT_SCENE::GAME)
+	{
+		//++count;
+		if (count == 60)
+		{
+			count = 0;
+			temp++;
+			for (int i = 0; i < temp; i++)
+			{
+				shared_ptr<GameObject> obj = make_shared<GameObject>();
+				obj->AddComponent(make_shared<Transform>());
+				obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
+				obj->GetTransform()->SetLocalPosition(Vec3(0, 100.f * temp, 500.f));
+				obj->SetStatic(false);
+				shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+				{
+					shared_ptr<Mesh> sphereMesh = GET_SINGLE(Resources)->LoadSphereMesh();
+					meshRenderer->SetMesh(sphereMesh);
+				}
+				{
+					shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
+					meshRenderer->SetMaterial(material->Clone());
+				}
+				obj->AddComponent(make_shared<TestObjectMove>());
+				obj->AddComponent(meshRenderer);
+				obj->AddComponent(make_shared<Physics>());
+				obj->GetPhysics()->SetGravity(false);
+				_activeScene->AddGameObject(obj);
+			}
+		}
+	}
 	_activeScene->Update();
 	_activeScene->LateUpdate();
 	_activeScene->FinalUpdate();
@@ -55,6 +85,8 @@ void SceneManager::LoadScene(wstring sceneName)
 	}
 	else if (sceneName == L"GameScene")
 	{
+		temp = 0;
+		count = 0;
 		_activeScene = LoadTestScene();
 		_currentScene = CURRENT_SCENE::GAME;
 	}
@@ -290,6 +322,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
 			meshRenderer->SetMaterial(material->Clone());
 		}
+		obj->AddComponent(make_shared<TestObjectMove>());
 		obj->AddComponent(meshRenderer);
 		obj->AddComponent(make_shared<Physics>());
 		obj->GetPhysics()->SetGravity(false);
