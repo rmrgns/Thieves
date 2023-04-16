@@ -17,11 +17,14 @@ void Text::Update()
 	if (GET_SINGLE(SceneManager)->GetActiveScene())
 	{
 		// 텍스트 출력
-		D2D1_RECT_F textRect = D2D1::RectF(0.0f, 0.0f, GEngine->GetWindow().width, GEngine->GetWindow().height);
-		static const WCHAR text[] = L"헤헿 D3D11On12 프로젝트 입니다.";
+		if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOGIN)
+		{
+			D2D1_RECT_F textRect = D2D1::RectF(0.0f, 0.0f, GEngine->GetWindow().width, GEngine->GetWindow().height);
+			static const WCHAR text[] = L"도둑들 로그인 화면.";
 
-		_d2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
-		_d2dDeviceContext->DrawTextW(text, _countof(text) - 1, _writeTextFormat.Get(), &textRect, _solidColorBrush.Get());
+			_d2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
+			_d2dDeviceContext->DrawTextW(text, _countof(text) - 1, _writeTextFormat.Get(), &textRect, _solidColorBrush.Get());
+		}
 	}
 }
 

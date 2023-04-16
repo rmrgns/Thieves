@@ -117,7 +117,8 @@ void Engine::ShowFps()
 	RECT rect1;
 	GetClientRect(GEngine->GetWindow().hwnd, &rect1);
 	WCHAR text[100] = L"";
-	::wsprintf(text, L"FPS : %d, x:%d y:%d, mx:%d my:%d", fps, (rect1.left + rect1.right) / 2, (rect1.top + rect1.bottom) / 2, INPUT->GetMousePos().x, INPUT->GetMousePos().y);
+	Vec3 pos = GET_SINGLE(SceneManager)->GetPlayerPosition();
+	::wsprintf(text, L"FPS : %d, x:%d y:%d z:%d", fps, (int)pos.x, (int)pos.y, (int)pos.z);
 	::SetWindowText(_window.hwnd, text);
 }
 

@@ -18,6 +18,8 @@ void PlayerInput::LateUpdate()
 {
 	Vec3 pos = GetTransform()->GetLocalPosition();
 
+
+	// 캐릭터 WASD이동
 	if (INPUT->GetButton(KEY_TYPE::W))
 	{
 		//pos += GetTransform()->GetLook() * _speed * DELTA_TIME;
@@ -43,14 +45,21 @@ void PlayerInput::LateUpdate()
 		pos.z += GetTransform()->GetRight().z * _speed * DELTA_TIME;
 	}
 
-	// 카메라 마우스제어
-	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
+	// 캐릭터 점프
+	if (INPUT->GetButtonDown(KEY_TYPE::SPACE))
 	{
-		PlayerRotation();
+		_jump = true;
 	}
 
+	// 캐릭터 점프
+	Jump(pos);
+	
+	// 캐릭터 회전
+	PlayerRotation();
+	
+	// 카메라 캐릭터 position 일치 -> 1인칭
 	GET_SINGLE(SceneManager)->SetPlayerPosition(pos);
-
+	 
 	GetTransform()->SetLocalPosition(pos);
 }
 
@@ -73,13 +82,30 @@ void PlayerInput::PlayerRotation()
 
 	//rotation.x += DELTA_TIME * (mouseY - viewMouseY) * _mouseRotateSpeed;
 	rotation.y += DELTA_TIME * (mouseX - viewMouseX) * _mouseRotateSpeed;
-	if (rotation.x < -LIMIT_ROTATION)
-	{
-		rotation.x = -LIMIT_ROTATION;
-	}
-	if (rotation.x > LIMIT_ROTATION)
-	{
-		rotation.x = LIMIT_ROTATION;
-	}
+
 	GetTransform()->SetLocalRotation(rotation);
+}
+
+void PlayerInput::Jump(Vec3& pos)
+{
+	if (_jump == true)
+	{
+		if (_jumpCount < 60)
+		{
+			_jumpCount++;
+			_jumpSpeed -= 5.f;
+			pos += GetTransform()->GetUp() * _jumpSpeed * DELTA_TIME;
+		}
+		else if(_jumpCount < 120)
+		{
+			_jumpCount++;
+			_jumpSpeed += 5.f;
+			pos -= GetTransform()->GetUp() * _jumpSpeed * DELTA_TIME;
+		}
+		else
+		{
+			_jumpCount = 0;
+			_jump = false;
+		}
+	}
 }
