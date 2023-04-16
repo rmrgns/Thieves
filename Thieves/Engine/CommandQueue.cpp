@@ -2,6 +2,7 @@
 #include "CommandQueue.h"
 #include "SwapChain.h"
 #include "Engine.h"
+#include "Text.h"
 
 // ************************
 // GraphicsCommandQueue
@@ -103,10 +104,13 @@ void GraphicsCommandQueue::RenderEnd()
 
 	_cmdList->ResourceBarrier(1, &barrier);
 	_cmdList->Close();
-
+	
 	// 커맨드 리스트 수행
 	ID3D12CommandList* cmdListArr[] = { _cmdList.Get() };
 	_cmdQueue->ExecuteCommandLists(_countof(cmdListArr), cmdListArr);
+
+	// 텍스트 렌더링
+	GEngine->GetText()->Render2D();
 
 	_swapChain->Present();
 

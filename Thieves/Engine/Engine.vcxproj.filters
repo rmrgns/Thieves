@@ -162,6 +162,12 @@
     <ClCompile Include="TestDragon.cpp">
       <Filter>Object\Script</Filter>
     </ClCompile>
+    <ClCompile Include="TextObject.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -298,6 +304,12 @@
     </ClInclude>
     <ClInclude Include="TestDragon.h">
       <Filter>Object\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="TextObject.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
