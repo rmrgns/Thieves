@@ -69,18 +69,18 @@ void ThievesSendManager::SendTestPacket(const SOCKET& s_socket)
 	SendPacket(s_socket, sizeof(packet), &packet);
 }
 
-//void ThievesSendManager::SendMovePacket(const SOCKET& s_socket, const client_fw::Vec3& position, const client_fw::Quaternion& rotation)
-//{
-//	cs_packet_move packet;
-//	packet.size = sizeof(packet);
-//	packet.type = CS_PACKET_MOVE;
-//	packet.x = position.x;
-//	packet.y = position.y;
-//	packet.z = position.z;
-//
-//	SendPacket(s_socket, sizeof(packet), &packet);
-//}
-//
+void ThievesSendManager::SendMovePacket(const SOCKET& s_socket, const client_fw::Vec3& position, const client_fw::Quaternion& rotation)
+{
+	cs_packet_move packet;
+	packet.size = sizeof(packet);
+	packet.type = CS_PACKET_MOVE;
+	packet.x = position.x;
+	packet.y = position.y;
+	packet.z = position.z;
+
+	SendPacket(s_socket, sizeof(packet), &packet);
+}
+
 //void ThievesSendManager::SendSignInPacket(const SOCKET& s_socket, char* id, char* pw)
 //{ 
 //	cs_packet_sign_in packet;
