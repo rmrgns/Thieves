@@ -1,7 +1,7 @@
 #include "pch.h"
 
 #include "send_manager.h"
-#include"network.h"
+#include "network.h"
 
 
 void SendManager::SendPacket(const SOCKET& s_socket, int num_byte, void* packet)

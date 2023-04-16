@@ -24,7 +24,7 @@ void TestObjectMove::LateUpdate()
 	// Test Packet
 	if (INPUT->GetButton(KEY_TYPE::L)) {
 		//packet
-		ThievesSendManager::SendTestPacket();
+//		ThievesSendManager::SendTestPacket();
 	}
 
 	if (INPUT->GetButton(KEY_TYPE::UP))

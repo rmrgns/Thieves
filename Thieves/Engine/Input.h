@@ -34,7 +34,7 @@ enum class KEY_TYPE
 	KEY_4 = '4',
 
 	// packet test
-	L = 'L',
+	//L = 'L',
 
 	ESC = VK_ESCAPE,
 	ENTER = VK_RETURN,
