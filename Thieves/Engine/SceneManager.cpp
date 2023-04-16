@@ -10,22 +10,24 @@
 #include "Camera.h"
 #include "Light.h"
 
+// 스크립트
 #include "TestCameraScript.h"
 #include "TestObjectMove.h"
 #include "LoginScript.h"
+#include "PlayerInput.h"
+#include "PlayerCamera.h"
 
 #include "Resources.h"
 #include "ParticleSystem.h"
 #include "Terrain.h"
 #include "SphereCollider.h"
 #include "MeshData.h"
-#include "TestDragon.h"
 
 void SceneManager::Update()
 {
 	if (_activeScene == nullptr)
 		return;
-	temprotation = _activeScene->GetMainCamera()->GetTransform()->GetLocalRotation();
+
 	_activeScene->Update();
 	_activeScene->LateUpdate();
 	_activeScene->FinalUpdate();
@@ -174,7 +176,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		camera->SetName(L"Main_Camera");
 		camera->AddComponent(make_shared<Transform>());
 		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45도
-		camera->AddComponent(make_shared<TestCameraScript>());
+		//camera->AddComponent(make_shared<TestCameraScript>());
+		camera->AddComponent(make_shared<PlayerCamera>());
 		camera->AddComponent(make_shared<LoginScript>());
 		camera->GetCamera()->SetFar(10000.f);
 		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
@@ -324,9 +327,11 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		{
 			gameObject->SetName(L"Thief");
 			gameObject->SetCheckFrustum(false);
-			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 300.f));
+			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 3.1415f, 0.f));
 			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 			//gameObject->AddComponent(make_shared<TestObjectMove>());
+			gameObject->AddComponent(make_shared<PlayerInput>());
 			scene->AddGameObject(gameObject);
 			//gameObject->AddComponent(make_shared<TestDragon>());
 

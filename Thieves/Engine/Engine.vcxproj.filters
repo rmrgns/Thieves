@@ -168,6 +168,12 @@
     <ClCompile Include="Text.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerInput.cpp">
+      <Filter>Object\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerCamera.cpp">
+      <Filter>Object\Script</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -310,6 +316,12 @@
     </ClInclude>
     <ClInclude Include="Text.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerInput.h">
+      <Filter>Object\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerCamera.h">
+      <Filter>Object\Script</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

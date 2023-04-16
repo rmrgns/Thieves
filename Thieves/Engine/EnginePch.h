@@ -3,6 +3,8 @@
 // std::byte 사용하지 않음
 #define _HAS_STD_BYTE 0
 
+#define LIMIT_ROTATION 1.575
+
 // 각종 include
 #include <windows.h>
 #include <tchar.h>
@@ -12,7 +14,6 @@
 #include <array>
 #include <list>
 #include <map>
-#include <iostream>	// temp
 using namespace std;
 
 #include <filesystem>

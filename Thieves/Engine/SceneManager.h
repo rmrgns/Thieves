@@ -31,13 +31,14 @@ public:
 
 	shared_ptr<class GameObject> Pick(int32 screenX, int32 screenY);
 
-	Vec3 Gettemprotation() { return temprotation; }
-
 public:
 	shared_ptr<Scene> GetActiveScene() { return _activeScene; }
 	bool GetCheckChangeScene() { return _checkChangeScene; }
 	void SetCheckChangeScene(bool check) { _checkChangeScene = check; }
 	CURRENT_SCENE GetCurrentScene() { return _currentScene; }
+
+	Vec3 GetPlayerPosition() { return _playerPosition; }
+	void SetPlayerPosition(Vec3 playerPosition) { _playerPosition = playerPosition; }
 
 private:
 	shared_ptr<Scene> LoadTestScene();
@@ -51,6 +52,8 @@ private:
 
 	array<wstring, MAX_LAYER> _layerNames;
 	map<wstring, uint8> _layerIndex;
-	Vec3		temprotation;
+
+	Vec3 _playerPosition;
+
 };
 
