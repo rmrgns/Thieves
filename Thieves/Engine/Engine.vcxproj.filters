@@ -167,8 +167,6 @@
     </ClCompile>
     <ClCompile Include="Text.cpp">
       <Filter>Engine</Filter>
-    <ClCompile Include="Physics.cpp">
-      <Filter>Object\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -312,8 +310,6 @@
     </ClInclude>
     <ClInclude Include="Text.h">
       <Filter>Engine</Filter>
-    <ClInclude Include="Physics.h">
-      <Filter>Object\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

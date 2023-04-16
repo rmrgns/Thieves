@@ -12,7 +12,7 @@ enum class COMPONENT_TYPE : uint8
 	TERRAIN,
 	COLLIDER,
 	ANIMATOR,
-	PHYSICS,
+	TEXTOBJECT,
 	// ...
 	MONO_BEHAVIOUR,
 	END,
@@ -27,7 +27,6 @@ class GameObject;
 class Transform;
 class MeshRenderer;
 class Animator;
-class Physics;
 
 class Component : public Object
 {
@@ -50,7 +49,6 @@ public:
 	shared_ptr<Transform> GetTransform();
 	shared_ptr<MeshRenderer> GetMeshRenderer();
 	shared_ptr<Animator> GetAnimator();
-	shared_ptr<Physics> GetPhysics();
 
 private:
 	friend class GameObject;

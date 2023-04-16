@@ -38,7 +38,7 @@ public:
 	bool GetCheckChangeScene() { return _checkChangeScene; }
 	void SetCheckChangeScene(bool check) { _checkChangeScene = check; }
 	CURRENT_SCENE GetCurrentScene() { return _currentScene; }
-	int GetCount() { return count; }
+
 private:
 	shared_ptr<Scene> LoadTestScene();
 	shared_ptr<Scene> LoadLoginScene();
@@ -51,5 +51,6 @@ private:
 
 	array<wstring, MAX_LAYER> _layerNames;
 	map<wstring, uint8> _layerIndex;
+	Vec3		temprotation;
 };
 
