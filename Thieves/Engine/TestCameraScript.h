@@ -10,6 +10,8 @@ public:
 	virtual void LateUpdate() override;
 
 	float GetMouseTranslationSpeed() { return _mouseTranslationSpeed; }
+	void AccelerateLook();
+	void AccelerateRight();
 
 	void CameraRotation();
 
@@ -19,5 +21,10 @@ private:
 	float		_mouseRotateSpeed = 0.2f;
 
 	bool		_checkCameraRotation = true;
+
+	// 가속도 설정
+	Vec3		_vel;
+	Vec3		_forceDirection;
+
 };
 

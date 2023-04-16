@@ -9,7 +9,8 @@
 #include "Terrain.h"
 #include "BaseCollider.h"
 #include "Animator.h"
-#include "TextObject.h"
+#include "TextObject.h" // 원래 목적: text의 update역할을 할려 했으나 사용 안함
+#include "Physics.h"
 
 GameObject::GameObject() : Object(OBJECT_TYPE::GAMEOBJECT)
 {
@@ -146,6 +147,11 @@ shared_ptr<TextObject> GameObject::GetTextObject()
 {
 	shared_ptr<Component> component = GetFixedComponent(COMPONENT_TYPE::TEXTOBJECT);
 	return static_pointer_cast<TextObject>(component);
+}
+shared_ptr<Physics> GameObject::GetPhysics()
+{
+	shared_ptr<Component> component = GetFixedComponent(COMPONENT_TYPE::PHYSICS);
+	return static_pointer_cast<Physics>(component);
 }
 
 void GameObject::AddComponent(shared_ptr<Component> component)

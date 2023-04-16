@@ -9,6 +9,7 @@
 #include "Transform.h"
 #include "Camera.h"
 #include "Light.h"
+#include "Physics.h"
 
 #include "TestCameraScript.h"
 #include "TestObjectMove.h"
@@ -25,7 +26,7 @@ void SceneManager::Update()
 {
 	if (_activeScene == nullptr)
 		return;
-	temprotation = _activeScene->GetMainCamera()->GetTransform()->GetLocalRotation();
+
 	_activeScene->Update();
 	_activeScene->LateUpdate();
 	_activeScene->FinalUpdate();
@@ -54,6 +55,8 @@ void SceneManager::LoadScene(wstring sceneName)
 	}
 	else if (sceneName == L"GameScene")
 	{
+		temp = 0;
+		count = 0;
 		_activeScene = LoadTestScene();
 		_currentScene = CURRENT_SCENE::GAME;
 	}
@@ -241,7 +244,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 #pragma endregion
 
 #pragma region UI_Test
-	for (int32 i = 0; i < 1; i++)
+	for (int32 i = 0; i < 6; i++)
 	{
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
 		obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
@@ -294,6 +297,30 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 //	}
 //#pragma endregion
 
+#pragma region Object
+	{
+		shared_ptr<GameObject> obj = make_shared<GameObject>();
+		obj->AddComponent(make_shared<Transform>());
+		obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
+		obj->GetTransform()->SetLocalPosition(Vec3(0, 0.f, 500.f));
+		obj->SetStatic(false);
+		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+		{
+			shared_ptr<Mesh> sphereMesh = GET_SINGLE(Resources)->LoadSphereMesh();
+			meshRenderer->SetMesh(sphereMesh);
+		}
+		{
+			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
+			meshRenderer->SetMaterial(material->Clone());
+		}
+		obj->AddComponent(make_shared<TestObjectMove>());
+		obj->AddComponent(meshRenderer);
+		obj->AddComponent(make_shared<Physics>());
+		obj->GetPhysics()->SetGravity(false);
+		scene->AddGameObject(obj);
+	}
+#pragma endregion
+
 #pragma region Directional Light
 	{
 		shared_ptr<GameObject> light = make_shared<GameObject>();
@@ -303,8 +330,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		light->GetLight()->SetLightDirection(Vec3(0, -1, 1.f));
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
 		light->GetLight()->SetDiffuse(Vec3(1.f, 1.f, 1.f));
-		light->GetLight()->SetAmbient(Vec3(0.1f, 0.1f, 0.1f));
-		light->GetLight()->SetSpecular(Vec3(0.1f, 0.1f, 0.1f));
+		light->GetLight()->SetAmbient(Vec3(0.5f, 0.5f, 0.5f));
+		light->GetLight()->SetSpecular(Vec3(1.f, 1.f, 1.f));
 
 		scene->AddGameObject(light);
 	}

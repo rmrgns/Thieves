@@ -7,6 +7,7 @@
 #include "Timer.h"
 #include "SceneManager.h"
 #include "Engine.h"
+#include "Physics.h"
 
 TestCameraScript::TestCameraScript()
 {
@@ -19,18 +20,57 @@ TestCameraScript::~TestCameraScript()
 void TestCameraScript::LateUpdate()
 {
 	Vec3 pos = GetTransform()->GetLocalPosition();
+	
+	if (INPUT->GetButton(KEY_TYPE::W) || INPUT->GetButton(KEY_TYPE::S) || INPUT->GetButton(KEY_TYPE::A) || INPUT->GetButton(KEY_TYPE::D))
+	{
+		if (INPUT->GetButton(KEY_TYPE::W))
+		{
+			AccelerateLook();
+			pos += GetTransform()->GetLook() * (_speed + _vel.x) * DELTA_TIME;
+		}
+		if (INPUT->GetButton(KEY_TYPE::S))
+		{
+			AccelerateLook();
+			pos -= GetTransform()->GetLook() * (_speed + _vel.x) * DELTA_TIME;
+		}
+		if (INPUT->GetButton(KEY_TYPE::A))
+		{
+			AccelerateRight();
+			pos -= GetTransform()->GetRight() * (_speed + _vel.z) * DELTA_TIME;
+		}
+		if (INPUT->GetButton(KEY_TYPE::D))
+		{
+			AccelerateRight();
+			pos += GetTransform()->GetRight() * (_speed + _vel.z) * DELTA_TIME;
+		}
+	}
 
-	if (INPUT->GetButton(KEY_TYPE::W))
-		pos += GetTransform()->GetLook() * _speed * DELTA_TIME;
-
-	if (INPUT->GetButton(KEY_TYPE::S))
-		pos -= GetTransform()->GetLook() * _speed * DELTA_TIME;
-
-	if (INPUT->GetButton(KEY_TYPE::A))
-		pos -= GetTransform()->GetRight() * _speed * DELTA_TIME;
-
-	if (INPUT->GetButton(KEY_TYPE::D))
-		pos += GetTransform()->GetRight() * _speed * DELTA_TIME;
+	if (INPUT->GetButtonUp(KEY_TYPE::W) ||
+		INPUT->GetButtonUp(KEY_TYPE::S) ||
+		INPUT->GetButtonUp(KEY_TYPE::A) ||
+		INPUT->GetButtonUp(KEY_TYPE::D))
+	{
+		if (INPUT->GetButtonUp(KEY_TYPE::W))
+		{
+			_forceDirection.x = 0.f;
+			_vel.x = 0.f;
+		}
+		if (INPUT->GetButtonUp(KEY_TYPE::S))
+		{
+			_forceDirection.x = 0.f;
+			_vel.x = 0.f;
+		}
+		if (INPUT->GetButtonUp(KEY_TYPE::A))
+		{
+			_forceDirection.z = 0.f;
+			_vel.z = 0.f;
+		}
+		if (INPUT->GetButtonUp(KEY_TYPE::D))
+		{
+			_forceDirection.z = 0.f;
+			_vel.z = 0.f;
+		}
+	}
 
 	if (INPUT->GetButton(KEY_TYPE::Q))
 	{
@@ -159,7 +199,6 @@ void TestCameraScript::LateUpdate()
 	GetTransform()->SetLocalPosition(pos);
 }
 
-
 void TestCameraScript::CameraRotation()
 {
 	const POINT& point = INPUT->GetMousePos();	// 현재 마우스좌표를 point변수에 저장
@@ -188,4 +227,71 @@ void TestCameraScript::CameraRotation()
 		rotation.x = 1.575f;
 	}
 	GetTransform()->SetLocalRotation(rotation);
+}
+
+void TestCameraScript::AccelerateLook()
+{
+	_forceDirection.x += 1.f;
+	_vel.x += _forceDirection.x * DELTA_TIME;
+
+	//float normalForce = 9.8f;
+	//float fric = m_fricCoef * normalForce;
+
+	//float mag = sqrtf(_vel.x * _vel.x);
+	//if (mag > FLT_EPSILON)
+	//{
+	//	float velDir = _vel.x / mag;
+	//	velDir *= -1.f;
+	//	//velDir *= fric;
+	//	//velDir /= m_mass;
+	//	float resultVel = 0.f;
+	//	resultVel = _vel.x + velDir;
+
+	//	if (resultVel * _vel.x < 0.f)
+	//	{
+	//		_vel.x = 0.f;
+	//	}
+	//	else
+	//	{
+	//		_vel.x += velDir;
+	//	}
+	//}
+	//else
+	//{
+
+	//}
+}
+
+void TestCameraScript::AccelerateRight()
+{
+	_forceDirection.z += 1.f;
+	_vel.z += _forceDirection.z * DELTA_TIME;
+
+	//float normalForce = 9.8f;
+	//float fric = m_fricCoef * normalForce;
+
+	//float mag = sqrtf(_vel.z * _vel.z);
+	//if (mag > FLT_EPSILON)
+	//{
+	//	float velDir = _vel.z / mag;
+	//	velDir *= -1.f;
+	//	//velDir *= fric;
+	//	//velDir /= m_mass;
+	//	float resultVel = 0.f;
+	//	resultVel = _vel.z + velDir;
+
+	//	if (resultVel * _vel.z < 0.f)
+	//	{
+	//		_vel.z = 0.f;
+	//	}
+	//	else
+	//	{
+	//		_vel.z += velDir;
+	//	}
+	//}
+	//else
+	//{
+
+	//}
+
 }

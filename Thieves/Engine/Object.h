@@ -11,6 +11,7 @@ enum class OBJECT_TYPE : uint8
 	SHADER,
 	TEXTURE,
 	TEXTOBJECT,
+	PHYSICS,
 
 	END
 };
