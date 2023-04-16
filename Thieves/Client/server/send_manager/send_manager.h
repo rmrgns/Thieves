@@ -1,8 +1,8 @@
 #pragma once
-#include "../define.h"
+#include "server/define.h"
 
 
-#include "server/massage/message_event_info.h"
+#include "server/message/message_event_info.h"
 class SendManager
 {
 public:
@@ -10,7 +10,7 @@ public:
 	virtual ~SendManager() = default;
 
 	virtual void ProcessSend(const SOCKET& s_socket, const client_fw::SPtr<client_fw::MessageEventInfo>& message) {};
-	//virtual void SendMovePacket(const SOCKET& s_socket, const client_fw::Vec3& position, const client_fw::Quaternion& rotation) {};
+	//virtual void SendMovePacket(const SOCKET& s_socket, const)
 	void SendPacket(const SOCKET& s_socket, int num_byte, void* packet);
 
 };

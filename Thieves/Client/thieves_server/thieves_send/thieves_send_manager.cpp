@@ -1,73 +1,88 @@
-<<<<<<< Updated upstream
-#include "pch.h"
-=======
+
 #include "pch.h"
 
-#include "server/thieves_server/thieves_send/thieves_send_manager.h"
-#include "server/thieves_server/thieves_massage/thieves_message_event_info.h"
+#include "thieves_server/thieves_send/thieves_send_manager.h"
+#include "thieves_server/thieves_message/thieves_message_event_info.h"
+#include <server/network/network.h>
+#include "server/send_manager/send_manager.h"
 
-//void ThievesSendManager::ProcessSend(const SOCKET& s_socket, const client_fw::SPtr<client_fw::MessageEventInfo>& message)
-//{
-//	switch (message->GetEventID())
-//	{
-//	case HashCode("send sign in"): {
-//		auto msg = std::static_pointer_cast<revive::SignInMessageEventInfo>(message);
-//		//LOG_INFO("send sign in");
-//		SendSignInPacket(s_socket, msg->GetUserID(), msg->GetUserPassword());
-//		break;
-//	}
-//	case HashCode("send sign up"): {
-//		auto msg = std::static_pointer_cast<revive::SignUpMessageEventInfo>(message);
-//		//LOG_INFO("send sign up");
-//		SendSignUPPacket(s_socket, msg->GetUserID(), msg->GetUserPassword());
-//		break;
-//	}
-//	case HashCode("send sign matching"): {
-//		auto msg = std::static_pointer_cast<revive::MatchingMessageEventInfo>(message);
-//		//LOG_INFO("send sign matching");
-//		SendMatchingPacket(s_socket, msg->GetUserNum());
-//		break;
-//	}
-//	case HashCode("send attack"): {
-//		auto msg = std::static_pointer_cast<revive::SendAttackEventInfo>(message);
-//		//LOG_INFO("send attack");
-//		SendAttackPacket(s_socket, msg->GetForward());
-//		break;
-//	}
-//	case HashCode("send hit"): {
-//		auto msg = std::static_pointer_cast<revive::ObjectHitMessageEventInfo>(message);
-//		//LOG_INFO("send hit");
-//		SendHitPacket(s_socket, msg->GetVictimID(), msg->GetAttackerID());
-//		break;
-//	}
-//	case HashCode("game start"): {
-//		auto msg = std::static_pointer_cast<revive::GameStartEventInfo>(message);
-//		//LOG_INFO("game start");
-//		SendGameStartPacket(s_socket);
-//		break;
-//	}
-//	case HashCode("send damage cheat"): {
-//		auto msg = std::static_pointer_cast<revive::SendDamageCheatEventInfo>(message);
-//		SendDamageCheatPacket(s_socket);
-//		break;
-//	}
-//	}
-//}
-//
-//void ThievesSendManager::SendMovePacket(const SOCKET& s_socket, const client_fw::Vec3& position, const client_fw::Quaternion& rotation)
-//{
-//	cs_packet_move packet;
-//	packet.size = sizeof(packet);
-//	packet.type = CS_PACKET_MOVE;
-//	packet.x = position.x;
-//	packet.y = position.y;
-//	packet.z = position.z;
-//
-//	SendPacket(s_socket, sizeof(packet), &packet);
-//}
-//
+void ThievesSendManager::ProcessSend(const SOCKET& s_socket, const client_fw::SPtr<client_fw::MessageEventInfo>& message)
+{
+	switch (message->GetEventID())
+	{
+	case HashCode("send test"): {
+		auto msg = std::static_pointer_cast<thieves::TestMessageEventInfo>(message);
+		//
+		SendTestPacket(s_socket);
+
+	}
+	//case HashCode("send sign in"): {
+	//	auto msg = std::static_pointer_cast<thieves::SignInMessageEventInfo>(message);
+	//	//LOG_INFO("send sign in");
+	//	SendSignInPacket(s_socket, msg->GetUserID(), msg->GetUserPassword());
+	//	break;
+	//}
+	//case HashCode("send sign up"): {
+	//	auto msg = std::static_pointer_cast<revive::SignUpMessageEventInfo>(message);
+	//	//LOG_INFO("send sign up");
+	//	SendSignUPPacket(s_socket, msg->GetUserID(), msg->GetUserPassword());
+	//	break;
+	//}
+	//case HashCode("send sign matching"): {
+	//	auto msg = std::static_pointer_cast<revive::MatchingMessageEventInfo>(message);
+	//	//LOG_INFO("send sign matching");
+	//	SendMatchingPacket(s_socket, msg->GetUserNum());
+	//	break;
+	//}
+	//case HashCode("send attack"): {
+	//	auto msg = std::static_pointer_cast<revive::SendAttackEventInfo>(message);
+	//	//LOG_INFO("send attack");
+	//	SendAttackPacket(s_socket, msg->GetForward());
+	//	break;
+	//}
+	//case HashCode("send hit"): {
+	//	auto msg = std::static_pointer_cast<revive::ObjectHitMessageEventInfo>(message);
+	//	//LOG_INFO("send hit");
+	//	SendHitPacket(s_socket, msg->GetVictimID(), msg->GetAttackerID());
+	//	break;
+	//}
+	//case HashCode("game start"): {
+	//	auto msg = std::static_pointer_cast<revive::GameStartEventInfo>(message);
+	//	//LOG_INFO("game start");
+	//	SendGameStartPacket(s_socket);
+	//	break;
+	//}
+	//case HashCode("send damage cheat"): {
+	//	auto msg = std::static_pointer_cast<revive::SendDamageCheatEventInfo>(message);
+	//	SendDamageCheatPacket(s_socket);
+	//	break;
+	//}
+	}
+}
+
+void ThievesSendManager::SendTestPacket(const SOCKET& s_socket)
+{
+	cs_packet_test packet;
+	packet.size = sizeof(packet);
+	packet.type = CS_PACKET_TEST;
+
+	SendPacket(s_socket, sizeof(packet), &packet);
+}
+
+void ThievesSendManager::SendMovePacket(const SOCKET& s_socket, const client_fw::Vec3& position, const client_fw::Quaternion& rotation)
+{
+	cs_packet_move packet;
+	packet.size = sizeof(packet);
+	packet.type = CS_PACKET_MOVE;
+	packet.x = position.x;
+	packet.y = position.y;
+	packet.z = position.z;
+
+	SendPacket(s_socket, sizeof(packet), &packet);
+}
+
 //void ThievesSendManager::SendSignInPacket(const SOCKET& s_socket, char* id, char* pw)
-//{
+//{ 
 //	cs_packet_sign_in packet;
 //	packet.size = sizeof(packet);
 //	packet.type = CS_PACKET_SIGN_IN;
@@ -144,4 +159,3 @@
 //	packet.type = CS_PACKET_DAMAGE_CHEAT;
 //	SendPacket(s_socket, sizeof(packet), &packet);
 //}
->>>>>>> Stashed changes

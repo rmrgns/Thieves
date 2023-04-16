@@ -10,7 +10,8 @@ void SendManager::SendPacket(const SOCKET& s_socket, int num_byte, void* packet)
 	int ret = WSASend(s_socket, &exp_over->_wsa_buf, 1, 0, 0, &exp_over->_wsa_over, NULL);
 	if (SOCKET_ERROR == ret) {
 		int error_num = WSAGetLastError();
-		if (ERROR_IO_PENDING != error_num){}
-			//LOG_INFO("send ", error_num);
+		if (ERROR_IO_PENDING != error_num)
+			cout << "Send"<< error_num << endl;
+			//LOG_INFO("send ", error_num;
 	}
 }

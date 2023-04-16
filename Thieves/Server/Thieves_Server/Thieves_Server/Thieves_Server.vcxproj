@@ -110,7 +110,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\doyou\Desktop\Thieves\Thieves\Thieves_Server\Thieves_Server\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\doyou\OneDrive\바탕 화면\졸작\Thieves\Thieves\Thieves\Server\Thieves_Server\Thieves_Server</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -132,6 +132,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>C:\Users\doyou\OneDrive\바탕 화면\졸작\Thieves\Thieves\Thieves\Server\Thieves_Server\Thieves_Server</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -143,31 +144,31 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="database\db.cpp" />
-    <ClCompile Include="enemy.cpp" />
     <ClCompile Include="game_server\ingame_server.cpp" />
     <ClCompile Include="game_server\packet_manager.cpp" />
     <ClCompile Include="iocp_server\iocp_server.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="moveobj_manager.cpp" />
+    <ClCompile Include="object\moveobj_manager.cpp" />
+    <ClCompile Include="object\move_object\enemy.cpp" />
+    <ClCompile Include="object\move_object\player.cpp" />
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="player.cpp" />
-    <ClCompile Include="room.cpp" />
-    <ClCompile Include="room_manager.cpp" />
+    <ClCompile Include="room\room.cpp" />
+    <ClCompile Include="room\room_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="database\db.h" />
     <ClInclude Include="define.h" />
-    <ClInclude Include="enemy.h" />
     <ClInclude Include="game_server\ingame_server.h" />
     <ClInclude Include="game_server\packet_manager.h" />
     <ClInclude Include="iocp_server\iocp_server.h" />
-    <ClInclude Include="moveobj_manager.h" />
-    <ClInclude Include="move_object.h" />
-    <ClInclude Include="object.h" />
+    <ClInclude Include="object\moveobj_manager.h" />
+    <ClInclude Include="object\move_object\enemy.h" />
+    <ClInclude Include="object\move_object\move_object.h" />
+    <ClInclude Include="object\move_object\player.h" />
+    <ClInclude Include="object\object.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="player.h" />
-    <ClInclude Include="room.h" />
-    <ClInclude Include="room_manager.h" />
+    <ClInclude Include="room\room.h" />
+    <ClInclude Include="room\room_manager.h" />
     <ClInclude Include="state.h" />
     <ClInclude Include="header.h" />
     <ClInclude Include="protocol.h" />

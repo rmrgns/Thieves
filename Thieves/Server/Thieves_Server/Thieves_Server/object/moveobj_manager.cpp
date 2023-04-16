@@ -90,7 +90,7 @@ int MoveObjManager::GetNewID()
 		}
 		cl->state_lock.unlock();
 	}
-	cout << " " << endl;
+	cout << "Get new ID" << endl;
 	return -1;
 }
 

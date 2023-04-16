@@ -11,7 +11,7 @@ Room::~Room()
 void Room::Init(int user_num)
 {
 	max_user = user_num;
-	max_npc = 7;
+	max_npc = max_user-user_num;
 	curr_round = 0;
 }
 

@@ -21,6 +21,7 @@ void PacketManager::ProcessRecv(int client_id, EXP_OVER* exp_over, DWORD num_byt
 	{
 		std::cout << "받은게 없음" << std::endl;
 	}
+
 	int remain_data = num_byte + m_prev_size;
 	unsigned char* packet_start = exp_over->_net_buf;
 	int packet_size = packet_start[0];
@@ -59,6 +60,8 @@ void PacketManager::ProcessPacket(int c_id, unsigned char* p)
 		//(this->*(iter->second))(c_id, p);
 		(iter->second)(c_id, p);
 	}
+
+
 
 }
 

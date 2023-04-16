@@ -26,6 +26,7 @@ public:
 			m_pInst = NULL;
 		}
 	}
+
 private:
 	SOCKET m_s_socket;
 	HANDLE m_hiocp;
@@ -43,10 +44,10 @@ public:
 		if (worker.joinable())
 			worker.join();
 	};
-	//bool Init();
 
 	bool Init(client_fw::UPtr<PacketManager>&& packet_manager, client_fw::UPtr<SendManager>&& send_manager);
 	bool Connect();
+
 	static void error_display(int err_no)
 	{
 		WCHAR* lpMsgBuf;
@@ -62,6 +63,7 @@ public:
 
 		LocalFree(lpMsgBuf);
 	}
+
 	void DestroyWorker()
 	{
 		worker.detach();
@@ -75,8 +77,11 @@ public:
 		//worker.join();
 	}
 
-	void SendMessageToServer(/*수정*/);
+	void SendMessageToServer(const client_fw::SPtr<client_fw::MessageEventInfo>& message);
 	void SendMovePacket(/*수정*/);
+	
+	void SendPacket();
+	
 	SOCKET& GetSock() { return m_s_socket; }
 	static bool matching_end;
 private:
