@@ -53,6 +53,19 @@ const char SC_PAKCET_INTERACTION = 14;		// 상호작용
 const char SC_PACKET_PHASE = 15;			// 페이즈 변경  
 const char SC_PACKET_TEST = 16;
 //#pragma pack (push, 1)
+
+struct cs_packet_move {
+	unsigned char size;
+	char	type;
+	char	direction;			// 0 : 앞,  1: 뒤, 2:왼, 3:오
+	int		move_time; //디버그 용 -> 보낸시간 -받은시간 = 통신하는 시간
+	float	s_x, s_y, s_z;
+	float	f_x, f_y, f_z;
+	float	r_x, r_y, r_z;
+	float	l_x, l_y, l_z;
+	float	deltaTime;
+};
+
 struct cs_packet_test {
 	unsigned char size;
 	char	type;
@@ -71,17 +84,11 @@ struct cs_packet_sign_up {
 	char	name[MAX_NAME_SIZE];
 	char	password[MAX_PASSWORD_SIZE];
 };
-struct cs_packet_move {
-	unsigned char size;
-	char	type;
-	//char	direction;			// 0 : 앞,  1: 뒤, 2:왼, 3:오
-	int		move_time; //디버그 용 -> 보낸시간 -받은시간 = 통신하는 시간
-	float x, y, z;
-};
+
 struct cs_packet_attack {
 	unsigned char size;
 	char	type;
-	//float f_x, f_y, f_z;
+	//float f_x, f_y, f_z; 
 };
 struct cs_packet_chat {
 	unsigned char size;
@@ -111,10 +118,13 @@ struct sc_packet_sign_up_ok {
 };
 struct sc_packet_move {
 	unsigned char size;
-	char type;
+	char	type;
 	int		id;
-	float x, y, z;
-	int move_time;
+	//char	direction;			// 0 : 앞,  1: 뒤, 2:왼, 3:오
+	int		move_time; //디버그 용 -> 보낸시간 -받은시간 = 통신하는 시간
+	float	s_x, s_y, s_z;
+	float	f_x, f_y, f_z;
+	float	r_x, r_y, r_z;
 };
 struct sc_packet_put_object {
 	unsigned char size;

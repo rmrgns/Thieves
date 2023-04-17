@@ -10,7 +10,10 @@ public:
     virtual ~ThievesSendManager() = default;
 //    virtual void ProcessSend(const SOCKET& s_socket, const client_fw::SPtr<client_fw::MessageEventInfo>& message)override;
 //    void SendTestPacket(const SOCKET& s_socket);
-  //  virtual void SendMovePacket(const SOCKET& s_socket, const client_fw::Vec3& position, const client_fw/::Quaternion& rotation)override;
+    virtual void SendMovePacket(const SOCKET& s_socket, char direction,
+            float f_x, float f_y, float f_z,
+            float r_x, float r_y, float r_z,
+            float deltatime)override;
     //void SendSignInPacket(const SOCKET& s_socket, char*, char*);
     //void SendSignUPPacket(const SOCKET& s_socket, char*, char*);
     //void SendMatchingPacket(const SOCKET& s_socket, int user_num);

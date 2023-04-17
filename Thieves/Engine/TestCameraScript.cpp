@@ -6,6 +6,7 @@
 #include "Timer.h"
 #include "SceneManager.h"
 #include "Engine.h"
+#include "server/network/network.h"
 
 TestCameraScript::TestCameraScript()
 {
@@ -21,29 +22,30 @@ void TestCameraScript::LateUpdate()
 
 	if (INPUT->GetButton(KEY_TYPE::W)) {
 		direction = 1;
+		
+		//pos += GetTransform()->GetLook() * _speed * DELTA_TIME;
 
-		pos += GetTransform()->GetLook() * _speed * DELTA_TIME;
 	}
 		
 
 	if (INPUT->GetButton(KEY_TYPE::S)) {
 		direction = 2;
 
-		pos -= GetTransform()->GetLook() * _speed * DELTA_TIME;
+		//pos -= GetTransform()->GetLook() * _speed * DELTA_TIME;
 	}
 		
 
 	if (INPUT->GetButton(KEY_TYPE::A)) {
 		direction = 3;
 
-		pos -= GetTransform()->GetRight() * _speed * DELTA_TIME;
+		//pos -= GetTransform()->GetRight() * _speed * DELTA_TIME;
 	}
 		
 
 	if (INPUT->GetButton(KEY_TYPE::D)) {
 		direction = 4;
 
-		pos += GetTransform()->GetRight() * _speed * DELTA_TIME;
+		//pos += GetTransform()->GetRight() * _speed * DELTA_TIME;
 	}
 		
 
@@ -96,6 +98,14 @@ void TestCameraScript::LateUpdate()
 	{
 		CameraRotation();
 	}
+
+	Network::GetInst()->SendMovePacket(direction,
+		pos.x, pos.y, pos.z,
+		GetTransform()->GetLook().x,
+		GetTransform()->GetLook().y,
+		GetTransform()->GetLook().z,
+		DELTA_TIME);
+	
 
 	GetTransform()->SetLocalPosition(pos);
 }

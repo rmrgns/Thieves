@@ -132,11 +132,19 @@ void Network::SendMessageToServer(const client_fw::SPtr<client_fw::MessageEventI
 //	m_send_manager->ProcessSend(m_s_socket, message);
 }
 
-//void Network::SendMovePacket()
-//{
-//	auto end_t = std::chrono::system_clock::now();
-//	if (m_move_time <= end_t) {
-//		m_send_manager->SendMovePacket(m_s_socket, position, rotation);
-//		m_move_time = end_t + 50ms;
-//	}
-//}
+void Network::SendMovePacket(char direction,
+	float f_x, float f_y, float f_z,
+	float r_x, float r_y, float r_z,
+	float deltatime)
+{
+	m_send_manager->SendMovePacket(m_s_socket, direction,
+		f_x, f_y, f_z,
+		r_x, r_y, r_z,
+		deltatime);
+
+	//auto end_t = std::chrono::system_clock::now();
+	//if (m_move_time <= end_t) {
+	//	m_send_manager->SendMovePacket(m_s_socket, position, rotation);
+	//	m_move_time = end_t + 50ms;
+	//}
+}

@@ -69,17 +69,25 @@
 ////	SendPacket(s_socket, sizeof(packet), &packet);
 ////}
 //
-////void ThievesSendManager::SendMovePacket(const SOCKET& s_socket, const client_fw::Vec3& position, const client_fw::Quaternion& rotation)
-////{
-////	cs_packet_move packet;
-////	packet.size = sizeof(packet);
-////	packet.type = CS_PACKET_MOVE;
-////	packet.x = position.x;
-////	packet.y = position.y;
-////	packet.z = position.z;
-////
-////	SendPacket(s_socket, sizeof(packet), &packet);
-////}
+void ThievesSendManager::SendMovePacket(const SOCKET& s_socket, char direction,
+	float f_x, float f_y, float f_z,
+	float r_x, float r_y, float r_z,
+	float deltatime)
+{
+	cs_packet_move packet;
+	packet.size = sizeof(packet);
+	packet.type = CS_PACKET_MOVE;
+	packet.f_x = f_x;
+	packet.f_y = f_y;
+	packet.f_z = f_z;
+	packet.r_x = r_x;
+	packet.r_y = r_y;
+	packet.r_z = r_z;
+	packet.deltaTime = deltatime;
+	packet.direction = direction;
+
+	SendPacket(s_socket, sizeof(packet), &packet);
+}
 //
 ////void ThievesSendManager::SendSignInPacket(const SOCKET& s_socket, char* id, char* pw)
 ////{ 
