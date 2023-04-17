@@ -5,20 +5,22 @@ MoveObjManager* MoveObjManager::m_pInst = nullptr;
 
 using namespace std;
 
-bool MoveObjManager::IsNear(int a, int b)
-{
-	Vector3& obj_a = m_moveobj_arr[a]->GetPos();
-	Vector3& obj_b = m_moveobj_arr[b]->GetPos();
-	return (FOV_RANGE > sqrt(pow(abs(obj_a.x - obj_b.x), 2) + pow(abs(obj_a.z - obj_b.z), 2)));
+//bool MoveObjManager::IsNear(int a, int b)
+//{
+//	//Vector3& obj_a = m_moveobj_arr[a]->GetPos();
+//	//Vector3& obj_b = m_moveobj_arr[b]->GetPos();
+//	//return (FOV_RANGE > sqrt(pow(abs(obj_a.x - obj_b.x), 2) + pow(abs(obj_a.z - obj_b.z), 2)));
+//
+//
+//}
 
-}
-
-float MoveObjManager::ObjDistance(int a, int b)
-{
-	Vector3& obj_a = m_moveobj_arr[a]->GetPos();
-	Vector3& obj_b = m_moveobj_arr[b]->GetPos();
-	return sqrt(pow(abs(obj_a.x - obj_b.x), 2) + pow(abs(obj_a.z - obj_b.z), 2));
-}
+//float MoveObjManager::ObjDistance(int a, int b)
+//{
+//	//Vector3& obj_a = m_moveobj_arr[a]->GetPos();
+//	//Vector3& obj_b = m_moveobj_arr[b]->GetPos();
+//	//return sqrt(pow(abs(obj_a.x - obj_b.x), 2) + pow(abs(obj_a.z - obj_b.z), 2));
+//	return;
+//}
 
 //void MoveObjManager::InitLua(const char* script_name, int obj_id, const Vector3& base_pos)
 //{

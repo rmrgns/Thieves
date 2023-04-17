@@ -80,9 +80,6 @@
     <ClInclude Include="header.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="protocol.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="state.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -104,15 +101,6 @@
     <ClInclude Include="pch.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="vec3.h">
-      <Filter>헤더 파일\vec</Filter>
-    </ClInclude>
-    <ClInclude Include="vec2.h">
-      <Filter>헤더 파일\vec</Filter>
-    </ClInclude>
-    <ClInclude Include="vec4.h">
-      <Filter>헤더 파일\vec</Filter>
-    </ClInclude>
     <ClInclude Include="object\moveobj_manager.h">
       <Filter>소스 파일\object</Filter>
     </ClInclude>
@@ -133,6 +121,9 @@
     </ClInclude>
     <ClInclude Include="room\room_manager.h">
       <Filter>소스 파일\room</Filter>
+    </ClInclude>
+    <ClInclude Include="protocol.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -19,5 +19,7 @@ private:
 	float		_mouseRotateSpeed = 0.2f;
 
 	bool		_checkCameraRotation = true;
+
+	char direction = 0;
 };
 

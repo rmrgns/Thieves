@@ -152,6 +152,27 @@ void PacketManager::SendMovePacket(int c_id, int mover)
 {
 }
 
+void PacketManager::SendMoveTestPacket(int mover)
+{
+	sc_packet_move packet;
+	MoveObj* p = MoveObjManager::GetInst()->GetMoveObj(mover);
+	packet.id = mover;
+	packet.size = sizeof(packet);
+	packet.type = SC_PACKET_MOVE;
+
+	packet.f_x = p->GetPosForwardX();
+	packet.f_y = p->GetPosForwardY();
+	packet.f_z = p->GetPosForwardZ();
+
+	packet.f_x = p->GetPosRightX();
+	packet.f_y = p->GetPosRightY();
+	packet.f_z = p->GetPosRightZ();
+
+	packet.move_time = p->m_last_move_time;
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(mover);
+	cl->DoSend(sizeof(packet), &packet);
+}
+
 void PacketManager::SendLoginFailPacket(SOCKET& c_socket, int reason)
 {
 	sc_packet_login_fail packet;
@@ -255,6 +276,52 @@ void PacketManager::ProcessAttack(int c_id, unsigned char* p)
 
 void PacketManager::ProcessMove(int c_id, unsigned char* p)
 {
+	cs_packet_move* packet = reinterpret_cast<cs_packet_move*>(p);
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	
+	
+	// 
+	if (packet->direction == 1)
+	{
+		packet->f_x = packet->f_x + packet->l_x * _speed * packet->deltaTime;
+		packet->f_z = packet->f_z + packet->l_z * _speed * packet->deltaTime;
+	}
+	if (packet->direction == 2)
+	{
+		packet->f_x = packet->f_x - packet->l_x * _speed * packet->deltaTime;
+		packet->f_z = packet->f_z - packet->l_z * _speed * packet->deltaTime;
+	}
+	if (packet->direction == 3)
+	{
+		packet->r_x = packet->r_x - packet->l_x * _speed * packet->deltaTime;
+		packet->r_z = packet->r_z - packet->l_z * _speed * packet->deltaTime;
+	}
+	if (packet->direction == 4)
+	{
+		packet->r_x = packet->r_x + packet->l_x * _speed * packet->deltaTime;
+		packet->r_z = packet->r_z + packet->l_z * _speed * packet->deltaTime;
+	}
+	//cl->state_lock.lock();
+	//if (cl->GetState() != STATE::ST_INGAME)
+	//{
+	//	cl->state_lock.unlock();
+	//	return;
+	//}
+	//else cl->state_lock.unlock();
+	//Room* room = m_room_manager->GetRoom(cl->GetRoomID());
+
+	//cl->m_last_move_time = packet->move_time;
+
+	//std::cout << "Packet x :" << pos.x << ", y : " << pos.y << ", z : " << pos.z << endl;
+	//std::cout << "Rotation x :" << packet->r_x << ", y : " << packet->r_y << ", z : " 
+	//	<< packet->r_z<< ", w : " << packet->r_w << endl;
+	//for (auto other_pl : room->GetObjList())
+	//{
+	//	if (false == MoveObjManager::GetInst()->IsPlayer(other_pl))
+	//		continue;
+	//	SendMovePacket(other_pl, c_id);
+	//}
+	SendMoveTestPacket(c_id);
 }
 
 void PacketManager::ProcessMatching(int c_id, unsigned char* p)
