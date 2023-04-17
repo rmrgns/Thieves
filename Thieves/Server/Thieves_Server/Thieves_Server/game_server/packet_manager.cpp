@@ -316,7 +316,8 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 
 	//cl->m_last_move_time = packet->move_time;
 
-	std::cout << "Packet x :" << packet->f_x << ", y : " << packet->f_y << ", z : " << packet->f_z << std::endl;
+	std::cout << "Packet Forward x :" << packet->f_x << ", y : " << packet->f_y << ", z : " << packet->f_z << std::endl;
+	std::cout << "Packet Right   x :" << packet->r_x << ", y : " << packet->r_y << ", z : " << packet->r_z << std::endl;
 	//std::cout << "Rotation x :" << packet->r_x << ", y : " << packet->r_y << ", z : " 
 	//	<< packet->r_z<< ", w : " << packet->r_w << endl;
 	//for (auto other_pl : room->GetObjList())
