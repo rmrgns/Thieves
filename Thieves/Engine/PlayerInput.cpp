@@ -5,7 +5,7 @@
 #include "Timer.h"
 #include "SceneManager.h"
 #include "Engine.h"
-
+#include "server/network/network.h"
 PlayerInput::PlayerInput()
 {
 }
@@ -22,28 +22,39 @@ void PlayerInput::LateUpdate()
 	// 캐릭터 WASD이동
 	if (INPUT->GetButton(KEY_TYPE::W))
 	{
+		direction = 1;
 		//pos += GetTransform()->GetLook() * _speed * DELTA_TIME;
-		pos.x += GetTransform()->GetLook().x * _speed * DELTA_TIME;
-		pos.z += GetTransform()->GetLook().z * _speed * DELTA_TIME;
+		//pos.x += GetTransform()->GetLook().x * _speed * DELTA_TIME;
+		//pos.z += GetTransform()->GetLook().z * _speed * DELTA_TIME;
+		
 	}
 	if (INPUT->GetButton(KEY_TYPE::S))
 	{
+		direction = 2;
 		//pos -= GetTransform()->GetLook() * _speed * DELTA_TIME;
-		pos.x -= GetTransform()->GetLook().x * _speed * DELTA_TIME;
-		pos.z -= GetTransform()->GetLook().z * _speed * DELTA_TIME;
+		//pos.x -= GetTransform()->GetLook().x * _speed * DELTA_TIME;
+		//pos.z -= GetTransform()->GetLook().z * _speed * DELTA_TIME;
 	}
 	if (INPUT->GetButton(KEY_TYPE::A))
 	{
+		direction = 3;
 		//pos -= GetTransform()->GetRight() * _speed * DELTA_TIME;
-		pos.x -= GetTransform()->GetRight().x * _speed * DELTA_TIME;
-		pos.z -= GetTransform()->GetRight().z * _speed * DELTA_TIME;
+		//pos.x -= GetTransform()->GetRight().x * _speed * DELTA_TIME;
+		//pos.z -= GetTransform()->GetRight().z * _speed * DELTA_TIME;
 	}
 	if (INPUT->GetButton(KEY_TYPE::D))
 	{
+		direction = 4;
 		//pos += GetTransform()->GetRight() * _speed * DELTA_TIME;
-		pos.x += GetTransform()->GetRight().x * _speed * DELTA_TIME;
-		pos.z += GetTransform()->GetRight().z * _speed * DELTA_TIME;
+		//pos.x += GetTransform()->GetRight().x * _speed * DELTA_TIME;
+		//pos.z += GetTransform()->GetRight().z * _speed * DELTA_TIME;
 	}
+
+	Network::GetInst()->SendMovePacket(direction, pos.x, pos.y, pos.z,
+		GetTransform()->GetLook().x,
+		GetTransform()->GetLook().y,
+		GetTransform()->GetLook().z,
+		DELTA_TIME);
 
 	// 캐릭터 점프
 	if (INPUT->GetButtonDown(KEY_TYPE::SPACE))

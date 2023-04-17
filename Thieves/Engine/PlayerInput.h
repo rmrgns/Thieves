@@ -18,4 +18,5 @@ private:
 	int			_jumpCount = 0;
 	bool		_jump = false;
 	float		_jumpSpeed = 300.f;
+	char		direction = 0;
 };

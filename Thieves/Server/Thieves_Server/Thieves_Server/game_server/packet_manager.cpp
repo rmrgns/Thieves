@@ -159,6 +159,7 @@ void PacketManager::SendMoveTestPacket(int mover)
 	packet.id = mover;
 	packet.size = sizeof(packet);
 	packet.type = SC_PACKET_MOVE;
+	packet.direction = p->GetDirection();
 
 	packet.f_x = p->GetPosForwardX();
 	packet.f_y = p->GetPosForwardY();
@@ -302,6 +303,8 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 		packet->r_x = packet->r_x + packet->l_x * _speed * packet->deltaTime;
 		packet->r_z = packet->r_z + packet->l_z * _speed * packet->deltaTime;
 	}
+
+
 	//cl->state_lock.lock();
 	//if (cl->GetState() != STATE::ST_INGAME)
 	//{
@@ -313,7 +316,7 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 
 	//cl->m_last_move_time = packet->move_time;
 
-	//std::cout << "Packet x :" << pos.x << ", y : " << pos.y << ", z : " << pos.z << endl;
+	std::cout << "Packet x :" << packet->f_x << ", y : " << packet->f_y << ", z : " << packet->f_z << std::endl;
 	//std::cout << "Rotation x :" << packet->r_x << ", y : " << packet->r_y << ", z : " 
 	//	<< packet->r_z<< ", w : " << packet->r_w << endl;
 	//for (auto other_pl : room->GetObjList())

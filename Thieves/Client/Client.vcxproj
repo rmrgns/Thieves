@@ -171,8 +171,10 @@
     <ClInclude Include="IocpNetworkManager.h" />
     <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="player.h" />
     <ClInclude Include="ptr.h" />
     <ClInclude Include="Resource.h" />
+    <ClCompile Include="player.cpp" />
     <ClCompile Include="server\message\message_event_info.cpp" />
     <ClCompile Include="server\message\message_event_manager.cpp" />
     <ClCompile Include="server\message\message_helper.cpp" />

@@ -11,14 +11,21 @@ public:
 	virtual ~Object() = default;
 
 
-	void Init(int id, OBJ_TYPE type, float x, float y, float z)
+	void Init(int id, OBJ_TYPE type,
+		float f_x, float f_y, float f_z,
+		float r_x, float r_y, float r_z,
+		float s_x, float s_y, float s_z,
+		char direction
+	)
 	{
 		m_id = id;
 		m_type = type;
-		m_pos.x = x;
-		m_pos.y = y;
-		m_pos.z = z;
+		m_pos.x = f_x;
+		m_pos.y = f_y;
+		m_pos.z = f_z;
 	};
+
+	char GetDirection()const { return direction; };
 
 	float GetPosForwardX()const { return f_x; };
 	float GetPosForwardY()const { return f_y; };
@@ -52,6 +59,7 @@ protected:
 	float	s_x, s_y, s_z;
 	float	f_x, f_y, f_z;
 	float	r_x, r_y, r_z;
+	char direction;
 
 
 };

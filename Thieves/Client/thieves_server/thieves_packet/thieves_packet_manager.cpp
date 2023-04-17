@@ -7,7 +7,12 @@
 #include "thieves_packet_manager.h"
 #include "server/packet/packet_helper.h"
 #include "thieves_server/thieves_message/thieves_message_event_info.h"
+#include "player.h"
 
+#include "PlayerInput.h"
+#include "Transform.h"
+#include "Engine.h"
+#include "Input.h"
 using namespace std;
 using namespace client_fw;
 
@@ -32,6 +37,33 @@ void ThievesPacketManager::ProcessTest(int c_id, unsigned char* p)
 
 void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
 {
+	sc_packet_move* packet = reinterpret_cast<sc_packet_move*>(p);
+
+	Vec3 pos;
+
+	pos.x = packet->f_x;
+	pos.z = packet->f_z;
+	f_x = packet->f_x;
+	f_y = packet->f_y;
+	f_z = packet->f_z;
+	r_x = packet->r_x;
+	r_y = packet->r_y;
+	r_z = packet->r_z;
+	//auto mover = m_obj_map.find(packet->id);
+	//if (mover != m_obj_map.end())
+	//{
+	//	if (mover->second->GetIsActive() == false)return;
+	//	if (isnan(packet->x) || isnan(packet->y) || isnan(packet->z))return;
+	//	//auto end_t = std::chrono::system_clock::now();
+
+
+	//	mover->second->SetPosition(move(recv_pos));
+
+	//	//	if (mover->second->m_move_time <= end_t) {
+	//	PacketHelper::RegisterPacketEventToActor(CreateSPtr<revive::MoveObjectMessageEventInfo>(HashCode("move object"), mover->second->GetPosition()), packet->id);
+	//	//	mover->second->m_move_time = end_t + 50ms;
+	////	}
+	//}
 
 }
 void ThievesPacketManager::ProcessSignin(int c_id, unsigned char* p)

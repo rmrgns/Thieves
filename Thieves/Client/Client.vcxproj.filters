@@ -45,6 +45,9 @@
     <Filter Include="소스 파일\thieves_server\thieves_send">
       <UniqueIdentifier>{55ccc657-a28c-4a11-9365-cb858f263354}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\thieves_server\object">
+      <UniqueIdentifier>{8330a5a3-b8dd-429c-b2b3-c362a2ad16d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -123,12 +126,6 @@
     <ClInclude Include="thieves_server\thieves_send\thieves_send_manager.h">
       <Filter>소스 파일\thieves_server\thieves_send</Filter>
     </ClInclude>
-    <ClInclude Include="thieves_server\thieves_message\thieves_message_event_info.h">
-      <Filter>소스 파일\thieves_server\thieves_packet</Filter>
-    </ClInclude>
-    <ClInclude Include="thieves_server\thieves_packet\thieves_packet_manager.h">
-      <Filter>소스 파일\thieves_server\thieves_message</Filter>
-    </ClInclude>
     <ClInclude Include="server\packet\packet_helper.h">
       <Filter>소스 파일\server\packet</Filter>
     </ClInclude>
@@ -165,6 +162,15 @@
     <ClInclude Include="server\define.h">
       <Filter>소스 파일\server</Filter>
     </ClInclude>
+    <ClInclude Include="thieves_server\thieves_packet\thieves_packet_manager.h">
+      <Filter>소스 파일\thieves_server\thieves_packet</Filter>
+    </ClInclude>
+    <ClInclude Include="thieves_server\thieves_message\thieves_message_event_info.h">
+      <Filter>소스 파일\thieves_server\thieves_message</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>소스 파일\thieves_server\object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -191,6 +197,9 @@
     </ClCompile>
     <ClCompile Include="..\Engine\Timer.cpp">
       <Filter>소스 파일\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>소스 파일\thieves_server\object</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
