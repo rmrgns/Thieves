@@ -75,7 +75,8 @@
     <LibraryPath>$(SolutionDir)lib\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Users\doyou\Desktop\Thieves\Thieves\Server\Thieves_Server\Thieves_Server;C:\Users\doyou\OneDrive\바탕 화면\졸작\Thieves\Thieves\Thieves\Server\Thieves_Server\Thieves_Server;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Thieves_Server\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -133,7 +134,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>C:\Users\doyou\OneDrive\바탕 화면\졸작\Thieves\Thieves\Thieves\Server\Thieves_Server\Thieves_Server</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Thieves_Server\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
