@@ -19,6 +19,11 @@ public:
 	void CreateRenderTarget();		// 텍스트 렌더타겟 생성
 	void Render2D();				// 텍스트 생성 및 출력
 
+	// Update에 추가하는 화면에 텍스트를 그리는 함수들
+	// 텍스트 설정 (n값으로 텍스트 설정값 변경)
+	void SetTextInfo(int infoNumber);
+	// 텍스트 제작 (텍스트 내용, 텍스트 좌표x값, 텍스트 좌표y값, 텍스트 가로크기, 텍스트 세로크기, 화면 크기)
+	void SetText(wstring text, float posX, float posY, float scaleX, float scaleY);
 private:
 	ComPtr<ID3D11On12Device>	_d3d11On12Device = nullptr;
 	ComPtr<ID3D11DeviceContext> _d3d11DeviceContext = nullptr;
@@ -32,5 +37,6 @@ private:
 private:
 	ComPtr<ID2D1SolidColorBrush>	_solidColorBrush = nullptr;	// 텍스트 색깔
 	ComPtr<IDWriteTextFormat>		_writeTextFormat = nullptr;	// 텍스트 폰트
+	D2D1_RECT_F	_rect;	// 화면 크기
 };
 

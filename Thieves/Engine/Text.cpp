@@ -9,22 +9,23 @@ void Text::Init()
 	CreateD3D11On12Device();
 	CreateD2DDevice();
 	CreateTextInfo();
+	_rect = D2D1::RectF(0.0f, 0.0f, GEngine->GetWindow().width, GEngine->GetWindow().height);
 }
 
 void Text::Update()
 {
-	shared_ptr<Scene> scene = GET_SINGLE(SceneManager)->GetActiveScene();
-	if (GET_SINGLE(SceneManager)->GetActiveScene())
+	// ï¿½Ø½ï¿½Æ® ï¿½ï¿½ï¿½
+	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOGIN)
 	{
-		// ÅØ½ºÆ® Ãâ·Â
-		if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOGIN)
-		{
-			D2D1_RECT_F textRect = D2D1::RectF(0.0f, 0.0f, GEngine->GetWindow().width, GEngine->GetWindow().height);
-			static const WCHAR text[] = L"µµµÏµé ·Î±×ÀÎ È­¸é.";
 
-			_d2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
-			_d2dDeviceContext->DrawTextW(text, _countof(text) - 1, _writeTextFormat.Get(), &textRect, _solidColorBrush.Get());
-		}
+		SetTextInfo(0);
+		wstring text = L"ï¿½ï¿½ï¿½Ïµï¿½ ï¿½Î±ï¿½ï¿½ï¿½ È­ï¿½ï¿½";
+		SetText(text, 400.f, 200.f, 1.f, 1.f);
+		
+		SetTextInfo(1);
+		wstring text1 = L"ï¿½ï¿½ï¿½m D3D11On12 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ô´Ï´ï¿½.";
+		SetText(text1, 0.f, 0.f, 1.f, 1.f);
+	
 	}
 }
 
@@ -54,16 +55,16 @@ void Text::CreateD2DDevice()
 
 void Text::CreateTextInfo()
 {
-	// ÅØ½ºÆ® »ö±ò
-	ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Aqua), _solidColorBrush.GetAddressOf()));
+	// ï¿½Ø½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
+	ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), _solidColorBrush.GetAddressOf()));
 	
-	// ÅØ½ºÆ® ÆùÆ® ¼³Á¤
+	// ï¿½Ø½ï¿½Æ® ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
 	ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"Verdana", nullptr,
-		DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_ITALIC, DWRITE_FONT_STRETCH_NORMAL,
-		25, L"en-us", _writeTextFormat.GetAddressOf()));
+		DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL,
+		10, L"en-us", _writeTextFormat.GetAddressOf()));
 
-	_writeTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
-	_writeTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	//_writeTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+	//_writeTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 }
 
 void Text::CreateRenderTarget()
@@ -132,3 +133,48 @@ void Text::Render2D()
 	// Flush to submit the 11 command list to the shared command queue.
 	_d3d11DeviceContext->Flush();
 }
+
+void Text::SetTextInfo(int infoNumber)
+{
+	switch (infoNumber)
+	{
+	case 0:
+		// ï¿½Ø½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
+		ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Crimson), _solidColorBrush.GetAddressOf()));
+
+		// ï¿½Ø½ï¿½Æ® ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
+		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"Verdana", nullptr,
+			DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_ITALIC, DWRITE_FONT_STRETCH_NORMAL,
+			25, L"en-us", _writeTextFormat.GetAddressOf()));
+
+		//_writeTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+		//_writeTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+		break;
+	case 1:
+		// ï¿½Ø½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
+		ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), _solidColorBrush.GetAddressOf()));
+
+		// ï¿½Ø½ï¿½Æ® ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
+		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"Verdana", nullptr,
+			DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_ITALIC, DWRITE_FONT_STRETCH_NORMAL,
+			25, L"en-us", _writeTextFormat.GetAddressOf()));
+
+		break;
+	default:
+		break;
+	}
+	
+}
+
+void Text::SetText(wstring text, float posX, float posY, float scaleX, float scaleY)
+{
+	wstring _text = text;
+	D2D1::Matrix3x2F matrix{};
+
+	matrix.SetProduct(D2D1::Matrix3x2F::Scale(scaleX, scaleY, { _rect.right, _rect.bottom }),
+		D2D1::Matrix3x2F::Translation(posX, posY));
+	_d2dDeviceContext->SetTransform(matrix);
+	_d2dDeviceContext->DrawTextW(text.c_str(), static_cast<UINT32>(text.size()), _writeTextFormat.Get(), &_rect, _solidColorBrush.Get());
+
+}
+
