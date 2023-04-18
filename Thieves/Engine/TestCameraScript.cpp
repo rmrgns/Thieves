@@ -81,6 +81,10 @@ void TestCameraScript::LateUpdate()
 		CameraRotation();
 	}
 
+	// 서버에 pos값 전달
+
+	// 서버에서 pos값 받기
+
 	GetTransform()->SetLocalPosition(pos);
 }
 

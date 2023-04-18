@@ -3,6 +3,7 @@
 #include "Engine.h"
 #include "Scene.h"
 #include "SceneManager.h"
+#include "Input.h"
 
 void Text::Init()
 {
@@ -18,14 +19,17 @@ void Text::Update()
 	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOGIN)
 	{
 		SetTextInfo(0);
-		wstring text = L"도둑들 로그인 화면";
+		wstring text = INPUT->GetUserID();
 		SetText(text, 400.f, 200.f, 1.f, 1.f);
 		
 		SetTextInfo(1);
-		wstring text1 = L"헤헿 D3D11On12 프로젝트 입니다.";
-		SetText(text1, 0.f, 0.f, 1.f, 1.f);
+		//wstring text1 = L"헤헿 D3D11On12 프로젝트 입니다.";
+		//SetText(text1, 0.f, 0.f, 1.f, 1.f);
 
 	}
+	wstring text1 = INPUT->GetUserID();
+	
+	SetText(text1, 0.f, 0.f, 1.f, 1.f);
 }
 
 void Text::CreateD3D11On12Device()
@@ -151,7 +155,7 @@ void Text::SetTextInfo(int infoNumber)
 		break;
 	case 1:
 		// 텍스트 색깔
-		ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), _solidColorBrush.GetAddressOf()));
+		ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Aqua), _solidColorBrush.GetAddressOf()));
 
 		// 텍스트 폰트 설정
 		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"Verdana", nullptr,

@@ -6,7 +6,7 @@
 #include "Game.h"
 #include <windowsx.h>
 #include "Input.h"
-
+#include "Timer.h"
 #define MAX_LOADSTRING 100
 
 // 전역 변수:
@@ -76,6 +76,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             }
         }
         // TODO
+        
         game->Update();
     }
 

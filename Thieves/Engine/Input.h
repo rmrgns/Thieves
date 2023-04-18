@@ -73,7 +73,7 @@ public:
 	bool GetButton(KEY_TYPE key) { return GetState(key) == KEY_STATE::PRESS; }
 	// ¸Ç Ã³À½ ´­·¶À» ¶§
 	bool GetButtonDown(KEY_TYPE key) { return GetState(key) == KEY_STATE::DOWN; }
-	// ¸Ç Ã³À½ ´­·¶´Ù ¶ÃÀ» ¶§_w
+	// ¸Ç Ã³À½ ´­·¶´Ù ¶ÃÀ» ¶§
 	bool GetButtonUp(KEY_TYPE key) { return GetState(key) == KEY_STATE::UP; }
 	
 	const POINT& GetMousePos() { return _mousePos; }
@@ -82,6 +82,8 @@ public:
 	
 	wstring GetUserID() const { return _userID; }
 	void InitUserId() { _userID = L""; }
+
+	int GetCount() { return count; }
 
 	wstring GetServerID() const { return _serverID; }
 private:
@@ -94,5 +96,6 @@ private:
 	POINT _prevMousePos = {};
 	wstring _userID;
 	wstring _serverID = L"TEST";
+	int count = 0;
 };
 

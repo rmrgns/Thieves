@@ -22,6 +22,6 @@ private:
 	uint32	_fps = 0;
 
 	// 프레임 제한
-	float	_lockFPS = 120.0f;
+	float	_lockFPS = 20.0f;
 };
 
