@@ -39,9 +39,9 @@ void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
 {
 	sc_packet_move* packet = reinterpret_cast<sc_packet_move*>(p);
 
-	pos.x = packet->posX;
-	pos.y = packet->posY;
-	pos.z = packet->posZ;
+	_pos.x = packet->posX;
+	_pos.y = packet->posY;
+	_pos.z = packet->posZ;
 
 	//Vec3 f_pos;
 	//Vec3 r_pos;

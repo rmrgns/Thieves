@@ -68,7 +68,7 @@ void PlayerInput::LateUpdate()
 
 
 
-	//pos = thieves_packet_manager->GetVec();
+	pos = thieves_packet_manager->GetVec();
 
 
 
