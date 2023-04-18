@@ -9,19 +9,22 @@ void Text::Init()
 	CreateD3D11On12Device();
 	CreateD2DDevice();
 	CreateTextInfo();
+	_rect = D2D1::RectF(0.0f, 0.0f, GEngine->GetWindow().width, GEngine->GetWindow().height);
 }
 
 void Text::Update()
 {
-	shared_ptr<Scene> scene = GET_SINGLE(SceneManager)->GetActiveScene();
-	if (GET_SINGLE(SceneManager)->GetActiveScene())
+	// 텍스트 출력
+	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOGIN)
 	{
-		// 텍스트 출력
-		D2D1_RECT_F textRect = D2D1::RectF(0.0f, 0.0f, GEngine->GetWindow().width, GEngine->GetWindow().height);
-		static const WCHAR text[] = L"헤헿 D3D11On12 프로젝트 입니다.";
-
-		_d2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
-		_d2dDeviceContext->DrawTextW(text, _countof(text) - 1, _writeTextFormat.Get(), &textRect, _solidColorBrush.Get());
+		SetTextInfo(0);
+		wstring text = L"도둑들 로그인 화면";
+		SetText(text, 400.f, 200.f, 1.f, 1.f);
+		
+		SetTextInfo(1);
+		wstring text1 = L"헤헿 D3D11On12 프로젝트 입니다.";
+		SetText(text1, 0.f, 0.f, 1.f, 1.f);
+		
 	}
 }
 
@@ -52,15 +55,15 @@ void Text::CreateD2DDevice()
 void Text::CreateTextInfo()
 {
 	// 텍스트 색깔
-	ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Aqua), _solidColorBrush.GetAddressOf()));
+	ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), _solidColorBrush.GetAddressOf()));
 	
 	// 텍스트 폰트 설정
 	ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"Verdana", nullptr,
-		DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_ITALIC, DWRITE_FONT_STRETCH_NORMAL,
-		25, L"en-us", _writeTextFormat.GetAddressOf()));
+		DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL,
+		10, L"en-us", _writeTextFormat.GetAddressOf()));
 
-	_writeTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
-	_writeTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	//_writeTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+	//_writeTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 }
 
 void Text::CreateRenderTarget()
@@ -129,3 +132,48 @@ void Text::Render2D()
 	// Flush to submit the 11 command list to the shared command queue.
 	_d3d11DeviceContext->Flush();
 }
+
+void Text::SetTextInfo(int infoNumber)
+{
+	switch (infoNumber)
+	{
+	case 0:
+		// 텍스트 색깔
+		ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Crimson), _solidColorBrush.GetAddressOf()));
+
+		// 텍스트 폰트 설정
+		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"Verdana", nullptr,
+			DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_ITALIC, DWRITE_FONT_STRETCH_NORMAL,
+			25, L"en-us", _writeTextFormat.GetAddressOf()));
+
+		//_writeTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+		//_writeTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+		break;
+	case 1:
+		// 텍스트 색깔
+		ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), _solidColorBrush.GetAddressOf()));
+
+		// 텍스트 폰트 설정
+		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"Verdana", nullptr,
+			DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_ITALIC, DWRITE_FONT_STRETCH_NORMAL,
+			25, L"en-us", _writeTextFormat.GetAddressOf()));
+
+		break;
+	default:
+		break;
+	}
+	
+}
+
+void Text::SetText(wstring text, float posX, float posY, float scaleX, float scaleY)
+{
+	wstring _text = text;
+	D2D1::Matrix3x2F matrix{};
+
+	matrix.SetProduct(D2D1::Matrix3x2F::Scale(scaleX, scaleY, { _rect.right, _rect.bottom }),
+		D2D1::Matrix3x2F::Translation(posX, posY));
+	_d2dDeviceContext->SetTransform(matrix);
+	_d2dDeviceContext->DrawTextW(text.c_str(), static_cast<UINT32>(text.size()), _writeTextFormat.Get(), &_rect, _solidColorBrush.Get());
+
+}
+
