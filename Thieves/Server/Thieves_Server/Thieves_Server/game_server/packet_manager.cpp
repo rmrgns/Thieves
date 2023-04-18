@@ -159,17 +159,24 @@ void PacketManager::SendMoveTestPacket(int mover)
 	packet.id = mover;
 	packet.size = sizeof(packet);
 	packet.type = SC_PACKET_MOVE;
-	packet.direction = p->GetDirection();
 
-	packet.f_x = p->GetPosForwardX();
-	packet.f_y = p->GetPosForwardY();
-	packet.f_z = p->GetPosForwardZ();
+	//packet.direction = p->GetDirection();
 
-	packet.f_x = p->GetPosRightX();
-	packet.f_y = p->GetPosRightY();
-	packet.f_z = p->GetPosRightZ();
+	//packet.f_x = p->GetPosForwardX();
+	//packet.f_y = p->GetPosForwardY();
+	//packet.f_z = p->GetPosForwardZ();
 
-	packet.move_time = p->m_last_move_time;
+	//packet.r_x = p->GetPosRightX();
+	//packet.r_y = p->GetPosRightY();
+	//packet.r_z = p->GetPosRightZ();
+
+	packet.posX = p->GetPosX();
+	packet.posY = p->GetPosY();
+	packet.posZ = p->GetPosZ();
+
+
+//	packet.move_time = p->m_last_move_time;
+
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(mover);
 	cl->DoSend(sizeof(packet), &packet);
 }
@@ -285,23 +292,23 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 	// 
 	if (packet->direction == 1)
 	{
-		packet->f_x = packet->f_x + packet->l_x * _speed * packet->deltaTime;
-		packet->f_z = packet->f_z + packet->l_z * _speed * packet->deltaTime;
+		packet->posX = packet->posX + packet->vecX * _speed * packet->deltaTime;
+		packet->posZ = packet->posZ + packet->vecZ * _speed * packet->deltaTime;
 	}
 	if (packet->direction == 2)
 	{
-		packet->f_x = packet->f_x - packet->l_x * _speed * packet->deltaTime;
-		packet->f_z = packet->f_z - packet->l_z * _speed * packet->deltaTime;
+		packet->posX = packet->posX - packet->vecX * _speed * packet->deltaTime;
+		packet->posZ = packet->posZ - packet->vecZ * _speed * packet->deltaTime;
 	}
 	if (packet->direction == 3)
 	{
-		packet->r_x = packet->r_x - packet->l_x * _speed * packet->deltaTime;
-		packet->r_z = packet->r_z - packet->l_z * _speed * packet->deltaTime;
+		packet->posX = packet->posX - packet->vecX * _speed * packet->deltaTime;
+		packet->posZ = packet->posZ - packet->vecZ * _speed * packet->deltaTime;
 	}
 	if (packet->direction == 4)
 	{
-		packet->r_x = packet->r_x + packet->l_x * _speed * packet->deltaTime;
-		packet->r_z = packet->r_z + packet->l_z * _speed * packet->deltaTime;
+		packet->posX = packet->posX + packet->vecX * _speed * packet->deltaTime;
+		packet->posZ = packet->posZ + packet->vecZ * _speed * packet->deltaTime;
 	}
 
 
@@ -316,8 +323,7 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 
 	//cl->m_last_move_time = packet->move_time;
 
-	std::cout << "Packet Forward x :" << packet->f_x << ", y : " << packet->f_y << ", z : " << packet->f_z << std::endl;
-	std::cout << "Packet Right   x :" << packet->r_x << ", y : " << packet->r_y << ", z : " << packet->r_z << std::endl;
+	std::cout << "Packet x :" << packet->posX << ", z : " << packet->posZ << std::endl;
 	//std::cout << "Rotation x :" << packet->r_x << ", y : " << packet->r_y << ", z : " 
 	//	<< packet->r_z<< ", w : " << packet->r_w << endl;
 	//for (auto other_pl : room->GetObjList())

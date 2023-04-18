@@ -79,9 +79,7 @@ public:
 
 	void SendMessageToServer(const client_fw::SPtr<client_fw::MessageEventInfo>& message);
 	void SendMovePacket(char direction,
-		float f_x, float f_y, float f_z,
-		float r_x, float r_y, float r_z,
-		float deltatime);
+		Vec3 pos, Vec3 vec, float deltatime);
 	
 	void SendPacket();
 	

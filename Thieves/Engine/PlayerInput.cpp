@@ -6,6 +6,7 @@
 #include "SceneManager.h"
 #include "Engine.h"
 #include "server/network/network.h"
+
 PlayerInput::PlayerInput()
 {
 }
@@ -50,11 +51,26 @@ void PlayerInput::LateUpdate()
 		//pos.z += GetTransform()->GetRight().z * _speed * DELTA_TIME;
 	}
 
-	Network::GetInst()->SendMovePacket(direction, pos.x, pos.y, pos.z,
-		GetTransform()->GetLook().x,
-		GetTransform()->GetLook().y,
-		GetTransform()->GetLook().z,
+	Network::GetInst()->SendMovePacket(direction, pos,
+		GetTransform()->GetLook(),
 		DELTA_TIME);
+
+
+
+	/*if (thieves_packet_manager->GetDirection() == 1 || thieves_packet_manager->GetDirection() == 2)
+	{
+		pos = thieves_packet_manager->GetForwardVec();
+	}
+	if (thieves_packet_manager->GetDirection() == 3 || thieves_packet_manager->GetDirection() == 4)
+	{
+		pos = thieves_packet_manager->GetRightVec();
+	}*/
+
+
+
+	//pos = thieves_packet_manager->GetVec();
+
+
 
 	// 캐릭터 점프
 	if (INPUT->GetButtonDown(KEY_TYPE::SPACE))

@@ -24,12 +24,18 @@ public:
 
 
 	void Reset();
-	float	s_x, s_y, s_z;
-	float	f_x, f_y, f_z;
-	float	r_x, r_y, r_z;
+	//float	s_x, s_y, s_z;
+	//float	f_x, f_y, f_z;
+	//float	r_x, r_y, r_z;
 
+//	Vec3 GetForwardVec() { return f_pos; };
+//	Vec3 GetRightVec() { return r_pos; };
+//	char GetDirection() { return direction; };
+	Vec3 GetVec() { return pos; };
 private:
-	std::unordered_map<int, client_fw::SPtr<NetworkMoveObj>>m_obj_map;
+//std::unordered_map<int, client_fw::SPtr<NetworkMoveObj>>m_obj_map;
 	GameInfo m_game_info;
-
+	//Vec3 f_pos;
+	Vec3 pos;
+	//char direction;
 };
