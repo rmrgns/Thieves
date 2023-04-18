@@ -9,6 +9,7 @@
 
 PlayerInput::PlayerInput()
 {
+	
 }
 
 PlayerInput::~PlayerInput()
@@ -19,7 +20,7 @@ void PlayerInput::LateUpdate()
 {
 	Vec3 pos = GetTransform()->GetLocalPosition();
 
-
+	direction = 0;
 	// 캐릭터 WASD이동
 	if (INPUT->GetButton(KEY_TYPE::W))
 	{
@@ -67,8 +68,11 @@ void PlayerInput::LateUpdate()
 	}*/
 
 
-
-	pos = thieves_packet_manager->GetVec();
+	if (thieves_packet_manager)
+	{
+		
+		pos += thieves_packet_manager->GetVec();		
+	}
 
 
 
