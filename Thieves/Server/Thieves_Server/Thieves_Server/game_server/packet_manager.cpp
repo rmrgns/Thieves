@@ -174,10 +174,12 @@ void PacketManager::SendMoveTestPacket(int mover)
 	packet.posY = p->GetPosY();
 	packet.posZ = p->GetPosZ();
 
+	std::cout << "SEND" << mover << ":  Packet x :" << packet.posX << ", z : " << packet.posZ << std::endl;
 
 //	packet.move_time = p->m_last_move_time;
 
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(mover);
+
 	cl->DoSend(sizeof(packet), &packet);
 }
 
@@ -284,7 +286,7 @@ void PacketManager::ProcessAttack(int c_id, unsigned char* p)
 
 void PacketManager::ProcessMove(int c_id, unsigned char* p)
 {
-	std::cout << "MOVE 받음" << std::endl;
+	//std::cout << "MOVE 받음" << std::endl;
 	cs_packet_move* packet = reinterpret_cast<cs_packet_move*>(p);
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 	
@@ -310,6 +312,13 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 		packet->posX = packet->posX + packet->vecX * _speed * packet->deltaTime;
 		packet->posZ = packet->posZ + packet->vecZ * _speed * packet->deltaTime;
 	}
+	Vector3 pos{ packet->posX,packet->posY,packet->posZ};
+	
+	cl->SetPos(pos);
+	std::cout << cl->GetID() << ":  Packet x :" << packet->posX << ", z : " << packet->posZ << std::endl;
+	SendMoveTestPacket(c_id);
+
+//	if (isnan(cl->GetPosX()) || isnan(cl->GetPosY()) || isnan(cl->GetPosZ()))return;
 
 
 	//cl->state_lock.lock();
@@ -319,20 +328,24 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 	//	return;
 	//}
 	//else cl->state_lock.unlock();
+	
 	//Room* room = m_room_manager->GetRoom(cl->GetRoomID());
 
 	//cl->m_last_move_time = packet->move_time;
 
-	std::cout << "Packet x :" << packet->posX << ", z : " << packet->posZ << std::endl;
+
 	//std::cout << "Rotation x :" << packet->r_x << ", y : " << packet->r_y << ", z : " 
 	//	<< packet->r_z<< ", w : " << packet->r_w << endl;
+
 	//for (auto other_pl : room->GetObjList())
 	//{
 	//	if (false == MoveObjManager::GetInst()->IsPlayer(other_pl))
 	//		continue;
 	//	SendMovePacket(other_pl, c_id);
 	//}
-	SendMoveTestPacket(c_id);
+
+
+	
 }
 
 void PacketManager::ProcessMatching(int c_id, unsigned char* p)

@@ -4,19 +4,19 @@ using namespace std;
 
 
 //
-void Enemy::InitEnemy(OBJ_TYPE type, int room_id,
-	float max_hp, Vector3& pos, float damage, const char* name)
-{
-	m_type = type;
-	m_room_id = room_id;
-//	m_hp = max_hp;
-//	m_maxhp = max_hp;
-	m_L = luaL_newstate();
-	//SetPos(pos);
-	m_damage = damage;
-	strcpy_s(m_name, name);
-
-}
+//void Enemy::InitEnemy(OBJ_TYPE type, int room_id,
+//	float max_hp, Vector3& pos, float damage, const char* name)
+//{
+//	m_type = type;
+//	//m_room_id = room_id;
+////	m_hp = max_hp;
+////	m_maxhp = max_hp;
+//	m_L = luaL_newstate();
+//	//SetPos(pos);
+//	m_damage = damage;
+//	strcpy_s(m_name, name);
+//
+//}
 
 void Enemy::SetSpawnPoint(float x, float z)
 {
@@ -26,22 +26,22 @@ void Enemy::SetSpawnPoint(float x, float z)
 	m_prev_pos = pos;
 }
 
-void Enemy::Reset()
-{
-//	target_id = BASE_ID;
-	lua_lock.lock();
-//	lua_close(m_L);
-	lua_lock.unlock();
-	m_room_id = -1;
-	m_attack_time = std::chrono::system_clock::now();
-	m_check_time = std::chrono::system_clock::now();
-	m_move_time = std::chrono::system_clock::now();
-	in_use = false;
-	in_game = false;
-	m_is_active = false;
-	ZeroMemory(m_name, MAX_NAME_SIZE + 1);
-	m_prev_test_pos = Vector3{ 0.0f,0.0f,0.0f };
-}
+//void Enemy::Reset()
+//{
+////	target_id = BASE_ID;
+//	lua_lock.lock();
+////	lua_close(m_L);
+//	lua_lock.unlock();
+//	m_room_id = -1;
+//	m_attack_time = std::chrono::system_clock::now();
+//	m_check_time = std::chrono::system_clock::now();
+//	m_move_time = std::chrono::system_clock::now();
+//	in_use = false;
+//	in_game = false;
+//	m_is_active = false;
+//	ZeroMemory(m_name, MAX_NAME_SIZE + 1);
+//	m_prev_test_pos = Vector3{ 0.0f,0.0f,0.0f };
+//}
 
 void Enemy::SetMoveTime(int val)
 {

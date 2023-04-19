@@ -43,6 +43,8 @@ void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
 	_pos.y = packet->posY;
 	_pos.z = packet->posZ;
 
+
+
 	//Vec3 f_pos;
 	//Vec3 r_pos;
 
@@ -59,9 +61,7 @@ void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
 	//r_x = packet->r_x;
 	//r_y = packet->r_y;
 	//r_z = packet->r_z;
-	// 
-	// 
-	// 
+ 
 	//auto mover = m_obj_map.find(packet->id);
 	//if (mover != m_obj_map.end())
 	//{

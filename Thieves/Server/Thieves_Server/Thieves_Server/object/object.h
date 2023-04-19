@@ -4,19 +4,21 @@ class Object
 {
 public:
 	Object() {
-		m_type = OBJ_TYPE::OT_MAPOBJ;
-		m_pos = Vector3(0.0f, 300.0f, 0.0f);
+//		m_type = OBJ_TYPE::OT_MAPOBJ;
+		m_pos = Vector3(0.0f, 0.0f, 0.0f);
 	};
 
 	virtual ~Object() = default;
 
 
 	void Init(int id, OBJ_TYPE type,
-		char direction
+		char direction, Vector3 pos
 	)
 	{
 		m_id = id;
-		m_type = type;
+
+
+//		m_type = type;
 //		m_pos.x = f_x;
 //		m_pos.y = f_y;
 //		m_pos.z = f_z;
@@ -36,9 +38,9 @@ public:
 	//float GetPosSY()const { return s_y; };
 	//float GetPosSZ()const { return s_z; };
 	
-	float GetPosX()const { return posX; };
-	float GetPosY()const { return posY; };
-	float GetPosZ()const { return posZ; };
+	float GetPosX()const { return m_pos.x; };
+	float GetPosY()const { return m_pos.y; };
+	float GetPosZ()const { return m_pos.z; };
 
 	//Vector3& GetPos() { return m_pos; }
 
@@ -46,7 +48,7 @@ public:
 
 
 	int GetID()const { return m_id; };
-	OBJ_TYPE GetType()const { return m_type; };
+//	OBJ_TYPE GetType()const { return m_type; };
 
 
 	void SetID(int val) { m_id = val; };
@@ -55,10 +57,10 @@ public:
 //	void SetPosX(float val) { m_pos.x = val; };
 //	void SetPosY(float val) { m_pos.y = val; };
 //	void SetPosZ(float val) { m_pos.z = val; };
-	//void SetPos(const Vector3& val) { m_pos = val; }
+	void SetPos(const Vector3& val) { m_pos = val; }
 protected:
 	int m_id;
-	OBJ_TYPE m_type;
+//	OBJ_TYPE m_type;
 	Vector3 m_pos;
 	/*float	s_x, s_y, s_z;
 	float	f_x, f_y, f_z;

@@ -57,7 +57,7 @@ const char SC_PACKET_TEST = 16;
 struct cs_packet_move {
 	unsigned char size;
 	char	type;
-	char	direction;			// 0 : 앞,  1: 뒤, 2:왼, 3:오
+	char	direction;			// 1 : 앞,  2: 뒤, 3:왼, 4:오
 	int		move_time; //디버그 용 -> 보낸시간 -받은시간 = 통신하는 시간
 //	float	s_x, s_y, s_z;
 //	float	f_x, f_y, f_z;
