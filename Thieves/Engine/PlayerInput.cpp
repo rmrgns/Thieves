@@ -97,7 +97,7 @@ void PlayerInput::LateUpdate()
 		pos += thieves_packet_manager->GetVec();		
 	}
 
-
+	GET_SINGLE(SceneManager)->SetPlayerPosition(pos);
 
 	// 캐릭터 점프
 	if (INPUT->GetButtonDown(KEY_TYPE::SPACE))
