@@ -2,6 +2,7 @@
 #include "Transform.h"
 #include "Engine.h"
 #include "Camera.h"
+#include "Timer.h"
 
 Transform::Transform() : Component(COMPONENT_TYPE::TRANSFORM)
 {
@@ -117,4 +118,16 @@ Vec3 Transform::DecomposeRotationMatrix(const Matrix& rotation)
 	}
 
 	return ret;
+}
+
+void Transform::AccelerateLook()
+{
+	_forceDirection.x += 1.f;
+	_vel.x += _forceDirection.x * DELTA_TIME;
+}
+
+void Transform::AccelerateRight()
+{
+	_forceDirection.z += 1.f;
+	_vel.z += _forceDirection.z * DELTA_TIME;
 }

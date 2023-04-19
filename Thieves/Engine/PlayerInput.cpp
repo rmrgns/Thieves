@@ -52,6 +52,29 @@ void PlayerInput::LateUpdate()
 		//pos.z += GetTransform()->GetRight().z * _speed * DELTA_TIME;
 	}
 
+	/*if (INPUT->GetButtonUp(KEY_TYPE::W) ||
+		INPUT->GetButtonUp(KEY_TYPE::S) ||
+		INPUT->GetButtonUp(KEY_TYPE::A) ||
+		INPUT->GetButtonUp(KEY_TYPE::D))
+	{
+		if (INPUT->GetButtonUp(KEY_TYPE::W))
+		{
+			GetTransform()->ResetAccelerateLook();
+		}
+		if (INPUT->GetButtonUp(KEY_TYPE::S))
+		{
+			GetTransform()->ResetAccelerateLook();
+		}
+		if (INPUT->GetButtonUp(KEY_TYPE::A))
+		{
+			GetTransform()->ResetAccelerateRight();
+		}
+		if (INPUT->GetButtonUp(KEY_TYPE::D))
+		{
+			GetTransform()->ResetAccelerateRight();
+		}
+	}*/
+
 	Network::GetInst()->SendMovePacket(direction, pos,
 		GetTransform()->GetLook(),
 		DELTA_TIME);
@@ -126,6 +149,7 @@ void PlayerInput::Jump(Vec3& pos)
 			pos.y = 0;
 			_jumpCount = 0;
 			_jump = false;
+			return;
 		}
 
 		if (_jumpCount < 60)
