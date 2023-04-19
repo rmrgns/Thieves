@@ -9,6 +9,7 @@
 #include "Transform.h"
 #include "Camera.h"
 #include "Light.h"
+#include "Physics.h"
 
 // 스크립트
 #include "TestCameraScript.h"
@@ -438,7 +439,7 @@ shared_ptr<Scene> SceneManager::LoadLoginScene()
 		obj->GetTransform()->SetLocalScale(Vec3(width / 7.0f, height / 7.0f, 100.f));
 		obj->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 100.f));
 		obj->SetStatic(false);
-		
+
 		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
 		{
 			shared_ptr<Mesh> ScreenMesh = GET_SINGLE(Resources)->LoadRectangleMesh();

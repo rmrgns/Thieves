@@ -121,6 +121,13 @@ void PlayerInput::Jump(Vec3& pos)
 {
 	if (_jump == true)
 	{
+		if (pos.y < 0)
+		{
+			pos.y = 0;
+			_jumpCount = 0;
+			_jump = false;
+		}
+
 		if (_jumpCount < 60)
 		{
 			_jumpCount++;
