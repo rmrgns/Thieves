@@ -53,8 +53,7 @@ void PlayerInput::LateUpdate()
 	}
 
 	Network::GetInst()->SendMovePacket(direction, pos,
-		GetTransform()->GetLook(),
-		DELTA_TIME);
+		GetTransform()->GetLook(),DELTA_TIME);
 
 
 
@@ -72,7 +71,7 @@ void PlayerInput::LateUpdate()
 //	if (GEngine->GetThievesPacketManager()->GetVec(). )
 //	{
 		//pos = networkObj->GetPosition();
-		pos = GEngine->GetThievesPacketManager()->GetVec();
+	pos = GEngine->GetThievesPacketManager()->GetVec();
 
 //	}
 

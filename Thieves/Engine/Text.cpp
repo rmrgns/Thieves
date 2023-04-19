@@ -29,7 +29,7 @@ void Text::Update()
 	}
 	else if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
 	{
-		Vec3 pos = GET_SINGLE(SceneManager)->GetPlayerPosition();
+		Vec3 pos = GEngine->GetThievesPacketManager()->GetVec();
 		wstring text2 = L"x:" + to_wstring(int(pos.x)) + L" y:" + to_wstring(int(pos.y)) + L" z:" + to_wstring(int(pos.z));
 		SetText(text2, 0.f, 0.f, 1.f, 1.f);
 	}

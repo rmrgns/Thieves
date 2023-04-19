@@ -295,7 +295,7 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 	//std::cout << "MOVE ¹ÞÀ½" << std::endl;
 	cs_packet_move* packet = reinterpret_cast<cs_packet_move*>(p);
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
-	
+	std::cout << cl->GetID() << ":  Packet pos :" << packet->posX << ", look : " << packet->vecX << std::endl;
 	
 	// 
 	if (packet->direction == 1)
@@ -321,7 +321,7 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 	Vector3 pos{ packet->posX,packet->posY,packet->posZ};
 	
 	cl->SetPos(pos);
-	std::cout << cl->GetID() << ":  Packet x :" << packet->posX << ", z : " << packet->posZ << std::endl;
+	
 	SendMoveTestPacket(c_id);
 
 //	if (isnan(cl->GetPosX()) || isnan(cl->GetPosY()) || isnan(cl->GetPosZ()))return;

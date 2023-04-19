@@ -20,10 +20,10 @@ void ThievesPacketManager::Init()
 {
 	m_obj_map = unordered_map<int, shared_ptr<NetworkMoveObj>>();
 	//TEST
-	RegisterRecvFunction(SC_PACKET_TEST, [this](int c_id, unsigned char* p) {ProcessTest(c_id, p); });
+	//RegisterRecvFunction(SC_PACKET_TEST, [this](int c_id, unsigned char* p) {ProcessTest(c_id, p); });
 	
 	
-	RegisterRecvFunction(SC_PACKET_MOVE, [this](int c_id, unsigned char* p) {ProcessMove(c_id, p); });
+	///RegisterRecvFunction(SC_PACKET_MOVE, [this](int c_id, unsigned char* p) {ProcessMove(c_id, p); });
 }
 
 void ThievesPacketManager::ProcessTest(int c_id, unsigned char* p)
@@ -42,8 +42,13 @@ void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
 {
 	sc_packet_move* packet = reinterpret_cast<sc_packet_move*>(p);
 
+
 	auto mover = m_obj_map.find(packet->id);
-	recv_pos = { packet->posX,packet->posY,packet->posZ };
+	//recv_pos = { packet->posX,packet->posY,packet->posZ };
+	
+	SetVecX(packet->posX);
+	SetVecY(packet->posY);
+	SetVecZ(packet->posZ);
 
 	if (mover != m_obj_map.end())
 	{
@@ -53,7 +58,6 @@ void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
 		//PacketHelper::RegisterPacketEventToActor(std::make_shared<MoveObjectMessageEventInfo>(HashCode("move object"), mover->second->GetPosition()), packet->id);
 
 		mover->second->SetPosition(move(recv_pos));
-
 	}
 	//_pos.x = packet->posX;
 	//_pos.y = packet->posY;
@@ -67,7 +71,7 @@ void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
 	//Vec3 f_pos;
 	//Vec3 r_pos;
 	/*f_pos.x = packet->f_x;
-	f_pos.z = packet->f_z;
+	//f_pos.z = packet->f_z;
 	r_pos.x = packet->r_x;
 	r_pos.z = packet->f_y;*/
 //	direction = packet->direction;
