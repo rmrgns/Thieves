@@ -14,7 +14,6 @@ public:
 	bool IsGravity() { return _useGravity; }
 	void UseGravity();
 
-
 private:
 	bool _useGravity = true;
 	
