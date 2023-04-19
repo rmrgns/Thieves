@@ -66,13 +66,15 @@ void PlayerInput::LateUpdate()
 	{
 		pos = thieves_packet_manager->GetRightVec();
 	}*/
+	
+	
 
+//	if (GEngine->GetThievesPacketManager()->GetVec(). )
+//	{
+		//pos = networkObj->GetPosition();
+		pos = GEngine->GetThievesPacketManager()->GetVec();
 
-	if (thieves_packet_manager)
-	{
-		
-		pos += thieves_packet_manager->GetVec();		
-	}
+//	}
 
 
 
@@ -86,8 +88,19 @@ void PlayerInput::LateUpdate()
 	Jump(pos);
 	
 	// 캐릭터 회전
-	PlayerRotation();
+	if(_checkCameraRotation == true)
+		PlayerRotation() ;
 	
+
+	// 카메라 마우스제어 on/off (temp code)
+	if (INPUT->GetButtonDown(KEY_TYPE::L))
+	{
+		if (_checkCameraRotation == true)
+			_checkCameraRotation = false;
+		else
+			_checkCameraRotation = true;
+	}
+
 	// 카메라 캐릭터 position 일치 -> 1인칭
 	GET_SINGLE(SceneManager)->SetPlayerPosition(pos);
 	 

@@ -2,6 +2,7 @@
 #include "MonoBehaviour.h"
 #include "server/packet/packet_manager.h"
 #include "thieves_server/thieves_packet/thieves_packet_manager.h"
+#include "server/network/network_object.h"
 class PlayerInput : public MonoBehaviour
 {
 public:
@@ -12,8 +13,7 @@ public:
 
 	void PlayerRotation();
 	void Jump(Vec3&);
-
-	shared_ptr<ThievesPacketManager> thieves_packet_manager;
+	
 
 private:
 	float		_speed = 200.f;
@@ -22,6 +22,8 @@ private:
 	bool		_jump = false;
 	float		_jumpSpeed = 300.f;
 	char		direction = 0;
+	bool		_checkCameraRotation = true;
+	//Vec3		recv_pos;
 
 	
 };

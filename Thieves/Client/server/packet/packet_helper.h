@@ -2,8 +2,7 @@
 #include "../Client/ptr.h"
 #include <minwindef.h>
 
-namespace client_fw
-{
+
 	class MessageEventInfo;
 	//class Actor;
 
@@ -23,7 +22,7 @@ namespace client_fw
 	class PacketHelper
 	{
 	public:
-		//static void RegisterPacketEventToActor(SPtr<MessageEventInfo>&& message, UINT id);
+		static void RegisterPacketEventToActor(shared_ptr<MessageEventInfo>&& message, UINT id);
 		//static void RegisterPacketEventToLevel(SPtr<MessageEventInfo>&& message);
 		//static void RegisterPacketEventToServer(SPtr<MessageEventInfo>&& message);
 
@@ -31,4 +30,3 @@ namespace client_fw
 	//	static SPtr<Actor> DisconnectActorFromServer(UINT id);
 	};
 
-}

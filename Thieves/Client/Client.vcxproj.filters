@@ -48,6 +48,9 @@
     <Filter Include="소스 파일\thieves_server\object">
       <UniqueIdentifier>{8330a5a3-b8dd-429c-b2b3-c362a2ad16d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\server\event">
+      <UniqueIdentifier>{0b1616fc-41ab-4410-b299-0d1e31a54de8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -116,8 +119,6 @@
     <ClCompile Include="NetworkManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClInclude Include="IocpNetworkManager.h" />
-    <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="ptr.h" />
     <ClInclude Include="thieves_server\game_info.h" />
     <ClInclude Include="server\send_manager\send_manager.h">
@@ -171,6 +172,15 @@
     <ClInclude Include="player.h">
       <Filter>소스 파일\thieves_server\object</Filter>
     </ClInclude>
+    <ClInclude Include="message_event.h">
+      <Filter>소스 파일\server\message</Filter>
+    </ClInclude>
+    <ClInclude Include="IocpNetworkManager.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkManager.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -200,6 +210,9 @@
     </ClCompile>
     <ClCompile Include="player.cpp">
       <Filter>소스 파일\thieves_server\object</Filter>
+    </ClCompile>
+    <ClCompile Include="message_event.cpp">
+      <Filter>소스 파일\server\message</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

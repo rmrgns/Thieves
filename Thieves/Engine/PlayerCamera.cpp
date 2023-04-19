@@ -20,10 +20,19 @@ void PlayerCamera::LateUpdate()
 	pos = GET_SINGLE(SceneManager)->GetPlayerPosition();
 	pos.y += 125.f;
 	// 카메라 마우스제어
-	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
+	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME && _checkCameraRotation == true)
 	{
 		CameraRotation();
 	}
+	// 카메라 마우스제어 on/off (temp code)
+	if (INPUT->GetButtonDown(KEY_TYPE::L))
+	{
+		if (_checkCameraRotation == true)
+			_checkCameraRotation = false;
+		else
+			_checkCameraRotation = true;
+	}
+
 	
 	GetTransform()->SetLocalPosition(pos);
 }

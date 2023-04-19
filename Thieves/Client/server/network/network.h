@@ -77,7 +77,7 @@ public:
 		//worker.join();
 	}
 
-	void SendMessageToServer(const client_fw::SPtr<client_fw::MessageEventInfo>& message);
+	void SendMessageToServer(const shared_ptr<MessageEventInfo>& message);
 	void SendMovePacket(char direction,
 		Vec3 pos, Vec3 vec, float deltatime);
 	

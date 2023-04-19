@@ -1,7 +1,8 @@
 #include "pch.h"
+#include "message_event_info.h"
+#include "server/network/network_move_object.h"
 
-
-#include  "server/message/message_event_info.h"
-namespace client_fw
+MoveObjectMessageEventInfo::MoveObjectMessageEventInfo(UINT event_id, const Vec3& pos)
+	: MessageEventInfo(event_id), m_pos(pos)
 {
 }

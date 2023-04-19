@@ -191,6 +191,12 @@ void PacketManager::SendLoginFailPacket(SOCKET& c_socket, int reason)
 	packet.reason = reason;
 	EXP_OVER* ex_over = new EXP_OVER(COMP_OP::OP_SEND, sizeof(packet), &packet);
 	int ret = WSASend(c_socket, &ex_over->_wsa_buf, 1, 0, 0, &ex_over->_wsa_over, NULL);
+	if (SOCKET_ERROR == ret) {
+		int error_num = WSAGetLastError();
+		if (ERROR_IO_PENDING != error_num)
+			std::cout << "Send" << error_num << std::endl;
+		//LOG_INFO("send ", error_num;
+	}
 }
 void PacketManager::SendSignInOK(int c_id)
 {

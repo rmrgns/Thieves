@@ -27,21 +27,26 @@ class NetworkMoveObj : public NetworkObj
 {
 public:
 	NetworkMoveObj();
-	NetworkMoveObj(int id, NW_OBJ_TYPE type)
+	NetworkMoveObj(int id,  NW_OBJ_TYPE type, float x, float y, float z )
 	{
 		m_id = id;
 
+		m_position = Vec3(x, y, z);
+		
 		m_type = type;
 	}
 	NetworkMoveObj(const NetworkMoveObj& other)
 	{
 		m_id = other.GetID();
+		m_position = other.GetPosition();
+		m_type = other.GetType();
 	}
 	~NetworkMoveObj();
 
 	void SetType(const NW_OBJ_TYPE val) { m_type = val; }
-	bool m_is_active = true;
+	const NW_OBJ_TYPE GetType()const { return m_type; }
 
+	bool m_is_active = true;
 private:
 	NW_OBJ_TYPE m_type;
 };

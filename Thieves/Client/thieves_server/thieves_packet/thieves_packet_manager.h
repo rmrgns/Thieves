@@ -7,7 +7,7 @@
 #include "thieves_server/game_info.h"
 
 
-class ThievesPacketManager : public PacketManager
+class ThievesPacketManager : public PacketManager 
 {
 public:
 	ThievesPacketManager() = default;
@@ -24,18 +24,25 @@ public:
 
 
 	void Reset();
+
 	//float	s_x, s_y, s_z;
 	//float	f_x, f_y, f_z;
 	//float	r_x, r_y, r_z;
-
 //	Vec3 GetForwardVec() { return f_pos; };
 //	Vec3 GetRightVec() { return r_pos; };
 //	char GetDirection() { return direction; };
-	Vec3 GetVec() { return _pos; };
+	Vec3 GetVec() { return recv_pos; };
+
+	void SetVecX(float p_pos) { _pos.x = p_pos; };
+	void SetVecY(float p_pos) { _pos.y = p_pos; };
+	void SetVecZ(float p_pos) { _pos.z = p_pos; };
+	
 private:
-//std::unordered_map<int, client_fw::SPtr<NetworkMoveObj>>m_obj_map;
+	std::unordered_map<int, shared_ptr<NetworkMoveObj>>m_obj_map;
 	GameInfo m_game_info;
 	//Vec3 f_pos;
 	Vec3 _pos;
+	Vec3 recv_pos;
+
 	//char direction;
 };

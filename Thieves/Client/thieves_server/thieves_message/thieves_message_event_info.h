@@ -6,16 +6,14 @@
 enum class NW_OBJ_TYPE;
 enum class eLoginFailType;
 class NetworkMoveObj;
-namespace thieves
-{
-    using namespace client_fw;
 
-    class TestMessageEventInfo final :public MessageEventInfo
+
+  /*  class TestMessageEventInfo final :public MessageEventInfo
     {
     public:
         TestMessageEventInfo(UINT event_id) : MessageEventInfo(event_id)
         {};
-    };
+    };*/
 
     //class NpcAttackEventInfo final : public MessageEventInfo
     //{
@@ -230,4 +228,3 @@ namespace thieves
     //public:
     //    GameDefeatEventInfo(UINT event_id);
     //};
-};

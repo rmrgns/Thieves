@@ -12,13 +12,13 @@ public:
 	{
 		m_move_time = std::chrono::system_clock::now();
 		m_name = std::string(name);
-		//m_position = client_fw::Vec3(x, y, z);
+		m_position = Vec3(x, y, z);
 		//m_rotation = client_fw::Quaternion(0.0f, 0.0f, 0.0f, 0.0f);
 	}
 	~NetworkObj() = default;
 
 
-	//const client_fw::Vec3& GetPosition()const { return m_position; }
+	const Vec3& GetPosition()const { return m_position; }
 	const std::string& GetName()const { return m_name; }
 
 	const int GetID()const { return m_id; }
@@ -26,14 +26,14 @@ public:
 	//void SetRotation(const client_fw::Quaternion& rot) { m_rotation = rot; }
 
 	void SetID(int val) { m_id = val; }
-	//void SetPosition(const client_fw::Vec3& val) { m_position = val; }
+	void SetPosition(const Vec3& val) { m_position = val; }
 
 	void SetName(const std::string& val) { m_name = val; }
 
 	std::chrono::system_clock::time_point m_move_time;
 protected:
 	std::string m_name;
-	//client_fw::Vec3 m_position;
+	Vec3 m_position;
 	int m_id;
 	//client_fw::Quaternion m_rotation;
 };

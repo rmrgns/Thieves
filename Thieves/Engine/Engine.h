@@ -12,6 +12,8 @@
 #include "RenderTargetGroup.h"
 #include "Text.h"
 
+#include "thieves_server/thieves_packet/thieves_packet_manager.h"
+
 #include "TextObject.h"
 
 class Engine
@@ -30,6 +32,8 @@ public:
 	shared_ptr<GraphicsDescriptorHeap> GetGraphicsDescHeap() { return _graphicsDescHeap; }
 	shared_ptr<ComputeDescriptorHeap> GetComputeDescHeap() { return _computeDescHeap; }
 	shared_ptr<Text> GetText() { return _text; }
+
+	shared_ptr<ThievesPacketManager> GetThievesPacketManager() { return _thievesPacketManager; }
 
 	shared_ptr<ConstantBuffer> GetConstantBuffer(CONSTANT_BUFFER_TYPE type) { return _constantBuffers[static_cast<uint8>(type)]; }
 	shared_ptr<RenderTargetGroup> GetRTGroup(RENDER_TARGET_GROUP_TYPE type) { return _rtGroups[static_cast<uint8>(type)]; }
@@ -69,7 +73,7 @@ private:
 	shared_ptr<ComputeDescriptorHeap> _computeDescHeap = make_shared<ComputeDescriptorHeap>();
 	shared_ptr<Text> _text = make_shared<Text>();
 	shared_ptr<TextObject> _textObject = make_shared<TextObject>();
-
+	shared_ptr<ThievesPacketManager> _thievesPacketManager = make_shared<ThievesPacketManager>();
 	//shared_ptr<TextObject> _TextObject = make_shared<TextObject>();
 
 	vector<shared_ptr<ConstantBuffer>> _constantBuffers;

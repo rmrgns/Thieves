@@ -63,7 +63,8 @@ bool Network::Connect()
 
 	m_hiocp = CreateIoCompletionPort(INVALID_HANDLE_VALUE, 0, NULL, 0);
 	CreateIoCompletionPort(reinterpret_cast<HANDLE>(m_s_socket), m_hiocp, m_id, 0);
-
+	m_packet_manager->DoRecv(m_s_socket);
+	
 	return true;
 }
 
@@ -80,8 +81,8 @@ void Network::Worker()
 		LONG64 iocp_key;
 		WSAOVERLAPPED* p_over;
 		BOOL ret = GetQueuedCompletionStatus(m_hiocp, &num_byte, (PULONG_PTR)&iocp_key, &p_over, INFINITE);
-		cout << "GQCS returned.\n";
-		Network::error_display(WSAGetLastError());
+		//cout << "GQCS returned.\n";
+		//Network::error_display(WSAGetLastError());
 		//LOG_INFO(WSAGetLastError());
 		int client_id = static_cast<int>(iocp_key);
 		EXP_OVER* exp_over = reinterpret_cast<EXP_OVER*>(p_over);
@@ -127,7 +128,7 @@ void Network::OnRecv(int client_id, EXP_OVER* exp_over, DWORD num_byte, SOCKET& 
 	m_packet_manager->ProcessRecv(client_id, exp_over, num_byte, socket);
 }
 
-void Network::SendMessageToServer(const client_fw::SPtr<client_fw::MessageEventInfo>& message)
+void Network::SendMessageToServer(const shared_ptr<MessageEventInfo>& message)
 {
 //	m_send_manager->ProcessSend(m_s_socket, message);
 }

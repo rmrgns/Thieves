@@ -1,18 +1,21 @@
 #pragma once
+#include"server/protocol.h"
+#include "message_event.h"
 
-namespace client_fw
+#include<mutex>
+
+class NetworkMoveObj;
+
+class MoveObjectMessageEventInfo final :public MessageEventInfo
 {
-	// 메세지 처리 이벤트
-	class MessageEventInfo
-	{
-	public:
-		MessageEventInfo(unsigned int event_id)
-			: m_event_id(event_id) {}
+public:
+    MoveObjectMessageEventInfo(UINT event_id, const Vec3& pos);
 
-	protected:
-		unsigned int m_event_id;
+private:
+    Vec3 m_pos;
 
-	public:
-		unsigned int GetEventID() const { return m_event_id; }
-	};
-}
+
+public:
+    const Vec3& GetObjPosition()const { return m_pos; }
+
+};
