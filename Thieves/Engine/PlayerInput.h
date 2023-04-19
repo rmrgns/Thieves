@@ -20,7 +20,7 @@ private:
 	float		_mouseRotateSpeed = 0.5f;
 	int			_jumpCount = 0;
 	bool		_jump = false;
-	float		_jumpSpeed = 300.f;
+	float		_jumpSpeed = 305.f;
 	char		direction = 0;
 
 	

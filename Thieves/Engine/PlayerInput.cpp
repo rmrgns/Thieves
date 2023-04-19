@@ -137,6 +137,7 @@ void PlayerInput::Jump(Vec3& pos)
 		{
 			_jumpCount = 0;
 			_jump = false;
+			pos.y = 0;
 		}
 	}
 }
