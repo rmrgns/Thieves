@@ -22,8 +22,10 @@ private:
 	bool		_jump = false;
 	float		_jumpSpeed = 300.f;
 	char		direction = 0;
+
 	bool		_checkCameraRotation = true;
 	//Vec3		recv_pos;
 
 	
+
 };
