@@ -20,7 +20,6 @@ void Physics::FinalUpdate()
 {
 	if(_useGravity == true)
 		UseGravity();
-	
 }
 
 void Physics::UseGravity()

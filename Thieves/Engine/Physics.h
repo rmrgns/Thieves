@@ -13,7 +13,6 @@ public:
 	void SetGravity(bool flag) { _useGravity = flag; }
 	bool IsGravity() { return _useGravity; }
 	void UseGravity();
-
 private:
 	bool _useGravity = true;
 	
