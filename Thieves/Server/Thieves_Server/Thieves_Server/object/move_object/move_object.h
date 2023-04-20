@@ -12,6 +12,8 @@ public:
 	virtual ~MoveObj() = default;
 
 	Vector3 GetOriginX()const { return m_origin_pos; }
+	int GetRoomID()const { return m_room_id; }
+
 
 	virtual void Reset()
 	{

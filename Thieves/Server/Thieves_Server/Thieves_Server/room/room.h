@@ -39,7 +39,7 @@ public:
 
 	std::mutex m_state_lock;
 private:
-	int room_id;
+	int room_id = 1;
 	int max_user;
 	ROOM_STATE m_room_state;
 	int max_npc;

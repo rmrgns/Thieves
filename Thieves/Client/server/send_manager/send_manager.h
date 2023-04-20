@@ -10,7 +10,9 @@ public:
 	//virtual void ProcessSend(const SOCKET& s_socket, const client_fw::SPtr<client_fw::MessageEventInfo>& message) {};
 	virtual void SendMovePacket(const SOCKET& s_socket, char direction,
 		Vec3 pos, Vec3 vec, float deltatime) {};
-	void SendPacket(const SOCKET& s_socket, int num_byte, void* packet);
+	virtual void SendStartPacket(const SOCKET& s_socket) {};
+	
+	void SendPacket(const SOCKET & s_socket, int num_byte, void* packet);
 
 };
 

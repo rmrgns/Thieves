@@ -1,6 +1,7 @@
 #include <map>
 #include <set>
 #include <bitset>
+#include <vector>
 #include "pch.h"
 
 #include "packet_manager.h"
@@ -370,6 +371,40 @@ void PacketManager::ProcessDamageCheat(int c_id, unsigned char* p)
 {
 }
 
+void PacketManager::ProcessGameStart(int c_id, unsigned char* p) {
+
+	cs_packet_game_start* packet = reinterpret_cast<cs_packet_game_start*>(p);
+	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
+
+	player->SetIsReady(true);
+	Room* room = m_room_manager->GetRoom(player->GetRoomID());
+	//for (auto pl : room->GetObjList())
+	//{
+	//	if (false == MoveObjManager::GetInst()->IsPlayer(pl))continue;
+	//	if (false == MoveObjManager::GetInst()->GetPlayer(pl)->GetIsReady())return;
+
+	//}
+	StartGame(room->GetRoomID());
+}
+
 void PacketManager::StartGame(int room_id)
 {
+	Room* room = m_room_manager->GetRoom(room_id);
+	// Player 초기화 및 보내주기
+	const Vector3 base_pos = { 0.0f,0.0f,0.0f };
+	
+	Player* pl = NULL;
+
+	
+	std::vector<int>obj_list{ room->GetObjList().begin(), room->GetObjList().end()};
+
+	for (int i = 0; i < obj_list.size(); ++i) {
+		// room 인원 안차면 SetPos 저장
+		if (i < room->GetMaxUser()) {
+			pl = MoveObjManager::GetInst()->GetPlayer(obj_list[i]);
+			pl->SetPos(base_pos);
+		}
+	}
+
+	// 플레이어에게 플레이어정보 보내주기
 }

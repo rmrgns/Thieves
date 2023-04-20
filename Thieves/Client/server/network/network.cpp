@@ -133,6 +133,10 @@ void Network::SendMessageToServer(const shared_ptr<MessageEventInfo>& message)
 //	m_send_manager->ProcessSend(m_s_socket, message);
 }
 
+void Network::SendStartPacket()
+{
+	m_send_manager->SendStartPacket(m_s_socket);
+}
 void Network::SendMovePacket(char direction,
 	Vec3 pos, Vec3 vec, float deltatime)
 {

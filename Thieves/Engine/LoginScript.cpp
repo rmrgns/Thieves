@@ -8,7 +8,7 @@
 #include "SceneManager.h"
 #include "Engine.h"
 #include "Scene.h"
-
+#include "server/network/network.h"
 LoginScript::LoginScript()
 {
 }
@@ -21,6 +21,9 @@ void LoginScript::LateUpdate()
 {
 	if (INPUT->GetButton(KEY_TYPE::O))
 	{
+		// 게임스타트 패킷 전송
+		Network::GetInst()->SendStartPacket();
+
 		GET_SINGLE(SceneManager)->SetCheckChangeScene(true);
 		GEngine->SetChangeScene(L"Game");
 	}

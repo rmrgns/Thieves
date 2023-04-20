@@ -78,6 +78,9 @@ public:
 	}
 
 	void SendMessageToServer(const shared_ptr<MessageEventInfo>& message);
+	
+	// 패킷 전송
+	void SendStartPacket();
 	void SendMovePacket(char direction,
 		Vec3 pos, Vec3 vec, float deltatime);
 	

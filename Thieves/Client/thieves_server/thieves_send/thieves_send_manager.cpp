@@ -91,6 +91,14 @@
 //	SendPacket(s_socket, sizeof(packet), &packet);
 //}
 
+void ThievesSendManager::SendStartPacket(const SOCKET& s_socket)
+{
+	cs_packet_game_start packet;
+	packet.size = sizeof(packet);
+	packet.type = CS_PACKET_GAME_START;
+	SendPacket(s_socket, sizeof(packet), &packet);
+}
+
 void ThievesSendManager::SendMovePacket(const SOCKET& s_socket, char direction,
 	Vec3 pos, Vec3 vec, float deltatime)
 {
