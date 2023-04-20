@@ -15,18 +15,24 @@ public:
 
 	virtual void Reset()
 	{
-	
+		ZeroMemory(m_name, MAX_NAME_SIZE + 1);
 	}
 
 	Vector4 GetRotation() { return m_rotation; }
 
-	void SetRotaion(const Vector4& val) { m_rotation = val; }
+	int GetRoomID() const { return m_room_id; }
+	char* GetName() { return m_name; }
 
+	void SetRotaion(const Vector4& val) { m_rotation = val; }
+	void SetRoomID(int val) { m_room_id = val; }
 
 	void SetOriginPos(const Vector3& val) { m_origin_pos = val; }
-	std::mutex m_hp_lock;
+
 	int		m_last_move_time = 0;
 protected:
+	int		m_room_id;
+
+	char m_name[MAX_NAME_SIZE + 1];
 	Vector4 m_rotation;
 	Vector3 m_origin_pos;
 };

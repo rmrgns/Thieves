@@ -19,14 +19,23 @@ public:
 	void ProcessAccept(HANDLE, SOCKET&, EXP_OVER*);
 	void ProcessRecv(int, EXP_OVER*, DWORD);
 
+	// Enemy
+	void UpdateObjMove();
+
 	// SendPacket
 	void SendTestPacket(int c_id, int mover, float x, float y, float z);
+	
 	void SendMovePacket(int c_id, int mover);
 	void SendMoveTestPacket(int mover);
+	
 	void SendLoginFailPacket(SOCKET&, int reason);
 	void SendSignInOK(int c_id);
 	void SendSignUpOK(int c_id);
+
+	void SendMatchingOK(int c_id);
+
 	void SendPutObjPakcet(int c_id, int obj_id, OBJ_TYPE obj_type);
+	void SendObjInfo(int c_id, int obj_id);
 	void SendTime(int c_id, float round_time);
 	void SendAttackPacket(int c_id, int room_id);
 	void SendGameWin(int c_id);
@@ -52,7 +61,10 @@ public:
 private:
 	RoomManager* m_room_manager;
 	DB* m_db;
+	MapManager* m_map_manager;
+	concurrency::concurrent_queue<db_task>m_db_queue;
 	std::thread db_thread;
+	
 	float	_speed = 200.f;
 
 
@@ -65,4 +77,9 @@ private:
 	void ProcessGameStart(int c_id, unsigned char* p);
 	void ProcessDamageCheat(int c_id, unsigned char* p);
 	void StartGame(int room_id);
+
+	// Test 
+	void TestProcessGameStart(int c_id, unsigned char* p);
+	void TestProcessMove(int c_id, unsigned char* p);
+	void TestStartGame(int room_id);
 };

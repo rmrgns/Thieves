@@ -1,7 +1,13 @@
 #include "room.h"
 #include "pch.h"
+#include "object/object.h"
+using namespace std;
+
 Room::Room(int room_id)
 {
+	m_round_time = chrono::system_clock::now();
+	m_room_state = ROOM_STATE::RT_FREE;
+	m_obj_list.reserve(100);
 }
 
 Room::~Room()

@@ -35,14 +35,21 @@ public:
 		return p;
 
 	}
+
+
 	MoveObj* GetMoveObj(int id) { return m_moveobj_arr[id]; }
 	bool IsPlayer(int id) { return (id >= 0) && (id < MAX_USER); }
+	bool IsNear(int a, int b);
+	bool IsNPC(int id);
+	float ObjDistance(int a, int b);
 
+	//
+	//
 	
 	int GetNewID();
 	void Disconnect(int);
 	void InitPlayer();
-
+	void InitNPC();
 	void DestroyObject();
 
 private:

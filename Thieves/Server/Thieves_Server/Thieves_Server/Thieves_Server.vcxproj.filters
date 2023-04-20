@@ -34,11 +34,17 @@
     <Filter Include="소스 파일\object">
       <UniqueIdentifier>{d9124090-5e3e-49f5-8dd6-75fdf0e1c043}</UniqueIdentifier>
     </Filter>
-    <Filter Include="헤더 파일\vec">
-      <UniqueIdentifier>{c5ca59dc-8f02-46e3-b7b5-00352a6866cb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\object\move_object">
       <UniqueIdentifier>{ee5e4619-29b4-4553-a57a-75bbb345c36b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\utill">
+      <UniqueIdentifier>{ae2ccd3e-3990-4453-b5f7-811863e4ed46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\utill\collision">
+      <UniqueIdentifier>{bceb6d54-87b0-4b66-83f3-fef50ff36adf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\object\map_object">
+      <UniqueIdentifier>{da17359a-e99a-4556-a2db-219cc24d9e86}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -74,6 +80,12 @@
     </ClCompile>
     <ClCompile Include="room\room_manager.cpp">
       <Filter>소스 파일\room</Filter>
+    </ClCompile>
+    <ClCompile Include="Astar.cpp">
+      <Filter>헤더 파일\utill</Filter>
+    </ClCompile>
+    <ClCompile Include="map_object.cpp">
+      <Filter>소스 파일\object\map_object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -124,6 +136,12 @@
     </ClInclude>
     <ClInclude Include="protocol.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Astar.h">
+      <Filter>헤더 파일\utill</Filter>
+    </ClInclude>
+    <ClInclude Include="map_object.h">
+      <Filter>소스 파일\object\map_object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

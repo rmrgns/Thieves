@@ -6,7 +6,7 @@
 #include<array>
 #include "state.h"
 class Object;
-const int MAX_BULLET = 100;
+
 class Room
 {
 public:

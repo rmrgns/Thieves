@@ -8,7 +8,7 @@ const int MAX_NAME_SIZE = 20;		// 아이디 사이즈
 const int MAX_PASSWORD_SIZE = 20;	// 비밀 번호 사이즈
 const int MAX_CHAT_SIZE = 100;		// 채팅 사이즈
 
-const int MAX_ROOM_SIZE = 1000;		// 방 최대 크기
+const int MAX_ROOM_SIZE = 8;		// 방 최대 크기
 
 const int MAX_USER = MAX_ROOM_SIZE * 8;		// 동접 가능 인원
 
@@ -52,6 +52,7 @@ const char SC_PACKET_STUN = 13;				// stun
 const char SC_PAKCET_INTERACTION = 14;		// 상호작용
 const char SC_PACKET_PHASE = 15;			// 페이즈 변경  
 const char SC_PACKET_TEST = 16;
+const char SC_PACKET_OBJ_INFO = 17;		// OBJ 정보
 //#pragma pack (push, 1)
 
 struct cs_packet_move {
@@ -106,6 +107,7 @@ struct cs_packet_hit {
 struct cs_packet_game_start {
 	unsigned char size;
 	char	type;
+	int		id;
 };
 
 struct sc_packet_sign_in_ok {
@@ -129,6 +131,16 @@ struct sc_packet_move {
 		//float	r_x, r_y, r_z;
 	float	posX, posY, posZ;
 };
+
+struct sc_packet_obj_info {
+	unsigned char size;
+	char type;
+	int id;
+	float x, y, z;
+	char object_type;
+
+};
+
 struct sc_packet_put_object {
 	unsigned char size;
 	char type;
@@ -178,10 +190,17 @@ struct sc_packet_stun {
 	char type;
 	int	obj_id;
 };
-struct sc_pakcet_interaction {
+struct sc_packet_interaction {
 };
 
 struct sc_packet_test {
+	unsigned char size;
+	char	type;
+	int		id;
+	float	x, y, z;
+};
+
+struct sc_packet_obj_info {
 	unsigned char size;
 	char	type;
 	int		id;

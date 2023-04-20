@@ -6,6 +6,21 @@ MoveObjManager* MoveObjManager::m_pInst = nullptr;
 using namespace std;
 
 
+bool MoveObjManager::IsNear(int a, int b)
+{
+	return false;
+}
+
+bool MoveObjManager::IsNPC(int id)
+{
+	return false;
+}
+
+float MoveObjManager::ObjDistance(int a, int b)
+{
+	return 0.0f;
+}
+
 int MoveObjManager::GetNewID()
 {
 	Player* cl = NULL;
@@ -32,7 +47,7 @@ void MoveObjManager::Disconnect(int c_id)
 	Player* cl = GetPlayer(c_id);
 	cl->state_lock.lock();
 	closesocket(cl->GetSock());
-//	cl->ResetPlayer();
+	cl->ResetPlayer();
 	cl->state_lock.unlock();
 }
 
@@ -42,6 +57,10 @@ void MoveObjManager::InitPlayer()
 		m_moveobj_arr[i] = new Player;
 
 
+}
+
+void MoveObjManager::InitNPC()
+{
 }
 
 

@@ -145,11 +145,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Astar.cpp" />
     <ClCompile Include="database\db.cpp" />
     <ClCompile Include="game_server\ingame_server.cpp" />
     <ClCompile Include="game_server\packet_manager.cpp" />
     <ClCompile Include="iocp_server\iocp_server.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="map_object.cpp" />
     <ClCompile Include="object\moveobj_manager.cpp" />
     <ClCompile Include="object\move_object\enemy.cpp" />
     <ClCompile Include="object\move_object\player.cpp" />
@@ -158,11 +160,13 @@
     <ClCompile Include="room\room_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Astar.h" />
     <ClInclude Include="database\db.h" />
     <ClInclude Include="define.h" />
     <ClInclude Include="game_server\ingame_server.h" />
     <ClInclude Include="game_server\packet_manager.h" />
     <ClInclude Include="iocp_server\iocp_server.h" />
+    <ClInclude Include="map_object.h" />
     <ClInclude Include="object\moveobj_manager.h" />
     <ClInclude Include="object\move_object\enemy.h" />
     <ClInclude Include="object\move_object\move_object.h" />

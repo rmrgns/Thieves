@@ -9,7 +9,9 @@ public:
         m_prev_size(0), m_socket(INVALID_SOCKET)
     {
         m_last_move_time = 0;
+        m_type = OBJ_TYPE::OT_PLAYER;
         m_state = STATE::ST_FREE;
+        m_room_id = 1;
 
     }
     virtual ~Player() = default;
@@ -23,7 +25,7 @@ private:
     SOCKET  m_socket;
     STATE m_state;
     std::atomic_bool m_is_ready = false;
-    //std::atomic_bool m_is_heal = false;
+    
     char m_password[MAX_PASSWORD_SIZE + 1];
     short m_mach_user_size = 0;
     
@@ -41,8 +43,7 @@ public:
     virtual void Reset()override;
     void SetIsReady(bool val) { m_is_ready = val; }
     bool GetIsReady() { return m_is_ready; }
-   // void SetIsHeal(bool val) { m_is_heal = val; }
-   // bool GetIsHeal() { return m_is_heal; }
+ 
     char* GetPassword() { return m_password; }
     short GetMatchUserSize() { return m_mach_user_size; }
     void SetMatchUserSize(short val) { m_mach_user_size = val; }
