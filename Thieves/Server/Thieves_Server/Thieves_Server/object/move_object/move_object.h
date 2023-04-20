@@ -28,6 +28,11 @@ public:
 	void SetOriginPos(const Vector3& val) { m_origin_pos = val; }
 	std::mutex m_hp_lock;
 	int		m_last_move_time = 0;
+	
+private:
+	int m_room_id = 1;
+
+
 protected:
 	Vector4 m_rotation;
 	Vector3 m_origin_pos;
