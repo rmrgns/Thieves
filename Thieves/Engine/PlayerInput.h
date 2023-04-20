@@ -24,7 +24,7 @@ private:
 	char		direction = 0;
 
 	bool		_checkCameraRotation = true;
-	//Vec3		recv_pos;
+	Vec3		recv_pos = { 0.0f,0.0f,0.0f };
 
 	
 

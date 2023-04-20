@@ -300,23 +300,23 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 	// 
 	if (packet->direction == 1)
 	{
-		packet->posX = packet->posX + packet->vecX * _speed * packet->deltaTime;
-		packet->posZ = packet->posZ + packet->vecZ * _speed * packet->deltaTime;
+		//packet->posX = packet->posX + packet->vecX * _speed * packet->deltaTime;
+		//packet->posZ = packet->posZ + packet->vecZ * _speed * packet->deltaTime;
 	}
 	if (packet->direction == 2)
 	{
-		packet->posX = packet->posX - packet->vecX * _speed * packet->deltaTime;
-		packet->posZ = packet->posZ - packet->vecZ * _speed * packet->deltaTime;
+		//packet->posX = packet->posX - packet->vecX * _speed * packet->deltaTime;
+		//packet->posZ = packet->posZ - packet->vecZ * _speed * packet->deltaTime;
 	}
 	if (packet->direction == 3)
 	{
-		packet->posX = packet->posX - packet->vecX * _speed * packet->deltaTime;
-		packet->posZ = packet->posZ - packet->vecZ * _speed * packet->deltaTime;
+		//packet->posX = packet->posX - packet->vecX * _speed * packet->deltaTime;
+		//packet->posZ = packet->posZ - packet->vecZ * _speed * packet->deltaTime;
 	}
 	if (packet->direction == 4)
 	{
-		packet->posX = packet->posX + packet->vecX * _speed * packet->deltaTime;
-		packet->posZ = packet->posZ + packet->vecZ * _speed * packet->deltaTime;
+		//packet->posX = packet->posX + packet->vecX * _speed * packet->deltaTime;
+		//packet->posZ = packet->posZ + packet->vecZ * _speed * packet->deltaTime;
 	}
 	Vector3 pos{ packet->posX,packet->posY,packet->posZ};
 	

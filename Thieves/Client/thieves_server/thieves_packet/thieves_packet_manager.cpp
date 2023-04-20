@@ -23,7 +23,7 @@ void ThievesPacketManager::Init()
 	//RegisterRecvFunction(SC_PACKET_TEST, [this](int c_id, unsigned char* p) {ProcessTest(c_id, p); });
 	
 	
-	///RegisterRecvFunction(SC_PACKET_MOVE, [this](int c_id, unsigned char* p) {ProcessMove(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_MOVE, [this](int c_id, unsigned char* p) {ProcessMove(c_id, p); });
 }
 
 void ThievesPacketManager::ProcessTest(int c_id, unsigned char* p)
