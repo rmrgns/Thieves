@@ -126,16 +126,48 @@ void FBXLoader::LoadMesh(FbxMesh* mesh)
 	uint32 vertexCounter = 0; // 정점의 개수
 
 	const int32 triCount = mesh->GetPolygonCount(); // 메쉬의 삼각형 개수를 가져온다
+
+	// 이미 UV를 작성한 상태인 경우를 확인하기 위한 체크 배열
+	unique_ptr<bool[]> isChecked = make_unique<bool[]>(mesh->GetControlPointsCount());
+
 	for (int32 i = 0; i < triCount; i++) // 삼각형의 개수
 	{
 		for (int32 j = 0; j < 3; j++) // 삼각형은 세 개의 정점으로 구성
 		{
 			int32 controlPointIndex = mesh->GetPolygonVertex(i, j); // 제어점의 인덱스 추출
-			arrIdx[j] = controlPointIndex;
 
-			GetNormal(mesh, &meshInfo, controlPointIndex, vertexCounter);
-			GetTangent(mesh, &meshInfo, controlPointIndex, vertexCounter);
-			GetUV(mesh, &meshInfo, controlPointIndex, mesh->GetTextureUVIndex(i, j));
+			
+			if (isChecked[controlPointIndex])
+			{
+
+				// 이미 추출된 정점의 데이터인 경우
+				// 정점을 추가해서 다른 데이터는 같고 uv 데이터만 다른 데이터를 받아와야 한다.
+				&meshInfo.vertices.emplace_back(meshInfo.vertices[controlPointIndex].pos, meshInfo.vertices[controlPointIndex].uv,
+					meshInfo.vertices[controlPointIndex].normal, meshInfo.vertices[controlPointIndex].tangent);
+
+				overlappedIndex.emplace_back(controlPointIndex, meshInfo.vertices.size() - 1);
+
+				controlPointIndex = meshInfo.vertices.size() - 1;
+
+				arrIdx[j] = controlPointIndex;
+
+				GetNormal(mesh, &meshInfo, controlPointIndex, vertexCounter);
+				GetTangent(mesh, &meshInfo, controlPointIndex, vertexCounter);
+				GetUV(mesh, &meshInfo, controlPointIndex, mesh->GetTextureUVIndex(i, j));
+			}
+			else
+
+			{
+				// 처음 받는 데이터인 경우
+				// 그냥 데이터 저장만 해주면 된다.
+				arrIdx[j] = controlPointIndex;
+
+				GetNormal(mesh, &meshInfo, controlPointIndex, vertexCounter);
+				GetTangent(mesh, &meshInfo, controlPointIndex, vertexCounter);
+				GetUV(mesh, &meshInfo, controlPointIndex, mesh->GetTextureUVIndex(i, j));
+
+				isChecked[controlPointIndex] = true;
+			}
 
 			vertexCounter++;
 		}
@@ -464,6 +496,14 @@ void FBXLoader::FillBoneWeight(FbxMesh* mesh, FbxMeshInfo* meshInfo)
 
 		memcpy(&meshInfo->vertices[v].indices, animBoneIndex, sizeof(Vec4));
 		memcpy(&meshInfo->vertices[v].weights, animBoneWeight, sizeof(Vec4));
+		for (pair<int, int> data : overlappedIndex)
+		{
+			if (data.first == v)
+			{
+				memcpy(&meshInfo->vertices[data.second].indices, animBoneIndex, sizeof(Vec4));
+				memcpy(&meshInfo->vertices[data.second].weights, animBoneWeight, sizeof(Vec4));
+			}
+		}
 	}
 }
 
