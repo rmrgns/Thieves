@@ -177,6 +177,7 @@
     <ClInclude Include="Resource.h" />
     <ClCompile Include="message_event.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="send_helper.cpp" />
     <ClCompile Include="server\message\message_event_info.cpp" />
     <ClCompile Include="server\message\message_event_manager.cpp" />
     <ClCompile Include="server\message\message_helper.cpp" />
@@ -190,6 +191,7 @@
     <ClCompile Include="thieves_server\thieves_message\thieves_message_event_info.cpp" />
     <ClCompile Include="thieves_server\thieves_packet\thieves_packet_manager.cpp" />
     <ClCompile Include="thieves_server\thieves_send\thieves_send_manager.cpp" />
+    <ClInclude Include="send_helper.h" />
     <ClInclude Include="server\define.h" />
     <ClInclude Include="server\message\message_event_info.h" />
     <ClInclude Include="server\message\message_event_manager.h" />

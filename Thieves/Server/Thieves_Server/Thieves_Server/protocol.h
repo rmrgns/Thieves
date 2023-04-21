@@ -12,6 +12,7 @@ const int MAX_ROOM_SIZE = 8;		// 방 최대 크기
 
 const int MAX_USER = MAX_ROOM_SIZE * 8;		// 동접 가능 인원
 
+const int USER_NUM = 8;
 // 수정
 const float FOV_RANGE = 0.f;
 
@@ -107,7 +108,7 @@ struct cs_packet_hit {
 struct cs_packet_game_start {
 	unsigned char size;
 	char	type;
-	int		id;
+
 };
 
 struct sc_packet_sign_in_ok {
@@ -132,14 +133,6 @@ struct sc_packet_move {
 	float	posX, posY, posZ;
 };
 
-struct sc_packet_obj_info {
-	unsigned char size;
-	char type;
-	int id;
-	float x, y, z;
-	char object_type;
-
-};
 
 struct sc_packet_put_object {
 	unsigned char size;
@@ -202,7 +195,8 @@ struct sc_packet_test {
 
 struct sc_packet_obj_info {
 	unsigned char size;
-	char	type;
 	int		id;
+	char	type;
 	float	x, y, z;
+	char	object_type;
 };

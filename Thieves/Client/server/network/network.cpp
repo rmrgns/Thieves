@@ -130,7 +130,7 @@ void Network::OnRecv(int client_id, EXP_OVER* exp_over, DWORD num_byte, SOCKET& 
 
 void Network::SendMessageToServer(const shared_ptr<MessageEventInfo>& message)
 {
-//	m_send_manager->ProcessSend(m_s_socket, message);
+	//m_send_manager->ProcessSend(m_s_socket, message);
 }
 
 void Network::SendMovePacket(char direction,
@@ -145,3 +145,11 @@ void Network::SendMovePacket(char direction,
 	//	m_move_time = end_t + 50ms;
 	//}
 }
+
+void Network::SendStartPacket()
+{
+	m_send_manager->SendStartPacket(m_s_socket);
+}
+
+
+// Packet Test

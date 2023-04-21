@@ -181,6 +181,9 @@
     <ClInclude Include="NetworkManager.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
+    <ClInclude Include="send_helper.h">
+      <Filter>소스 파일\server\send_manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -213,6 +216,9 @@
     </ClCompile>
     <ClCompile Include="message_event.cpp">
       <Filter>소스 파일\server\message</Filter>
+    </ClCompile>
+    <ClCompile Include="send_helper.cpp">
+      <Filter>소스 파일\server\send_manager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

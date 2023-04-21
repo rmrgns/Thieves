@@ -78,9 +78,10 @@ public:
 	}
 
 	void SendMessageToServer(const shared_ptr<MessageEventInfo>& message);
-	void SendMovePacket(char direction,
-		Vec3 pos, Vec3 vec, float deltatime);
-	
+	void SendMovePacket(char direction, Vec3 pos, Vec3 vec, float deltatime);
+	void SendStartPacket();
+
+
 	void SendPacket();
 	
 	SOCKET& GetSock() { return m_s_socket; }

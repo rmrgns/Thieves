@@ -59,7 +59,8 @@ void PacketManager::ProcessPacket(int c_id, unsigned char* p)
 		break;
 	}
 	case CS_PACKET_GAME_START: {
-		ProcessGameStart(c_id, p);
+		TestProcessGameStart(c_id, p);
+		//ProcessGameStart(c_id, p);
 		break;
 	}
 	case CS_PACKET_TEST: {
@@ -339,27 +340,29 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 	// 
 	if (packet->direction == 1)
 	{
-		//packet->posX = packet->posX + packet->vecX * _speed * packet->deltaTime;
-		//packet->posZ = packet->posZ + packet->vecZ * _speed * packet->deltaTime;
+		packet->posX +=  packet->vecX * _speed * packet->deltaTime;
+		packet->posZ +=  packet->vecZ * _speed * packet->deltaTime;
 	}
 	if (packet->direction == 2)
 	{
-		//packet->posX = packet->posX - packet->vecX * _speed * packet->deltaTime;
-		//packet->posZ = packet->posZ - packet->vecZ * _speed * packet->deltaTime;
+		packet->posX -= packet->vecX * _speed * packet->deltaTime;
+		packet->posZ -= packet->vecZ * _speed * packet->deltaTime;
 	}
 	if (packet->direction == 3)
 	{
-		//packet->posX = packet->posX - packet->vecX * _speed * packet->deltaTime;
-		//packet->posZ = packet->posZ - packet->vecZ * _speed * packet->deltaTime;
+		packet->posX -= packet->vecX * _speed * packet->deltaTime;
+		packet->posZ -= packet->vecZ * _speed * packet->deltaTime;
 	}
 	if (packet->direction == 4)
 	{
-		//packet->posX = packet->posX + packet->vecX * _speed * packet->deltaTime;
-		//packet->posZ = packet->posZ + packet->vecZ * _speed * packet->deltaTime;
+		packet->posX += packet->vecX * _speed * packet->deltaTime;
+		packet->posZ += packet->vecZ * _speed * packet->deltaTime;
 	}
-	Vector3 pos{ packet->posX,packet->posY,packet->posZ};
+	//Vector3 pos{ packet->posX,packet->posY,packet->posZ};
 	
-	cl->SetPos(pos);
+	cl->SetPosX(packet->posX);
+	cl->SetPosY(packet->posY);
+	cl->SetPosZ(packet->posZ);
 	
 	SendMoveTestPacket(c_id);
 
@@ -400,8 +403,6 @@ void PacketManager::ProcessMatching(int c_id, unsigned char* p)
 void PacketManager::ProcessHit(int c_id, unsigned char* p)
 {
 }
-
-
 
 void PacketManager::ProcessGameStart(int c_id, unsigned char* p)
 {
@@ -475,9 +476,34 @@ void PacketManager::TestProcessGameStart(int c_id, unsigned char* p)
 {
 	cs_packet_game_start* packet = reinterpret_cast<cs_packet_game_start*>(p);
 	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
+	player->SetMatchUserSize(USER_NUM);
+	player->is_matching = true;
+	Player* other_pl = NULL;
+	vector<int>match_list;
+	match_list.push_back(c_id);
+	Room* room = m_room_manager->GetRoom(0);
+	for (auto id : match_list)
+	{
+		Player* pl = MoveObjManager::GetInst()->GetPlayer(id);
+		pl->is_matching = false;
+		pl->state_lock.lock();
+		pl->SetState(STATE::ST_INGAME);
+		pl->SetRoomID(0);
+		//player->SetIsActive(true);
+		pl->state_lock.unlock();
+		//room->EnterRoom(id);//방에 아이디 넘겨주기
+		//cout << id << endl;
+		//SendMatchingOK(id);
+	}
+	room->Init(player->GetMatchUserSize());
+	for (auto obj_id : match_list)
+		room->EnterRoom(obj_id);
+
+
 	if (player->GetRoomID() == -1)return;
 	player->SetIsReady(true);
-	Room* room = m_room_manager->GetRoom(player->GetRoomID());
+	std::cout << "Room ID : " <<  (m_room_manager->GetRoom(player->GetRoomID())) << std::endl;
+	room = m_room_manager->GetRoom(player->GetRoomID());
 
 	TestStartGame(room->GetRoomID());
 }
@@ -485,6 +511,8 @@ void PacketManager::TestProcessGameStart(int c_id, unsigned char* p)
 void PacketManager::TestStartGame(int room_id)
 {
 	Room* room = m_room_manager->GetRoom(room_id);
+
+	const Vector3 base_pos{ 0.0f,0.0f,0.0f };
 
 	Player* pl = NULL;
 
@@ -495,6 +523,20 @@ void PacketManager::TestStartGame(int room_id)
 		if (i < room->GetMaxUser())
 		{
 			pl = MoveObjManager::GetInst()->GetPlayer(obj_list[i]);
+			//pl->SetPos(m_map_manager->PLAYER_SPAWN_POINT[i]);
+			//pl->SetColorType(COLOR_TYPE(i + 1));
+			continue;
+		}
+	}
+
+
+
+	for (int i = 0; i < obj_list.size(); ++i)
+	{
+		if (i < room->GetMaxUser())
+		{
+			pl = MoveObjManager::GetInst()->GetPlayer(obj_list[i]);
+			pl ->SetPos(base_pos);
 			//pl->SetPos(m_map_manager->PLAYER_SPAWN_POINT[i]);
 			//pl->SetColorType(COLOR_TYPE(i + 1));
 			continue;

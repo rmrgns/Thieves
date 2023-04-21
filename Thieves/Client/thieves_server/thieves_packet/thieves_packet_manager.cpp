@@ -24,6 +24,8 @@ void ThievesPacketManager::Init()
 	
 	
 	RegisterRecvFunction(SC_PACKET_MOVE, [this](int c_id, unsigned char* p) {ProcessMove(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_OBJ_INFO, [this](int c_id, unsigned char* p) {ProcessObjInfo(c_id, p); });
+
 }
 
 void ThievesPacketManager::ProcessTest(int c_id, unsigned char* p)
@@ -42,9 +44,10 @@ void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
 {
 	sc_packet_move* packet = reinterpret_cast<sc_packet_move*>(p);
 
-
 	auto mover = m_obj_map.find(packet->id);
-	//recv_pos = { packet->posX,packet->posY,packet->posZ };
+
+	
+	recv_pos = { packet->posX,packet->posY,packet->posZ };
 	
 	SetVecX(packet->posX);
 	SetVecY(packet->posY);
@@ -97,8 +100,30 @@ void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
 	//}
 
 }
+
 void ThievesPacketManager::ProcessSignin(int c_id, unsigned char* p)
 {
+	sc_packet_sign_in_ok* packet = reinterpret_cast<sc_packet_sign_in_ok*>(p);
+	m_game_info.SetNetworkID(packet->id);
 
+	// Å¬¶ó·Î
 }
 
+
+void ThievesPacketManager::ProcessObjInfo(int c_id, unsigned char* p)
+{
+	sc_packet_obj_info* packet = reinterpret_cast<sc_packet_obj_info*>(p);
+	NetworkObj* obj = NULL;
+	Network::matching_end = true;
+	NW_OBJ_TYPE nw_type;
+	//string da = "ss";
+	packet->id == m_game_info.GetNetworkID() ? nw_type = NW_OBJ_TYPE::OT_MY_PLAYER : nw_type = (NW_OBJ_TYPE)packet->object_type;
+	auto res = m_obj_map.try_emplace(packet->id, CreateSPtr<NetworkMoveObj>(
+		packet->id,
+		nw_type,
+		packet->x,
+		packet->y,
+		packet->z
+	));
+	//PacketHelper::RegisterPacketEventToLevel(CreateSPtr<revive::ObjectInfoMessageEventInfo>(HashCode("spawn object"), m_obj_map[packet->id]));
+}

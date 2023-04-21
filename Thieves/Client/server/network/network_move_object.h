@@ -30,16 +30,14 @@ public:
 	NetworkMoveObj(int id,  NW_OBJ_TYPE type, float x, float y, float z )
 	{
 		m_id = id;
-
-		m_position = Vec3(x, y, z);
-		
 		m_type = type;
+		m_position = Vec3(x, y, z);
 	}
 	NetworkMoveObj(const NetworkMoveObj& other)
 	{
 		m_id = other.GetID();
-		m_position = other.GetPosition();
 		m_type = other.GetType();
+		m_position = other.GetPosition();
 	}
 	~NetworkMoveObj();
 

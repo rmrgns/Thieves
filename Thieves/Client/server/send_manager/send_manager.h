@@ -7,9 +7,15 @@ public:
 	SendManager() = default;
 	virtual ~SendManager() = default;
 
-	//virtual void ProcessSend(const SOCKET& s_socket, const client_fw::SPtr<client_fw::MessageEventInfo>& message) {};
+	//virtual void ProcessSend(const SOCKET& s_socket, shared_ptr<MessageEventInfo>& message) {};
+	
+	// Send
 	virtual void SendMovePacket(const SOCKET& s_socket, char direction,
 		Vec3 pos, Vec3 vec, float deltatime) {};
+	virtual void SendStartPacket(const SOCKET& s_socket) {};
+
+
+	//virtual void TestProcessSend(const SOCKET& s_socket);
 	void SendPacket(const SOCKET& s_socket, int num_byte, void* packet);
 
 };

@@ -16,7 +16,6 @@ PlayerInput::~PlayerInput()
 {
 
 }
-
 void PlayerInput::LateUpdate()
 {
 
@@ -28,85 +27,75 @@ void PlayerInput::LateUpdate()
 	{
 		direction = 1;
 		pos += GetTransform()->GetLook() * _speed * DELTA_TIME;
-		//pos.x += GetTransform()->GetLook().x * _speed * DELTA_TIME;
-		//pos.z += GetTransform()->GetLook().z * _speed * DELTA_TIME;
-		
+		Network::GetInst()->SendMovePacket(direction, recv_pos,
+			GetTransform()->GetLook(), DELTA_TIME);
 	}
 	if (INPUT->GetButton(KEY_TYPE::S))
 	{
 		direction = 2;
 		pos -= GetTransform()->GetLook() * _speed * DELTA_TIME;
-		//pos.x -= GetTransform()->GetLook().x * _speed * DELTA_TIME;
-		//pos.z -= GetTransform()->GetLook().z * _speed * DELTA_TIME;
+		Network::GetInst()->SendMovePacket(direction, recv_pos,
+			GetTransform()->GetLook(), DELTA_TIME);
 	}
 	if (INPUT->GetButton(KEY_TYPE::A))
 	{
 		direction = 3;
 		pos -= GetTransform()->GetRight() * _speed * DELTA_TIME;
-		//pos.x -= GetTransform()->GetRight().x * _speed * DELTA_TIME;
-		//pos.z -= GetTransform()->GetRight().z * _speed * DELTA_TIME;
+		Network::GetInst()->SendMovePacket(direction, recv_pos,
+			GetTransform()->GetLook(), DELTA_TIME);
 	}
 	if (INPUT->GetButton(KEY_TYPE::D))
 	{
 		direction = 4;
 		pos += GetTransform()->GetRight() * _speed * DELTA_TIME;
-		//pos.x += GetTransform()->GetRight().x * _speed * DELTA_TIME;
-		//pos.z += GetTransform()->GetRight().z * _speed * DELTA_TIME;
+		Network::GetInst()->SendMovePacket(direction, recv_pos,
+			GetTransform()->GetLook(), DELTA_TIME);
 	}
 
-	Network::GetInst()->SendMovePacket(direction, pos,
-		GetTransform()->GetLook(),DELTA_TIME);
+
+	if (pos != GEngine->GetThievesPacketManager()->GetVec()) {
+		pos = GEngine->GetThievesPacketManager()->GetVec();
 
 
+		GET_SINGLE(SceneManager)->SetPlayerPosition(pos);
 
-	/*if (thieves_packet_manager->GetDirection() == 1 || thieves_packet_manager->GetDirection() == 2)
-	{
-		pos = thieves_packet_manager->GetForwardVec();
-	}
-	if (thieves_packet_manager->GetDirection() == 3 || thieves_packet_manager->GetDirection() == 4)
-	{
-		pos = thieves_packet_manager->GetRightVec();
-	}*/
-	
-	
+		// 캐릭터 점프
+		if (INPUT->GetButtonDown(KEY_TYPE::SPACE))
+		{
+			_jump = true;
+		}
 
-//	if (GEngine->GetThievesPacketManager()->GetVec(). )
-//	{
-		//pos = networkObj->GetPosition();
-		recv_pos = GEngine->GetThievesPacketManager()->GetVec();
+		// 캐릭터 점프
+		Jump(pos);
 
-//	}
-
-	GET_SINGLE(SceneManager)->SetPlayerPosition(recv_pos);
-
-	// 캐릭터 점프
-	if (INPUT->GetButtonDown(KEY_TYPE::SPACE))
-	{
-		_jump = true;
-	}
-
-	// 캐릭터 점프
-	Jump(pos);
-	
-	// 캐릭터 회전
-	if(_checkCameraRotation == true)
-		PlayerRotation() ;
-	
-
-	// 카메라 마우스제어 on/off (temp code)
-	if (INPUT->GetButtonDown(KEY_TYPE::L))
-	{
+		// 캐릭터 회전
 		if (_checkCameraRotation == true)
-			_checkCameraRotation = false;
-		else
-			_checkCameraRotation = true;
-	}
+			PlayerRotation();
 
-	// 카메라 캐릭터 position 일치 -> 1인칭
-	GET_SINGLE(SceneManager)->SetPlayerPosition(pos);
-	 
-	GetTransform()->SetLocalPosition(pos);
+
+		// 카메라 마우스제어 on/off (temp code)
+		if (INPUT->GetButtonDown(KEY_TYPE::L))
+		{
+			if (_checkCameraRotation == true)
+				_checkCameraRotation = false;
+			else
+				_checkCameraRotation = true;
+		}
+
+		// 카메라 캐릭터 position 일치 -> 1인칭
+		GET_SINGLE(SceneManager)->SetPlayerPosition(GEngine->GetThievesPacketManager()->GetVec());
+
+		GetTransform()->SetLocalPosition(GEngine->GetThievesPacketManager()->GetVec());
+	}
 }
+
+void PlayerInput::PlayerMove(Vec3 pos) {
+	
+
+
+}
+
+
 
 void PlayerInput::PlayerRotation()
 {

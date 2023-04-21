@@ -8,7 +8,7 @@
 #include "SceneManager.h"
 #include "Engine.h"
 #include "Scene.h"
-
+#include "server/network/network.h"
 LoginScript::LoginScript()
 {
 }
@@ -19,10 +19,15 @@ LoginScript::~LoginScript()
 
 void LoginScript::LateUpdate()
 {
-	if (INPUT->GetButton(KEY_TYPE::O))
-	{
-		GET_SINGLE(SceneManager)->SetCheckChangeScene(true);
-		GEngine->SetChangeScene(L"Game");
+	if (_start == false) {
+		if (INPUT->GetButton(KEY_TYPE::O))
+		{
+
+			Network::GetInst()->SendStartPacket();
+
+			GET_SINGLE(SceneManager)->SetCheckChangeScene(true);
+			GEngine->SetChangeScene(L"Game");
+		}
 	}
 
 	if (INPUT->GetButton(KEY_TYPE::P))

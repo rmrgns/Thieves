@@ -11,6 +11,7 @@ public:
 
 	virtual void LateUpdate() override;
 
+	void PlayerMove(Vec3);
 	void PlayerRotation();
 	void Jump(Vec3&);
 	
@@ -24,7 +25,7 @@ private:
 	char		direction = 0;
 
 	bool		_checkCameraRotation = true;
-	Vec3		recv_pos = { 0.0f,0.0f,0.0f };
+	Vec3		recv_pos;
 
 	
 

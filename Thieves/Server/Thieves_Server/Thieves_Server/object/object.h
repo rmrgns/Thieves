@@ -24,9 +24,9 @@ public:
 //		m_pos.y = f_y;
 //		m_pos.z = f_z;
 	};
-	float GetPosX()const { return m_pos.x; };
-	float GetPosY()const { return m_pos.y; };
-	float GetPosZ()const { return m_pos.z; };
+	float GetPosX()const { return posX; };
+	float GetPosY()const { return posY; };
+	float GetPosZ()const { return posZ; };
 	Vector3& GetPos() { return m_pos; };
 
 	int GetID()const { return m_id; };
@@ -35,9 +35,9 @@ public:
 	void SetID(int val) { m_id = val; };
 	void SetType(OBJ_TYPE val) { m_type = val; };
 
-	float SetPosX(float val) { m_pos.x = val; };
-	float SetPosY(float val) { m_pos.y = val; };
-	float SetPosZ(float val) { m_pos.z = val; };
+	void SetPosX(float val) { posX = val; };
+	void SetPosY(float val) { posY = val; };
+	void SetPosZ(float val) { posZ = val; };
 	void SetPos(const Vector3& val) { m_pos = val; };
 
 
@@ -77,13 +77,9 @@ protected:
 	int m_id;
 	OBJ_TYPE m_type;
 	Vector3 m_pos;
-
+	
 
 //	OBJ_TYPE m_type;
-
-	/*float	s_x, s_y, s_z;
-	float	f_x, f_y, f_z;
-	float	r_x, r_y, r_z;*/
 	float	posX, posY, posZ;
 
 	//char direction;

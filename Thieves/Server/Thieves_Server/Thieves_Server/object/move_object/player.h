@@ -11,7 +11,7 @@ public:
         m_last_move_time = 0;
         m_type = OBJ_TYPE::OT_PLAYER;
         m_state = STATE::ST_FREE;
-        m_room_id = 1;
+        m_room_id = 0;
 
     }
     virtual ~Player() = default;
