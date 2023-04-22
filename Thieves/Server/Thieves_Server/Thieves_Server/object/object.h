@@ -24,9 +24,9 @@ public:
 //		m_pos.y = f_y;
 //		m_pos.z = f_z;
 	};
-	float GetPosX()const { return posX; };
-	float GetPosY()const { return posY; };
-	float GetPosZ()const { return posZ; };
+	float GetPosX()const { return m_pos.x; };
+	float GetPosY()const { return m_pos.y; };
+	float GetPosZ()const { return m_pos.z; };
 	Vector3& GetPos() { return m_pos; };
 
 	int GetID()const { return m_id; };
@@ -35,9 +35,9 @@ public:
 	void SetID(int val) { m_id = val; };
 	void SetType(OBJ_TYPE val) { m_type = val; };
 
-	void SetPosX(float val) { posX = val; };
-	void SetPosY(float val) { posY = val; };
-	void SetPosZ(float val) { posZ = val; };
+	void SetPosX(float val) { m_pos.x = val; };
+	void SetPosY(float val) { m_pos.y = val; };
+	void SetPosZ(float val) { m_pos.z = val; };
 	void SetPos(const Vector3& val) { m_pos = val; };
 
 
@@ -77,12 +77,8 @@ protected:
 	int m_id;
 	OBJ_TYPE m_type;
 	Vector3 m_pos;
-	
-
-//	OBJ_TYPE m_type;
-	float	posX, posY, posZ;
-
-	//char direction;
+	// 회전 방향 데이터
+	Vector3 m_rot;
 
 
 };

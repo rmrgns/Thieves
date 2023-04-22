@@ -335,36 +335,45 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 	//std::cout << "MOVE ¹ÞÀ½" << std::endl;
 	cs_packet_move* packet = reinterpret_cast<cs_packet_move*>(p);
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
-	std::cout << cl->GetID() << ":  Packet pos :" << packet->posX << ", look : " << packet->vecX << std::endl;
+	std::cout << cl->GetID() << "pos : " << cl->GetPos() << "look : " << packet->vecX << std::endl;
 	
 	// 
 	if (packet->direction == 1)
 	{
-		packet->posX +=  packet->vecX * _speed * packet->deltaTime;
-		packet->posZ +=  packet->vecZ * _speed * packet->deltaTime;
+		// 1¹ø
+		cl->SetPosX(cl->GetPosX() + packet->vecX * _speed * packet->deltaTime);
+		cl->SetPosZ(cl->GetPosZ() + packet->vecZ * _speed * packet->deltaTime);
 	}
 	if (packet->direction == 2)
 	{
-		packet->posX -= packet->vecX * _speed * packet->deltaTime;
-		packet->posZ -= packet->vecZ * _speed * packet->deltaTime;
+		cl->SetPosX(cl->GetPosX() - packet->vecX * _speed * packet->deltaTime);
+		cl->SetPosZ(cl->GetPosZ() - packet->vecZ * _speed * packet->deltaTime);
 	}
 	if (packet->direction == 3)
 	{
-		packet->posX -= packet->vecX * _speed * packet->deltaTime;
-		packet->posZ -= packet->vecZ * _speed * packet->deltaTime;
+		// ·è º¤ÅÍ¿Í ¾÷ º¤ÅÍ¸¦ ¿ÜÀûÇÏ¸é right º¤ÅÍ°¡ »ý¼ºµÊ.
+		// ´ÜÀ§ º¤ÅÍ¿Í ´ÜÀ§ º¤ÅÍ »çÀÌÀÇ ¿ÜÀûÀº ´ÜÀ§ º¤ÅÍÀÎ ¿ÜÀûÀÌ »ý¼ºµÊ.
+		Vector3 look = Vector3(packet->vecX, packet->vecY, packet->vecZ);
+		Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
+		Vector3 right = look.Cross(up);
+
+		cl->SetPosX(cl->GetPosX() - right.x * _speed * packet->deltaTime);
+		cl->SetPosZ(cl->GetPosZ() - right.z * _speed * packet->deltaTime);
 	}
 	if (packet->direction == 4)
 	{
-		packet->posX += packet->vecX * _speed * packet->deltaTime;
-		packet->posZ += packet->vecZ * _speed * packet->deltaTime;
+		// ·è º¤ÅÍ¿Í ¾÷ º¤ÅÍ¸¦ ¿ÜÀûÇÏ¸é right º¤ÅÍ°¡ »ý¼ºµÊ.
+		// ´ÜÀ§ º¤ÅÍ¿Í ´ÜÀ§ º¤ÅÍ »çÀÌÀÇ ¿ÜÀûÀº ´ÜÀ§ º¤ÅÍÀÎ ¿ÜÀûÀÌ »ý¼ºµÊ.
+		Vector3 look = Vector3(packet->vecX, packet->vecY, packet->vecZ);
+		Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
+		Vector3 right = look.Cross(up);
+
+		cl->SetPosX(cl->GetPosX() + right.x * _speed * packet->deltaTime);
+		cl->SetPosZ(cl->GetPosZ() + right.z * _speed * packet->deltaTime);
 	}
 	//Vector3 pos{ packet->posX,packet->posY,packet->posZ};
 	
-	cl->SetPosX(packet->posX);
-	cl->SetPosY(packet->posY);
-	cl->SetPosZ(packet->posZ);
 	
-	SendMoveTestPacket(c_id);
 
 //	if (isnan(cl->GetPosX()) || isnan(cl->GetPosY()) || isnan(cl->GetPosZ()))return;
 
@@ -495,6 +504,7 @@ void PacketManager::TestProcessGameStart(int c_id, unsigned char* p)
 		//cout << id << endl;
 		//SendMatchingOK(id);
 	}
+
 	room->Init(player->GetMatchUserSize());
 	for (auto obj_id : match_list)
 		room->EnterRoom(obj_id);

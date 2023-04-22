@@ -36,6 +36,7 @@ const char CS_PACKET_HIT = 6;				// 피격
 const char CS_PACKET_GAME_START = 7;		// 게임 시작
 const char CS_PACKET_MATCHING = 8;
 const char CS_PACKET_TEST = 9;
+
 // SC
 const char SC_PACKET_SIGN_IN_OK = 1;		// 로그인 OK
 const char SC_PACKET_SIGN_UP_OK = 2;		// 가입 OK
@@ -56,6 +57,8 @@ const char SC_PACKET_TEST = 16;
 const char SC_PACKET_OBJ_INFO = 17;		// OBJ 정보
 //#pragma pack (push, 1)
 
+// 클라이언트 -> 서버로 보내는 패킷은 어떤 키를 얼마나 눌렀는지에 대해서만 보내주면 된다.
+// 어차피 서버에서 위치를 계산하여 클라이언트로 보내줄 것이기 때문에 문제가 없다.
 struct cs_packet_move {
 	unsigned char size;
 	char	type;
@@ -65,7 +68,7 @@ struct cs_packet_move {
 	//	float	f_x, f_y, f_z;
 	//	float	r_x, r_y, r_z;
 	//	float	l_x, l_y, l_z;
-	float	posX, posY, posZ;	// 위치 vec
+	//float	posX, posY, posZ;	// 위치 vec
 	float	vecX, vecY, vecZ;	// look vec
 	float	deltaTime;
 };
@@ -121,6 +124,10 @@ struct sc_packet_sign_up_ok {
 	unsigned char size;
 	char type;
 };
+
+// 서버 -> 클라의 경우 포지션과 룩 벡터 모두 보내줘야 하기는 한다.
+// 자기 자신의 경우는 그냥 룩 벡터에 대해서는 적용시키지 않도록 하기만 하면 된다.
+// 이미 id 데이터를 가지고 있기 때문에 이 부분은 문제가 없을 것이다.
 struct sc_packet_move {
 	unsigned char size;
 	char	type;
@@ -131,6 +138,7 @@ struct sc_packet_move {
 		//float	f_x, f_y, f_z;
 		//float	r_x, r_y, r_z;
 	float	posX, posY, posZ;
+	float   vecX, vecY, vecZ;
 };
 
 

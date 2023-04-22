@@ -21,10 +21,6 @@ void ThievesSendManager::SendMovePacket(const SOCKET& s_socket, char direction,
 	packet.size = sizeof(packet);
 	packet.type = CS_PACKET_MOVE;
 
-	packet.posX = pos.x;
-	packet.posY = pos.y;
-	packet.posZ = pos.z;
-
 	packet.vecX = vec.x;
 	packet.vecY = vec.y;
 	packet.vecZ = vec.z;
