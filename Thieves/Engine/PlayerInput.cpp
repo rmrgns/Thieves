@@ -154,15 +154,15 @@ void PlayerInput::Jump(Vec3& pos)
 			return;
 		}
 		_jumpCount += DELTA_TIME;
-		if (_jumpCount < 0.5f)
+		if (_jumpCount < 1.f)
 		{
 			
-			_jumpSpeed -= 5.f;
+			_jumpSpeed -= 300.f * DELTA_TIME;
 			pos += GetTransform()->GetUp() * _jumpSpeed * DELTA_TIME;
 		}
-		else if(_jumpCount < 1.f)
+		else if(_jumpCount < 2.f)
 		{
-			_jumpSpeed += 5.f;
+			_jumpSpeed += 300.f * DELTA_TIME;
 			pos -= GetTransform()->GetUp() * _jumpSpeed * DELTA_TIME;
 		}
 		else
