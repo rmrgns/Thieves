@@ -56,6 +56,5 @@ private:
 
 
 	Vec3 _playerPosition;
-
 };
 

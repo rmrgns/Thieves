@@ -178,9 +178,7 @@ void PacketManager::SendMovePacket(int c_id, int mover)
 
 	packet.recv_bool = true;
 
-	std::cout << "SEND" << mover << ":  Packet x :" << packet.posX << ", z : " << packet.posZ << std::endl;
-
-
+	std::cout << "SEND " << mover << " :  Packet x :" << packet.posX << ", z : " << packet.posZ << " bool : " << packet.recv_bool << std::endl;
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(mover);
 
 	cl->DoSend(sizeof(packet), &packet);
@@ -378,8 +376,8 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 		Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
 		Vector3 right = look.Cross(up);
 
-		cl->SetPosX(cl->GetPosX() - right.x * _speed * packet->deltaTime);
-		cl->SetPosZ(cl->GetPosZ() - right.z * _speed * packet->deltaTime);
+		cl->SetPosX(cl->GetPosX() + right.x * _speed * packet->deltaTime);
+		cl->SetPosZ(cl->GetPosZ() + right.z * _speed * packet->deltaTime);
 	}
 	if (packet->direction == 4)
 	{
@@ -389,8 +387,8 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 		Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
 		Vector3 right = look.Cross(up);
 
-		cl->SetPosX(cl->GetPosX() + right.x * _speed * packet->deltaTime);
-		cl->SetPosZ(cl->GetPosZ() + right.z * _speed * packet->deltaTime);
+		cl->SetPosX(cl->GetPosX() - right.x * _speed * packet->deltaTime);
+		cl->SetPosZ(cl->GetPosZ() - right.z * _speed * packet->deltaTime);
 	}
 
 

@@ -28,34 +28,35 @@ void PlayerInput::LateUpdate()
 	if (INPUT->GetButton(KEY_TYPE::W))
 	{
 		direction = 1;
-		pos += GetTransform()->GetLook() * _speed * DELTA_TIME;
+		//pos += GetTransform()->GetLook() * _speed * DELTA_TIME;
 		Network::GetInst()->SendMovePacket(direction, recv_pos,
 			GetTransform()->GetLook(), DELTA_TIME);
 	}
 	if (INPUT->GetButton(KEY_TYPE::S))
 	{
 		direction = 2;
-		pos -= GetTransform()->GetLook() * _speed * DELTA_TIME;
+		//pos -= GetTransform()->GetLook() * _speed * DELTA_TIME;
 		Network::GetInst()->SendMovePacket(direction, recv_pos,
 			GetTransform()->GetLook(), DELTA_TIME);
 	}
 	if (INPUT->GetButton(KEY_TYPE::A))
 	{
 		direction = 3;
-		pos -= GetTransform()->GetRight() * _speed * DELTA_TIME;
+		//pos += GetTransform()->GetRight() * _speed * DELTA_TIME;
 		Network::GetInst()->SendMovePacket(direction, recv_pos,
 			GetTransform()->GetLook(), DELTA_TIME);
 	}
 	if (INPUT->GetButton(KEY_TYPE::D))
 	{
 		direction = 4;
-		pos += GetTransform()->GetRight() * _speed * DELTA_TIME;
+		//pos -= GetTransform()->GetRight() * _speed * DELTA_TIME;
 		Network::GetInst()->SendMovePacket(direction, recv_pos,
 			GetTransform()->GetLook(), DELTA_TIME);
 	}
 
-	bool bRecv = GEngine->GetThievesPacketManager()->GetRecv();
-	PlayerRecvPos(bRecv);
+//bool bRecv = GEngine->GetThievesPacketManager()->GetRecv();
+	GetTransform()->SetLocalPosition(GET_SINGLE(SceneManager)->GetPlayerPosition());
+//PlayerRecvPos(bRecv);
 
 }
 
