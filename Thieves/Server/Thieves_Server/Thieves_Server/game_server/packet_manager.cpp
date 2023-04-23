@@ -243,6 +243,8 @@ void PacketManager::SendObjInfo(int c_id, int obj_id)
 	packet.x = obj->GetPosX();
 	packet.y = obj->GetPosY();
 	packet.z = obj->GetPosZ();
+
+	std::cout << packet.id << " " << packet.size << " " << packet.type << " " << packet.x << " " << packet.y << " " << packet.z << endl;
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 	cl->DoSend(sizeof(packet), &packet);
 
@@ -350,12 +352,14 @@ void PacketManager::ProcessAttack(int c_id, unsigned char* p)
 
 void PacketManager::ProcessMove(int c_id, unsigned char* p)
 {
-	//std::cout << "MOVE 받음" << std::endl;
+	std::cout << endl;
+	std::cout << "MOVE 받음" << std::endl;
+	
 	cs_packet_move* packet = reinterpret_cast<cs_packet_move*>(p);
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 	//std::cout << cl->GetID() << "pos : " << cl->GetPos() << "look : " << packet->vecX << std::endl;
 	
-	// 
+	//  
 	if (packet->direction == 1)
 	{
 		// 1번

@@ -21,7 +21,7 @@ void LoginScript::LateUpdate()
 {
 	if (_start == false) 
 	{
-		if (INPUT->GetButton(KEY_TYPE::O))
+		if (INPUT->GetButtonDown(KEY_TYPE::O))
 		{
 			_start = true;
 			Network::GetInst()->SendStartPacket();
@@ -30,7 +30,7 @@ void LoginScript::LateUpdate()
 		}
 	}
 
-	if (INPUT->GetButton(KEY_TYPE::P))
+	if (INPUT->GetButtonDown(KEY_TYPE::P))
 	{
 		INPUT->InitUserId();
 		GET_SINGLE(SceneManager)->SetCheckChangeScene(true);
