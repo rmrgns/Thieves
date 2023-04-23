@@ -55,7 +55,7 @@ void PlayerInput::LateUpdate()
 	}
 
 	bool bRecv = GEngine->GetThievesPacketManager()->GetRecv();
-	//PlayerRecvPos(bRecv);
+	PlayerRecvPos(bRecv);
 
 }
 

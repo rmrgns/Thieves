@@ -28,14 +28,6 @@ public:
 
 	void Reset();
 
-	//float	s_x, s_y, s_z;
-	//float	f_x, f_y, f_z;
-	//float	r_x, r_y, r_z;
-//	Vec3 GetForwardVec() { return f_pos; };
-//	Vec3 GetRightVec() { return r_pos; };
-//	char GetDirection() { return direction; };
-
-
 	Vec3 GetVec(){ return recv_pos; }
 
 	void SetVecX(float p_posx) { recv_pos.x = p_posx; }

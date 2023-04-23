@@ -41,6 +41,8 @@ void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
 	SetVecZ(packet->posZ);
 	SetRecv(packet->recv_bool);
 
+	
+
 	if (mover != m_obj_map.end())
 	{
 		//if (mover->second->GetIsActive() == false)return;
@@ -53,7 +55,8 @@ void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
 
 		GET_SINGLE(SceneManager)->SetPlayerPosition(recv_pos);
 		
-		PlayerInput::PlayerMove(recv_pos)
+	
+
 		//PlayerInput::PlayerMove(recv_pos);
 	}
 
