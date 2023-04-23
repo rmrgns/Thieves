@@ -125,6 +125,10 @@ private:
 	FbxImporter* _importer = nullptr;
 	wstring			_resourceDirectory;
 
+	// UV가 중첩되어 있어 분리된 정점들에 대한 데이터를 모아둠.
+	// 첫번째는 몇번째 정점인지, 두번째는 몇번째에 새로 생긴 정짐이 있는지에 대해 넣음.
+	vector<pair<int, int>> overlappedIndex;
+
 	vector<FbxMeshInfo>					_meshes;
 	vector<shared_ptr<FbxBoneInfo>>		_bones;
 	vector<shared_ptr<FbxAnimClipInfo>>	_animClips;
