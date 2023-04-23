@@ -22,16 +22,27 @@ void Text::Update()
 		wstring text = L"���ϵ� �α��� ȭ��";
 		SetText(text, 400.f, 200.f, 1.f, 1.f);
 		
-		SetTextInfo(1);
-		wstring text1 = L"���m D3D11On12 ������Ʈ �Դϴ�.";
-		SetText(text1, 0.f, 0.f, 1.f, 1.f);
+
+		
+
 	
 	}
 	else if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
 	{
-		Vec3 pos = GEngine->GetThievesPacketManager()->GetVec();
+		/*Vec3 pos = GEngine->GetThievesPacketManager()->GetVec();
 		wstring text2 = L"x:" + to_wstring(int(pos.x)) + L" y:" + to_wstring(int(pos.y)) + L" z:" + to_wstring(int(pos.z));
-		SetText(text2, 0.f, 0.f, 1.f, 1.f);
+		SetText(text2, 0.f, 0.f, 1.f, 1.f);*/
+
+		if (GEngine->GetThievesPacketManager()->GetRecv()) {
+			SetTextInfo(1);
+			wstring text1 = L"TRUE";
+			SetText(text1, 0.f, 0.f, 1.f, 1.f);
+		}
+		else {
+			SetTextInfo(1);
+			wstring text1 = L"FALSE";
+			SetText(text1, 0.f, 0.f, 1.f, 1.f);
+		}
 	}
 } 
 

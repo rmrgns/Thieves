@@ -137,8 +137,8 @@ struct sc_packet_move {
 		//float	s_x, s_y, s_z;
 		//float	f_x, f_y, f_z;
 		//float	r_x, r_y, r_z;
+	bool	recv_bool;
 	float	posX, posY, posZ;
-	float   vecX, vecY, vecZ;
 };
 
 
@@ -206,5 +206,6 @@ struct sc_packet_obj_info {
 	int		id;
 	char	type;
 	float	x, y, z;
+	bool	start;
 	char	object_type;
 };

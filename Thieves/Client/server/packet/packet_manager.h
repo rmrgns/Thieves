@@ -7,8 +7,12 @@
 #include<functional>
 #include<unordered_map>
 
+class ThievesPacketManager;
+
 class PacketManager
 {
+
+
 public:
 	PacketManager();
 	virtual ~PacketManager();
@@ -24,6 +28,12 @@ public:
 	void SetID(int val) { m_id = val; }
 	int GetPrevSize() { return m_prev_size; }
 	void SetPrevSize(int val) { m_prev_size = val; }
+
+	//virtual Vec3 GetVec() {};
+	//virtual bool GetRecv() {};
+
+	
+
 
 protected:
 	bool m_stop_recv;

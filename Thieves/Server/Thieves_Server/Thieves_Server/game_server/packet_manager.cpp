@@ -175,6 +175,9 @@ void PacketManager::SendMovePacket(int c_id, int mover)
 	packet.posY = p->GetPosY();
 	packet.posZ = p->GetPosZ();
 
+
+	packet.recv_bool = true;
+
 	std::cout << "SEND" << mover << ":  Packet x :" << packet.posX << ", z : " << packet.posZ << std::endl;
 
 

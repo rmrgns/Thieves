@@ -6,6 +6,8 @@
 #include "SceneManager.h"
 #include "Engine.h"
 #include "server/network/network.h"
+#include "ptr.h"
+#include "server/packet/packet_manager.h"
 
 PlayerInput::PlayerInput()
 {
@@ -52,47 +54,54 @@ void PlayerInput::LateUpdate()
 			GetTransform()->GetLook(), DELTA_TIME);
 	}
 
+	bool bRecv = GEngine->GetThievesPacketManager()->GetRecv();
+	PlayerRecvPos(bRecv);
+}
 
-	if (pos != GEngine->GetThievesPacketManager()->GetVec()) {
-		pos = GEngine->GetThievesPacketManager()->GetVec();
+void PlayerInput::PlayerRecvPos( bool bRecv) {
 
-
-		GET_SINGLE(SceneManager)->SetPlayerPosition(pos);
-
-		// 캐릭터 점프
-		if (INPUT->GetButtonDown(KEY_TYPE::SPACE))
-		{
-			_jump = true;
-		}
-
-		// 캐릭터 점프
-		Jump(pos);
-
-		// 캐릭터 회전
-		if (_checkCameraRotation == true)
-			PlayerRotation();
-
-
-		// 카메라 마우스제어 on/off (temp code)
-		if (INPUT->GetButtonDown(KEY_TYPE::L))
-		{
-			if (_checkCameraRotation == true)
-				_checkCameraRotation = false;
-			else
-				_checkCameraRotation = true;
-		}
-
-		// 카메라 캐릭터 position 일치 -> 1인칭
-		GET_SINGLE(SceneManager)->SetPlayerPosition(GEngine->GetThievesPacketManager()->GetVec());
-
-		GetTransform()->SetLocalPosition(GEngine->GetThievesPacketManager()->GetVec());
+	if (bRecv == true) {
+		bRecv = false;
+		PlayerInput::PlayerMove();
 	}
 }
 
-void PlayerInput::PlayerMove(Vec3 pos) {
-	
+
+void PlayerInput::PlayerMove() {
 
 
+
+	Vec3 pos = GEngine->GetThievesPacketManager()->GetVec();
+
+	GET_SINGLE(SceneManager)->SetPlayerPosition(pos);
+
+	// 캐릭터 점프
+	if (INPUT->GetButtonDown(KEY_TYPE::SPACE))
+	{
+		_jump = true;
+	}
+
+	// 캐릭터 점프
+	Jump(pos);
+
+	// 캐릭터 회전
+	if (_checkCameraRotation == true)
+		PlayerRotation();
+
+
+	// 카메라 마우스제어 on/off (temp code)
+	if (INPUT->GetButtonDown(KEY_TYPE::L))
+	{
+		if (_checkCameraRotation == true)
+			_checkCameraRotation = false;
+		else
+			_checkCameraRotation = true;
+	}
+
+	// 카메라 캐릭터 position 일치 -> 1인칭
+	GET_SINGLE(SceneManager)->SetPlayerPosition(GEngine->GetThievesPacketManager()->GetVec());
+
+	GetTransform()->SetLocalPosition(GEngine->GetThievesPacketManager()->GetVec());
 }
 
 

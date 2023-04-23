@@ -5,6 +5,7 @@
 #include "server/network/network_obj_manager.h"
 #include "server/network/network_move_object.h"
 #include "thieves_server/game_info.h"
+#include "PlayerInput.h"
 
 
 class ThievesPacketManager : public PacketManager 
@@ -35,18 +36,20 @@ public:
 //	char GetDirection() { return direction; };
 
 
-	Vec3 GetVec() { return recv_pos; };
+	Vec3 GetVec(){ return recv_pos; }
 
-	void SetVecX(float p_posx) { recv_pos.x = p_posx; };
-	void SetVecY(float p_posy) { recv_pos.y = p_posy; };
-	void SetVecZ(float p_posz) { recv_pos.z = p_posz; };
+	void SetVecX(float p_posx) { recv_pos.x = p_posx; }
+	void SetVecY(float p_posy) { recv_pos.y = p_posy; }
+	void SetVecZ(float p_posz) { recv_pos.z = p_posz; }
 	
+	Vec3 GetPlayerInput() { return recv_pos; }
+	bool GetRecv() {return bRecv; }
+	void SetRecv(bool bool_recv) { bRecv = bool_recv; }
+
 private:
 	std::unordered_map<int, shared_ptr<NetworkMoveObj>>m_obj_map;
 	GameInfo m_game_info;
-	//Vec3 f_pos;
-	//Vec3 _pos = { 999, 999, 999 };
-	Vec3 recv_pos;
 
-	//char direction;
+	bool bRecv;
+	Vec3 recv_pos;
 };

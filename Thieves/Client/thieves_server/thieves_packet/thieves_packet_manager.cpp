@@ -13,30 +13,17 @@
 #include "Transform.h"
 #include "Engine.h"
 #include "Input.h"
+#include "SceneManager.h"
+
 using namespace std;
 using namespace client_fw;
 
 void ThievesPacketManager::Init()
 {
 	m_obj_map = unordered_map<int, shared_ptr<NetworkMoveObj>>();
-	//TEST
-	//RegisterRecvFunction(SC_PACKET_TEST, [this](int c_id, unsigned char* p) {ProcessTest(c_id, p); });
-	
-	
+
 	RegisterRecvFunction(SC_PACKET_MOVE, [this](int c_id, unsigned char* p) {ProcessMove(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_OBJ_INFO, [this](int c_id, unsigned char* p) {ProcessObjInfo(c_id, p); });
-
-}
-
-void ThievesPacketManager::ProcessTest(int c_id, unsigned char* p)
-{
-	sc_packet_test* packet = reinterpret_cast<sc_packet_test*>(p);
-	
-	
-	//PacketHelper::RegisterPacketEventToActor(CreateSPtr<TestMessageEventInfo>())
-	//PacketHelper::RegisterPacketEventToActor(CreateSPtr<thieves::TestMessageEventInfo>(HashCode("testmove"),  packet->x, packet->y, packet->z), packet->id);
-	//Vec3 recv_pos{ packet->x,packet->y,packet->z };
-
 
 }
 
@@ -52,6 +39,7 @@ void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
 	SetVecX(packet->posX);
 	SetVecY(packet->posY);
 	SetVecZ(packet->posZ);
+	SetRecv(packet->recv_bool);
 
 	if (mover != m_obj_map.end())
 	{
@@ -61,7 +49,14 @@ void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
 		//PacketHelper::RegisterPacketEventToActor(std::make_shared<MoveObjectMessageEventInfo>(HashCode("move object"), mover->second->GetPosition()), packet->id);
 
 		mover->second->SetPosition(move(recv_pos));
+		
+
+		GET_SINGLE(SceneManager)->SetPlayerPosition(recv_pos);
+		
+		//PlayerInput::PlayerMove(recv_pos);
 	}
+
+	
 	//_pos.x = packet->posX;
 	//_pos.y = packet->posY;
 	//_pos.z = packet->posZ;

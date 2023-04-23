@@ -11,12 +11,14 @@ public:
 
 	virtual void LateUpdate() override;
 
-	void PlayerMove(Vec3);
+	void PlayerRecvPos(bool);
+	void PlayerMove();
 	void PlayerRotation();
 	void Jump(Vec3&);
 	
 
 private:
+
 	float		_speed = 200.f;
 	float		_mouseRotateSpeed = 0.5f;
 	int			_jumpCount = 0;
@@ -25,8 +27,7 @@ private:
 	char		direction = 0;
 
 	bool		_checkCameraRotation = true;
-	Vec3		recv_pos;
-
 	
+	Vec3		recv_pos;
 
 };
