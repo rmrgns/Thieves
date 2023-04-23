@@ -3,6 +3,7 @@
 #include "Object.h"
 
 class Transform;
+class Physics;
 class MeshRenderer;
 class Camera;
 class Light;
@@ -36,6 +37,7 @@ public:
 	shared_ptr<BaseCollider> GetCollider();
 	shared_ptr<Animator> GetAnimator();
 	shared_ptr<TextObject> GetTextObject();
+	shared_ptr<Physics> GetPhysics();
 
 	void AddComponent(shared_ptr<Component> component);
 

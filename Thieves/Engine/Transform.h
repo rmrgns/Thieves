@@ -35,6 +35,12 @@ public:
 	static bool CloseEnough(const float& a, const float& b, const float& epsilon = std::numeric_limits<float>::epsilon());
 	static Vec3 DecomposeRotationMatrix(const Matrix& rotation);
 
+	// 가속도 기능
+	void AccelerateLook();
+	void AccelerateRight();
+	Vec3 GetVelocity() { return _vel; }
+	void ResetAccelerateLook() { _vel.x = 0.f; _forceDirection.x = 0.f; }
+	void ResetAccelerateRight() { _vel.z = 0.f; _forceDirection.z = 0.f; }
 public:
 	void SetParent(shared_ptr<Transform> parent) { _parent = parent; }
 	weak_ptr<Transform> GetParent() { return _parent; }
@@ -49,5 +55,9 @@ private:
 	Matrix _matWorld = {};
 
 	weak_ptr<Transform> _parent;
+
+	// 가속도 기능
+	Vec3		_vel;
+	Vec3		_forceDirection;
 };
 

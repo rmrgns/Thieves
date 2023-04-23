@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "GameObject.h"
 #include "Transform.h"
+#include "Physics.h"
 #include "MeshRenderer.h"
 #include "Camera.h"
 #include "Light.h"
@@ -146,6 +147,12 @@ shared_ptr<TextObject> GameObject::GetTextObject()
 {
 	shared_ptr<Component> component = GetFixedComponent(COMPONENT_TYPE::TEXTOBJECT);
 	return static_pointer_cast<TextObject>(component);
+}
+
+shared_ptr<Physics> GameObject::GetPhysics()
+{
+	shared_ptr<Component> component = GetFixedComponent(COMPONENT_TYPE::PHYSICS);
+	return static_pointer_cast<Physics>(component);
 }
 
 void GameObject::AddComponent(shared_ptr<Component> component)

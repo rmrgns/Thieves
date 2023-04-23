@@ -16,15 +16,16 @@ PlayerCamera::~PlayerCamera()
 
 void PlayerCamera::LateUpdate()
 {
-	Vec3 pos = GetTransform()->GetLocalPosition();
-	pos = GET_SINGLE(SceneManager)->GetPlayerPosition();
+	//Vec3 pos = GetTransform()->GetLocalPosition();
+	Vec3 pos = GET_SINGLE(SceneManager)->GetPlayerPosition();
 	pos.y += 125.f;
-	// Ä«¸Þ¶ó ¸¶¿ì½ºÁ¦¾î
+	// Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ì½ºï¿½ï¿½ï¿½ï¿½
 	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME && _checkCameraRotation == true)
 	{
 		CameraRotation();
 	}
-	// Ä«¸Þ¶ó ¸¶¿ì½ºÁ¦¾î on/off (temp code)
+
+	// Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ì½ºï¿½ï¿½ï¿½ï¿½ on/off (temp code)
 	if (INPUT->GetButtonDown(KEY_TYPE::L))
 	{
 		if (_checkCameraRotation == true)
@@ -34,28 +35,29 @@ void PlayerCamera::LateUpdate()
 	}
 
 	
+
 	GetTransform()->SetLocalPosition(pos);
 }
 
 void PlayerCamera::CameraRotation()
 {
-	const POINT& point = INPUT->GetMousePos();	// ÇöÀç ¸¶¿ì½ºÁÂÇ¥¸¦ pointº¯¼ö¿¡ ÀúÀå
-	float mouseX = static_cast<float>(point.x);	// pointº¯¼öÀÇ °ªÀ» float°ªÀ¸·Î º¯°æ
-	float mouseY = static_cast<float>(point.y);
-
+	const POINT& point = INPUT->GetMousePos();	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ì½ºï¿½ï¿½Ç¥ï¿½ï¿½ pointï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	POINT WindowCenter = GEngine->GetWindowCenter();
-	SetCursorPos(WindowCenter.x, WindowCenter.y);
-
 	POINT ClientCenter = GEngine->GetClientCenter();
 
-	float viewMouseX = static_cast<float>(ClientCenter.x);
-	float viewMouseY = static_cast<float>(ClientCenter.y);
+	// ï¿½ß¾Ó¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ì½ºï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ floatï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	float dx = static_cast<float>(point.x - ClientCenter.x);	
+	float dy = static_cast<float>(point.y - ClientCenter.y);
+
+	// Ä¿ï¿½ï¿½ï¿½ï¿½ È­ï¿½ï¿½ ï¿½ß¾ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
+	SetCursorPos(WindowCenter.x, WindowCenter.y);
 
 	// rotation
 	Vec3 rotation = GetTransform()->GetLocalRotation();
+	rotation.x += DELTA_TIME * dy * _mouseRotateSpeed;
+	rotation.y += DELTA_TIME * dx * _mouseRotateSpeed;
 
-	rotation.x += DELTA_TIME * (mouseY - viewMouseY) * _mouseRotateSpeed;
-	rotation.y += DELTA_TIME * (mouseX - viewMouseX) * _mouseRotateSpeed;
+	// ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	if (rotation.x < -LIMIT_ROTATION)
 	{
 		rotation.x = -LIMIT_ROTATION;
@@ -64,5 +66,9 @@ void PlayerCamera::CameraRotation()
 	{
 		rotation.x = LIMIT_ROTATION;
 	}
+
+	// Ä«ï¿½Þ¶ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ rotation ï¿½ï¿½Ä¡ -> 1ï¿½ï¿½Äª
+	GET_SINGLE(SceneManager)->SetPlayerRotation(rotation);
+	
 	GetTransform()->SetLocalRotation(rotation);
 }

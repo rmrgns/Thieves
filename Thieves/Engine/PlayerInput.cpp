@@ -24,35 +24,61 @@ void PlayerInput::LateUpdate()
 	Vec3 pos = GetTransform()->GetLocalPosition();
 
 	direction = 0;
-	// Ä³¸¯ÅÍ WASDÀÌµ¿
+	// Ä³ï¿½ï¿½ï¿½ï¿½ WASDï¿½Ìµï¿½
 	if (INPUT->GetButton(KEY_TYPE::W))
 	{
 		direction = 1;
-		//pos += GetTransform()->GetLook() * _speed * DELTA_TIME;
 		Network::GetInst()->SendMovePacket(direction, recv_pos,
 			GetTransform()->GetLook(), DELTA_TIME);
+
 	}
 	if (INPUT->GetButton(KEY_TYPE::S))
 	{
 		direction = 2;
-		//pos -= GetTransform()->GetLook() * _speed * DELTA_TIME;
+
 		Network::GetInst()->SendMovePacket(direction, recv_pos,
 			GetTransform()->GetLook(), DELTA_TIME);
+
 	}
 	if (INPUT->GetButton(KEY_TYPE::A))
 	{
 		direction = 3;
-		//pos += GetTransform()->GetRight() * _speed * DELTA_TIME;
+
 		Network::GetInst()->SendMovePacket(direction, recv_pos,
 			GetTransform()->GetLook(), DELTA_TIME);
+
 	}
 	if (INPUT->GetButton(KEY_TYPE::D))
 	{
 		direction = 4;
-		//pos -= GetTransform()->GetRight() * _speed * DELTA_TIME;
+
 		Network::GetInst()->SendMovePacket(direction, recv_pos,
 			GetTransform()->GetLook(), DELTA_TIME);
 	}
+
+	// if (INPUT->GetButtonUp(KEY_TYPE::W) ||
+	// 	INPUT->GetButtonUp(KEY_TYPE::S) ||
+	// 	INPUT->GetButtonUp(KEY_TYPE::A) ||
+	// 	INPUT->GetButtonUp(KEY_TYPE::D))
+	// {
+	// 	if (INPUT->GetButtonUp(KEY_TYPE::W))
+	// 	{
+	// 		GetTransform()->ResetAccelerateLook();
+	// 	}
+	// 	if (INPUT->GetButtonUp(KEY_TYPE::S))
+	// 	{
+	// 		GetTransform()->ResetAccelerateLook();
+	// 	}
+	// 	if (INPUT->GetButtonUp(KEY_TYPE::A))
+	// 	{
+	// 		GetTransform()->ResetAccelerateRight();
+	// 	}
+	// 	if (INPUT->GetButtonUp(KEY_TYPE::D))
+	// 	{
+	// 		GetTransform()->ResetAccelerateRight();
+	// 	}
+	//
+	// }
 
 //bool bRecv = GEngine->GetThievesPacketManager()->GetRecv();
 	GetTransform()->SetLocalPosition(GET_SINGLE(SceneManager)->GetPlayerPosition());
@@ -75,21 +101,21 @@ void PlayerInput::PlayerMove() {
 
 	GET_SINGLE(SceneManager)->SetPlayerPosition(pos);
 
-	// Ä³¸¯ÅÍ Á¡ÇÁ
+	// Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	if (INPUT->GetButtonDown(KEY_TYPE::SPACE))
 	{
 		_jump = true;
 	}
 
-	// Ä³¸¯ÅÍ Á¡ÇÁ
+	// Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	Jump(pos);
 
-	// Ä³¸¯ÅÍ È¸Àü
+
 	if (_checkCameraRotation == true)
 		PlayerRotation();
 
 
-	// Ä«¸Þ¶ó ¸¶¿ì½ºÁ¦¾î on/off (temp code)
+	// Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ì½ºï¿½ï¿½ï¿½ï¿½ on/off (temp code)
 	if (INPUT->GetButtonDown(KEY_TYPE::L))
 	{
 		if (_checkCameraRotation == true)
@@ -98,18 +124,28 @@ void PlayerInput::PlayerMove() {
 			_checkCameraRotation = true;
 	}
 
-	// Ä«¸Þ¶ó Ä³¸¯ÅÍ position ÀÏÄ¡ -> 1ÀÎÄª
+	// Ä«ï¿½Þ¶ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ position ï¿½ï¿½Ä¡ -> 1ï¿½ï¿½Äª
 	GET_SINGLE(SceneManager)->SetPlayerPosition(GEngine->GetThievesPacketManager()->GetVec());
 
 	GetTransform()->SetLocalPosition(GEngine->GetThievesPacketManager()->GetVec());
+
+	Vec3 rotation;
+	rotation.y = GET_SINGLE(SceneManager)->GetPlayerRotation().y;
+	
+	// Ä«ï¿½Þ¶ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ position ï¿½ï¿½Ä¡ -> 1ï¿½ï¿½Äª
+	GET_SINGLE(SceneManager)->SetPlayerPosition(pos);
+	 
+	GetTransform()->SetLocalRotation(rotation);
+	GetTransform()->SetLocalPosition(pos);
+
 }
 
 
 
 void PlayerInput::PlayerRotation()
 {
-	const POINT& point = INPUT->GetMousePos();	// ÇöÀç ¸¶¿ì½ºÁÂÇ¥¸¦ pointº¯¼ö¿¡ ÀúÀå
-	float mouseX = static_cast<float>(point.x);	// pointº¯¼öÀÇ °ªÀ» float°ªÀ¸·Î º¯°æ
+	const POINT& point = INPUT->GetMousePos();	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ì½ºï¿½ï¿½Ç¥ï¿½ï¿½ pointï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	float mouseX = static_cast<float>(point.x);	// pointï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ floatï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	//float mouseY = static_cast<float>(point.y);
 
 	POINT WindowCenter = GEngine->GetWindowCenter();
@@ -133,15 +169,22 @@ void PlayerInput::Jump(Vec3& pos)
 {
 	if (_jump == true)
 	{
-		if (_jumpCount < 60)
+		if (pos.y < 0)
 		{
-			_jumpCount++;
+			pos.y = 0;
+			_jumpCount = 0;
+			_jump = false;
+			return;
+		}
+		_jumpCount += DELTA_TIME;
+		if (_jumpCount < 0.5f)
+		{
+			
 			_jumpSpeed -= 5.f;
 			pos += GetTransform()->GetUp() * _jumpSpeed * DELTA_TIME;
 		}
-		else if(_jumpCount < 120)
+		else if(_jumpCount < 1.f)
 		{
-			_jumpCount++;
 			_jumpSpeed += 5.f;
 			pos -= GetTransform()->GetUp() * _jumpSpeed * DELTA_TIME;
 		}
@@ -149,6 +192,7 @@ void PlayerInput::Jump(Vec3& pos)
 		{
 			_jumpCount = 0;
 			_jump = false;
+			pos.y = 0;
 		}
 	}
 }
