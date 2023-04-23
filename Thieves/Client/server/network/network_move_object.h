@@ -46,7 +46,9 @@ public:
 	void SetType(const NW_OBJ_TYPE val) { m_type = val; }
 	const NW_OBJ_TYPE GetType()const { return m_type; }
 
-	bool m_is_active = true;
+	bool GetIsActive() { return m_is_active; }
+	void SetIsActive(bool val) { m_is_active = val; }
 private:
 	NW_OBJ_TYPE m_type;
+	bool m_is_active = true;
 };

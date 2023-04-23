@@ -51,6 +51,9 @@
     <Filter Include="소스 파일\server\event">
       <UniqueIdentifier>{0b1616fc-41ab-4410-b299-0d1e31a54de8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\thieves_server\object\core">
+      <UniqueIdentifier>{7c9fe49d-932e-42f0-ae98-d1d91d300572}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -169,9 +172,6 @@
     <ClInclude Include="thieves_server\thieves_message\thieves_message_event_info.h">
       <Filter>소스 파일\thieves_server\thieves_message</Filter>
     </ClInclude>
-    <ClInclude Include="player.h">
-      <Filter>소스 파일\thieves_server\object</Filter>
-    </ClInclude>
     <ClInclude Include="message_event.h">
       <Filter>소스 파일\server\message</Filter>
     </ClInclude>
@@ -181,6 +181,21 @@
     <ClInclude Include="NetworkManager.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
+<<<<<<< Updated upstream
+=======
+    <ClInclude Include="send_helper.h">
+      <Filter>소스 파일\server\send_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="actor_manager.h">
+      <Filter>소스 파일\thieves_server\object\core</Filter>
+    </ClInclude>
+    <ClInclude Include="actor.h">
+      <Filter>소스 파일\thieves_server\object\core</Filter>
+    </ClInclude>
+    <ClInclude Include="base_object.h">
+      <Filter>소스 파일\thieves_server\object</Filter>
+    </ClInclude>
+>>>>>>> Stashed changes
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -208,11 +223,23 @@
     <ClCompile Include="..\Engine\Timer.cpp">
       <Filter>소스 파일\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="player.cpp">
-      <Filter>소스 파일\thieves_server\object</Filter>
-    </ClCompile>
     <ClCompile Include="message_event.cpp">
       <Filter>소스 파일\server\message</Filter>
     </ClCompile>
+<<<<<<< Updated upstream
+=======
+    <ClCompile Include="send_helper.cpp">
+      <Filter>소스 파일\server\send_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="actor.cpp">
+      <Filter>소스 파일\thieves_server\object\core</Filter>
+    </ClCompile>
+    <ClCompile Include="actor_manager.cpp">
+      <Filter>소스 파일\thieves_server\object\core</Filter>
+    </ClCompile>
+    <ClCompile Include="base_object_manager.h">
+      <Filter>소스 파일\thieves_server\object</Filter>
+    </ClCompile>
+>>>>>>> Stashed changes
   </ItemGroup>
 </Project>

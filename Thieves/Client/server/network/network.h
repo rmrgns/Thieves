@@ -37,7 +37,7 @@ private:
 	int m_prev_size = 0;
 	bool m_iswork = true;
 public:
-	Network() {};
+	Network() { };
 	~Network() {
 		closesocket(m_s_socket);
 		WSACleanup();
@@ -45,7 +45,7 @@ public:
 			worker.join();
 	};
 
-	bool Init(client_fw::UPtr<PacketManager>&& packet_manager, client_fw::UPtr<SendManager>&& send_manager);
+	bool Init(std::unique_ptr<PacketManager>&& packet_manager, std::unique_ptr<SendManager>&& send_manager);
 	bool Connect();
 
 	static void error_display(int err_no)
@@ -99,7 +99,7 @@ private:
 	}
 
 	client_fw::UPtr<PacketManager>m_packet_manager;
-	client_fw::UPtr<SendManager>m_send_manager;
+	std::unique_ptr<SendManager>m_send_manager;
 	// 이전 이동 패킷이 전송된 시점을 저장하는 변수
 	std::chrono::system_clock::time_point m_move_time;
 

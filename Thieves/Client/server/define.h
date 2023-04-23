@@ -7,7 +7,7 @@
 //
 ////
 #include"protocol.h"
-const int BUFSIZE = 2048;
+const int BUFSIZE = 4096;
 
 enum class COMP_OP {
 	OP_RECV,

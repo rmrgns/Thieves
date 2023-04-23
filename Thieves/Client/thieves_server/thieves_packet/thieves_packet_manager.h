@@ -33,18 +33,18 @@ public:
 //	char GetDirection() { return direction; };
 
 
-	Vec3 GetVec() { return recv_pos; };
+	Vec3 GetVec() { return _recv_pos; };
 
-	void SetVecX(float p_posx) { recv_pos.x = p_posx; };
-	void SetVecY(float p_posy) { recv_pos.y = p_posy; };
-	void SetVecZ(float p_posz) { recv_pos.z = p_posz; };
+	void SetVecX(float p_posx) { _recv_pos.x = p_posx; };
+	void SetVecY(float p_posy) { _recv_pos.y = p_posy; };
+	void SetVecZ(float p_posz) { _recv_pos.z = p_posz; };
 	
 private:
 	std::unordered_map<int, shared_ptr<NetworkMoveObj>>m_obj_map;
 	GameInfo m_game_info;
 	//Vec3 f_pos;
 	//Vec3 _pos = { 999, 999, 999 };
-	Vec3 recv_pos;
+	Vec3 _recv_pos;
 
 	//char direction;
 };

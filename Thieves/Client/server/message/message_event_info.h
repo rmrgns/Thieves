@@ -4,18 +4,16 @@
 
 #include<mutex>
 
-class NetworkMoveObj;
-
-class MoveObjectMessageEventInfo final :public MessageEventInfo
+class MessageEventInfo
 {
 public:
-    MoveObjectMessageEventInfo(UINT event_id, const Vec3& pos);
+	MessageEventInfo(UINT event_id)
+		: m_event_id(event_id) {}
 
-private:
-    Vec3 m_pos;
-
+protected:
+	UINT m_event_id;
 
 public:
-    const Vec3& GetObjPosition()const { return m_pos; }
-
+	UINT GetEventID() const { return m_event_id; }
 };
+}

@@ -4,7 +4,7 @@
 
 
 	class MessageEventInfo;
-	//class Actor;
+	class Actor;
 
 	/// PacketEvent는 client와 server와의 통신을 위해 보내는 Message가 필요할 때 사용할 수 있다.
 	// 사용하기 위한 방법은 RegisterPacketEventTo[X]를 통해서 message를 등록하게 되면
@@ -23,10 +23,10 @@
 	{
 	public:
 		static void RegisterPacketEventToActor(shared_ptr<MessageEventInfo>&& message, UINT id);
-		//static void RegisterPacketEventToLevel(SPtr<MessageEventInfo>&& message);
-		//static void RegisterPacketEventToServer(SPtr<MessageEventInfo>&& message);
+		static void RegisterPacketEventToLevel(shared_ptr<MessageEventInfo>&& message);
+		static void RegisterPacketEventToServer(shared_ptr<MessageEventInfo>&& message);
 
-		//static void ConnectActorToServer(const SPtr<Actor>& actor, UINT id);
-	//	static SPtr<Actor> DisconnectActorFromServer(UINT id);
+		static void ConnectActorToServer(const shared_ptr<Actor>& actor, UINT id);
+		static shared_ptr<Actor> DisconnectActorFromServer(UINT id);
 	};
 
