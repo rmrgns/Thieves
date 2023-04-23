@@ -52,7 +52,7 @@ void PlayerInput::LateUpdate()
 		//pos.z += GetTransform()->GetRight().z * _speed * DELTA_TIME;
 	}
 
-	/*if (INPUT->GetButtonUp(KEY_TYPE::W) ||
+	if (INPUT->GetButtonUp(KEY_TYPE::W) ||
 		INPUT->GetButtonUp(KEY_TYPE::S) ||
 		INPUT->GetButtonUp(KEY_TYPE::A) ||
 		INPUT->GetButtonUp(KEY_TYPE::D))
@@ -73,7 +73,7 @@ void PlayerInput::LateUpdate()
 		{
 			GetTransform()->ResetAccelerateRight();
 		}
-	}*/
+	}
 
 	Network::GetInst()->SendMovePacket(direction, pos,
 		GetTransform()->GetLook(),
@@ -109,11 +109,13 @@ void PlayerInput::LateUpdate()
 	Jump(pos);
 	
 	// 캐릭터 회전
-	PlayerRotation();
+	Vec3 rotation;
+	rotation.y = GET_SINGLE(SceneManager)->GetPlayerRotation().y;
 	
 	// 카메라 캐릭터 position 일치 -> 1인칭
 	GET_SINGLE(SceneManager)->SetPlayerPosition(pos);
 	 
+	GetTransform()->SetLocalRotation(rotation);
 	GetTransform()->SetLocalPosition(pos);
 }
 
@@ -151,16 +153,15 @@ void PlayerInput::Jump(Vec3& pos)
 			_jump = false;
 			return;
 		}
-
-		if (_jumpCount < 60)
+		_jumpCount += DELTA_TIME;
+		if (_jumpCount < 0.5f)
 		{
-			_jumpCount++;
+			
 			_jumpSpeed -= 5.f;
 			pos += GetTransform()->GetUp() * _jumpSpeed * DELTA_TIME;
 		}
-		else if(_jumpCount < 120)
+		else if(_jumpCount < 1.f)
 		{
-			_jumpCount++;
 			_jumpSpeed += 5.f;
 			pos -= GetTransform()->GetUp() * _jumpSpeed * DELTA_TIME;
 		}

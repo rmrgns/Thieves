@@ -20,34 +20,19 @@ void Input::Update()
 		return;
 	}
 
-	// 입력한 키가 KEY_TYPE에 있는지 확인 (실패시 Update()함수 종료)
-	BYTE asciiKeys[KEY_TYPE_COUNT] = {};
-	if (::GetKeyboardState(asciiKeys) == false)
-		return;
-
 	// 입력한 key의 KEY_STATE값 변경
 	for (uint32 key = 0; key < KEY_TYPE_COUNT; key++)
 	{
-		// 키가 눌려 있으면 true
-		if (asciiKeys[key] & 0x80)
+		if (::GetAsyncKeyState(key) & 0x8000)
 		{
 			KEY_STATE& state = _states[key];
-
-			// 이전 프레임에 키를 누른 상태라면 PRESS
 			if (state == KEY_STATE::PRESS || state == KEY_STATE::DOWN)
 				state = KEY_STATE::PRESS;
 			else
 			{
 				state = KEY_STATE::DOWN;
-				if (isgraph(key))
-					_userID += key;
-				// 프롬프트 창 출력 코드
-				/*{
-					system("cls");
-					cout << "UserID : ";
-					wcout << INPUT->GetUserID();
-					cout << endl;
-				}*/
+				//if (isgraph(key))
+				//	_userID += key;
 			}
 		}
 		else
@@ -71,3 +56,9 @@ void Input::Update()
 		::ScreenToClient(GEngine->GetWindow().hwnd, &_mousePos);
 	}
 }
+
+//if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
+	//{
+	//	// 마우스 왼쪽 버튼이 눌려져 있음
+	//	// 여기에 처리할 코드를 작성하세요.
+	//}
