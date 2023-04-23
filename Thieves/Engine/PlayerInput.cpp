@@ -25,31 +25,31 @@ void PlayerInput::LateUpdate()
 	if (INPUT->GetButton(KEY_TYPE::W))
 	{
 		direction = 1;
-		//pos += GetTransform()->GetLook() * _speed * DELTA_TIME;
-		//pos.x += GetTransform()->GetLook().x * _speed * DELTA_TIME;
-		//pos.z += GetTransform()->GetLook().z * _speed * DELTA_TIME;
+		pos += GetTransform()->GetLook() * _speed * DELTA_TIME;
+		pos.x += GetTransform()->GetLook().x * _speed * DELTA_TIME;
+		pos.z += GetTransform()->GetLook().z * _speed * DELTA_TIME;
 		
 	}
 	if (INPUT->GetButton(KEY_TYPE::S))
 	{
 		direction = 2;
-		//pos -= GetTransform()->GetLook() * _speed * DELTA_TIME;
-		//pos.x -= GetTransform()->GetLook().x * _speed * DELTA_TIME;
-		//pos.z -= GetTransform()->GetLook().z * _speed * DELTA_TIME;
+		pos -= GetTransform()->GetLook() * _speed * DELTA_TIME;
+		pos.x -= GetTransform()->GetLook().x * _speed * DELTA_TIME;
+		pos.z -= GetTransform()->GetLook().z * _speed * DELTA_TIME;
 	}
 	if (INPUT->GetButton(KEY_TYPE::A))
 	{
 		direction = 3;
-		//pos -= GetTransform()->GetRight() * _speed * DELTA_TIME;
-		//pos.x -= GetTransform()->GetRight().x * _speed * DELTA_TIME;
-		//pos.z -= GetTransform()->GetRight().z * _speed * DELTA_TIME;
+		pos -= GetTransform()->GetRight() * _speed * DELTA_TIME;
+		pos.x -= GetTransform()->GetRight().x * _speed * DELTA_TIME;
+		pos.z -= GetTransform()->GetRight().z * _speed * DELTA_TIME;
 	}
 	if (INPUT->GetButton(KEY_TYPE::D))
 	{
 		direction = 4;
-		//pos += GetTransform()->GetRight() * _speed * DELTA_TIME;
-		//pos.x += GetTransform()->GetRight().x * _speed * DELTA_TIME;
-		//pos.z += GetTransform()->GetRight().z * _speed * DELTA_TIME;
+		pos += GetTransform()->GetRight() * _speed * DELTA_TIME;
+		pos.x += GetTransform()->GetRight().x * _speed * DELTA_TIME;
+		pos.z += GetTransform()->GetRight().z * _speed * DELTA_TIME;
 	}
 
 	if (INPUT->GetButtonUp(KEY_TYPE::W) ||
@@ -91,13 +91,13 @@ void PlayerInput::LateUpdate()
 	}*/
 
 
-	if (thieves_packet_manager)
-	{
-		
-		pos += thieves_packet_manager->GetVec();		
-	}
+	//if (thieves_packet_manager)
+	//{
+	//	
+	//	pos += thieves_packet_manager->GetVec();		
+	//}
 
-
+	GET_SINGLE(SceneManager)->SetPlayerPosition(pos);
 
 	// 캐릭터 점프
 	if (INPUT->GetButtonDown(KEY_TYPE::SPACE))

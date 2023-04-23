@@ -22,6 +22,4 @@ private:
 	bool		_jump = false;
 	float		_jumpSpeed = 305.f;
 	char		direction = 0;
-
-	
 };
