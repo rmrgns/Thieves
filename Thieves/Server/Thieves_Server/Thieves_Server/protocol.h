@@ -205,5 +205,6 @@ struct sc_packet_obj_info {
 	int		id;
 	char	type;
 	float	x, y, z;
+	bool	start;
 	char	object_type;
 };

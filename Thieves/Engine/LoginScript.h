@@ -11,6 +11,6 @@ public:
 
 private:
 	float		_speed = 20.f;
-	bool		_start = false;
+	bool	    _start = false;
 };
 

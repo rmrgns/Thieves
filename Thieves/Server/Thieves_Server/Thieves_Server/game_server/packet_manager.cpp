@@ -76,7 +76,7 @@ void PacketManager::ProcessAccept(HANDLE hiocp, SOCKET& s_socket, EXP_OVER* exp_
 	SOCKET c_socket = *(reinterpret_cast<SOCKET*>(exp_over->_net_buf));
 
 	int new_id = MoveObjManager::GetInst()->GetNewID();
-	std::cout << new_id << std::endl;
+	//std::cout << new_id << std::endl;
 	if (-1 == new_id) {
 		std::cout << "Maxmum user overflow. Accept aborted.\n";
 		SendLoginFailPacket(c_socket, static_cast<int>(LOGINFAIL_TYPE::FULL));
@@ -165,6 +165,22 @@ void PacketManager::SendTestPacket(int c_id, int mover, float x, float y, float 
 
 void PacketManager::SendMovePacket(int c_id, int mover)
 {
+	sc_packet_move packet;
+	MoveObj* p = MoveObjManager::GetInst()->GetMoveObj(mover);
+	packet.id = mover;
+	packet.size = sizeof(packet);
+	packet.type = SC_PACKET_MOVE;
+
+	packet.posX = p->GetPosX();
+	packet.posY = p->GetPosY();
+	packet.posZ = p->GetPosZ();
+
+	std::cout << "SEND" << mover << ":  Packet x :" << packet.posX << ", z : " << packet.posZ << std::endl;
+
+
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(mover);
+
+	cl->DoSend(sizeof(packet), &packet);
 }
 
 
@@ -221,6 +237,8 @@ void PacketManager::SendObjInfo(int c_id, int obj_id)
 	packet.id = obj_id;
 	packet.size = sizeof(packet);
 	packet.type = SC_PACKET_OBJ_INFO;
+
+	packet.start = true;
 
 	packet.x = obj->GetPosX();
 	packet.y = obj->GetPosY();
@@ -335,7 +353,7 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 	//std::cout << "MOVE ¹ÞÀ½" << std::endl;
 	cs_packet_move* packet = reinterpret_cast<cs_packet_move*>(p);
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
-	std::cout << cl->GetID() << "pos : " << cl->GetPos() << "look : " << packet->vecX << std::endl;
+	//std::cout << cl->GetID() << "pos : " << cl->GetPos() << "look : " << packet->vecX << std::endl;
 	
 	// 
 	if (packet->direction == 1)
@@ -371,11 +389,13 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 		cl->SetPosX(cl->GetPosX() + right.x * _speed * packet->deltaTime);
 		cl->SetPosZ(cl->GetPosZ() + right.z * _speed * packet->deltaTime);
 	}
+
+
 	//Vector3 pos{ packet->posX,packet->posY,packet->posZ};
 	
 	
 
-//	if (isnan(cl->GetPosX()) || isnan(cl->GetPosY()) || isnan(cl->GetPosZ()))return;
+	if (isnan(cl->GetPosX()) || isnan(cl->GetPosY()) || isnan(cl->GetPosZ()))return;
 
 
 	//cl->state_lock.lock();
@@ -386,20 +406,20 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 	//}
 	//else cl->state_lock.unlock();
 	
-	//Room* room = m_room_manager->GetRoom(cl->GetRoomID());
+	Room* room = m_room_manager->GetRoom(cl->GetRoomID());
 
 	//cl->m_last_move_time = packet->move_time;
 
 
-	//std::cout << "Rotation x :" << packet->r_x << ", y : " << packet->r_y << ", z : " 
-	//	<< packet->r_z<< ", w : " << packet->r_w << endl;
+//	std::cout << "Rotation x :" << packet->r_x << ", y : " << packet->r_y << ", z : " 
+//		<< packet->r_z<< ", w : " << packet->r_w << endl;
 
-	//for (auto other_pl : room->GetObjList())
-	//{
-	//	if (false == MoveObjManager::GetInst()->IsPlayer(other_pl))
-	//		continue;
-	//	SendMovePacket(other_pl, c_id);
-	//}
+	for (auto other_pl : room->GetObjList())
+	{
+		if (false == MoveObjManager::GetInst()->IsPlayer(other_pl))
+			continue;
+		SendMovePacket(other_pl, c_id);
+	}
 
 
 	
@@ -533,7 +553,7 @@ void PacketManager::TestStartGame(int room_id)
 		if (i < room->GetMaxUser())
 		{
 			pl = MoveObjManager::GetInst()->GetPlayer(obj_list[i]);
-			//pl->SetPos(m_map_manager->PLAYER_SPAWN_POINT[i]);
+			pl->SetPos(base_pos);
 			//pl->SetColorType(COLOR_TYPE(i + 1));
 			continue;
 		}

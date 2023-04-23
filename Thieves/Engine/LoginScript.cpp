@@ -19,12 +19,12 @@ LoginScript::~LoginScript()
 
 void LoginScript::LateUpdate()
 {
-	if (_start == false) {
+	if (_start == false) 
+	{
 		if (INPUT->GetButton(KEY_TYPE::O))
 		{
-
+			_start = true;
 			Network::GetInst()->SendStartPacket();
-
 			GET_SINGLE(SceneManager)->SetCheckChangeScene(true);
 			GEngine->SetChangeScene(L"Game");
 		}
@@ -52,5 +52,5 @@ void LoginScript::LateUpdate()
 		}
 		INPUT->InitUserId();
 	}
-	
+
 }
