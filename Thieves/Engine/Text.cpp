@@ -8,24 +8,30 @@ void Text::Init()
 {
 	CreateD3D11On12Device();
 	CreateD2DDevice();
-	CreateTextInfo();
+	SetTextInfo(0);
 	_rect = D2D1::RectF(0.0f, 0.0f, GEngine->GetWindow().width, GEngine->GetWindow().height);
 }
 
 void Text::Update()
 {
-	// �ؽ�Ʈ ���
+	// 텍스트 출력
 	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOGIN)
 	{
 
 		SetTextInfo(0);
-		wstring text = L"���ϵ� �α��� ȭ��";
+		wstring text = L"도둑들 login 화면";
 		SetText(text, 400.f, 200.f, 1.f, 1.f);
-		
+
 		SetTextInfo(1);
-		wstring text1 = L"���m D3D11On12 ������Ʈ �Դϴ�.";
+		wstring text1 = L"testLogin";
 		SetText(text1, 0.f, 0.f, 1.f, 1.f);
-	
+
+	}
+	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
+	{
+		SetTextInfo(1);
+		wstring text1 = L"asdasdasd";
+		SetText(text1, 0.f, 0.f, 1.f, 1.f);
 	}
 }
 
@@ -51,20 +57,6 @@ void Text::CreateD2DDevice()
 	ThrowIfFailed(_d2dFactory->CreateDevice(dxgiDevice.Get(), &_d2dDevice));
 	ThrowIfFailed(_d2dDevice->CreateDeviceContext(deviceOptions, &_d2dDeviceContext));
 	ThrowIfFailed(DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), &_dWriteFactory));
-}
-
-void Text::CreateTextInfo()
-{
-	// �ؽ�Ʈ ����
-	ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), _solidColorBrush.GetAddressOf()));
-	
-	// �ؽ�Ʈ ��Ʈ ����
-	ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"Verdana", nullptr,
-		DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL,
-		10, L"en-us", _writeTextFormat.GetAddressOf()));
-
-	//_writeTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
-	//_writeTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 }
 
 void Text::CreateRenderTarget()
@@ -139,10 +131,10 @@ void Text::SetTextInfo(int infoNumber)
 	switch (infoNumber)
 	{
 	case 0:
-		// �ؽ�Ʈ ����
+		// 텍스트 색깔
 		ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Crimson), _solidColorBrush.GetAddressOf()));
 
-		// �ؽ�Ʈ ��Ʈ ����
+		// 텍스트 폰트 등
 		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"Verdana", nullptr,
 			DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_ITALIC, DWRITE_FONT_STRETCH_NORMAL,
 			25, L"en-us", _writeTextFormat.GetAddressOf()));
@@ -151,10 +143,10 @@ void Text::SetTextInfo(int infoNumber)
 		//_writeTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 		break;
 	case 1:
-		// �ؽ�Ʈ ����
+		// 텍스트 색깔
 		ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), _solidColorBrush.GetAddressOf()));
 
-		// �ؽ�Ʈ ��Ʈ ����
+		// 텍스트 폰트 등
 		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"Verdana", nullptr,
 			DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_ITALIC, DWRITE_FONT_STRETCH_NORMAL,
 			25, L"en-us", _writeTextFormat.GetAddressOf()));

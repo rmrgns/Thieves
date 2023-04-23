@@ -15,7 +15,6 @@ public:
 public:
 	void CreateD3D11On12Device();	// 11on12 디바이스 생성
 	void CreateD2DDevice();			// D2D, DWrite 생성
-	void CreateTextInfo();			// 텍스트 설정 (색깔, 폰트)
 	void CreateRenderTarget();		// 텍스트 렌더타겟 생성
 	void Render2D();				// 텍스트 생성 및 출력
 
