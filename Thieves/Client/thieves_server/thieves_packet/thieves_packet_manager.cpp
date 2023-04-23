@@ -53,6 +53,7 @@ void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
 
 		GET_SINGLE(SceneManager)->SetPlayerPosition(recv_pos);
 		
+		PlayerInput::PlayerMove(recv_pos)
 		//PlayerInput::PlayerMove(recv_pos);
 	}
 

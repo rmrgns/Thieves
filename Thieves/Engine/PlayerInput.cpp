@@ -55,7 +55,8 @@ void PlayerInput::LateUpdate()
 	}
 
 	bool bRecv = GEngine->GetThievesPacketManager()->GetRecv();
-	PlayerRecvPos(bRecv);
+	//PlayerRecvPos(bRecv);
+
 }
 
 void PlayerInput::PlayerRecvPos( bool bRecv) {
@@ -68,8 +69,6 @@ void PlayerInput::PlayerRecvPos( bool bRecv) {
 
 
 void PlayerInput::PlayerMove() {
-
-
 
 	Vec3 pos = GEngine->GetThievesPacketManager()->GetVec();
 
