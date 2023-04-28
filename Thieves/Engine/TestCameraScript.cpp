@@ -6,7 +6,7 @@
 #include "Timer.h"
 #include "SceneManager.h"
 #include "Engine.h"
-#include "server/network/network.h"
+#include "server/main/network.h"
 
 TestCameraScript::TestCameraScript()
 {
@@ -22,29 +22,24 @@ void TestCameraScript::LateUpdate()
 
 	if (INPUT->GetButton(KEY_TYPE::W)) {
 		direction = 1;
-		
 		//pos += GetTransform()->GetLook() * _speed * DELTA_TIME;
-
 	}
 		
 
 	if (INPUT->GetButton(KEY_TYPE::S)) {
 		direction = 2;
-
 		//pos -= GetTransform()->GetLook() * _speed * DELTA_TIME;
 	}
 		
 
 	if (INPUT->GetButton(KEY_TYPE::A)) {
 		direction = 3;
-
 		//pos -= GetTransform()->GetRight() * _speed * DELTA_TIME;
 	}
 		
 
 	if (INPUT->GetButton(KEY_TYPE::D)) {
 		direction = 4;
-
 		//pos += GetTransform()->GetRight() * _speed * DELTA_TIME;
 	}
 		

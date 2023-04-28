@@ -28,6 +28,27 @@
     <Filter Include="Object\Script">
       <UniqueIdentifier>{84de148f-21fb-42e7-a8b6-52fcd96ae59a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Server">
+      <UniqueIdentifier>{40816c91-3d98-4f07-b4ed-63d96747fc17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Server\thieves_server">
+      <UniqueIdentifier>{326c3265-30de-46c6-880e-70c23b1e6658}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Server\packet">
+      <UniqueIdentifier>{bf7286b0-d5d2-473e-abae-287810f73c9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Server\send">
+      <UniqueIdentifier>{6d42d4b7-e0bf-4bad-8224-f718d287a40e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Server\message">
+      <UniqueIdentifier>{634a616e-cc02-4b55-85e7-213509467ab8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Server\object">
+      <UniqueIdentifier>{c8600252-abc9-4922-8414-8ef7921c1e2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Server\main">
+      <UniqueIdentifier>{f111c88f-295b-4a1d-9db3-0dc3ca34b7f6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -156,9 +177,6 @@
     <ClCompile Include="MeshData.cpp">
       <Filter>Object\Resource</Filter>
     </ClCompile>
-    <ClCompile Include="Network.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
     <ClCompile Include="TestDragon.cpp">
       <Filter>Object\Script</Filter>
     </ClCompile>
@@ -176,6 +194,57 @@
     </ClCompile>
     <ClCompile Include="Physics.cpp">
       <Filter>Object\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="server\thieves_server\thieves_message_event_info.cpp">
+      <Filter>Server\thieves_server</Filter>
+    </ClCompile>
+    <ClCompile Include="server\thieves_server\thieves_packet_manager.cpp">
+      <Filter>Server\thieves_server</Filter>
+    </ClCompile>
+    <ClCompile Include="server\thieves_server\thieves_send_manager.cpp">
+      <Filter>Server\thieves_server</Filter>
+    </ClCompile>
+    <ClCompile Include="server\message\message_event.cpp">
+      <Filter>Server\message</Filter>
+    </ClCompile>
+    <ClCompile Include="server\message\message_event_info.cpp">
+      <Filter>Server\message</Filter>
+    </ClCompile>
+    <ClCompile Include="server\message\message_event_manager.cpp">
+      <Filter>Server\message</Filter>
+    </ClCompile>
+    <ClCompile Include="server\message\message_helper.cpp">
+      <Filter>Server\message</Filter>
+    </ClCompile>
+    <ClCompile Include="server\packet\packet_helper.cpp">
+      <Filter>Server\packet</Filter>
+    </ClCompile>
+    <ClCompile Include="server\packet\packet_event_manager.cpp">
+      <Filter>Server\packet</Filter>
+    </ClCompile>
+    <ClCompile Include="server\send\send_helper.cpp">
+      <Filter>Server\send</Filter>
+    </ClCompile>
+    <ClCompile Include="server\object\player.cpp">
+      <Filter>Server\object</Filter>
+    </ClCompile>
+    <ClCompile Include="server\main\network.cpp">
+      <Filter>Server\main</Filter>
+    </ClCompile>
+    <ClCompile Include="server\main\network_move_object.cpp">
+      <Filter>Server\main</Filter>
+    </ClCompile>
+    <ClCompile Include="server\main\network_obj_manager.cpp">
+      <Filter>Server\main</Filter>
+    </ClCompile>
+    <ClCompile Include="server\main\send_manager.cpp">
+      <Filter>Server\main</Filter>
+    </ClCompile>
+    <ClCompile Include="server\main\packet_manager.cpp">
+      <Filter>Server\main</Filter>
+    </ClCompile>
+    <ClCompile Include="state.h">
+      <Filter>Server</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -308,9 +377,6 @@
     <ClInclude Include="MeshData.h">
       <Filter>Object\Resource</Filter>
     </ClInclude>
-    <ClInclude Include="Network.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
     <ClInclude Include="TestDragon.h">
       <Filter>Object\Script</Filter>
     </ClInclude>
@@ -328,6 +394,69 @@
     </ClInclude>
     <ClInclude Include="Physics.h">
       <Filter>Object\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="server\thieves_server\thieves_message_event_info.h">
+      <Filter>Server\thieves_server</Filter>
+    </ClInclude>
+    <ClInclude Include="server\thieves_server\thieves_packet_manager.h">
+      <Filter>Server\thieves_server</Filter>
+    </ClInclude>
+    <ClInclude Include="server\thieves_server\thieves_send_manager.h">
+      <Filter>Server\thieves_server</Filter>
+    </ClInclude>
+    <ClInclude Include="server\thieves_server\game_info.h">
+      <Filter>Server</Filter>
+    </ClInclude>
+    <ClInclude Include="server\define.h">
+      <Filter>Server</Filter>
+    </ClInclude>
+    <ClInclude Include="server\protocol.h">
+      <Filter>Server</Filter>
+    </ClInclude>
+    <ClInclude Include="server\ptr.h">
+      <Filter>Server</Filter>
+    </ClInclude>
+    <ClInclude Include="server\message\message_event.h">
+      <Filter>Server\message</Filter>
+    </ClInclude>
+    <ClInclude Include="server\message\message_event_info.h">
+      <Filter>Server\message</Filter>
+    </ClInclude>
+    <ClInclude Include="server\message\message_event_manager.h">
+      <Filter>Server\message</Filter>
+    </ClInclude>
+    <ClInclude Include="server\message\message_helper.h">
+      <Filter>Server\message</Filter>
+    </ClInclude>
+    <ClInclude Include="server\packet\packet_helper.h">
+      <Filter>Server\packet</Filter>
+    </ClInclude>
+    <ClInclude Include="server\packet\packet_event_manager.h">
+      <Filter>Server\packet</Filter>
+    </ClInclude>
+    <ClInclude Include="server\send\send_helper.h">
+      <Filter>Server\send</Filter>
+    </ClInclude>
+    <ClInclude Include="server\object\player.h">
+      <Filter>Server\object</Filter>
+    </ClInclude>
+    <ClInclude Include="server\main\network.h">
+      <Filter>Server\main</Filter>
+    </ClInclude>
+    <ClInclude Include="server\main\network_move_object.h">
+      <Filter>Server\main</Filter>
+    </ClInclude>
+    <ClInclude Include="server\main\network_obj_manager.h">
+      <Filter>Server\main</Filter>
+    </ClInclude>
+    <ClInclude Include="server\main\network_object.h">
+      <Filter>Server\main</Filter>
+    </ClInclude>
+    <ClInclude Include="server\main\send_manager.h">
+      <Filter>Server\main</Filter>
+    </ClInclude>
+    <ClInclude Include="server\main\packet_manager.h">
+      <Filter>Server\main</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

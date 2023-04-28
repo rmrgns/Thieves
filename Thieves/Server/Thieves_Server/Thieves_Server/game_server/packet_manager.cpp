@@ -59,8 +59,7 @@ void PacketManager::ProcessPacket(int c_id, unsigned char* p)
 		break;
 	}
 	case CS_PACKET_GAME_START: {
-		TestProcessGameStart(c_id, p);
-		//ProcessGameStart(c_id, p);
+		ProcessGameStart(c_id, p);
 		break;
 	}
 	case CS_PACKET_TEST: {
@@ -76,7 +75,8 @@ void PacketManager::ProcessAccept(HANDLE hiocp, SOCKET& s_socket, EXP_OVER* exp_
 	SOCKET c_socket = *(reinterpret_cast<SOCKET*>(exp_over->_net_buf));
 
 	int new_id = MoveObjManager::GetInst()->GetNewID();
-	//std::cout << new_id << std::endl;
+	
+	
 	if (-1 == new_id) {
 		std::cout << "Maxmum user overflow. Accept aborted.\n";
 		SendLoginFailPacket(c_socket, static_cast<int>(LOGINFAIL_TYPE::FULL));
@@ -148,21 +148,6 @@ void PacketManager::ProcessRecv(int c_id , EXP_OVER* exp_over, DWORD num_bytes)
 //	SetTimerEvent(0, 0, EVENT_TYPE::EVENT_PLAYER_MOVE, 10);
 //}
 
-// Send test PAcket
-void PacketManager::SendTestPacket(int c_id, int mover, float x, float y, float z)
-{
-	sc_packet_test packet;
-	packet.size = sizeof(packet);
-	packet.type = SC_PACKET_TEST;
-	packet.id = mover;
-	packet.x = x;
-	packet.y = y;
-	packet.z = z;
-
-	MoveObjManager::GetInst()->GetPlayer(c_id)->DoSend(sizeof(packet), &packet);
-
-}
-
 void PacketManager::SendMovePacket(int c_id, int mover)
 {
 	sc_packet_move packet;
@@ -172,15 +157,16 @@ void PacketManager::SendMovePacket(int c_id, int mover)
 	packet.type = SC_PACKET_MOVE;
 
 	packet.posX = p->GetPosX();
-	packet.posY = p->GetPosY();
+	//packet.posY = p->GetPosY();
 	packet.posZ = p->GetPosZ();
 
 
 	packet.recv_bool = true;
 
-	std::cout << "SEND " << mover << " :  Packet x :" << packet.posX << ", z : " << packet.posZ << " bool : " << packet.recv_bool << std::endl;
-	Player* cl = MoveObjManager::GetInst()->GetPlayer(mover);
-
+	
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+//	cout << "ID : " << c_id << " x " << packet.posX << " y " << packet.posY << "z " << packet.posZ << endl;
+	cout << "ID : " << c_id << " x " << packet.posX  << "z " << packet.posZ << endl;
 	cl->DoSend(sizeof(packet), &packet);
 }
 
@@ -198,7 +184,6 @@ void PacketManager::SendLoginFailPacket(SOCKET& c_socket, int reason)
 		int error_num = WSAGetLastError();
 		if (ERROR_IO_PENDING != error_num)
 			std::cout << "Send" << error_num << std::endl;
-		//LOG_INFO("send ", error_num;
 	}
 }
 void PacketManager::SendSignInOK(int c_id)
@@ -241,10 +226,13 @@ void PacketManager::SendObjInfo(int c_id, int obj_id)
 
 	packet.start = true;
 
+	packet.object_type = static_cast<char>(obj->GetType());
+
 	packet.x = obj->GetPosX();
 	packet.y = obj->GetPosY();
 	packet.z = obj->GetPosZ();
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cout << "Send OBJ INFO ID : " << c_id << " x " << packet.x << " y " << packet.y << "z " << packet.z << endl;
 	cl->DoSend(sizeof(packet), &packet);
 
 }
@@ -294,6 +282,14 @@ void PacketManager::Disconnect(int c_id)
 
 bool PacketManager::IsRoomInGame(int room_id)
 {
+	Room* room = m_room_manager->GetRoom(room_id);
+	room->m_state_lock.lock();
+	if (room->GetState() == ROOM_STATE::RT_INGAME)
+	{
+		room->m_state_lock.unlock();
+		return true;
+	}
+	room->m_state_lock.unlock();
 	return false;
 }
 
@@ -323,6 +319,10 @@ void PacketManager::ProcessTimer(HANDLE hiocp)
 {
 }
 
+
+
+
+
 void PacketManager::ProcessSignIn(int c_id, unsigned char* p)
 {
 	cs_packet_sign_in* packet = reinterpret_cast<cs_packet_sign_in*>(p);
@@ -351,12 +351,10 @@ void PacketManager::ProcessAttack(int c_id, unsigned char* p)
 
 void PacketManager::ProcessMove(int c_id, unsigned char* p)
 {
-	//std::cout << "MOVE 받음" << std::endl;
+	std::cout << "MOVE " << std::endl;
 	cs_packet_move* packet = reinterpret_cast<cs_packet_move*>(p);
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
-	//std::cout << cl->GetID() << "pos : " << cl->GetPos() << "look : " << packet->vecX << std::endl;
 	
-	// 
 	if (packet->direction == 1)
 	{
 		// 1번
@@ -372,7 +370,7 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 	{
 		// 룩 벡터와 업 벡터를 외적하면 right 벡터가 생성됨.
 		// 단위 벡터와 단위 벡터 사이의 외적은 단위 벡터인 외적이 생성됨.
-		Vector3 look = Vector3(packet->vecX, packet->vecY, packet->vecZ);
+		Vector3 look = Vector3(packet->vecX, 0.0f, packet->vecZ);
 		Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
 		Vector3 right = look.Cross(up);
 
@@ -383,7 +381,7 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 	{
 		// 룩 벡터와 업 벡터를 외적하면 right 벡터가 생성됨.
 		// 단위 벡터와 단위 벡터 사이의 외적은 단위 벡터인 외적이 생성됨.
-		Vector3 look = Vector3(packet->vecX, packet->vecY, packet->vecZ);
+		Vector3 look = Vector3(packet->vecX, 0.0f, packet->vecZ);
 		Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
 		Vector3 right = look.Cross(up);
 
@@ -391,39 +389,25 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 		cl->SetPosZ(cl->GetPosZ() - right.z * _speed * packet->deltaTime);
 	}
 
+	//cl->SetPosY(packet->vecY);
 
-	//Vector3 pos{ packet->posX,packet->posY,packet->posZ};
-	
-	
-
-	if (isnan(cl->GetPosX()) || isnan(cl->GetPosY()) || isnan(cl->GetPosZ()))return;
-
-
-	//cl->state_lock.lock();
-	//if (cl->GetState() != STATE::ST_INGAME)
-	//{
-	//	cl->state_lock.unlock();
-	//	return;
-	//}
-	//else cl->state_lock.unlock();
-	
+	cl->state_lock.lock();
+	if (cl->GetState() != STATE::ST_INGAME)
+	{
+		cl->state_lock.unlock();
+		return;
+	}
+	else cl->state_lock.unlock();
 	Room* room = m_room_manager->GetRoom(cl->GetRoomID());
 
-	//cl->m_last_move_time = packet->move_time;
-
-
-//	std::cout << "Rotation x :" << packet->r_x << ", y : " << packet->r_y << ", z : " 
-//		<< packet->r_z<< ", w : " << packet->r_w << endl;
-
+	
+	if (isnan(cl->GetPosX()) || isnan(cl->GetPosY()) || isnan(cl->GetPosZ()))return;
 	for (auto other_pl : room->GetObjList())
 	{
 		if (false == MoveObjManager::GetInst()->IsPlayer(other_pl))
 			continue;
 		SendMovePacket(other_pl, c_id);
-	}
-
-
-	
+	}	
 }
 
 void PacketManager::ProcessMatching(int c_id, unsigned char* p)
@@ -438,9 +422,19 @@ void PacketManager::ProcessGameStart(int c_id, unsigned char* p)
 {
 	cs_packet_game_start* packet = reinterpret_cast<cs_packet_game_start*>(p);
 	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
+	
+	player->is_matching = false;
+	player->state_lock.lock();
+	player->SetState(STATE::ST_INGAME);
+	player->SetRoomID(0);
+	player->state_lock.unlock();
+	
+
 	if (player->GetRoomID() == -1)return;
 	player->SetIsReady(true);
 	Room* room = m_room_manager->GetRoom(player->GetRoomID());
+	room->EnterRoom(c_id);
+
 	for (auto pl : room->GetObjList())
 	{
 		if (false == MoveObjManager::GetInst()->IsPlayer(pl))continue;
@@ -471,7 +465,7 @@ void PacketManager::StartGame(int room_id)
 		if (i < room->GetMaxUser())
 		{
 			pl = MoveObjManager::GetInst()->GetPlayer(obj_list[i]);
-			//pl->SetPos(m_map_manager->PLAYER_SPAWN_POINT[i]);
+			pl->SetPos({ 0.0f,0.0f,0.0f});
 			//pl->SetColorType(COLOR_TYPE(i + 1));
 			continue;
 		}
@@ -521,8 +515,8 @@ void PacketManager::TestProcessGameStart(int c_id, unsigned char* p)
 		pl->SetRoomID(0);
 		//player->SetIsActive(true);
 		pl->state_lock.unlock();
-		//room->EnterRoom(id);//방에 아이디 넘겨주기
-		//cout << id << endl;
+		room->EnterRoom(id);//방에 아이디 넘겨주기
+		cout << id << endl;
 		//SendMatchingOK(id);
 	}
 
@@ -581,7 +575,7 @@ void PacketManager::TestStartGame(int room_id)
 
 		pl = MoveObjManager::GetInst()->GetPlayer(c_id);
 		//cout << "SendObj 이름:" << pl->GetName() << endl;
-		SendObjInfo(c_id, c_id);//자기자신
+		//SendObjInfo(c_id, c_id);//자기자신
 		for (auto other_id : room->GetObjList())
 		{
 			if (false == MoveObjManager::GetInst()->IsPlayer(other_id))
@@ -596,22 +590,3 @@ void PacketManager::TestStartGame(int room_id)
 	}
 }
 
-void PacketManager::SendMoveTestPacket(int mover)
-{
-	sc_packet_move packet;
-	MoveObj* p = MoveObjManager::GetInst()->GetMoveObj(mover);
-	packet.id = mover;
-	packet.size = sizeof(packet);
-	packet.type = SC_PACKET_MOVE;
-
-	packet.posX = p->GetPosX();
-	packet.posY = p->GetPosY();
-	packet.posZ = p->GetPosZ();
-
-	std::cout << "SEND" << mover << ":  Packet x :" << packet.posX << ", z : " << packet.posZ << std::endl;
-
-
-	Player* cl = MoveObjManager::GetInst()->GetPlayer(mover);
-
-	cl->DoSend(sizeof(packet), &packet);
-}

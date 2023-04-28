@@ -1,8 +1,8 @@
 #pragma once
 #include "MonoBehaviour.h"
-#include "server/packet/packet_manager.h"
-#include "thieves_server/thieves_packet/thieves_packet_manager.h"
-#include "server/network/network_object.h"
+#include "server/main/packet_manager.h"
+#include "server/thieves_server/thieves_packet_manager.h"
+#include "server/main/network_object.h"
 class PlayerInput : public MonoBehaviour
 {
 public:

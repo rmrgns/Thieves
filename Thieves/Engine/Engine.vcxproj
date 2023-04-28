@@ -85,13 +85,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)Output\</OutDir>
-    <IncludePath>$(SolutionDir)Library/Include/;$(SolutionDir)Library/Include/FBX;$(SolutionDir)Library/Include/DirectX-Tex</IncludePath>
+    <IncludePath>$(SolutionDir)Library/Include/;$(SolutionDir)Library/Include/FBX;$(SolutionDir)Library/Include/DirectX-Tex;$(SolutionDir)</IncludePath>
     <LibraryPath>$(SolutionDir)Library/Include/FBX;$(SolutionDir)Library/Include/DirectX-Tex</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)Output\</OutDir>
-    <IncludePath>$(SolutionDir)Library/Include/;$(SolutionDir)Library/Include/FBX;$(SolutionDir)Library/Include/DirectX-Tex</IncludePath>
+    <IncludePath>$(SolutionDir)Library/Include/;$(SolutionDir)Library/Include/FBX;$(SolutionDir)Library/Include/DirectX-Tex;$(SolutionDir)</IncludePath>
     <LibraryPath>$(SolutionDir)Library/Include/FBX;$(SolutionDir)Library/Include/DirectX-Tex</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -139,7 +139,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AdditionalOptions>/Ylsymbol %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(SolutionDir)Client\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Engine\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -165,7 +165,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/Ylsymbol %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(SolutionDir)Client\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Engine\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -205,7 +205,6 @@
     <ClInclude Include="MeshData.h" />
     <ClInclude Include="MeshRenderer.h" />
     <ClInclude Include="MonoBehaviour.h" />
-    <ClInclude Include="Network.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="pch.h" />
@@ -217,6 +216,27 @@
     <ClInclude Include="RootSignature.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="server\define.h" />
+    <ClInclude Include="server\main\network.h" />
+    <ClInclude Include="server\main\network_move_object.h" />
+    <ClInclude Include="server\main\network_object.h" />
+    <ClInclude Include="server\main\network_obj_manager.h" />
+    <ClInclude Include="server\main\packet_manager.h" />
+    <ClInclude Include="server\main\send_manager.h" />
+    <ClInclude Include="server\message\message_event.h" />
+    <ClInclude Include="server\message\message_event_info.h" />
+    <ClInclude Include="server\message\message_event_manager.h" />
+    <ClInclude Include="server\message\message_helper.h" />
+    <ClInclude Include="server\object\player.h" />
+    <ClInclude Include="server\packet\packet_event_manager.h" />
+    <ClInclude Include="server\packet\packet_helper.h" />
+    <ClInclude Include="server\protocol.h" />
+    <ClInclude Include="server\ptr.h" />
+    <ClInclude Include="server\send\send_helper.h" />
+    <ClInclude Include="server\thieves_server\game_info.h" />
+    <ClInclude Include="server\thieves_server\thieves_message_event_info.h" />
+    <ClInclude Include="server\thieves_server\thieves_packet_manager.h" />
+    <ClInclude Include="server\thieves_server\thieves_send_manager.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="SphereCollider.h" />
@@ -256,7 +276,6 @@
     <ClCompile Include="MeshData.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
     <ClCompile Include="MonoBehaviour.cpp" />
-    <ClCompile Include="Network.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="pch.cpp">
@@ -273,9 +292,29 @@
     <ClCompile Include="RootSignature.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="server\main\network.cpp" />
+    <ClCompile Include="server\main\network_move_object.cpp" />
+    <ClCompile Include="server\main\network_obj_manager.cpp" />
+    <ClCompile Include="server\main\packet_manager.cpp" />
+    <ClCompile Include="server\main\send_manager.cpp" />
+    <ClCompile Include="server\message\message_event.cpp" />
+    <ClCompile Include="server\message\message_event_info.cpp" />
+    <ClCompile Include="server\message\message_event_manager.cpp" />
+    <ClCompile Include="server\message\message_helper.cpp" />
+    <ClCompile Include="server\object\player.cpp" />
+    <ClCompile Include="server\packet\packet_event_manager.cpp" />
+    <ClCompile Include="server\packet\packet_helper.cpp" />
+    <ClCompile Include="server\send\send_helper.cpp" />
+    <ClCompile Include="server\thieves_server\thieves_message_event_info.cpp" />
+    <ClCompile Include="server\thieves_server\thieves_packet_manager.cpp" />
+    <ClCompile Include="server\thieves_server\thieves_send_manager.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SimpleMath.cpp" />
     <ClCompile Include="SphereCollider.cpp" />
+    <ClCompile Include="state.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="StructuredBuffer.cpp" />
     <ClCompile Include="SwapChain.cpp" />
     <ClCompile Include="TableDescriptorHeap.cpp" />

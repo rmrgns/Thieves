@@ -20,7 +20,7 @@
 #include <bitset>
 
 
-#include "../Client/ptr.h"
+#include "server/ptr.h"
 //#include "../Client/Resource.h"
 
 

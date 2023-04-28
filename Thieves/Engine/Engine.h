@@ -12,8 +12,8 @@
 #include "RenderTargetGroup.h"
 #include "Text.h"
 
-#include "thieves_server/thieves_packet/thieves_packet_manager.h"
-#include "thieves_server/thieves_send/thieves_send_manager.h"
+#include "server/thieves_server/thieves_packet_manager.h"
+#include "server/thieves_server/thieves_send_manager.h"
 #include "TextObject.h"
 
 class Engine

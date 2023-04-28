@@ -38,7 +38,7 @@ int MoveObjManager::GetNewID()
 		}
 		cl->state_lock.unlock();
 	}
-	cout << "Get new ID" << endl;
+	cout << "USER FULL!" << endl;
 	return -1;
 }
 

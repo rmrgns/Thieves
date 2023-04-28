@@ -38,7 +38,15 @@ public:
 	CURRENT_SCENE GetCurrentScene() { return _currentScene; }
 
 	Vec3 GetPlayerPosition() { return _playerPosition; }
+	float GetPlayerPositionX() { return _playerPosition.x; }
+	float GetPlayerPositionY() { return _playerPosition.y; }
+	float GetPlayerPositionZ() { return _playerPosition.z; }
+	
 	void SetPlayerPosition(Vec3 playerPosition) { _playerPosition = playerPosition; }
+	void SetPlayerPositionX(float playerPosition) { _playerPosition.x = playerPosition; }
+	void SetPlayerPositionY(float playerPosition) { _playerPosition.y = playerPosition; }
+	void SetPlayerPositionZ(float playerPosition) { _playerPosition.z = playerPosition; }
+
 	Vec3 GetPlayerRotation() { return _playerRotation; }
 	void SetPlayerRotation(Vec3 playerRotation) { _playerRotation = playerRotation; }
 private:

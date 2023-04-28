@@ -22,8 +22,6 @@ public:
 	// Enemy
 	void UpdateObjMove();
 
-	// SendPacket
-	void SendTestPacket(int c_id, int mover, float x, float y, float z);
 	
 	void SendMovePacket(int c_id, int mover);
 	void SendMoveTestPacket(int mover);

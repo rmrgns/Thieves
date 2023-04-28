@@ -3,12 +3,12 @@
 #include "Engine.h"
 #include "SceneManager.h"
 
-#include "ptr.h"
-#include "server/network/network.h"
-#include "server/packet/packet_manager.h"
-#include "server/send_manager/send_manager.h"
-#include "thieves_server/thieves_packet/thieves_packet_manager.h"
-#include "thieves_server/thieves_send/thieves_send_manager.h"
+#include "server/ptr.h"
+#include "server/main/network.h"
+#include "server/main/packet_manager.h"
+#include "server/main/send_manager.h"
+#include "server/thieves_server/thieves_packet_manager.h"
+#include "server/thieves_server/thieves_send_manager.h"
 
 void Game::Init(const WindowInfo& info)
 {

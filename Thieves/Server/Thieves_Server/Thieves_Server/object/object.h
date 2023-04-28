@@ -39,40 +39,6 @@ public:
 	void SetPosY(float val) { m_pos.y = val; };
 	void SetPosZ(float val) { m_pos.z = val; };
 	void SetPos(const Vector3& val) { m_pos = val; };
-
-
-
-	//char GetDirection()const { return direction; };
-
-	//float GetPosForwardX()const { return f_x; };
-	//float GetPosForwardY()const { return f_y; };
-	//float GetPosForwardZ()const { return f_z; };\
-
-	//float GetPosRightX()const { return r_x; };
-	//float GetPosRightY()const { return r_y; };
-	//float GetPosRightZ()const { return r_z; };
-
-	//float GetPosSX()const { return s_x; };
-	//float GetPosSY()const { return s_y; };
-	//float GetPosSZ()const { return s_z; };
-	
-
-
-	//Vector3& GetPos() { return m_pos; }
-
-
-
-
-	
-//	OBJ_TYPE GetType()const { return m_type; };
-
-
-//	void SetType(OBJ_TYPE val) { m_type = val; }
-
-//	void SetPosX(float val) { m_pos.x = val; };
-//	void SetPosY(float val) { m_pos.y = val; };
-//	void SetPosZ(float val) { m_pos.z = val; };
-	
 protected:
 	int m_id;
 	OBJ_TYPE m_type;

@@ -5,9 +5,9 @@
 #include "Timer.h"
 #include "SceneManager.h"
 #include "Engine.h"
-#include "server/network/network.h"
-#include "ptr.h"
-#include "server/packet/packet_manager.h"
+#include "server/main/network.h"
+#include "server/ptr.h"
+#include "server/main/packet_manager.h"
 
 PlayerInput::PlayerInput()
 {
@@ -28,7 +28,7 @@ void PlayerInput::LateUpdate()
 	if (INPUT->GetButton(KEY_TYPE::W))
 	{
 		direction = 1;
-		Network::GetInst()->SendMovePacket(direction, recv_pos,
+		Network::GetInst()->SendMovePacket(direction, pos,
 			GetTransform()->GetLook(), DELTA_TIME);
 
 	}
@@ -36,7 +36,7 @@ void PlayerInput::LateUpdate()
 	{
 		direction = 2;
 
-		Network::GetInst()->SendMovePacket(direction, recv_pos,
+		Network::GetInst()->SendMovePacket(direction, pos,
 			GetTransform()->GetLook(), DELTA_TIME);
 
 	}
@@ -44,7 +44,7 @@ void PlayerInput::LateUpdate()
 	{
 		direction = 3;
 
-		Network::GetInst()->SendMovePacket(direction, recv_pos,
+		Network::GetInst()->SendMovePacket(direction,pos,
 			GetTransform()->GetLook(), DELTA_TIME);
 
 	}
@@ -52,7 +52,7 @@ void PlayerInput::LateUpdate()
 	{
 		direction = 4;
 
-		Network::GetInst()->SendMovePacket(direction, recv_pos,
+		Network::GetInst()->SendMovePacket(direction, pos,
 			GetTransform()->GetLook(), DELTA_TIME);
 	}
 
@@ -80,31 +80,30 @@ void PlayerInput::LateUpdate()
 	//
 	// }
 
-//bool bRecv = GEngine->GetThievesPacketManager()->GetRecv();
-	GetTransform()->SetLocalPosition(GET_SINGLE(SceneManager)->GetPlayerPosition());
-//PlayerRecvPos(bRecv);
 
+	//GetTransform()->SetLocalPosition(GET_SINGLE(SceneManager)->GetPlayerPosition());
+
+	PlayerMove();
 }
-
-void PlayerInput::PlayerRecvPos( bool bRecv) {
-
-	if (bRecv == true) {
-		bRecv = false;
-		PlayerInput::PlayerMove();
-	}
-}
-
 
 void PlayerInput::PlayerMove() {
 
-	Vec3 pos = GEngine->GetThievesPacketManager()->GetVec();
+	//Vec3 pos = GEngine->GetThievesPacketManager()->GetVec();
+	
+	Vec3 pos;
+	pos.x = GET_SINGLE(SceneManager)->GetPlayerPositionX();
+	pos.y = recv_pos.y;
+	pos.z = GET_SINGLE(SceneManager)->GetPlayerPositionZ();
+	
 
-	GET_SINGLE(SceneManager)->SetPlayerPosition(pos);
+	//	GET_SINGLE(SceneManager)->SetPlayerPosition(pos);
 
 	// ĳ���� ����
 	if (INPUT->GetButtonDown(KEY_TYPE::SPACE))
 	{
+
 		_jump = true;
+		// 점프 시작 패킷 전송
 	}
 
 	// ĳ���� ����
@@ -125,9 +124,9 @@ void PlayerInput::PlayerMove() {
 	}
 
 	// ī�޶� ĳ���� position ��ġ -> 1��Ī
-	GET_SINGLE(SceneManager)->SetPlayerPosition(GEngine->GetThievesPacketManager()->GetVec());
+	GET_SINGLE(SceneManager)->SetPlayerPosition(pos);
 
-	GetTransform()->SetLocalPosition(GEngine->GetThievesPacketManager()->GetVec());
+	GetTransform()->SetLocalPosition(pos);
 
 	Vec3 rotation;
 	rotation.y = GET_SINGLE(SceneManager)->GetPlayerRotation().y;
@@ -137,6 +136,7 @@ void PlayerInput::PlayerMove() {
 	 
 	GetTransform()->SetLocalRotation(rotation);
 	GetTransform()->SetLocalPosition(pos);
+	recv_pos = GetTransform()->GetLocalPosition();
 
 }
 
@@ -190,6 +190,8 @@ void PlayerInput::Jump(Vec3& pos)
 		}
 		else
 		{
+			// 점프 완료 패킷
+
 			_jumpCount = 0;
 			_jump = false;
 			pos.y = 0;
