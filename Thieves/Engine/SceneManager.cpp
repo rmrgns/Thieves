@@ -28,7 +28,10 @@ void SceneManager::Update()
 {
 	if (_activeScene == nullptr)
 		return;
-
+	if (_BuildPlayer == true)
+	{
+		BuildPlayer();
+	}
 	_activeScene->Update();
 	_activeScene->LateUpdate();
 	_activeScene->FinalUpdate();
@@ -138,6 +141,30 @@ shared_ptr<GameObject> SceneManager::Pick(int32 screenX, int32 screenY)
 	}
 
 	return picked;
+}
+
+void SceneManager::BuildPlayer()
+{
+	// 다른 플레이어 좌표
+	Vec3 otherplayer = { 100.f,100.f,100.f };
+
+	shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Thief.fbx");
+
+	vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+	
+	for (auto& gameObject : gameObjects)
+	{
+		gameObject->SetName(L"Thief");
+		gameObject->SetCheckFrustum(false);
+		gameObject->GetTransform()->SetLocalPosition(otherplayer);
+		//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 3.1415f, 0.f));
+		gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+		//gameObject->AddComponent(make_shared<TestObjectMove>());
+		//gameObject->AddComponent(make_shared<PlayerInput>());
+		_activeScene->AddGameObject(gameObject);
+		//gameObject->AddComponent(make_shared<TestDragon>());
+	}
+	_BuildPlayer = false;
 }
 
 shared_ptr<Scene> SceneManager::LoadTestScene()
@@ -278,27 +305,30 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 #pragma endregion
 
-/*
-#pragma region FBX
-	{
-		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Dragon.fbx");
 
-		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+//#pragma region FBX
+//	{
+//		for (int i = 0; i < 2; i++)
+//		{
+//			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Dragon.fbx");
+//
+//			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+//
+//			for (auto& gameObject : gameObjects)
+//			{
+//				gameObject->SetName(L"Dragon");
+//				gameObject->SetCheckFrustum(false);
+//				gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 300.f * i));
+//				//gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 300.f));
+//				gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+//				//gameObject->AddComponent(make_shared<TestObjectMove>());
+//				scene->AddGameObject(gameObject);
+//				//gameObject->AddComponent(make_shared<TestDragon>());
+//
+//			}
+//		}}
+//#pragma endregion
 
-		for (auto& gameObject : gameObjects)
-		{
-			gameObject->SetName(L"Dragon");
-			gameObject->SetCheckFrustum(false);
-			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 300.f));
-			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-			gameObject->AddComponent(make_shared<TestObjectMove>());
-			scene->AddGameObject(gameObject);
-			gameObject->AddComponent(make_shared<TestDragon>());
-
-		}
-	}
-#pragma endregion
-*/
 
 //#pragma region FBXMap
 //	{
@@ -342,21 +372,24 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 
 #pragma region PoliceFBX
 	{
-		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\PoliceMan.fbx");
-
-		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-
-		for (auto& gameObject : gameObjects)
+		for (int i = 0; i < 1; i++)
 		{
-			gameObject->SetName(L"Thief");
-			gameObject->SetCheckFrustum(false);
-			gameObject->GetTransform()->SetLocalPosition(Vec3(200.f, 0.f, 0.f));
-			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 3.1415f, 0.f));
-			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-			//gameObject->AddComponent(make_shared<TestObjectMove>());
-			scene->AddGameObject(gameObject);
-			//gameObject->AddComponent(make_shared<TestDragon>());
+			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\PoliceMan.fbx");
+			//hared_ptr<MeshData> meshData
+			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 
+			for (auto& gameObject : gameObjects)
+			{
+				gameObject->SetName(L"Police");
+				gameObject->SetCheckFrustum(false);
+				gameObject->GetTransform()->SetLocalPosition(Vec3(200.f * i, 0.f, 0.f));
+				//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 3.1415f, 0.f));
+				gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+				//gameObject->AddComponent(make_shared<TestObjectMove>());
+				scene->AddGameObject(gameObject);
+				//gameObject->AddComponent(make_shared<TestDragon>());
+
+			}
 		}
 	}
 #pragma endregion
@@ -364,21 +397,20 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 #pragma region FBXBox
 	{
 		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Box.fbx");
-
-		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-
-		for (auto& gameObject : gameObjects)
+		meshData->Save(L"..\\Resources\\FBX\\Box.fbx");
+		for (int32 i = 0; i < 2; i++)
 		{
-			gameObject->SetName(L"Box");
-			gameObject->SetCheckFrustum(false);
-			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
-			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 3.1415f, 0.f));
-			gameObject->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
-			//gameObject->AddComponent(make_shared<TestObjectMove>());
-			//gameObject->AddComponent(make_shared<PlayerInput>());
-			scene->AddGameObject(gameObject);
-			//gameObject->AddComponent(make_shared<TestDragon>());
+			meshData->Load(L"..\\Resources\\FBX\\Box.fbx");
+			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 
+			for (auto& gameObject : gameObjects)
+			{
+				gameObject->SetName(L"Box" + to_wstring(i));
+				gameObject->SetCheckFrustum(false);
+				gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f + 100.f * i, 0.f));
+				gameObject->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
+				scene->AddGameObject(gameObject);
+			}
 		}
 	}
 #pragma endregion

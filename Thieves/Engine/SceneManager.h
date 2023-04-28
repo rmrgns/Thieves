@@ -49,6 +49,10 @@ public:
 
 	Vec3 GetPlayerRotation() { return _playerRotation; }
 	void SetPlayerRotation(Vec3 playerRotation) { _playerRotation = playerRotation; }
+
+	void SetBuildPlayer(bool BuildPlayer) { _BuildPlayer = BuildPlayer; }
+	void BuildPlayer();
+
 private:
 	shared_ptr<Scene> LoadTestScene();
 	shared_ptr<Scene> LoadLoginScene();
@@ -63,8 +67,8 @@ private:
 	map<wstring, uint8> _layerIndex;
 
 
-	Vec3 _playerPosition;
-	Vec3 _playerRotation;
-
+	Vec3 _playerPosition;	// �÷��̾� ��ǥ
+	Vec3 _playerRotation;	// �÷��̾� ȸ����
+	bool _BuildPlayer = false;		// �÷��̾� ����
 };
 
