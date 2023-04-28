@@ -79,7 +79,10 @@ void PlayerInput::LateUpdate()
 		GetTransform()->GetLook(),
 		DELTA_TIME);
 
-
+	if (INPUT->GetButtonDown(KEY_TYPE::Q))
+	{
+		GET_SINGLE(SceneManager)->SetBuildPlayer(true);
+	}
 
 	/*if (thieves_packet_manager->GetDirection() == 1 || thieves_packet_manager->GetDirection() == 2)
 	{

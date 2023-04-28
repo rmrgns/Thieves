@@ -41,6 +41,10 @@ public:
 	void SetPlayerPosition(Vec3 playerPosition) { _playerPosition = playerPosition; }
 	Vec3 GetPlayerRotation() { return _playerRotation; }
 	void SetPlayerRotation(Vec3 playerRotation) { _playerRotation = playerRotation; }
+
+	void SetBuildPlayer(bool BuildPlayer) { _BuildPlayer = BuildPlayer; }
+	void BuildPlayer();
+
 private:
 	shared_ptr<Scene> LoadTestScene();
 	shared_ptr<Scene> LoadLoginScene();
@@ -54,7 +58,8 @@ private:
 	array<wstring, MAX_LAYER> _layerNames;
 	map<wstring, uint8> _layerIndex;
 
-	Vec3 _playerPosition;
-	Vec3 _playerRotation;
+	Vec3 _playerPosition;	// 플레이어 좌표
+	Vec3 _playerRotation;	// 플레이어 회전각
+	bool _BuildPlayer = false;		// 플레이어 생성
 };
 
