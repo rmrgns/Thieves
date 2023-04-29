@@ -178,7 +178,7 @@ void PacketManager::SendMovePacket(int c_id, int mover)
 
 	packet.recv_bool = true;
 
-	std::cout << "SEND " << mover << " :  Packet x :" << packet.posX << ", z : " << packet.posZ << " bool : " << packet.recv_bool << std::endl;
+	//std::cout << "SEND " << mover << " :  Packet x :" << packet.posX << ", z : " << packet.posZ << " bool : " << packet.recv_bool << std::endl;
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(mover);
 
 	cl->DoSend(sizeof(packet), &packet);
