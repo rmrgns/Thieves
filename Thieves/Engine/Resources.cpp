@@ -325,9 +325,8 @@ shared_ptr<MeshData> Resources::LoadFBX(const wstring& path)
 
 	shared_ptr<MeshData> meshData = Get<MeshData>(key);
 	if (meshData)
-	{
-		
-		//return meshData;
+	{	
+		return meshData;
 	}
 	meshData = MeshData::LoadFromFBX(path);
 	meshData->SetName(key);
