@@ -45,7 +45,7 @@ void PlayerInput::LateUpdate()
 			direction = 1;
 			Network::GetInst()->SendMovePacket(direction, pos,
 				GetTransform()->GetLook(), DELTA_TIME);
-			pos += GetTransform()->GetLook() * _speed * DELTA_TIME;
+			//pos += GetTransform()->GetLook() * _speed * DELTA_TIME;
 		}
 		if (INPUT->GetButton(KEY_TYPE::S))
 		{
@@ -53,7 +53,7 @@ void PlayerInput::LateUpdate()
 
 			Network::GetInst()->SendMovePacket(direction, pos,
 				GetTransform()->GetLook(), DELTA_TIME);
-			pos -= GetTransform()->GetLook() * _speed * DELTA_TIME;
+			//pos -= GetTransform()->GetLook() * _speed * DELTA_TIME;
 		}
 		if (INPUT->GetButton(KEY_TYPE::A))
 		{
@@ -61,7 +61,7 @@ void PlayerInput::LateUpdate()
 
 			Network::GetInst()->SendMovePacket(direction, pos,
 				GetTransform()->GetLook(), DELTA_TIME);
-			pos += GetTransform()->GetRight() * _speed * DELTA_TIME;
+			//pos += GetTransform()->GetRight() * _speed * DELTA_TIME;
 		}
 		if (INPUT->GetButton(KEY_TYPE::D))
 		{
@@ -69,7 +69,7 @@ void PlayerInput::LateUpdate()
 
 			Network::GetInst()->SendMovePacket(direction, pos,
 				GetTransform()->GetLook(), DELTA_TIME);
-			pos -= GetTransform()->GetRight() * _speed * DELTA_TIME;
+			//pos -= GetTransform()->GetRight() * _speed * DELTA_TIME;
 		}
 	}
 	 if (INPUT->GetButtonUp(KEY_TYPE::W) ||
@@ -108,13 +108,9 @@ void PlayerInput::LateUpdate()
 
 	if (INPUT->GetButtonDown(KEY_TYPE::SPACE))
 	{
-
 		_jump = true;
 		// 점프 시작 패킷 전송
 	}
-
-	// ĳ���� ����
-	Jump(pos);
 
 	// Attack
 	if (INPUT->GetButtonDown(KEY_TYPE::LBUTTON))
@@ -122,12 +118,8 @@ void PlayerInput::LateUpdate()
 		if(_attack == 0)
 			_attack = 1;
 	}
-	GET_SINGLE(SceneManager)->SetPlayerPosition(pos);
 	PlayerAttack();
 	PlayerMove();
-	GetTransform()->SetLocalPosition(pos);
-
-	
 }
 
 void PlayerInput::PlayerMove() {
@@ -165,7 +157,7 @@ void PlayerInput::PlayerMove() {
 	rotation.y = GET_SINGLE(SceneManager)->GetPlayerRotation().y;
 	 
 	GetTransform()->SetLocalRotation(rotation);
-	//GetTransform()->SetLocalPosition(pos);
+	GetTransform()->SetLocalPosition(pos);
 	recv_pos = GetTransform()->GetLocalPosition();
 
 }
