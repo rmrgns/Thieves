@@ -379,19 +379,14 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		for (int i = 0; i < 1; i++)
 		{
 			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\PoliceMan.fbx");
-			//hared_ptr<MeshData> meshData
 			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-
 			for (auto& gameObject : gameObjects)
 			{
 				gameObject->SetName(L"Police");
 				gameObject->SetCheckFrustum(false);
 				gameObject->GetTransform()->SetLocalPosition(Vec3(200.f * i, 0.f, 0.f));
-				//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 3.1415f, 0.f));
 				gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-				//gameObject->AddComponent(make_shared<TestObjectMove>());
 				scene->AddGameObject(gameObject);
-				//gameObject->AddComponent(make_shared<TestDragon>());
 
 			}
 		}

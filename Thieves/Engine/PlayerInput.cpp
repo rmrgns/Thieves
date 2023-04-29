@@ -34,8 +34,8 @@ void PlayerInput::LateUpdate()
 		INPUT->GetButton(KEY_TYPE::A) ||
 		INPUT->GetButton(KEY_TYPE::D))
 	{
-		_move = true;
-		if (_attack == 0 && _index != 0)
+		_moveState = true;
+		if (_attackState == 0 && _index != 0  && _jumpState == 0)
 		{
 			_index = 0;
 			GetAnimator()->Play(_index);
@@ -77,7 +77,7 @@ void PlayerInput::LateUpdate()
 	 	INPUT->GetButtonUp(KEY_TYPE::A) ||
 	 	INPUT->GetButtonUp(KEY_TYPE::D))
 	 {
-		 _move = false;
+		 _moveState = false;
 	 	if (INPUT->GetButtonUp(KEY_TYPE::W))
 	 	{
 	 		GetTransform()->ResetAccelerateLook();
@@ -95,7 +95,7 @@ void PlayerInput::LateUpdate()
 	 		GetTransform()->ResetAccelerateRight();
 	 	}
 	 }
-	 if (_attack == 0 && _move == false)
+	 if (_attackState == 0 && _moveState == false && _jumpState == 0)
 	 {
 		 _index = 2;
 		 GetAnimator()->Play(_index);
@@ -106,11 +106,22 @@ void PlayerInput::LateUpdate()
 		GET_SINGLE(SceneManager)->SetBuildPlayer(true);
 	}
 
+	// ĳ���� ����
+	if (INPUT->GetButtonDown(KEY_TYPE::SPACE))
+	{
+		if(_jumpState == 0)
+			_jumpState = 1;
+		// 점프 시작 패킷 전송
+	}
+
+	// ĳ���� ����
+	Jump(pos);
+
 	// Attack
 	if (INPUT->GetButtonDown(KEY_TYPE::LBUTTON))
 	{
-		if(_attack == 0)
-			_attack = 1;
+		if(_attackState == 0)
+			_attackState = 1;
 	}
 	GET_SINGLE(SceneManager)->SetPlayerPosition(pos);
 	PlayerAttack();
@@ -131,17 +142,6 @@ void PlayerInput::PlayerMove() {
 	
 
 	//	GET_SINGLE(SceneManager)->SetPlayerPosition(pos);
-
-	// ĳ���� ����
-	if (INPUT->GetButtonDown(KEY_TYPE::SPACE))
-	{
-
-		_jump = true;
-		// 점프 시작 패킷 전송
-	}
-
-	// ĳ���� ����
-	Jump(pos);
 
 
 	if (_checkCameraRotation == true)
@@ -196,13 +196,19 @@ void PlayerInput::PlayerRotation()
 
 void PlayerInput::Jump(Vec3& pos)
 {
-	if (_jump == true)
+	if (_jumpState == 1)
+	{
+		_index = 3;
+		GetAnimator()->Play(_index);
+		_jumpState = 2;
+	}
+	else if (_jumpState == 2)
 	{
 		if (pos.y < 0)
 		{
 			pos.y = 0;
 			_jumpCount = 0;
-			_jump = false;
+			_jumpState = 0;
 			return;
 		}
 		_jumpCount += DELTA_TIME;
@@ -222,7 +228,7 @@ void PlayerInput::Jump(Vec3& pos)
 			// 점프 완료 패킷
 
 			_jumpCount = 0;
-			_jump = false;
+			_jumpState = 0;
 			pos.y = 0;
 		}
 	}
@@ -231,16 +237,13 @@ void PlayerInput::Jump(Vec3& pos)
 void PlayerInput::PlayerAttack()
 {
 	// Attack
-	if (_attack == 1)
+	if (_attackState == 1)
 	{
-		int32 count = GetAnimator()->GetAnimCount();
-		int32 currentIndex = GetAnimator()->GetCurrentClipIndex();
-
 		_index = 1;
 		GetAnimator()->Play(_index);
-		_attack = 2;
+		_attackState = 2;
 	}
-	else if (_attack == 2)
+	else if (_attackState == 2)
 	{
 		_attackCount += DELTA_TIME;
 		if (_attackCount > 0.7f)
@@ -248,7 +251,7 @@ void PlayerInput::PlayerAttack()
 			_index = 2;
 			GetAnimator()->Play(_index);
 			_attackCount = 0.f;
-			_attack = 0;
+			_attackState = 0;
 		}
 	}
 	else

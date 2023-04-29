@@ -20,19 +20,19 @@ public:
 private:
 	// Player Move
 	float		_speed = 200.f;
-	bool		_move = false;
+	bool		_moveState = false;
 
 	// Player Rotate Speed
 	float		_mouseRotateSpeed = 0.5f;
 
 	// Player Jump
 	float		_jumpCount = 0.f;
-	bool		_jump = false;
+	int32		_jumpState = 0;
 	float		_jumpSpeed = 305.f;
 
 	// Player Attack
 	float		_attackCount = 0.f;
-	int32		_attack = 0;	// 0=none, 1=attack on, 2=attack
+	int32		_attackState = 0;	// 0=공격안함, 1=공격버튼 눌림, 2=공격 중
 
 	// Send Data to Server
 	char		direction = 0;
