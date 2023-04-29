@@ -15,10 +15,16 @@ public:
 	virtual ~ThievesPacketManager() = default;
 
 	virtual void Init()override;
-
+	// MOVE
 	void ProcessMove(int c_id, unsigned char* p);
+	// Login
 	void ProcessSignin(int c_id, unsigned char* p);
+	// Object정보
 	void ProcessObjInfo(int c_id, unsigned char* p);
+	// JumpStart
+	void ProcessJumpStart(int c_id, unsigned char* p);
+	// JumpComplete
+	void ProcessJumpComplete(int c_id, unsigned char* p);
 
 
 	// 추가필요

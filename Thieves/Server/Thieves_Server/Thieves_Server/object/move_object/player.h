@@ -25,6 +25,9 @@ private:
     EXP_OVER m_recv_over;
     SOCKET  m_socket;
     STATE m_state;
+
+    bool m_jump;
+
     std::atomic_bool m_is_ready = false;
     
     char m_password[MAX_PASSWORD_SIZE + 1];
@@ -44,7 +47,10 @@ public:
     virtual void Reset()override;
     void SetIsReady(bool val) { m_is_ready = val; }
     bool GetIsReady() { return m_is_ready; }
- 
+    
+    void SetJump(bool val) { m_jump = val; }
+    bool GetJump(bool val) { return m_jump; }
+
     char* GetPassword() { return m_password; }
     short GetMatchUserSize() { return m_mach_user_size; }
     void SetMatchUserSize(short val) { m_mach_user_size = val; }

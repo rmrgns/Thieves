@@ -75,6 +75,8 @@ private:
 	void ProcessGameStart(int c_id, unsigned char* p);
 	void ProcessDamageCheat(int c_id, unsigned char* p);
 	void StartGame(int room_id);
+	void ProcessJumpStart(int c_id, unsigned char* p);
+	void ProcessJumpComplete(int c_id, unsigned char* p);
 
 	// Test 
 	void TestProcessGameStart(int c_id, unsigned char* p);

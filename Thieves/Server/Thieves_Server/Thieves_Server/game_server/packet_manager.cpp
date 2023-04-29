@@ -237,6 +237,8 @@ void PacketManager::SendObjInfo(int c_id, int obj_id)
 
 }
 
+
+
 void PacketManager::SendTime(int c_id, float round_time)
 {
 }
@@ -444,10 +446,6 @@ void PacketManager::ProcessGameStart(int c_id, unsigned char* p)
 	StartGame(room->GetRoomID());
 }
 
-void PacketManager::ProcessDamageCheat(int c_id, unsigned char* p)
-{
-}
-
 void PacketManager::StartGame(int room_id)
 {
 	Room* room = m_room_manager->GetRoom(room_id);
@@ -491,6 +489,21 @@ void PacketManager::StartGame(int room_id)
 
 		//SendWaveInfo(c_id, next_round, room->GetMaxUser() * next_round, room->GetMaxUser() * (next_round + 1));
 	}
+}
+
+void PacketManager::ProcessJumpStart(int c_id, unsigned char* p)
+{
+	cs_packet_jump_start* packet = reinterpret_cast<cs_packet_jump_start*> (p);
+	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
+	player->SetJump(true);
+
+}
+
+void PacketManager::ProcessJumpComplete(int c_id, unsigned char* p)
+{
+	cs_packet_jump_start* packet = reinterpret_cast<cs_packet_jump_start*> (p);
+	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
+	player->SetJump(false);
 }
 
 // TEST

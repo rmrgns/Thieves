@@ -85,6 +85,18 @@ void ThievesPacketManager::ProcessObjInfo(int c_id, unsigned char* p)
 	// 오브젝트 spqwn 및 m_objmap[pakcet->id] 전송하여 id값마다 스폰
 }
 
+void ThievesPacketManager::ProcessJumpStart(int c_id, unsigned char* p)
+{
+	sc_packet_jump_start* packet = reinterpret_cast<sc_packet_jump_start*>(p);
+
+}
+
+void ThievesPacketManager::ProcessJumpComplete(int c_id, unsigned char* p)
+{
+	sc_packet_jump_complete* packet = reinterpret_cast<sc_packet_jump_complete*>(p);
+}
+
+
 
 //void ThievesPacketManager::Reset()
 //{

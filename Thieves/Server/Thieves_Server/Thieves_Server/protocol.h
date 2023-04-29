@@ -115,6 +115,16 @@ struct cs_packet_game_start {
 
 };
 
+struct cs_packet_jump_start {
+	unsigned char size;
+	char type;
+};
+
+struct cs_packet_jump_complete {
+	unsigned char size;
+	char type;
+};
+
 struct sc_packet_sign_in_ok {
 	unsigned char size;
 	char type;
@@ -204,4 +214,14 @@ struct sc_packet_obj_info {
 	float	x, y, z;
 	bool	start;
 	char	object_type;
+};
+
+struct sc_packet_jump_start {
+	unsigned char size;
+	char type;
+};
+
+struct sc_packet_jump_complete {
+	unsigned char size;
+	char type;
 };
