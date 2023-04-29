@@ -106,11 +106,7 @@ void PlayerInput::LateUpdate()
 		GET_SINGLE(SceneManager)->SetBuildPlayer(true);
 	}
 
-	if (INPUT->GetButtonDown(KEY_TYPE::SPACE))
-	{
-		_jump = true;
-		// 점프 시작 패킷 전송
-	}
+	
 
 	// Attack
 	if (INPUT->GetButtonDown(KEY_TYPE::LBUTTON))
@@ -130,16 +126,20 @@ void PlayerInput::PlayerMove() {
 	pos.x = GET_SINGLE(SceneManager)->GetPlayerPositionX();
 	pos.y = recv_pos.y;
 	pos.z = GET_SINGLE(SceneManager)->GetPlayerPositionZ();
-	
-
-	//	GET_SINGLE(SceneManager)->SetPlayerPosition(pos);
 
 	// ĳ���� ����
+	if (INPUT->GetButtonDown(KEY_TYPE::SPACE))
+	{
 
+		_jump = true;
+		// 점프 시작 패킷 전송
+	}
+
+	// ĳ���� ����
+	Jump(pos);
 
 	if (_checkCameraRotation == true)
 		PlayerRotation();
-
 
 	// ī�޶� ���콺���� on/off (temp code)
 	if (INPUT->GetButtonDown(KEY_TYPE::L))
