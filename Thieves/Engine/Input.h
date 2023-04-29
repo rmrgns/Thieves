@@ -90,6 +90,7 @@ private:
 private:
 	HWND _hwnd;
 	vector<KEY_STATE> _states;
+	vector<KEY_STATE> _mouseState;
 	POINT _mousePos = {};
 	POINT _prevMousePos = {};
 	wstring _userID;

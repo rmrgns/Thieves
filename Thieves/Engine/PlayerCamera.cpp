@@ -18,7 +18,8 @@ void PlayerCamera::LateUpdate()
 {
 	//Vec3 pos = GetTransform()->GetLocalPosition();
 	Vec3 pos = GET_SINGLE(SceneManager)->GetPlayerPosition();
-	pos.y += 125.f;
+	pos.y += 175.f;
+	pos.x += 100.f;
 	// ī�޶� ���콺����
 	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME && _checkCameraRotation == true)
 	{

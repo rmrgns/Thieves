@@ -56,9 +56,3 @@ void Input::Update()
 		::ScreenToClient(GEngine->GetWindow().hwnd, &_mousePos);
 	}
 }
-
-//if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
-	//{
-	//	// 마우스 왼쪽 버튼이 눌려져 있음
-	//	// 여기에 처리할 코드를 작성하세요.
-	//}
