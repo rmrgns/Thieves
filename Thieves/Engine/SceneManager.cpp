@@ -308,29 +308,46 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 #pragma endregion
 
 
-#pragma region FBX
-	{
-		for (int i = 0; i < 2; i++)
-		{
-			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Dragon.fbx");
 
-			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-
-			for (auto& gameObject : gameObjects)
-			{
-				gameObject->SetName(L"Dragon");
-				gameObject->SetCheckFrustum(false);
-				gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 300.f * i));
-				//gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 300.f));
-				gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-				//gameObject->AddComponent(make_shared<TestObjectMove>());
-				scene->AddGameObject(gameObject);
-				gameObject->AddComponent(make_shared<TestDragon>());
-
-			}
-		}}
+//#pragma region FBX
+//	{
+//		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Dragon.fbx");
+//
+//		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+//
+//		for (auto& gameObject : gameObjects)
+//		{
+//			gameObject->SetName(L"Dragon");
+//			gameObject->SetCheckFrustum(false);
+//			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 300.f));
+//			//gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 300.f));
+//			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+//			//gameObject->AddComponent(make_shared<TestObjectMove>());
+//			scene->AddGameObject(gameObject);
+//
+//		}
+//	}
 //#pragma endregion
 
+//#pragma region FBX2
+//	{
+//		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Dragon.fbx");
+//
+//		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+//
+//		for (auto& gameObject : gameObjects)
+//		{
+//			gameObject->SetName(L"Dragon2");
+//			gameObject->SetCheckFrustum(false);
+//			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, -300.f));
+//			//gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 300.f));
+//			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+//			//gameObject->AddComponent(make_shared<TestObjectMove>());
+//			scene->AddGameObject(gameObject);
+//
+//		}
+//	}
+//#pragma endregion
 
 //#pragma region FBXMap
 //	{
@@ -375,30 +392,80 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 #pragma endregion
 
-#pragma region PoliceFBX
+
+
+#pragma region OtherFBX
 	{
-		for (int i = 0; i < 1; i++)
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Thief2.fbx");
+
+		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+
+		for (auto& gameObject : gameObjects)
 		{
-			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\PoliceMan.fbx");
-			//hared_ptr<MeshData> meshData
-			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+			gameObject->SetName(L"Thief2");
+			gameObject->SetCheckFrustum(false);
+			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 100.f));
+			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 3.1415f, 0.f));
+			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+			//gameObject->AddComponent(make_shared<TestObjectMove>());
+			//gameObject->AddComponent(make_shared<PlayerInput>());
+			int32 index = 2;
+			gameObject->GetAnimator()->Play(index);
+			//gameObject->AddComponent(make_shared<ParticleSystem>());
+			scene->AddGameObject(gameObject);
+			//gameObject->AddComponent(make_shared<TestDragon>());
 
-			for (auto& gameObject : gameObjects)
-			{
-				gameObject->SetName(L"Police");
-				gameObject->SetCheckFrustum(false);
-				gameObject->GetTransform()->SetLocalPosition(Vec3(200.f * i, 0.f, 0.f));
-				//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 3.1415f, 0.f));
-				gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-				//gameObject->AddComponent(make_shared<TestObjectMove>());
-				scene->AddGameObject(gameObject);
-				//gameObject->AddComponent(make_shared<TestDragon>());
-
-			}
 		}
 	}
 #pragma endregion
 
+#pragma region OtherFBX2
+	{
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Thief3.fbx");
+
+		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+
+		for (auto& gameObject : gameObjects)
+		{
+			gameObject->SetName(L"Thief3");
+			gameObject->SetCheckFrustum(false);
+			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 200.f));
+			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 3.1415f, 0.f));
+			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+			//gameObject->AddComponent(make_shared<TestObjectMove>());
+			//gameObject->AddComponent(make_shared<PlayerInput>());
+			int32 index = 2;
+			gameObject->GetAnimator()->Play(index);
+			//gameObject->AddComponent(make_shared<ParticleSystem>());
+			scene->AddGameObject(gameObject);
+			//gameObject->AddComponent(make_shared<TestDragon>());
+
+		}
+	}
+#pragma endregion
+
+//#pragma region PoliceFBX
+//	{
+//			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\PoliceMan.fbx");
+//			//hared_ptr<MeshData> meshData
+//			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+//
+//			for (auto& gameObject : gameObjects)
+//			{
+//				gameObject->SetName(L"Police");
+//				gameObject->SetCheckFrustum(false);
+//				gameObject->GetTransform()->SetLocalPosition(Vec3(200.f, 0.f, 0.f));
+//				//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 3.1415f, 0.f));
+//				gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+//				//gameObject->AddComponent(make_shared<TestObjectMove>());
+//				scene->AddGameObject(gameObject);
+//				//gameObject->AddComponent(make_shared<TestDragon>());
+//
+//			}
+//	}
+//#pragma endregion
+
+/*
 #pragma region FBXBox
 	{
 		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Box.fbx");
@@ -419,6 +486,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		}
 	}
 #pragma endregion
+*/
 
 #pragma region Directional Light
 	{
