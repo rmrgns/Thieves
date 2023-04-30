@@ -11,7 +11,7 @@
 #include "Light.h"
 #include "Physics.h"
 
-// ½ºÅ©¸³Æ®
+// ï¿½ï¿½Å©ï¿½ï¿½Æ®
 #include "TestCameraScript.h"
 #include "TestObjectMove.h"
 #include "LoginScript.h"
@@ -51,8 +51,8 @@ void SceneManager::Render()
 
 void SceneManager::LoadScene(wstring sceneName)
 {
-	// TODO : ±âÁ¸ Scene Á¤¸®
-	// TODO : ÆÄÀÏ¿¡¼­ Scene Á¤º¸ ·Îµå
+	// TODO : ï¿½ï¿½ï¿½ï¿½ Scene ï¿½ï¿½ï¿½ï¿½
+	// TODO : ï¿½ï¿½ï¿½Ï¿ï¿½ï¿½ï¿½ Scene ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½
 	if (_activeScene != nullptr)
 	{
 		_activeScene.reset();
@@ -79,7 +79,7 @@ void SceneManager::LoadScene(wstring sceneName)
 
 void SceneManager::SetLayerName(uint8 index, const wstring& name)
 {
-	// ±âÁ¸ µ¥ÀÌÅÍ »èÁ¦
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	const wstring& prevName = _layerNames[index];
 	_layerIndex.erase(prevName);
 
@@ -105,7 +105,7 @@ shared_ptr<GameObject> SceneManager::Pick(int32 screenX, int32 screenY)
 
 	Matrix projectionMatrix = camera->GetProjectionMatrix();
 
-	// ViewSpace¿¡¼­ Picking ÁøÇà
+	// ViewSpaceï¿½ï¿½ï¿½ï¿½ Picking ï¿½ï¿½ï¿½ï¿½
 	float viewX = (+2.0f * screenX / width - 1.0f) / projectionMatrix(0, 0);
 	float viewY = (-2.0f * screenY / height + 1.0f) / projectionMatrix(1, 1);
 
@@ -122,16 +122,16 @@ shared_ptr<GameObject> SceneManager::Pick(int32 screenX, int32 screenY)
 		if (gameObject->GetCollider() == nullptr)
 			continue;
 
-		// ViewSpace¿¡¼­ÀÇ Ray Á¤ÀÇ
+		// ViewSpaceï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ray ï¿½ï¿½ï¿½ï¿½
 		Vec4 rayOrigin = Vec4(0.0f, 0.0f, 0.0f, 1.0f);
 		Vec4 rayDir = Vec4(viewX, viewY, 1.0f, 0.0f);
 
-		// WorldSpace¿¡¼­ÀÇ Ray Á¤ÀÇ
+		// WorldSpaceï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ray ï¿½ï¿½ï¿½ï¿½
 		rayOrigin = XMVector3TransformCoord(rayOrigin, viewMatrixInv);
 		rayDir = XMVector3TransformNormal(rayDir, viewMatrixInv);
 		rayDir.Normalize();
 
-		// WorldSpace¿¡¼­ ¿¬»ê
+		// WorldSpaceï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		float distance = 0.f;
 		if (gameObject->GetCollider()->Intersects(rayOrigin, rayDir, OUT distance) == false)
 			continue;
@@ -149,7 +149,7 @@ shared_ptr<GameObject> SceneManager::Pick(int32 screenX, int32 screenY)
 
 void SceneManager::BuildPlayer()
 {
-	// ´Ù¸¥ ÇÃ·¹ÀÌ¾î ÁÂÇ¥
+	// ï¿½Ù¸ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ç¥
 	Vec3 otherplayer = { 100.f,100.f,100.f };
 
 	shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Thief.fbx");
@@ -180,7 +180,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	{
 		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"ComputeShader");
 
-		// UAV ¿ë Texture »ý¼º
+		// UAV ï¿½ï¿½ Texture ï¿½ï¿½ï¿½ï¿½
 		shared_ptr<Texture> texture = GET_SINGLE(Resources)->CreateTexture(L"UAVTexture",
 			DXGI_FORMAT_R8G8B8A8_UNORM, 1024, 1024,
 			CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT), D3D12_HEAP_FLAG_NONE,
@@ -191,7 +191,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		material->SetInt(0, 1);
 		GEngine->GetComputeDescHeap()->SetUAV(texture->GetUAVHandle(), UAV_REGISTER::u0);
 
-		// ¾²·¹µå ±×·ì (1 * 1024 * 1)
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×·ï¿½ (1 * 1024 * 1)
 		material->Dispatch(1, 1024, 1);
 	}
 #pragma endregion
@@ -203,14 +203,14 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		shared_ptr<GameObject> camera = make_shared<GameObject>();
 		camera->SetName(L"Main_Camera");
 		camera->AddComponent(make_shared<Transform>());
-		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45µµ
+		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45ï¿½ï¿½
 		//camera->AddComponent(make_shared<TestCameraScript>());
 		camera->AddComponent(make_shared<PlayerCamera>());
 		camera->AddComponent(make_shared<LoginScript>());
-		camera->GetCamera()->SetFar(10000.f);
+		camera->GetCamera()->SetFar(30000.f);
 		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
 		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
-		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true); // UI´Â ¾È ÂïÀ½
+		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true); // UIï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 		scene->AddGameObject(camera);
 	}	
@@ -225,8 +225,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
 		camera->GetCamera()->SetProjectionType(PROJECTION_TYPE::ORTHOGRAPHIC);
 		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
-		camera->GetCamera()->SetCullingMaskAll(); // ´Ù ²ô°í
-		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, false); // UI¸¸ ÂïÀ½
+		camera->GetCamera()->SetCullingMaskAll(); // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, false); // UIï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		scene->AddGameObject(camera);
 	}
 #pragma endregion
@@ -389,14 +389,24 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 #pragma endregion
 
-#pragma region FBXBox
+#pragma region Map
 	{
-		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Box.fbx");
-		meshData->Save(L"..\\Resources\\FBX\\Box.fbx");
-		for (int32 i = 0; i < 2; i++)
+
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Map.fbx");
+
+		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+
+		for (auto& gameObject : gameObjects)
 		{
-			meshData->Load(L"..\\Resources\\FBX\\Box.fbx");
-			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+			gameObject->SetName(L"Map");
+			gameObject->SetCheckFrustum(false);
+			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 3.1415f, 0.f));
+			gameObject->GetTransform()->SetLocalScale(Vec3(60.f, 100.f, 60.f));
+			//gameObject->AddComponent(make_shared<TestObjectMove>());
+			//gameObject->AddComponent(make_shared<PlayerInput>());
+			scene->AddGameObject(gameObject);
+			//gameObject->AddComponent(make_shared<TestDragon>());
 
 			for (auto& gameObject : gameObjects)
 			{
@@ -418,9 +428,9 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		light->AddComponent(make_shared<Light>());
 		light->GetLight()->SetLightDirection(Vec3(0, -1, 1.f));
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
-		light->GetLight()->SetDiffuse(Vec3(1.f, 1.f, 1.f));
+		light->GetLight()->SetDiffuse(Vec3(1.0f, 1.0f, 1.0f));
 		light->GetLight()->SetAmbient(Vec3(1.0f, 1.0f, 1.0f));
-		light->GetLight()->SetSpecular(Vec3(1.0f, 1.0f, 1.0f));
+		light->GetLight()->SetSpecular(Vec3(0.0f, 0.0f, 0.0f));
 
 		scene->AddGameObject(light);
 	}
@@ -492,7 +502,7 @@ shared_ptr<Scene> SceneManager::LoadLoginScene()
 		shared_ptr<GameObject> camera = make_shared<GameObject>();
 		camera->SetName(L"Main_Camera");
 		camera->AddComponent(make_shared<Transform>());
-		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45µµ
+		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45ï¿½ï¿½
 
 		camera->GetCamera()->SetFar(10000.f);
 		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));

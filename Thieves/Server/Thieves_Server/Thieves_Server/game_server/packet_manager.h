@@ -63,7 +63,7 @@ private:
 	concurrency::concurrent_queue<db_task>m_db_queue;
 	std::thread db_thread;
 	
-	float	_speed = 200.f;
+	float	_speed = 700.f;
 
 
 	void ProcessSignIn(int c_id, unsigned char* p);

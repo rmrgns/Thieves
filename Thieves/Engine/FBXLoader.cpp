@@ -173,9 +173,9 @@ void FBXLoader::LoadMesh(FbxMesh* mesh)
 		}
 
 		const uint32 subsetIdx = geometryElementMaterial->GetIndexArray().GetAt(i);
-		meshInfo.indices[subsetIdx].push_back(arrIdx[0]);
-		meshInfo.indices[subsetIdx].push_back(arrIdx[2]);
-		meshInfo.indices[subsetIdx].push_back(arrIdx[1]);
+		meshInfo.indices[subsetIdx].emplace_back(arrIdx[0]);
+		meshInfo.indices[subsetIdx].emplace_back(arrIdx[2]);
+		meshInfo.indices[subsetIdx].emplace_back(arrIdx[1]);
 	}
 
 	// Animation
@@ -196,7 +196,7 @@ void FBXLoader::LoadMaterial(FbxSurfaceMaterial* surfaceMaterial)
 	material.normalTexName = GetTextureRelativeName(surfaceMaterial, FbxSurfaceMaterial::sNormalMap);
 	material.specularTexName = GetTextureRelativeName(surfaceMaterial, FbxSurfaceMaterial::sSpecular);
 
-	_meshes.back().materials.push_back(material);
+	_meshes.back().materials.emplace_back(material);
 }
 
 void FBXLoader::GetNormal(FbxMesh* mesh, FbxMeshInfo* container, int32 idx, int32 vertexCounter)
@@ -401,7 +401,7 @@ void FBXLoader::LoadBones(FbxNode* node, int32 idx, int32 parentIdx)
 		shared_ptr<FbxBoneInfo> bone = make_shared<FbxBoneInfo>();
 		bone->boneName = s2ws(node->GetName());
 		bone->parentIndex = parentIdx;
-		_bones.push_back(bone);
+		_bones.emplace_back(bone);
 	}
 
 	const int32 childCount = node->GetChildCount();
@@ -429,7 +429,7 @@ void FBXLoader::LoadAnimationInfo()
 		animClip->endTime = takeInfo->mLocalTimeSpan.GetStop();
 		animClip->mode = _scene->GetGlobalSettings().GetTimeMode();
 
-		_animClips.push_back(animClip);
+		_animClips.emplace_back(animClip);
 	}
 }
 
@@ -583,7 +583,7 @@ void FBXLoader::LoadKeyframe(int32 animIndex, FbxNode* node, FbxCluster* cluster
 		keyFrameInfo.time = fbxTime.GetSecondDouble();
 		keyFrameInfo.matTransform = matTransform;
 
-		_animClips[animIndex]->keyFrames[boneIdx].push_back(keyFrameInfo);
+		_animClips[animIndex]->keyFrames[boneIdx].emplace_back(keyFrameInfo);
 	}
 }
 

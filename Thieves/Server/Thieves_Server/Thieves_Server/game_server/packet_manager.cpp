@@ -100,13 +100,13 @@ void PacketManager::ProcessRecv(int c_id , EXP_OVER* exp_over, DWORD num_bytes)
 {
 	if (num_bytes == 0) {
 		Disconnect(c_id);
-		std::cout << "Àß¸øµÈ Á¤º¸" << std::endl;
+		std::cout << "ï¿½ß¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½" << std::endl;
 	}
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 	int remain_data = num_bytes + cl->m_prev_size;
 	unsigned char* packet_start = exp_over->_net_buf;
 	int packet_size = packet_start[0];
-	if (packet_size == 0)std::cout << "packet_size°¡ 0" << cl->GetID();
+	if (packet_size == 0)std::cout << "packet_sizeï¿½ï¿½ 0" << cl->GetID();
 	while (packet_size <= remain_data) {
 		ProcessPacket(c_id, packet_start);
 		remain_data -= packet_size;
@@ -127,7 +127,7 @@ void PacketManager::ProcessRecv(int c_id , EXP_OVER* exp_over, DWORD num_bytes)
 //	for (int i = 0; i < MAX_USER; ++i)
 //	{
 //		for (int j = 0; j <= NPC_ID_END; ++j) {
-//			//ÀÌÈÄ¿¡ Á¶°Ç Ãß°¡
+//			//ï¿½ï¿½ï¿½Ä¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
 //			if (i != j)
 //				SendMovePacket(i, j);
 //		}
@@ -135,12 +135,12 @@ void PacketManager::ProcessRecv(int c_id , EXP_OVER* exp_over, DWORD num_bytes)
 //	SetTimerEvent(0, 0, EVENT_TYPE::EVENT_PLAYER_MOVE, 10);
 //}
 
-//void PacketManager::UpdateObjMove()//ÀÏ´Ü º¸·ù
+//void PacketManager::UpdateObjMove()//ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½
 //{
 //	for (int i = 0; i < MAX_USER; ++i)
 //	{
 //		for (int j = 0; j <= NPC_ID_END; ++j) {
-//			//ÀÌÈÄ¿¡ Á¶°Ç Ãß°¡
+//			//ï¿½ï¿½ï¿½Ä¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
 //			if (i != j)
 //				SendMovePacket(i, j);
 //		}
@@ -163,10 +163,10 @@ void PacketManager::SendMovePacket(int c_id, int mover)
 
 	packet.recv_bool = true;
 
-	
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 //	cout << "ID : " << c_id << " x " << packet.posX << " y " << packet.posY << "z " << packet.posZ << endl;
 	cout << "ID : " << c_id << " x " << packet.posX  << "z " << packet.posZ << endl;
+
 	cl->DoSend(sizeof(packet), &packet);
 }
 
@@ -301,12 +301,12 @@ void PacketManager::CreateDBThread()
 {
 }
 
-// ºñµ¿±â·Î DBÀÛ¾÷À» ½ÇÇàÇÏ´Â Thread
+// ï¿½ñµ¿±ï¿½ï¿½ DBï¿½Û¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ Thread
 void PacketManager::DBThread()
 {
 }
 
-// case¿¡ µû¸¥ DB ·Î±×ÀÎ °¡ÀÔÀ» ÆÇ´ÜÇÏ´Â ÇÔ¼ö
+// caseï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ DB ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
 void PacketManager::ProcessDBTask(db_task& dt)
 {
 }
@@ -357,7 +357,7 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 	
 	if (packet->direction == 1)
 	{
-		// 1¹ø
+		// 1ï¿½ï¿½
 		cl->SetPosX(cl->GetPosX() + packet->vecX * _speed * packet->deltaTime);
 		cl->SetPosZ(cl->GetPosZ() + packet->vecZ * _speed * packet->deltaTime);
 	}
@@ -368,8 +368,8 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 	}
 	if (packet->direction == 3)
 	{
-		// ·è º¤ÅÍ¿Í ¾÷ º¤ÅÍ¸¦ ¿ÜÀûÇÏ¸é right º¤ÅÍ°¡ »ý¼ºµÊ.
-		// ´ÜÀ§ º¤ÅÍ¿Í ´ÜÀ§ º¤ÅÍ »çÀÌÀÇ ¿ÜÀûÀº ´ÜÀ§ º¤ÅÍÀÎ ¿ÜÀûÀÌ »ý¼ºµÊ.
+		// ï¿½ï¿½ ï¿½ï¿½ï¿½Í¿ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ right ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Í¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
 		Vector3 look = Vector3(packet->vecX, 0.0f, packet->vecZ);
 		Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
 		Vector3 right = look.Cross(up);
@@ -379,8 +379,8 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 	}
 	if (packet->direction == 4)
 	{
-		// ·è º¤ÅÍ¿Í ¾÷ º¤ÅÍ¸¦ ¿ÜÀûÇÏ¸é right º¤ÅÍ°¡ »ý¼ºµÊ.
-		// ´ÜÀ§ º¤ÅÍ¿Í ´ÜÀ§ º¤ÅÍ »çÀÌÀÇ ¿ÜÀûÀº ´ÜÀ§ º¤ÅÍÀÎ ¿ÜÀûÀÌ »ý¼ºµÊ.
+		// ï¿½ï¿½ ï¿½ï¿½ï¿½Í¿ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ right ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Í¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
 		Vector3 look = Vector3(packet->vecX, 0.0f, packet->vecZ);
 		Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
 		Vector3 right = look.Cross(up);
@@ -452,8 +452,8 @@ void PacketManager::StartGame(int room_id)
 {
 	Room* room = m_room_manager->GetRoom(room_id);
 	//const Vector3 base_pos = m_map_manager->GetMapObjectByType(OBJ_TYPE::OT_BASE).GetGroundPos();
-	//¸Ê ¿ÀºêÁ§Æ® Á¤º¸´Â º¸³»ÁÙ ÇÊ¿ä¾øÀ½
-	//npc¿Í player ÃÊ±âÈ­ ¹× º¸³»ÁÖ±â
+	//ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½ï¿½
+	//npcï¿½ï¿½ player ï¿½Ê±ï¿½È­ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½
 	//const Vector3 base_pos = m_map_manager->GetMapObjectByType(OBJ_TYPE::OT_BASE).GetGroundPos();
 
 	Player* pl = NULL;
@@ -477,15 +477,15 @@ void PacketManager::StartGame(int room_id)
 			continue;
 
 		pl = MoveObjManager::GetInst()->GetPlayer(c_id);
-		//cout << "SendObj ÀÌ¸§:" << pl->GetName() << endl;
-		SendObjInfo(c_id, c_id);//ÀÚ±âÀÚ½Å
+		//cout << "SendObj ï¿½Ì¸ï¿½:" << pl->GetName() << endl;
+		SendObjInfo(c_id, c_id);//ï¿½Ú±ï¿½ï¿½Ú½ï¿½
 		for (auto other_id : room->GetObjList())
 		{
 			if (false == MoveObjManager::GetInst()->IsPlayer(other_id))
 				continue;
 			if (c_id == other_id)continue;
 			SendObjInfo(c_id, other_id);
-			//cout << "¾È¿¡ SendObj ÀÌ¸§:" << pl->GetName() << endl;
+			//cout << "ï¿½È¿ï¿½ SendObj ï¿½Ì¸ï¿½:" << pl->GetName() << endl;
 		}
 		//SendBaseStatus(c_id, room->GetRoomID());
 
@@ -515,7 +515,7 @@ void PacketManager::TestProcessGameStart(int c_id, unsigned char* p)
 		pl->SetRoomID(0);
 		//player->SetIsActive(true);
 		pl->state_lock.unlock();
-		room->EnterRoom(id);//¹æ¿¡ ¾ÆÀÌµð ³Ñ°ÜÁÖ±â
+		room->EnterRoom(id);//ï¿½æ¿¡ ï¿½ï¿½ï¿½Ìµï¿½ ï¿½Ñ°ï¿½ï¿½Ö±ï¿½
 		cout << id << endl;
 		//SendMatchingOK(id);
 	}
@@ -574,15 +574,15 @@ void PacketManager::TestStartGame(int room_id)
 			continue;
 
 		pl = MoveObjManager::GetInst()->GetPlayer(c_id);
-		//cout << "SendObj ÀÌ¸§:" << pl->GetName() << endl;
-		//SendObjInfo(c_id, c_id);//ÀÚ±âÀÚ½Å
+		//cout << "SendObj ï¿½Ì¸ï¿½:" << pl->GetName() << endl;
+		//SendObjInfo(c_id, c_id);//ï¿½Ú±ï¿½ï¿½Ú½ï¿½
 		for (auto other_id : room->GetObjList())
 		{
 			if (false == MoveObjManager::GetInst()->IsPlayer(other_id))
 				continue;
 			if (c_id == other_id)continue;
 			SendObjInfo(c_id, other_id);
-			//cout << "¾È¿¡ SendObj ÀÌ¸§:" << pl->GetName() << endl;
+			//cout << "ï¿½È¿ï¿½ SendObj ï¿½Ì¸ï¿½:" << pl->GetName() << endl;
 		}
 		//SendBaseStatus(c_id, room->GetRoomID());
 
