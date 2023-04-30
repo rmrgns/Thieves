@@ -254,22 +254,23 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 #pragma endregion
 	
-#pragma region Terrain
-	{
-		shared_ptr<GameObject> obj = make_shared<GameObject>();
-		obj->AddComponent(make_shared<Transform>());
-		obj->AddComponent(make_shared<Terrain>());
-		obj->AddComponent(make_shared<MeshRenderer>());
 
-		obj->GetTransform()->SetLocalScale(Vec3(50.f, 250.f, 50.f));
-		obj->GetTransform()->SetLocalPosition(Vec3(-100.f, -200.f, 300.f));
-		obj->SetStatic(true);
-		obj->GetTerrain()->Init(64, 64);
-		obj->SetCheckFrustum(false);
-
-		scene->AddGameObject(obj);
-	}
-#pragma endregion
+//#pragma region Terrain
+//	{
+//		shared_ptr<GameObject> obj = make_shared<GameObject>();
+//		obj->AddComponent(make_shared<Transform>());
+//		obj->AddComponent(make_shared<Terrain>());
+//		obj->AddComponent(make_shared<MeshRenderer>());
+//
+//		obj->GetTransform()->SetLocalScale(Vec3(50.f, 250.f, 50.f));
+//		obj->GetTransform()->SetLocalPosition(Vec3(-100.f, -200.f, 300.f));
+//		obj->SetStatic(true);
+//		obj->GetTerrain()->Init(64, 64);
+//		obj->SetCheckFrustum(false);
+//
+//		scene->AddGameObject(obj);
+//	}
+//#pragma endregion
 	
 #pragma region UI_Test
 	for (int32 i = 0; i < 1; i++)
@@ -407,15 +408,6 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 			//gameObject->AddComponent(make_shared<PlayerInput>());
 			scene->AddGameObject(gameObject);
 			//gameObject->AddComponent(make_shared<TestDragon>());
-
-			for (auto& gameObject : gameObjects)
-			{
-				gameObject->SetName(L"Box" + to_wstring(i));
-				gameObject->SetCheckFrustum(false);
-				gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f + 100.f * i, 0.f));
-				gameObject->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
-				scene->AddGameObject(gameObject);
-			}
 		}
 	}
 #pragma endregion

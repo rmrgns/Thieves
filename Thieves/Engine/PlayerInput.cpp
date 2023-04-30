@@ -45,7 +45,6 @@ void PlayerInput::LateUpdate()
 			direction = 1;
 			Network::GetInst()->SendMovePacket(direction, pos,
 				GetTransform()->GetLook(), DELTA_TIME);
-			pos += GetTransform()->GetLook() * _speed * DELTA_TIME;
 		}
 		if (INPUT->GetButton(KEY_TYPE::S))
 		{
@@ -53,7 +52,6 @@ void PlayerInput::LateUpdate()
 
 			Network::GetInst()->SendMovePacket(direction, pos,
 				GetTransform()->GetLook(), DELTA_TIME);
-			pos -= GetTransform()->GetLook() * _speed * DELTA_TIME;
 		}
 		if (INPUT->GetButton(KEY_TYPE::A))
 		{
@@ -61,7 +59,6 @@ void PlayerInput::LateUpdate()
 
 			Network::GetInst()->SendMovePacket(direction, pos,
 				GetTransform()->GetLook(), DELTA_TIME);
-			pos += GetTransform()->GetRight() * _speed * DELTA_TIME;
 		}
 		if (INPUT->GetButton(KEY_TYPE::D))
 		{
@@ -69,7 +66,6 @@ void PlayerInput::LateUpdate()
 
 			Network::GetInst()->SendMovePacket(direction, pos,
 				GetTransform()->GetLook(), DELTA_TIME);
-			pos -= GetTransform()->GetRight() * _speed * DELTA_TIME;
 		}
 	}
 	 if (INPUT->GetButtonUp(KEY_TYPE::W) ||
