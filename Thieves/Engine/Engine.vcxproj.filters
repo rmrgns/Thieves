@@ -246,6 +246,9 @@
     <ClCompile Include="state.h">
       <Filter>Server</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerParticle.cpp">
+      <Filter>Object\Script</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -457,6 +460,9 @@
     </ClInclude>
     <ClInclude Include="server\main\packet_manager.h">
       <Filter>Server\main</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerParticle.h">
+      <Filter>Object\Script</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

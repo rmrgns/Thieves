@@ -17,14 +17,19 @@ void Text::Update()
 	// 텍스트 출력
 	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOGIN)
 	{
+		SetTextInfo(1);
+		wstring text2 = L"Thieves Login Screen";
+		SetText(text2, 0.f, 0.f, 1.f, 1.f);
 
 		SetTextInfo(0);
-		wstring text = L"도둑들 login 화면";
-		SetText(text, 400.f, 200.f, 1.f, 1.f);
+		wstring text = L"Thieves ID";
+		SetText(text, 500.f, 400.f, 1.f, 1.f);
 
-		SetTextInfo(1);
-		wstring text1 = L"testLogin";
-		SetText(text1, 0.f, 0.f, 1.f, 1.f);
+		SetTextInfo(0);
+		wstring text1 = L"Thieves Password";
+		SetText(text1, 500.f, 500.f, 1.f, 1.f);
+
+		
 
 	}
 	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
@@ -166,7 +171,7 @@ void Text::SetTextInfo(int infoNumber)
 		// 텍스트 폰트 등
 		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"Verdana", nullptr,
 			DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_ITALIC, DWRITE_FONT_STRETCH_NORMAL,
-			25, L"en-us", _writeTextFormat.GetAddressOf()));
+			50, L"en-us", _writeTextFormat.GetAddressOf()));
 
 		break;
 	default:

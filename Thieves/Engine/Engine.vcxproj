@@ -211,6 +211,7 @@
     <ClInclude Include="Physics.h" />
     <ClInclude Include="PlayerCamera.h" />
     <ClInclude Include="PlayerInput.h" />
+    <ClInclude Include="PlayerParticle.h" />
     <ClInclude Include="RenderTargetGroup.h" />
     <ClInclude Include="Resources.h" />
     <ClInclude Include="RootSignature.h" />
@@ -287,6 +288,7 @@
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="PlayerCamera.cpp" />
     <ClCompile Include="PlayerInput.cpp" />
+    <ClCompile Include="PlayerParticle.cpp" />
     <ClCompile Include="RenderTargetGroup.cpp" />
     <ClCompile Include="Resources.cpp" />
     <ClCompile Include="RootSignature.cpp" />

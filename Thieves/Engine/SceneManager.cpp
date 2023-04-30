@@ -18,6 +18,7 @@
 #include "PlayerInput.h"
 #include "PlayerCamera.h"
 #include "TestDragon.h"
+#include "PlayerParticle.h"
 
 #include "Resources.h"
 #include "ParticleSystem.h"
@@ -30,10 +31,12 @@ void SceneManager::Update()
 {
 	if (_activeScene == nullptr)
 		return;
+
 	if (_BuildPlayer == true)
 	{
 		BuildPlayer();
 	}
+	
 	_activeScene->Update();
 	_activeScene->LateUpdate();
 	_activeScene->FinalUpdate();
@@ -69,7 +72,6 @@ void SceneManager::LoadScene(wstring sceneName)
 	{
 		return;
 	}
-
 
 	_activeScene->Awake();
 	_activeScene->Start();
@@ -159,12 +161,8 @@ void SceneManager::BuildPlayer()
 		gameObject->SetName(L"Thief");
 		gameObject->SetCheckFrustum(false);
 		gameObject->GetTransform()->SetLocalPosition(otherplayer);
-		//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 3.1415f, 0.f));
 		gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-		//gameObject->AddComponent(make_shared<TestObjectMove>());
-		//gameObject->AddComponent(make_shared<PlayerInput>());
 		_activeScene->AddGameObject(gameObject);
-		//gameObject->AddComponent(make_shared<TestDragon>());
 	}
 	_BuildPlayer = false;
 }
@@ -255,7 +253,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		scene->AddGameObject(skybox);
 	}
 #pragma endregion
-	/*
+	
 #pragma region Terrain
 	{
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
@@ -272,7 +270,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		scene->AddGameObject(obj);
 	}
 #pragma endregion
-	*/
+	
 #pragma region UI_Test
 	for (int32 i = 0; i < 1; i++)
 	{
@@ -366,10 +364,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 			gameObject->AddComponent(make_shared<PlayerInput>());
 			int32 index = 2;
 			gameObject->GetAnimator()->Play(index);
-			gameObject->AddComponent(make_shared<ParticleSystem>());
 			scene->AddGameObject(gameObject);
 			//gameObject->AddComponent(make_shared<TestDragon>());
-
 		}
 	}
 #pragma endregion
@@ -465,16 +461,19 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 #pragma endregion
 */
-//#pragma region ParticleSystem
-//	{
-//		shared_ptr<GameObject> particle = make_shared<GameObject>();
-//		particle->AddComponent(make_shared<Transform>());
-//		particle->AddComponent(make_shared<ParticleSystem>());
-//		particle->SetCheckFrustum(false);
-//		particle->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 100.f));
-//		scene->AddGameObject(particle);
-//	}
-//#pragma endregion
+#pragma region ParticleSystem
+	{
+		shared_ptr<GameObject> particle = make_shared<GameObject>();
+		particle->SetName(L"Particle");
+		particle->AddComponent(make_shared<Transform>());
+		particle->AddComponent(make_shared<ParticleSystem>());
+		particle->SetCheckFrustum(false);
+		particle->AddComponent(make_shared<PlayerParticle>());
+		particle->GetParticleSystem()->UseParticle(false);
+		particle->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+		scene->AddGameObject(particle);
+	}
+#pragma endregion
 	return scene;
 }
 
@@ -571,16 +570,16 @@ shared_ptr<Scene> SceneManager::LoadLoginScene()
 	}
 #pragma endregion
 
-	//#pragma region ParticleSystem
-	//	{
-	//		shared_ptr<GameObject> particle = make_shared<GameObject>();
-	//		particle->AddComponent(make_shared<Transform>());
-	//		particle->AddComponent(make_shared<ParticleSystem>());
-	//		particle->SetCheckFrustum(false);
-	//		particle->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 100.f));
-	//		scene->AddGameObject(particle);
-	//	}
-	//#pragma endregion
+//#pragma region ParticleSystem
+//	{
+//		shared_ptr<GameObject> particle = make_shared<GameObject>();
+//		particle->AddComponent(make_shared<Transform>());
+//		particle->AddComponent(make_shared<ParticleSystem>());
+//		particle->SetCheckFrustum(false);
+//		particle->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 100.f));
+//		scene->AddGameObject(particle);
+//	}
+//#pragma endregion
 
 	return scene;
 }

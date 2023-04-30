@@ -17,7 +17,7 @@ ParticleSystem::ParticleSystem() : Component(COMPONENT_TYPE::PARTICLE_SYSTEM)
 	_mesh = GET_SINGLE(Resources)->LoadPointMesh();
 	_material = GET_SINGLE(Resources)->Get<Material>(L"Particle");
 	shared_ptr<Texture> tex = GET_SINGLE(Resources)->Load<Texture>(
-		L"Bubbles", L"..\\Resources\\Texture\\Particle\\bubble.png");
+		L"Bubbles", L"..\\Resources\\Texture\\Particle\\pngwing.com.png");
 
 	_material->SetTexture(0, tex);
 
@@ -53,12 +53,15 @@ void ParticleSystem::FinalUpdate()
 
 void ParticleSystem::Render()
 {
-	GetTransform()->PushData();
+	if (_useParticle == true)
+	{
+		GetTransform()->PushData();
 
-	_particleBuffer->PushGraphicsData(SRV_REGISTER::t9);
-	_material->SetFloat(0, _startScale);
-	_material->SetFloat(1, _endScale);
-	_material->PushGraphicsData();
+		_particleBuffer->PushGraphicsData(SRV_REGISTER::t9);
+		_material->SetFloat(0, _startScale);
+		_material->SetFloat(1, _endScale);
+		_material->PushGraphicsData();
 
-	_mesh->Render(_maxParticle);
+		_mesh->Render(_maxParticle);
+	}
 }

@@ -30,7 +30,7 @@ public:
 public:
 	virtual void FinalUpdate();
 	void Render();
-
+	void UseParticle(bool flag) { _useParticle = flag; };
 public:
 	virtual void Load(const wstring& path) override { }
 	virtual void Save(const wstring& path) override { }
@@ -53,4 +53,6 @@ private:
 	float				_maxSpeed = 50;
 	float				_startScale = 10.f;
 	float				_endScale = 5.f;
+
+	bool				_useParticle = false;
 };
