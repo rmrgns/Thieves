@@ -97,21 +97,10 @@ void PlayerInput::LateUpdate()
 		 GetAnimator()->Play(_index);
 	 }
 
-	if (INPUT->GetButtonDown(KEY_TYPE::Q))
-	{
-		GET_SINGLE(SceneManager)->SetBuildPlayer(true);
-	}
-
-	// ĳ���� ����
-	if (INPUT->GetButtonDown(KEY_TYPE::SPACE))
-	{
-		if(_jumpState == 0)
-			_jumpState = 1;
-		// 점프 시작 패킷 전송
-	}
-
-	// ĳ���� ����
-	Jump(pos);
+	 if (INPUT->GetButtonDown(KEY_TYPE::Q))
+	 {
+		 GET_SINGLE(SceneManager)->SetBuildPlayer(true);
+	 }
 
 	// Attack
 	if (INPUT->GetButtonDown(KEY_TYPE::LBUTTON))
@@ -119,12 +108,9 @@ void PlayerInput::LateUpdate()
 		if(_attackState == 0)
 			_attackState = 1;
 	}
-	GET_SINGLE(SceneManager)->SetPlayerPosition(pos);
+
 	PlayerAttack();
 	PlayerMove();
-	GetTransform()->SetLocalPosition(pos);
-
-	
 }
 
 void PlayerInput::PlayerMove() {
@@ -135,14 +121,22 @@ void PlayerInput::PlayerMove() {
 	pos.x = GET_SINGLE(SceneManager)->GetPlayerPositionX();
 	pos.y = recv_pos.y;
 	pos.z = GET_SINGLE(SceneManager)->GetPlayerPositionZ();
-	
-
-	//	GET_SINGLE(SceneManager)->SetPlayerPosition(pos);
 
 
 	if (_checkCameraRotation == true)
 		PlayerRotation();
 
+
+	// ĳ���� ����
+	if (INPUT->GetButtonDown(KEY_TYPE::SPACE))
+	{
+		if (_jumpState == 0)
+			_jumpState = 1;
+		// 점프 시작 패킷 전송
+	}
+
+	// ĳ���� ����
+	Jump(pos);
 
 	// ī�޶� ���콺���� on/off (temp code)
 	if (INPUT->GetButtonDown(KEY_TYPE::L))
@@ -158,9 +152,10 @@ void PlayerInput::PlayerMove() {
 
 	Vec3 rotation;
 	rotation.y = GET_SINGLE(SceneManager)->GetPlayerRotation().y;
-	 
+
+	GetTransform()->SetLocalPosition(pos);
 	GetTransform()->SetLocalRotation(rotation);
-	//GetTransform()->SetLocalPosition(pos);
+	
 	recv_pos = GetTransform()->GetLocalPosition();
 
 }
