@@ -61,11 +61,18 @@ const char SC_PACKET_OBJ_INFO = 17;		// OBJ 정보
 // 어차피 서버에서 위치를 계산하여 클라이언트로 보내줄 것이기 때문에 문제가 없다.
 struct cs_packet_move {
 	unsigned char size;
-	char	type;
-	char	direction;			// 1 : 앞,  2: 뒤, 3:왼, 4:오
-	int		move_time; //디버그 용 -> 보낸시간 -받은시간 = 통신하는 시간
-	float	vecX, vecZ;	// look vec
-	float	deltaTime;
+	char		type;
+	char		direction;			// 1 : 앞,  2: 뒤, 3:왼, 4:오
+	int			move_time; //디버그 용 -> 보낸시간 -받은시간 = 통신하는 시간
+	float		vecX, vecZ;	// look vec
+	float		deltaTime;
+};
+
+struct cs_packet_jump {
+	unsigned char size;
+	char		type;
+	char		direction;			// 1 : 앞,  2: 뒤, 3:왼, 4:오
+	float		vecY;
 };
 
 struct cs_packet_test {
@@ -131,6 +138,13 @@ struct sc_packet_move {
 	float	posX,  posZ;
 };
 
+struct cs_packet_jump {
+	unsigned char size;
+	char		type;
+	int			id;
+	char		direction;			// 1 : 앞,  2: 뒤, 3:왼, 4:오
+	float		vecY;
+};
 
 struct sc_packet_put_object {
 	unsigned char size;
@@ -138,6 +152,7 @@ struct sc_packet_put_object {
 	int id;
 	float x, y, z;
 	char object_type;
+
 	char name[MAX_NAME_SIZE];
 };
 struct sc_packet_remove_object {

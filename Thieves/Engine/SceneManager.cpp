@@ -27,6 +27,9 @@
 #include "MeshData.h"
 #include "Animator.h"
 
+
+#include "server/thieves_server/thieves_packet_manager.h"
+
 void SceneManager::Update()
 {
 	if (_activeScene == nullptr)
@@ -164,7 +167,7 @@ void SceneManager::BuildPlayer()
 		gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 		_activeScene->AddGameObject(gameObject);
 	}
-	_BuildPlayer = false;
+	//_BuildPlayer = false;
 }
 
 shared_ptr<Scene> SceneManager::LoadTestScene()

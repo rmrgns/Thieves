@@ -15,6 +15,7 @@
 #include "Input.h"
 #include "SceneManager.h"
 
+
 using namespace std;
 using namespace client_fw;
 
@@ -42,11 +43,16 @@ void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
 	SetVecZ(packet->posZ);
 	SetRecv(packet->recv_bool);
 
+
+	// 자기 자신
 	//GET_SINGLE(SceneManager)->SetPlayerPosition(recv_pos);
 	GET_SINGLE(SceneManager)->SetPlayerPositionX(recv_pos.x);
 	//GET_SINGLE(SceneManager)->SetPlayerPositionX(recv_pos.y);
 	GET_SINGLE(SceneManager)->SetPlayerPositionZ(recv_pos.z);
 	
+	// other
+	SceneManager::BuildPlayer(float )
+
 	if (mover != m_obj_map.end())
 	{
 		//if (mover->second->GetIsActive() == false)return;

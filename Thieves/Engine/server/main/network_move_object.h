@@ -27,12 +27,12 @@ class NetworkMoveObj : public NetworkObj
 {
 public:
 	NetworkMoveObj();
-	NetworkMoveObj(int id,  NW_OBJ_TYPE type, float x, float y, float z )
+	NetworkMoveObj(int id,  NW_OBJ_TYPE type, float x, float y, float z, bool is_active )
 	{
 		m_id = id;
 		m_type = type;
 		m_position = Vec3(x, y, z);
-	
+		is_active = false;
 	}
 	NetworkMoveObj(const NetworkMoveObj& other)
 	{
