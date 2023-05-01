@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "SceneManager.h"
 
+
 void Text::Init()
 {
 	CreateD3D11On12Device();
@@ -22,6 +23,8 @@ void Text::Update()
 		SetText(text2, 0.f, 0.f, 1.f, 1.f);
 
 		SetTextInfo(0);
+		//int text GEngine->GetGameInfo()->GetNetworkID();
+		//auto text  = GEngine->GetGameInfo()->GetNetworkID();
 		wstring text = L"Thieves ID";
 		SetText(text, 500.f, 400.f, 1.f, 1.f);
 

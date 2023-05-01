@@ -42,7 +42,7 @@ public:
 	void SetPos(const Vector3& val) { m_pos = val; };
 
 	bool GetJumpState() { return m_jumpState; }
-	void SetJumpState(bool val) { m_jumpState; }
+	void SetJumpState(bool val) { m_jumpState = val; }
 protected:
 	int m_id;
 	OBJ_TYPE m_type;

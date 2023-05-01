@@ -42,11 +42,20 @@ void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
 	SetVecY(packet->posY);
 	SetVecZ(packet->posZ);
 	SetRecv(packet->recv_bool);
+	//PlayerInput::SetJumpState(packet->jump_state);
+
 
 	// 자기 자신
 	//GET_SINGLE(SceneManager)->SetPlayerPosition(recv_pos);
 	GET_SINGLE(SceneManager)->SetPlayerPositionX(recv_pos.x);
-	GET_SINGLE(SceneManager)->SetPlayerPositionY(recv_pos.y);
+	//if (packet->jump_state == true)
+	//{
+		GET_SINGLE(SceneManager)->SetPlayerPositionY(recv_pos.y);
+//	}
+//	else if(packet->jump_state == false)
+//	{
+//		GET_SINGLE(SceneManager)->SetPlayerPositionY(0.f);
+//	}
 	GET_SINGLE(SceneManager)->SetPlayerPositionZ(recv_pos.z);
 	
 	// other

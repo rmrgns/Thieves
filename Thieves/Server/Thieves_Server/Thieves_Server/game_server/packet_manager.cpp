@@ -161,10 +161,14 @@ void PacketManager::SendMovePacket(int c_id, int mover)
 
 	packet.recv_bool = true;
 
-	packet.jump_state = p->GetJumpState();
 
+	// 여기가 잘못됨
+	//if (packet.posY <= 0.f)
+	//	packet.jump_state = false;
+	//else
+	packet.jump_state = p->GetJumpState();
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
-	cout << "ID : " << c_id << " x " << packet.posX << " y " << packet.posY << "z " << packet.posZ << endl;
+	cout << "ID : " << c_id << " jump "<< packet.jump_state << " x " << packet.posX << " y " << packet.posY << "z " << packet.posZ << endl;
 //	cout << "ID : " << c_id << " x " << packet.posX  << "z " << packet.posZ << endl;
 
 	cl->DoSend(sizeof(packet), &packet);
@@ -351,7 +355,7 @@ void PacketManager::ProcessAttack(int c_id, unsigned char* p)
 
 void PacketManager::ProcessMove(int c_id, unsigned char* p)
 {
-	std::cout << "MOVE " << std::endl;
+	//std::cout << "MOVE " << std::endl;
 	cs_packet_move* packet = reinterpret_cast<cs_packet_move*>(p);
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 	
@@ -405,24 +409,25 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 		}*/
 		if (_jumpCount < 1.f)
 		{
-			_jumpSpeed -= 300.f * packet->deltaTime;
+			_jumpSpeed -= 400.f * packet->deltaTime;
 			cl->SetPosY(cl->GetPosY() + up.y  * _jumpSpeed * packet->deltaTime);
 			
 
 		}
 		else if (_jumpCount < 2.f)
 		{
-			_jumpSpeed += 300.f * packet->deltaTime;
+			_jumpSpeed += 400.f * packet->deltaTime;
 			cl->SetPosY(cl->GetPosY() - up.y * _jumpSpeed * packet->deltaTime);
 			
 		}
-		else
+		
+		if (cl->GetPosY() < 0)
 		{
-			// 점프 완료 패킷
-			_jumpCount = 0;
+	//		// 점프 완료 패킷
+	//		_jumpCount = 0;
 			packet->jumpstate = false;
 			cl->SetJumpState(false);
-			cl->SetPosY(0.f);
+			cl->SetPosY(0);
 		}
 
 	}

@@ -17,6 +17,13 @@ public:
 	void Jump(Vec3&);
 	void PlayerAttack();
 
+	bool	GetMoveState() { return _moveState; }
+	int32	GetJumpState() { return _jumpState; }
+	int32	GetAttackState() { return _attackState; }
+	void	SetMoveState(bool val) {  _moveState = val; }
+	void	SetJumpState(int32 val) {  _jumpState = val; }
+	void	SetAttackState(int32 val) {  _attackState = val; }
+	
 private:
 	// Player Move
 	float		_speed = 200.f;
@@ -28,6 +35,7 @@ private:
 	// Player Jump
 	float		_jumpCount = 0.f;
 	int32		_jumpState = 0;
+	//bool		_jumpState = 0;
 	float		_jumpSpeed = 305.f;
 
 	// Player Attack
