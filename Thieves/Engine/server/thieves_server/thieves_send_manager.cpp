@@ -15,18 +15,19 @@ void ThievesSendManager::SendStartPacket(const SOCKET& s_socket)
 }
 
 void ThievesSendManager::SendMovePacket(const SOCKET& s_socket, char direction,
-	Vec3 pos, Vec3 vec, float deltatime)
+	Vec3 pos, Vec3 vec, float deltatime, bool jumpstate)
 {
 	cs_packet_move packet;
 	packet.size = sizeof(packet);
 	packet.type = CS_PACKET_MOVE;
 
 	packet.vecX = vec.x;
-	//packet.vecY = vec.y;
+	packet.vecY = vec.y;
 	packet.vecZ = vec.z;
 
 	packet.deltaTime = deltatime;
 	packet.direction = direction;
+	packet.jumpstate = jumpstate;
 
 	SendPacket(s_socket, sizeof(packet), &packet);
 }

@@ -15,7 +15,7 @@ public:
     //        float r_x, float r_y, float r_z,
     //        float deltatime)override;
     virtual void SendMovePacket(const SOCKET& s_socket, char direction,
-        Vec3 pos, Vec3 vec, float deltatime)override;
+        Vec3 pos, Vec3 vec, float deltatime, bool jumpstate)override;
 
     //void SendSignInPacket(const SOCKET& s_socket, char*, char*);
     //void SendSignUPPacket(const SOCKET& s_socket, char*, char*);

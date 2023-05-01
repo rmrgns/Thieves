@@ -36,6 +36,10 @@ const char CS_PACKET_HIT = 6;				// 피격
 const char CS_PACKET_GAME_START = 7;		// 게임 시작
 const char CS_PACKET_MATCHING = 8;
 const char CS_PACKET_TEST = 9;
+const char CS_PACKET_START_JUMP = 10;				// 점프 시작 패킷
+const char CS_PACKET_COMPLETE_JUMP = 11;				// 점프 완료 패킷
+
+
 
 // SC
 const char SC_PACKET_SIGN_IN_OK = 1;		// 로그인 OK
@@ -55,24 +59,20 @@ const char SC_PAKCET_INTERACTION = 14;		// 상호작용
 const char SC_PACKET_PHASE = 15;			// 페이즈 변경  
 const char SC_PACKET_TEST = 16;
 const char SC_PACKET_OBJ_INFO = 17;		// OBJ 정보
+const char SC_PACKET_START_JUMP = 18;			// 점프 시작 패킷
+const char SC_PACKET_COMPLETE_JUMP = 19;			// 점프 완료 패킷
 //#pragma pack (push, 1)
 
 // 클라이언트 -> 서버로 보내는 패킷은 어떤 키를 얼마나 눌렀는지에 대해서만 보내주면 된다.
 // 어차피 서버에서 위치를 계산하여 클라이언트로 보내줄 것이기 때문에 문제가 없다.
 struct cs_packet_move {
 	unsigned char size;
-	char		type;
-	char		direction;			// 1 : 앞,  2: 뒤, 3:왼, 4:오
-	int			move_time; //디버그 용 -> 보낸시간 -받은시간 = 통신하는 시간
-	float		vecX, vecZ;	// look vec
-	float		deltaTime;
-};
-
-struct cs_packet_jump {
-	unsigned char size;
-	char		type;
-	char		direction;			// 1 : 앞,  2: 뒤, 3:왼, 4:오
-	float		vecY;
+	char	type;
+	char	direction;			// 1 : 앞,  2: 뒤, 3:왼, 4:오
+	int		move_time; //디버그 용 -> 보낸시간 -받은시간 = 통신하는 시간
+	float	vecX, vecY, vecZ;	// look vec
+	float	deltaTime;
+	bool	jumpstate;			// jump_state
 };
 
 struct cs_packet_test {
@@ -135,16 +135,10 @@ struct sc_packet_move {
 	char	type;
 	int		id;
 	bool	recv_bool;
-	float	posX,  posZ;
+	float	posX, posY, posZ;
+	bool	jump_state;
 };
 
-struct cs_packet_jump {
-	unsigned char size;
-	char		type;
-	int			id;
-	char		direction;			// 1 : 앞,  2: 뒤, 3:왼, 4:오
-	float		vecY;
-};
 
 struct sc_packet_put_object {
 	unsigned char size;
@@ -152,7 +146,6 @@ struct sc_packet_put_object {
 	int id;
 	float x, y, z;
 	char object_type;
-
 	char name[MAX_NAME_SIZE];
 };
 struct sc_packet_remove_object {

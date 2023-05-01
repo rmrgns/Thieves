@@ -134,7 +134,6 @@ void PacketManager::ProcessRecv(int c_id , EXP_OVER* exp_over, DWORD num_bytes)
 //	}
 //	SetTimerEvent(0, 0, EVENT_TYPE::EVENT_PLAYER_MOVE, 10);
 //}
-
 //void PacketManager::UpdateObjMove()//�ϴ� ����
 //{
 //	for (int i = 0; i < MAX_USER; ++i)
@@ -157,15 +156,16 @@ void PacketManager::SendMovePacket(int c_id, int mover)
 	packet.type = SC_PACKET_MOVE;
 
 	packet.posX = p->GetPosX();
-	//packet.posY = p->GetPosY();
+	packet.posY = p->GetPosY();
 	packet.posZ = p->GetPosZ();
-
 
 	packet.recv_bool = true;
 
+	packet.jump_state = p->GetJumpState();
+
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
-//	cout << "ID : " << c_id << " x " << packet.posX << " y " << packet.posY << "z " << packet.posZ << endl;
-	cout << "ID : " << c_id << " x " << packet.posX  << "z " << packet.posZ << endl;
+	cout << "ID : " << c_id << " x " << packet.posX << " y " << packet.posY << "z " << packet.posZ << endl;
+//	cout << "ID : " << c_id << " x " << packet.posX  << "z " << packet.posZ << endl;
 
 	cl->DoSend(sizeof(packet), &packet);
 }
@@ -389,7 +389,43 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 		cl->SetPosZ(cl->GetPosZ() - right.z * _speed * packet->deltaTime);
 	}
 
-	//cl->SetPosY(packet->vecY);
+	// Jump calculate
+	//Vector3 pos{ cl->GetPosX() , cl->GetPosY(), cl->GetPosZ() };
+	if (packet->jumpstate == true)
+	{
+		cl->SetJumpState(true);
+		Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
+		_jumpCount += packet->deltaTime;
+		/*if (pos.y < 0)
+		{
+			pos.y = 0;
+			_jumpCount = 0;
+			_jumpState = 0;
+			return;
+		}*/
+		if (_jumpCount < 1.f)
+		{
+			_jumpSpeed -= 300.f * packet->deltaTime;
+			cl->SetPosY(cl->GetPosY() + up.y  * _jumpSpeed * packet->deltaTime);
+			
+
+		}
+		else if (_jumpCount < 2.f)
+		{
+			_jumpSpeed += 300.f * packet->deltaTime;
+			cl->SetPosY(cl->GetPosY() - up.y * _jumpSpeed * packet->deltaTime);
+			
+		}
+		else
+		{
+			// 점프 완료 패킷
+			_jumpCount = 0;
+			packet->jumpstate = false;
+			cl->SetJumpState(false);
+			cl->SetPosY(0.f);
+		}
+
+	}
 
 	cl->state_lock.lock();
 	if (cl->GetState() != STATE::ST_INGAME)

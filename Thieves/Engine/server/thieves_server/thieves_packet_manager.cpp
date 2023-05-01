@@ -36,27 +36,26 @@ void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
 	auto mover = m_obj_map.find(packet->id);
 
 	
-	recv_pos = { packet->posX, packet->posZ };
+	recv_pos = { packet->posX, packet->posY, packet->posZ };
 	
 	SetVecX(packet->posX);
-	//SetVecY(packet->posY);
+	SetVecY(packet->posY);
 	SetVecZ(packet->posZ);
 	SetRecv(packet->recv_bool);
-
 
 	// 자기 자신
 	//GET_SINGLE(SceneManager)->SetPlayerPosition(recv_pos);
 	GET_SINGLE(SceneManager)->SetPlayerPositionX(recv_pos.x);
-	//GET_SINGLE(SceneManager)->SetPlayerPositionX(recv_pos.y);
+	GET_SINGLE(SceneManager)->SetPlayerPositionY(recv_pos.y);
 	GET_SINGLE(SceneManager)->SetPlayerPositionZ(recv_pos.z);
 	
 	// other
-	SceneManager::BuildPlayer(float )
+	//SceneManager::BuildPlayer(float )
 
 	if (mover != m_obj_map.end())
 	{
 		//if (mover->second->GetIsActive() == false)return;
-		if (isnan(packet->posX) ||  isnan(packet->posZ))return;
+		if (isnan(packet->posX)|| isnan(packet->posY) ||  isnan(packet->posZ))return;
 		
 		mover->second->SetPosition(move(recv_pos));
 		

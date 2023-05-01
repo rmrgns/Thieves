@@ -94,10 +94,7 @@ void TestCameraScript::LateUpdate()
 		CameraRotation();
 	}
 
-	Network::GetInst()->SendMovePacket(direction, pos,
-		GetTransform()->GetLook(),
-		DELTA_TIME);
-	
+
 
 	GetTransform()->SetLocalPosition(pos);
 }

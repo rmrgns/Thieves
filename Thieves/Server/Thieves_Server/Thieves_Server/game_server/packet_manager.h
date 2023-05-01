@@ -24,7 +24,6 @@ public:
 
 	
 	void SendMovePacket(int c_id, int mover);
-	void SendMoveTestPacket(int mover);
 	
 	void SendLoginFailPacket(SOCKET&, int reason);
 	void SendSignInOK(int c_id);
@@ -64,7 +63,9 @@ private:
 	std::thread db_thread;
 	
 	float	_speed = 700.f;
-
+	// jump
+	float		_jumpSpeed = 305.f;
+	float		_jumpCount = 0.f;
 
 	void ProcessSignIn(int c_id, unsigned char* p);
 	void ProcessSignUp(int c_id, unsigned char* p);

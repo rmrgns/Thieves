@@ -70,8 +70,9 @@ struct cs_packet_move {
 	char	type;
 	char	direction;			// 1 : 앞,  2: 뒤, 3:왼, 4:오
 	int		move_time; //디버그 용 -> 보낸시간 -받은시간 = 통신하는 시간
-	float	vecX, vecZ;	// look vec
+	float	vecX, vecY, vecZ;	// look vec
 	float	deltaTime;
+	bool	jumpstate;			// jump_state
 };
 
 struct cs_packet_test {
@@ -134,7 +135,8 @@ struct sc_packet_move {
 	char	type;
 	int		id;
 	bool	recv_bool;
-	float	posX, posZ;
+	float	posX, posY, posZ;
+	bool	jump_state;
 };
 
 

@@ -28,6 +28,20 @@ void PlayerInput::LateUpdate()
 	Vec3 pos = GetTransform()->GetLocalPosition();
 
 	direction = 0;
+
+	// ĳ���� ����
+	if (INPUT->GetButtonDown(KEY_TYPE::SPACE))
+	{
+		if (_jumpState == 0) {
+			_jumpState = 1;
+
+		}
+		// 점프 시작 패킷 전송)
+	}
+
+	// ĳ���� ����
+	Jump(pos);
+
 	// ĳ���� WASD�̵�
 	if (INPUT->GetButton(KEY_TYPE::W) ||
 		INPUT->GetButton(KEY_TYPE::S) ||
@@ -43,31 +57,29 @@ void PlayerInput::LateUpdate()
 		if (INPUT->GetButton(KEY_TYPE::W))
 		{
 			direction = 1;
-			Network::GetInst()->SendMovePacket(direction, pos,
-				GetTransform()->GetLook(), DELTA_TIME);
+//			Network::GetInst()->SendMovePacket(direction, pos,GetTransform()->GetLook(), DELTA_TIME, _jumpState );
 		}
 		if (INPUT->GetButton(KEY_TYPE::S))
 		{
 			direction = 2;
 
-			Network::GetInst()->SendMovePacket(direction, pos,
-				GetTransform()->GetLook(), DELTA_TIME);
+//			Network::GetInst()->SendMovePacket(direction, pos,GetTransform()->GetLook(), DELTA_TIME, _jumpState);
 		}
 		if (INPUT->GetButton(KEY_TYPE::A))
 		{
 			direction = 3;
 
-			Network::GetInst()->SendMovePacket(direction, pos,
-				GetTransform()->GetLook(), DELTA_TIME);
+//			Network::GetInst()->SendMovePacket(direction, pos,GetTransform()->GetLook(), DELTA_TIME, _jumpState);
 		}
 		if (INPUT->GetButton(KEY_TYPE::D))
 		{
 			direction = 4;
 
-			Network::GetInst()->SendMovePacket(direction, pos,
-				GetTransform()->GetLook(), DELTA_TIME);
+//			Network::GetInst()->SendMovePacket(direction, pos,GetTransform()->GetLook(), DELTA_TIME, _jumpState);
 		}
 	}
+
+	Network::GetInst()->SendMovePacket(direction, pos, GetTransform()->GetLook(), DELTA_TIME, _jumpState);
 	 if (INPUT->GetButtonUp(KEY_TYPE::W) ||
 	 	INPUT->GetButtonUp(KEY_TYPE::S) ||
 	 	INPUT->GetButtonUp(KEY_TYPE::A) ||
@@ -119,24 +131,13 @@ void PlayerInput::PlayerMove() {
 	
 	Vec3 pos;
 	pos.x = GET_SINGLE(SceneManager)->GetPlayerPositionX();
-	pos.y = recv_pos.y;
+	pos.y = GET_SINGLE(SceneManager)->GetPlayerPositionY();
 	pos.z = GET_SINGLE(SceneManager)->GetPlayerPositionZ();
 
 
 	if (_checkCameraRotation == true)
 		PlayerRotation();
 
-
-	// ĳ���� ����
-	if (INPUT->GetButtonDown(KEY_TYPE::SPACE))
-	{
-		if (_jumpState == 0)
-			_jumpState = 1;
-		// 점프 시작 패킷 전송
-	}
-
-	// ĳ���� ����
-	Jump(pos);
 
 	// ī�޶� ���콺���� on/off (temp code)
 	if (INPUT->GetButtonDown(KEY_TYPE::L))
@@ -159,8 +160,6 @@ void PlayerInput::PlayerMove() {
 	recv_pos = GetTransform()->GetLocalPosition();
 
 }
-
-
 
 void PlayerInput::PlayerRotation()
 {
@@ -198,29 +197,27 @@ void PlayerInput::Jump(Vec3& pos)
 		if (pos.y < 0)
 		{
 			pos.y = 0;
-			_jumpCount = 0;
+			//_jumpCount = 0;
 			_jumpState = 0;
-			return;
+			//return;
 		}
-		_jumpCount += DELTA_TIME;
+		//_jumpCount += DELTA_TIME;
 		if (_jumpCount < 1.f)
 		{
-			
-			_jumpSpeed -= 300.f * DELTA_TIME;
-			pos += GetTransform()->GetUp() * _jumpSpeed * DELTA_TIME;
+			//_jumpSpeed -= 300.f * DELTA_TIME;
+			//pos += GetTransform()->GetUp() * _jumpSpeed * DELTA_TIME;
 		}
 		else if(_jumpCount < 2.f)
 		{
-			_jumpSpeed += 300.f * DELTA_TIME;
-			pos -= GetTransform()->GetUp() * _jumpSpeed * DELTA_TIME;
+			//_jumpSpeed += 300.f * DELTA_TIME;
+			//pos -= GetTransform()->GetUp() * _jumpSpeed * DELTA_TIME;
 		}
 		else
 		{
 			// 점프 완료 패킷
-
-			_jumpCount = 0;
-			_jumpState = 0;
-			pos.y = 0;
+			//_jumpCount = 0;
+			//_jumpState = 0;
+			//pos.y = 0;
 		}
 	}
 }
