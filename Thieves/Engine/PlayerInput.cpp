@@ -35,6 +35,11 @@ void PlayerInput::LateUpdate()
 		INPUT->GetButton(KEY_TYPE::D))
 	{
 		_moveState = true;
+		if (_action_type == (char)PL_ACTION_TYPE::JUMP) 
+			return;
+		else
+			_action_type = (char)PL_ACTION_TYPE::MOVE;
+		
 		if (_attackState == 0 && _index != 0  && _jumpState == 0)
 		{
 			_index = 0;
@@ -44,28 +49,28 @@ void PlayerInput::LateUpdate()
 		{
 			direction = 1;
 			Network::GetInst()->SendMovePacket(direction, pos,
-				GetTransform()->GetLook(), DELTA_TIME);
+				GetTransform()->GetLook(), DELTA_TIME, _action_type);
 		}
 		if (INPUT->GetButton(KEY_TYPE::S))
 		{
 			direction = 2;
 
 			Network::GetInst()->SendMovePacket(direction, pos,
-				GetTransform()->GetLook(), DELTA_TIME);
+				GetTransform()->GetLook(), DELTA_TIME, _action_type);
 		}
 		if (INPUT->GetButton(KEY_TYPE::A))
 		{
 			direction = 3;
 
 			Network::GetInst()->SendMovePacket(direction, pos,
-				GetTransform()->GetLook(), DELTA_TIME);
+				GetTransform()->GetLook(), DELTA_TIME, _action_type);
 		}
 		if (INPUT->GetButton(KEY_TYPE::D))
 		{
 			direction = 4;
 
 			Network::GetInst()->SendMovePacket(direction, pos,
-				GetTransform()->GetLook(), DELTA_TIME);
+				GetTransform()->GetLook(), DELTA_TIME, _action_type);
 		}
 	}
 	 if (INPUT->GetButtonUp(KEY_TYPE::W) ||
@@ -105,8 +110,11 @@ void PlayerInput::LateUpdate()
 	// ĳ���� ����
 	if (INPUT->GetButtonDown(KEY_TYPE::SPACE))
 	{
-		if(_jumpState == 0)
+		if (_jumpState == 0) {
+			_action_type = (char)PL_ACTION_TYPE::JUMP;
 			_jumpState = 1;
+		}
+	
 		// 점프 시작 패킷 전송
 	}
 
@@ -117,6 +125,7 @@ void PlayerInput::LateUpdate()
 	if (INPUT->GetButtonDown(KEY_TYPE::LBUTTON))
 	{
 		if(_attackState == 0)
+			_action_type = (char)PL_ACTION_TYPE::ATTACK;
 			_attackState = 1;
 	}
 	GET_SINGLE(SceneManager)->SetPlayerPosition(pos);

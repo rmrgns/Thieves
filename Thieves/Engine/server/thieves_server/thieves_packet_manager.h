@@ -33,11 +33,15 @@ public:
 	Vec3 GetPlayerInput() { return recv_pos; }
 	bool GetRecv() {return bRecv; }
 	void SetRecv(bool& bool_recv) { bRecv = bool_recv; }
-
+	
+	char GetActionType() { return pl_action; }
+	void SetActionType(char type_val) { pl_action = type_val; }
 private:
 	std::unordered_map<int, shared_ptr<NetworkMoveObj>>m_obj_map;
 	GameInfo m_game_info;
 
+	char pl_action;
 	bool bRecv;
 	Vec3 recv_pos;
+	//Vec3 recv_pos;
 };

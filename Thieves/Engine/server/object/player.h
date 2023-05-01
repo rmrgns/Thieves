@@ -4,13 +4,16 @@
 class Player
 {
 private:
-	float	s_x, s_y, s_z;
-	float	f_x, f_y, f_z;
-	float	r_x, r_y, r_z;
+	Vec3 PlayerPos;
+
 public:
 	Player();
 	~Player();
 
 	void Init() {};
+
+	void GetPos();
+	Vec3 SetPos();
+
 };
 

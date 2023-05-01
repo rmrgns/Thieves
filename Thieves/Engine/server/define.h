@@ -2,6 +2,7 @@
 
 #include <WS2tcpip.h>
 #include <MSWSock.h>
+#include "state.h"
 #pragma comment (lib, "WS2_32.LIB")
 #pragma comment (lib, "MSWSock.LIB")
 //

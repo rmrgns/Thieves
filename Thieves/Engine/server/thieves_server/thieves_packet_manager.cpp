@@ -34,17 +34,12 @@ void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
 
 	auto mover = m_obj_map.find(packet->id);
 
-	
-	recv_pos = { packet->posX, packet->posZ };
-	
 	SetVecX(packet->posX);
-	//SetVecY(packet->posY);
 	SetVecZ(packet->posZ);
 	SetRecv(packet->recv_bool);
-
-	//GET_SINGLE(SceneManager)->SetPlayerPosition(recv_pos);
+	SetActionType(packet->action_type);
+	
 	GET_SINGLE(SceneManager)->SetPlayerPositionX(recv_pos.x);
-	//GET_SINGLE(SceneManager)->SetPlayerPositionX(recv_pos.y);
 	GET_SINGLE(SceneManager)->SetPlayerPositionZ(recv_pos.z);
 	
 	if (mover != m_obj_map.end())
@@ -86,14 +81,28 @@ void ThievesPacketManager::ProcessObjInfo(int c_id, unsigned char* p)
 }
 
 
-//void ThievesPacketManager::Reset()
-//{
-//	for (auto& obj : m_obj_map)
-//	{
-//		//if (obj.second->GetIsActive() == true)
-//			//PacketHelper::DisconnectActorFromServer(obj.first);
-//		obj.second = nullptr;
-//
-//	}
-//	m_obj_map.clear();
-//}
+void ThievesPacketManager::Reset()
+{
+	//for (auto& obj : m_obj_map)
+	//{
+	//	if (obj.second->GetIsActive() == true) {
+	//		if (m_connected_actor_map.find(id) != m_connected_actor_map.cend()
+	//					&& m_connected_actor_map[id] != nullptr)
+	//				{
+	//					SPtr<Actor> actor = m_connected_actor_map[id];
+	//					actor->ConnectServer(false);
+	//					m_connected_actor_map[id] = nullptr;
+	//					return actor;
+	//				}
+	//				else
+	//				{
+	//					//LOG_WARN("ID : {0} is already disconnected", id);
+	//					return nullptr;
+	//				}
+	//	}
+	//		
+	//	obj.second = nullptr;
+
+	//}
+	//m_obj_map.clear();
+}

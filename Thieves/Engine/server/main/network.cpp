@@ -134,10 +134,10 @@ void Network::SendMessageToServer(const shared_ptr<MessageEventInfo>& message)
 }
 
 void Network::SendMovePacket(char direction,
-	Vec3 pos, Vec3 vec, float deltatime)
+	Vec3 pos, Vec3 vec, float deltatime, char action_type)
 {
 	m_send_manager->SendMovePacket(m_s_socket, direction,
-		pos, vec, deltatime);
+		pos, vec, deltatime, action_type);
 
 	//auto end_t = std::chrono::system_clock::now();
 	//if (m_move_time <= end_t) {

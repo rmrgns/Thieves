@@ -49,6 +49,9 @@
     <Filter Include="Server\main">
       <UniqueIdentifier>{f111c88f-295b-4a1d-9db3-0dc3ca34b7f6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Server\event">
+      <UniqueIdentifier>{8f7c781b-d008-4873-9879-8b03aa2ed5b2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -242,9 +245,6 @@
     </ClCompile>
     <ClCompile Include="server\main\packet_manager.cpp">
       <Filter>Server\main</Filter>
-    </ClCompile>
-    <ClCompile Include="state.h">
-      <Filter>Server</Filter>
     </ClCompile>
     <ClCompile Include="PlayerParticle.cpp">
       <Filter>Object\Script</Filter>
@@ -463,6 +463,9 @@
     </ClInclude>
     <ClInclude Include="PlayerParticle.h">
       <Filter>Object\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="state.h">
+      <Filter>Server</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -27,26 +27,34 @@ class NetworkMoveObj : public NetworkObj
 {
 public:
 	NetworkMoveObj();
-	NetworkMoveObj(int id,  NW_OBJ_TYPE type, float x, float y, float z )
+	NetworkMoveObj(int id,  NW_OBJ_TYPE obj_type, float x, float y, float z)
 	{
 		m_id = id;
-		m_type = type;
+		m_obj_type = obj_type;
 		m_position = Vec3(x, y, z);
+		//m_action_type = action_type;
 	
 	}
 	NetworkMoveObj(const NetworkMoveObj& other)
 	{
 		m_id = other.GetID();
-		m_type = other.GetType();
+		m_obj_type = other.GetType();
 		m_position = other.GetPosition();
+		m_action_type = other.GetActionType();
 
 	}
 	~NetworkMoveObj();
 
-	void SetType(const NW_OBJ_TYPE val) { m_type = val; }
-	const NW_OBJ_TYPE GetType()const { return m_type; }
+	void SetType(const NW_OBJ_TYPE val) { m_obj_type = val; }
+	const NW_OBJ_TYPE GetType()const { return m_obj_type; }
+	
+	void SetActionType(const PL_ACTION_TYPE val) { m_action_type = val; }
+	const PL_ACTION_TYPE GetActionType()const { return m_action_type; }
 
-	bool m_is_active = true;
+	bool GetIsActive() { return m_is_active; }
+	void SetIsActive(bool val) { m_is_active; }
 private:
-	NW_OBJ_TYPE m_type;
+	NW_OBJ_TYPE m_obj_type;
+	PL_ACTION_TYPE m_action_type;
+	bool m_is_active = true;
 };

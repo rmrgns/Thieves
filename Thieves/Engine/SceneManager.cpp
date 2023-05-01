@@ -27,6 +27,7 @@
 #include "MeshData.h"
 #include "Animator.h"
 
+#include "server/thieves_server/thieves_packet_manager.h"
 void SceneManager::Update()
 {
 	if (_activeScene == nullptr)
