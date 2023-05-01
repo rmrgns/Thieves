@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Text.h"
 #include "Engine.h"
 #include "Scene.h"
@@ -29,14 +29,15 @@ void Text::Update()
 		wstring text1 = L"Thieves Password";
 		SetText(text1, 500.f, 500.f, 1.f, 1.f);
 
-		
+		wstring test = L"한글 테스트";
+		SetText(test, 100.f, 500.f, 1.f, 1.f);
 
 	}
 	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
 	{
 		SetTextInfo(1);
-		wstring text1 = L"asdasdasd";
-		SetText(text1, 0.f, 0.f, 1.f, 1.f);
+		wstring text4 = L"asdasdasd";
+		SetText(text4, 0.f, 0.f, 1.f, 1.f);
 	}
 	else if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
 	{
@@ -46,13 +47,13 @@ void Text::Update()
 
 		if (GEngine->GetThievesPacketManager()->GetRecv()) {
 			SetTextInfo(1);
-			wstring text1 = L"TRUE";
-			SetText(text1, 0.f, 0.f, 1.f, 1.f);
+			wstring text5 = L"TRUE";
+			SetText(text5, 0.f, 0.f, 1.f, 1.f);
 		}
 		else {
 			SetTextInfo(1);
-			wstring text1 = L"FALSE";
-			SetText(text1, 0.f, 0.f, 1.f, 1.f);
+			wstring text6 = L"FALSE";
+			SetText(text6, 0.f, 0.f, 1.f, 1.f);
 		}
 	}
 } 
