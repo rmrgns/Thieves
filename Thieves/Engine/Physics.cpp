@@ -25,6 +25,11 @@ void Physics::FinalUpdate()
 void Physics::UseGravity()
 {
 	Vec3 pos = GetTransform()->GetLocalPosition();
-	pos -= GetTransform()->GetUp() * _gravity * DELTA_TIME;
+	if(pos.y > 0.f)
+		pos -= GetTransform()->GetUp() * _gravity * DELTA_TIME;
+	else
+	{
+		pos.y = 0.f;
+	}
 	GetTransform()->SetLocalPosition(pos);
 }

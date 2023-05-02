@@ -195,32 +195,16 @@ void PlayerInput::Jump(Vec3& pos)
 	}
 	else if (_jumpState == 2)
 	{
+		_jumpSpeed -= 100.f * DELTA_TIME;
+		pos += GetTransform()->GetUp() * _jumpSpeed * DELTA_TIME;
+
 		if (pos.y < 0)
 		{
 			pos.y = 0;
 			_jumpCount = 0;
 			_jumpState = 0;
+			_jumpSpeed = 100.f;
 			return;
-		}
-		_jumpCount += DELTA_TIME;
-		if (_jumpCount < 1.f)
-		{
-			
-			_jumpSpeed -= 300.f * DELTA_TIME;
-			pos += GetTransform()->GetUp() * _jumpSpeed * DELTA_TIME;
-		}
-		else if(_jumpCount < 2.f)
-		{
-			_jumpSpeed += 300.f * DELTA_TIME;
-			pos -= GetTransform()->GetUp() * _jumpSpeed * DELTA_TIME;
-		}
-		else
-		{
-			// 점프 완료 패킷
-
-			_jumpCount = 0;
-			_jumpState = 0;
-			pos.y = 0;
 		}
 	}
 }
