@@ -34,8 +34,8 @@ private:
 
 	// Player Jump
 	float		_jumpCount = 0.f;
-	int32		_jumpState = 0;
-	//bool		_jumpState = 0;
+	//int32		_jumpState = 0;
+	bool		_jumpState = 0;
 	float		_jumpSpeed = 305.f;
 
 	// Player Attack

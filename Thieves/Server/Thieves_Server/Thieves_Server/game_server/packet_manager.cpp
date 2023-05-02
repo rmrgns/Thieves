@@ -395,42 +395,41 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 
 	// Jump calculate
 	//Vector3 pos{ cl->GetPosX() , cl->GetPosY(), cl->GetPosZ() };
-	if (packet->jumpstate == true)
-	{
-		cl->SetJumpState(true);
-		Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
-		_jumpCount += packet->deltaTime;
-		/*if (pos.y < 0)
-		{
-			pos.y = 0;
-			_jumpCount = 0;
-			_jumpState = 0;
-			return;
-		}*/
-		if (_jumpCount < 1.f)
-		{
-			_jumpSpeed -= 400.f * packet->deltaTime;
-			cl->SetPosY(cl->GetPosY() + up.y  * _jumpSpeed * packet->deltaTime);
-			
-
-		}
-		else if (_jumpCount < 2.f)
-		{
-			_jumpSpeed += 400.f * packet->deltaTime;
-			cl->SetPosY(cl->GetPosY() - up.y * _jumpSpeed * packet->deltaTime);
-			
-		}
-		
-		if (cl->GetPosY() < 0)
-		{
-	//		// 점프 완료 패킷
+	//if (packet->jumpstate == 1)
+	//{
+	//	cl->SetJumpState(1);
+	//	Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
+	//	if (cl->GetPosY() < 0)
+	//	{
+	//		cl->SetPosY(0);
 	//		_jumpCount = 0;
-			packet->jumpstate = false;
-			cl->SetJumpState(false);
-			cl->SetPosY(0);
-		}
+	//		packet->jumpstate = false;
+	//		return;
+	//	}
+	//	_jumpCount += packet->deltaTime;
+	//	if (_jumpCount < 1.f)
+	//	{
+	//		_jumpSpeed -= 400.f * packet->deltaTime;
+	//		cl->SetPosY(cl->GetPosY() + up.y  * _jumpSpeed * packet->deltaTime);
+	//		
 
-	}
+	//	}
+	//	else if (_jumpCount < 2.f)
+	//	{
+	//		_jumpSpeed += 400.f * packet->deltaTime;
+	//		cl->SetPosY(cl->GetPosY() - up.y * _jumpSpeed * packet->deltaTime);
+	//		
+	//	}
+	//	else
+	//	{
+	////		// 점프 완료 패킷
+	//		_jumpCount = 0;
+	//		packet->jumpstate = false;
+	//		cl->SetJumpState(false);
+	//		cl->SetPosY(0);
+	//	}
+
+	//}
 
 	cl->state_lock.lock();
 	if (cl->GetState() != STATE::ST_INGAME)

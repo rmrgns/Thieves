@@ -18,7 +18,7 @@ public:
 		m_pos.x = x;
 		m_pos.y = y;
 		m_pos.z = z;
-		m_jumpState = jump_state;
+		m_jumpState = false;
 
 //		m_type = type;
 //		m_pos.x = f_x;

@@ -21,7 +21,7 @@ void ThievesSendManager::SendMovePacket(const SOCKET& s_socket, char direction,
 	packet.size = sizeof(packet);
 	packet.type = CS_PACKET_MOVE;
 
-	packet.vecX = vec.x;
+	packet.vecX = vec.x; 
 	packet.vecY = vec.y;
 	packet.vecZ = vec.z;
 
