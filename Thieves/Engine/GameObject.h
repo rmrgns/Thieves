@@ -13,6 +13,7 @@ class Terrain;
 class BaseCollider;
 class Animator;
 class TextObject;
+class NetworkSystem;
 
 class GameObject : public Object, public enable_shared_from_this<GameObject>
 {
@@ -38,6 +39,7 @@ public:
 	shared_ptr<Animator> GetAnimator();
 	shared_ptr<TextObject> GetTextObject();
 	shared_ptr<Physics> GetPhysics();
+	shared_ptr<NetworkSystem> GetNetworkSystem();
 
 	void AddComponent(shared_ptr<Component> component);
 

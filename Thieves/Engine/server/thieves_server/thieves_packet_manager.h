@@ -38,6 +38,7 @@ public:
 	void SetActionType(char type_val) { pl_action = type_val; }
 
 	std::unordered_map<int, shared_ptr<NetworkMoveObj>>& GetObjMap() { return m_obj_map; };
+	GameInfo& GetGameInfo() { return m_game_info; };
 
 private:
 	std::unordered_map<int, shared_ptr<NetworkMoveObj>>m_obj_map;

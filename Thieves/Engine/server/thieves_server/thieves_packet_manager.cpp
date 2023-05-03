@@ -14,6 +14,9 @@
 #include "Engine.h"
 #include "Input.h"
 #include "SceneManager.h"
+#include "Scene.h"
+#include "GameObject.h"
+#include "NetworkSystem.h"
 
 using namespace std;
 using namespace client_fw;
@@ -38,6 +41,7 @@ void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
 	{
 		//if (mover->second->GetIsActive() == false)return;
 		if (isnan(packet->posX) ||  isnan(packet->posZ)) return;
+		
 		
 		mover->second->SetPosition(Vec3(packet->posX, packet->posY, packet->posZ));
 		mover->second->SetRotation(Vec3(packet->rotX, 0.0f, packet->rotZ));
@@ -74,6 +78,23 @@ void ThievesPacketManager::ProcessObjInfo(int c_id, unsigned char* p)
 		packet->y,
 		packet->z
 	));
+
+	auto& data = GET_SINGLE(SceneManager)->GetActiveScene()->GetGameObjects();
+
+	for (auto& obj : data) {
+		auto nsys = obj->GetNetworkSystem();
+		if (nsys = nullptr) continue;
+		else {
+			if (nsys->GetNetworkingType() == NetworkType::NONE) {
+				nsys->SetNetworkId(packet->id);
+				if (nw_type == NW_OBJ_TYPE::OT_MY_PLAYER) nsys->SetNetworkingType(NetworkType::PLAYER);
+				else if (nw_type == NW_OBJ_TYPE::OT_PLAYER) nsys->SetNetworkingType(NetworkType::OTHER_PLAYER);
+				else {
+					// 다른 타입인 경우 설정해 주어야 함.
+				}
+			}
+		}
+	}
 
 	// 오브젝트 spqwn 및 m_objmap[pakcet->id] 전송하여 id값마다 스폰
 }

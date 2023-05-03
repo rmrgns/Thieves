@@ -207,8 +207,8 @@ struct sc_packet_test {
 
 struct sc_packet_obj_info {
 	unsigned char size;
-	int		id;
 	char	type;
+	int		id;
 	float	x, y, z;
 	bool	start;
 	char	object_type;

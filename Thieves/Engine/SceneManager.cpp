@@ -26,17 +26,14 @@
 #include "SphereCollider.h"
 #include "MeshData.h"
 #include "Animator.h"
+#include "NetworkSystem.h"
 
+#include "server/main/network.h"
 #include "server/thieves_server/thieves_packet_manager.h"
 void SceneManager::Update()
 {
 	if (_activeScene == nullptr)
 		return;
-
-	if (_BuildPlayer == true)
-	{
-		BuildPlayer();
-	}
 	
 	_activeScene->Update();
 	_activeScene->LateUpdate();
@@ -165,7 +162,6 @@ void SceneManager::BuildPlayer()
 		gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 		_activeScene->AddGameObject(gameObject);
 	}
-	_BuildPlayer = false;
 }
 
 shared_ptr<Scene> SceneManager::LoadTestScene()
@@ -308,47 +304,6 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 #pragma endregion
 
 
-//#pragma region FBX
-//	{
-//
-//		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Dragon.fbx");
-//
-//		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-//
-//		for (auto& gameObject : gameObjects)
-//		{
-//			gameObject->SetName(L"Dragon");
-//			gameObject->SetCheckFrustum(false);
-//			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 300.f));
-//			//gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 300.f));
-//			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-//			//gameObject->AddComponent(make_shared<TestObjectMove>());
-//			scene->AddGameObject(gameObject);
-//			gameObject->AddComponent(make_shared<TestDragon>());
-//
-//		}
-//	}
-//#pragma endregion
-
-
-//#pragma region FBXMap
-//	{
-//		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\TempMap.fbx");
-//
-//		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-//
-//		for (auto& gameObject : gameObjects)
-//		{
-//			gameObject->SetName(L"Map");
-//			gameObject->SetCheckFrustum(false);
-//			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
-//			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-//			scene->AddGameObject(gameObject);
-//		}
-//	}
-//#pragma endregion
-
-
 #pragma region FBX
 	{
 		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Thief.fbx");
@@ -364,6 +319,11 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 			//gameObject->AddComponent(make_shared<TestObjectMove>());
 			gameObject->AddComponent(make_shared<PlayerInput>());
+			gameObject->AddComponent(make_shared<NetworkSystem>());
+			Network::GetInst()->GetNetworkObjMap().find(Network::GetInst()->GetPacketManager()->GetGameInfo().GetNetworkID());
+
+
+			
 			int32 index = 2;
 			gameObject->GetAnimator()->Play(index);
 			scene->AddGameObject(gameObject);
@@ -372,24 +332,51 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 #pragma endregion
 
-#pragma region PoliceFBX
+#pragma region OtherPlayers
 	{
-		for (int i = 0; i < 1; i++)
+		for (int i = 0; i < 2; ++i)
 		{
-			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\PoliceMan.fbx");
+			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Thief.fbx");
+
 			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+
 			for (auto& gameObject : gameObjects)
 			{
-				gameObject->SetName(L"Police");
+				
+				gameObject->SetName(L"Thief");
 				gameObject->SetCheckFrustum(false);
-				gameObject->GetTransform()->SetLocalPosition(Vec3(200.f * i, 0.f, 0.f));
+				gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+				//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 3.1415f, 0.f));
 				gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+				//gameObject->AddComponent(make_shared<TestObjectMove>());
+				gameObject->AddComponent(make_shared<NetworkSystem>());
+				int32 index = 2;
+				gameObject->GetAnimator()->Play(index);
 				scene->AddGameObject(gameObject);
-
+				//gameObject->AddComponent(make_shared<TestDragon>());
 			}
 		}
 	}
 #pragma endregion
+
+//#pragma region PoliceFBX
+//	{
+//		for (int i = 0; i < 1; i++)
+//		{
+//			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\PoliceMan.fbx");
+//			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+//			for (auto& gameObject : gameObjects)
+//			{
+//				gameObject->SetName(L"Police");
+//				gameObject->SetCheckFrustum(false);
+//				gameObject->GetTransform()->SetLocalPosition(Vec3(200.f * i, 0.f, 0.f));
+//				gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+//				scene->AddGameObject(gameObject);
+//
+//			}
+//		}
+//	}
+//#pragma endregion
 
 #pragma region Map
 	{
