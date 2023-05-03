@@ -1,3 +1,4 @@
+#include "thieves_send_manager.h"
 
 #include "pch.h"
 
@@ -12,6 +13,16 @@ void ThievesSendManager::SendStartPacket(const SOCKET& s_socket)
 	packet.size = sizeof(packet);
 	packet.type = CS_PACKET_GAME_START;
 	SendPacket(s_socket, sizeof(packet), &packet);
+}
+
+void ThievesSendManager::SendSignInPacket(const SOCKET& s_socket)
+{
+	cs_packet_sign_in packet;
+	packet.size = sizeof(packet);
+	packet.type = CS_PACKET_SIGN_IN;
+
+	SendPacket(s_socket, sizeof(packet), &packet);
+
 }
 
 void ThievesSendManager::SendMovePacket(const SOCKET& s_socket, char direction,

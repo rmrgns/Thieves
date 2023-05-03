@@ -328,12 +328,13 @@ void PacketManager::ProcessTimer(HANDLE hiocp)
 void PacketManager::ProcessSignIn(int c_id, unsigned char* p)
 {
 	cs_packet_sign_in* packet = reinterpret_cast<cs_packet_sign_in*>(p);
-	db_task dt;
-	dt.dt = DB_TASK_TYPE::SIGN_IN;
-	dt.obj_id = c_id;
-	strcpy_s(dt.user_id, packet->name);
-	strcpy_s(dt.user_password, packet->password);
-	m_db_queue.push(move(dt));
+	//db_task dt;
+	//dt.dt = DB_TASK_TYPE::SIGN_IN;
+	//dt.obj_id = c_id;
+	//strcpy_s(dt.user_id, packet->name);
+	//strcpy_s(dt.user_password, packet->password);
+	//m_db_queue.push(move(dt));
+	SendSignInOK(c_id);
 }
 
 void PacketManager::ProcessSignUp(int c_id, unsigned char* p)

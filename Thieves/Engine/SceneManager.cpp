@@ -320,9 +320,13 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 			//gameObject->AddComponent(make_shared<TestObjectMove>());
 			gameObject->AddComponent(make_shared<PlayerInput>());
 			gameObject->AddComponent(make_shared<NetworkSystem>());
-			Network::GetInst()->GetNetworkObjMap().find(Network::GetInst()->GetPacketManager()->GetGameInfo().GetNetworkID());
-
-
+			
+			if (Network::GetInst()->GetNetworkObjMap().end()
+				!= Network::GetInst()->GetNetworkObjMap().find(Network::GetInst()->GetPacketManager()->GetGameInfo().GetNetworkID())) {	
+				int id = Network::GetInst()->GetNetworkObjMap().find(Network::GetInst()->GetPacketManager()->GetGameInfo().GetNetworkID())->second->GetID();
+				gameObject->GetNetworkSystem()->SetNetworkId(id);
+				gameObject->GetNetworkSystem()->SetNetworkingType(NetworkType::PLAYER);
+			}
 			
 			int32 index = 2;
 			gameObject->GetAnimator()->Play(index);
@@ -334,6 +338,9 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 
 #pragma region OtherPlayers
 	{
+
+		
+
 		for (int i = 0; i < 2; ++i)
 		{
 			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Thief.fbx");
@@ -350,6 +357,9 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 				gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 				//gameObject->AddComponent(make_shared<TestObjectMove>());
 				gameObject->AddComponent(make_shared<NetworkSystem>());
+
+
+
 				int32 index = 2;
 				gameObject->GetAnimator()->Play(index);
 				scene->AddGameObject(gameObject);
@@ -464,6 +474,9 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		scene->AddGameObject(particle);
 	}
 #pragma endregion
+
+	scene->SetSceneLoaded(true);
+
 	return scene;
 }
 
@@ -570,6 +583,8 @@ shared_ptr<Scene> SceneManager::LoadLoginScene()
 //		scene->AddGameObject(particle);
 //	}
 //#pragma endregion
+
+	scene->SetSceneLoaded(true);
 
 	return scene;
 }

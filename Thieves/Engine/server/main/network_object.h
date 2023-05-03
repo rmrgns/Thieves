@@ -32,7 +32,7 @@ public:
 	void SetPositionX(const float& val) { m_position.x = val; }
 	void SetPositionY(const float& val) { m_position.y = val; }
 	void SetPositionZ(const float& val) { m_position.z = val; }
-	void SetRotation(const Vec3& val) { m_position = val; }
+	void SetRotation(const Vec3& val) { m_rotation = val; }
 	void SetRotationX(const float& val) { m_rotation.x = val; }
 	void SetRotationY(const float& val) { m_rotation.y = val; }
 	void SetRotationZ(const float& val) { m_rotation.z = val; }

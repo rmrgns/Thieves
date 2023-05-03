@@ -9,6 +9,7 @@ public:
     ThievesSendManager() = default;
     virtual ~ThievesSendManager() = default;
     virtual void SendStartPacket(const SOCKET& s_socket)override;
+    virtual void SendSignInPacket(const SOCKET& s_socket);
     virtual void SendMovePacket(const SOCKET& s_socket, char direction,
         Vec3 pos, Vec3 vec, float deltatime, char )override;
     void SendAttackPacket(const SOCKET& s_socket, const Vec3& forward_vec, char);

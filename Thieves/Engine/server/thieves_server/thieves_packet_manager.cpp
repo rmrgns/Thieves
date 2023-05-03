@@ -27,6 +27,7 @@ void ThievesPacketManager::Init()
 	
 	RegisterRecvFunction(SC_PACKET_MOVE, [this](int c_id, unsigned char* p) {ProcessMove(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_OBJ_INFO, [this](int c_id, unsigned char* p) {ProcessObjInfo(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_SIGN_IN_OK, [this](int c_id, unsigned char* p) {ProcessSignin(c_id, p); });
 
 
 }
@@ -68,7 +69,9 @@ void ThievesPacketManager::ProcessObjInfo(int c_id, unsigned char* p)
 	// 이거 가독성 너무 안좋다. 이런 방식으로 적어주면 좋을듯 -> 김혁동임
 	// 
 	// 패킷 아이디가 게임 정보의 네트워크 아이디와 같다면 오브젝트 타입을 조작 플레이어 타입으로, 아니라면 패킷에서 받은 오브젝트 타입으로 한다.
-	packet->id == m_game_info.GetNetworkID() ? nw_type = NW_OBJ_TYPE::OT_MY_PLAYER : nw_type = (NW_OBJ_TYPE)packet->object_type;
+	packet->id == m_game_info.GetNetworkID() ? nw_type = NW_OBJ_TYPE::OT_MY_PLAYER : nw_type = NW_OBJ_TYPE::OT_PLAYER;
+	//-> 나중에 NPC 처리를 할 때에는 이 부분을 변경해 주어야 함.
+
 
 	// 해당 데이터를 네트워크의 id를 키로 해서 네트워크 오브젝트에 넣는다.
 	auto res = m_obj_map.try_emplace(packet->id, CreateSPtr<NetworkMoveObj>(
@@ -78,23 +81,6 @@ void ThievesPacketManager::ProcessObjInfo(int c_id, unsigned char* p)
 		packet->y,
 		packet->z
 	));
-
-	auto& data = GET_SINGLE(SceneManager)->GetActiveScene()->GetGameObjects();
-
-	for (auto& obj : data) {
-		auto nsys = obj->GetNetworkSystem();
-		if (nsys = nullptr) continue;
-		else {
-			if (nsys->GetNetworkingType() == NetworkType::NONE) {
-				nsys->SetNetworkId(packet->id);
-				if (nw_type == NW_OBJ_TYPE::OT_MY_PLAYER) nsys->SetNetworkingType(NetworkType::PLAYER);
-				else if (nw_type == NW_OBJ_TYPE::OT_PLAYER) nsys->SetNetworkingType(NetworkType::OTHER_PLAYER);
-				else {
-					// 다른 타입인 경우 설정해 주어야 함.
-				}
-			}
-		}
-	}
 
 	// 오브젝트 spqwn 및 m_objmap[pakcet->id] 전송하여 id값마다 스폰
 }

@@ -151,5 +151,9 @@ void Network::SendStartPacket()
 	m_send_manager->SendStartPacket(m_s_socket);
 }
 
+void Network::SendSignInPacket()
+{
+	m_send_manager->SendSignInPacket(m_s_socket);
+}
 
 // Packet Test
