@@ -31,7 +31,7 @@ void ThievesPacketManager::Init()
 void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
 {
 	sc_packet_move* packet = reinterpret_cast<sc_packet_move*>(p);
-
+	int mid = packet->id;
 	auto mover = m_obj_map.find(packet->id);
 
 	SetVecX(packet->posX);

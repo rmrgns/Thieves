@@ -249,6 +249,9 @@
     <ClCompile Include="PlayerParticle.cpp">
       <Filter>Object\Script</Filter>
     </ClCompile>
+    <ClCompile Include="NetworkSystem.cpp">
+      <Filter>Object\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -466,6 +469,9 @@
     </ClInclude>
     <ClInclude Include="state.h">
       <Filter>Server</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkSystem.h">
+      <Filter>Object\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
