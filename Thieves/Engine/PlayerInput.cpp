@@ -58,29 +58,29 @@ void PlayerInput::LateUpdate()
 		if (INPUT->GetButton(KEY_TYPE::W))
 		{
 			direction = 1;
-//			Network::GetInst()->SendMovePacket(direction, pos,GetTransform()->GetLook(), DELTA_TIME, _jumpState );
+			Network::GetInst()->SendMovePacket(direction, pos,GetTransform()->GetLook(), DELTA_TIME, _jumpState );
 		}
 		if (INPUT->GetButton(KEY_TYPE::S))
 		{
 			direction = 2;
 
-//			Network::GetInst()->SendMovePacket(direction, pos,GetTransform()->GetLook(), DELTA_TIME, _jumpState);
+			Network::GetInst()->SendMovePacket(direction, pos,GetTransform()->GetLook(), DELTA_TIME, _jumpState);
 		}
 		if (INPUT->GetButton(KEY_TYPE::A))
 		{
 			direction = 3;
 
-//			Network::GetInst()->SendMovePacket(direction, pos,GetTransform()->GetLook(), DELTA_TIME, _jumpState);
+			Network::GetInst()->SendMovePacket(direction, pos,GetTransform()->GetLook(), DELTA_TIME, _jumpState);
 		}
 		if (INPUT->GetButton(KEY_TYPE::D))
 		{
 			direction = 4;
 
-//			Network::GetInst()->SendMovePacket(direction, pos,GetTransform()->GetLook(), DELTA_TIME, _jumpState);
+			Network::GetInst()->SendMovePacket(direction, pos,GetTransform()->GetLook(), DELTA_TIME, _jumpState);
 		}
 	}
 	// MOVE SEND
-	Network::GetInst()->SendMovePacket(direction, pos, GetTransform()->GetLook(), DELTA_TIME, _jumpState);
+	//Network::GetInst()->SendMovePacket(direction, pos, GetTransform()->GetLook(), DELTA_TIME, _jumpState);
 	 
 	if (INPUT->GetButtonUp(KEY_TYPE::W) ||
 	 	INPUT->GetButtonUp(KEY_TYPE::S) ||

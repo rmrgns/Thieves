@@ -100,7 +100,7 @@ void PacketManager::ProcessRecv(int c_id , EXP_OVER* exp_over, DWORD num_bytes)
 {
 	if (num_bytes == 0) {
 		Disconnect(c_id);
-		std::cout << "�߸��� ����" << std::endl;
+		std::cout << "disconnect" << std::endl;
 	}
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 	int remain_data = num_bytes + cl->m_prev_size;
@@ -168,8 +168,9 @@ void PacketManager::SendMovePacket(int c_id, int mover)
 	//else
 	packet.jump_state = p->GetJumpState();
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
-	cout << "ID : " << c_id << " jump "<< packet.jump_state << " x " << packet.posX << " y " << packet.posY << "z " << packet.posZ << endl;
+//	cout << "ID : " << c_id << " jump "<< packet.jump_state << " x " << packet.posX << " y " << packet.posY << "z " << packet.posZ << endl;
 //	cout << "ID : " << c_id << " x " << packet.posX  << "z " << packet.posZ << endl;
+	cout << "ID : " << c_id << " mover  " << mover << " x " << packet.posX  << "z " << packet.posZ << endl;
 
 	cl->DoSend(sizeof(packet), &packet);
 }
@@ -505,7 +506,7 @@ void PacketManager::StartGame(int room_id)
 		if (i < room->GetMaxUser())
 		{
 			pl = MoveObjManager::GetInst()->GetPlayer(obj_list[i]);
-			pl->SetPos({ 0.0f,0.0f,0.0f});
+			pl->SetPos({ 20.0f,0.0f,0.0f});
 			//pl->SetColorType(COLOR_TYPE(i + 1));
 			continue;
 		}

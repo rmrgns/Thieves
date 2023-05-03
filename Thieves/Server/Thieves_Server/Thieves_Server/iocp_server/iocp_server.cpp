@@ -91,6 +91,7 @@ void IOCPServer::Worker()
 			error_display(err_no);
 			cout << endl;
 			Disconnect(client_id);
+			//여기서 플레이어 초기화 필요
 			if (exp_over->_comp_op == COMP_OP::OP_SEND)
 				delete exp_over;
 			continue;

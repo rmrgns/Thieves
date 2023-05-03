@@ -36,8 +36,8 @@ const char CS_PACKET_HIT = 6;				// 피격
 const char CS_PACKET_GAME_START = 7;		// 게임 시작
 const char CS_PACKET_MATCHING = 8;
 const char CS_PACKET_TEST = 9;
-const char CS_PACKET_START_JUMP = 10;				// 점프 시작 패킷
-const char CS_PACKET_COMPLETE_JUMP = 11;				// 점프 완료 패킷
+//const char CS_PACKET_START_JUMP = 10;				// 점프 시작 패킷
+//const char CS_PACKET_COMPLETE_JUMP = 11;				// 점프 완료 패킷
 
 
 
@@ -59,8 +59,9 @@ const char SC_PAKCET_INTERACTION = 14;		// 상호작용
 const char SC_PACKET_PHASE = 15;			// 페이즈 변경  
 const char SC_PACKET_TEST = 16;
 const char SC_PACKET_OBJ_INFO = 17;		// OBJ 정보
-const char SC_PACKET_START_JUMP = 18;			// 점프 시작 패킷
-const char SC_PACKET_COMPLETE_JUMP = 19;			// 점프 완료 패킷
+//const char SC_PACKET_START_JUMP = 18;			// 점프 시작 패킷
+//const char SC_PACKET_COMPLETE_JUMP = 19;			// 점프 완료 패킷
+
 //#pragma pack (push, 1)
 
 // 클라이언트 -> 서버로 보내는 패킷은 어떤 키를 얼마나 눌렀는지에 대해서만 보내주면 된다.

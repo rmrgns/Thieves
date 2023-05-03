@@ -11,19 +11,13 @@ public:
 	virtual ~Object() = default;
 
 
-	void Init(int id, OBJ_TYPE type, float x, float y, float z, bool jump_state)
+	void Init(int id, OBJ_TYPE type, float x, float y, float z)
 	{
 		m_id = id;
 		m_type = type;
 		m_pos.x = x;
 		m_pos.y = y;
 		m_pos.z = z;
-		m_jumpState = false;
-
-//		m_type = type;
-//		m_pos.x = f_x;
-//		m_pos.y = f_y;
-//		m_pos.z = f_z;
 	};
 	float GetPosX()const { return m_pos.x; };
 	float GetPosY()const { return m_pos.y; };
@@ -41,14 +35,10 @@ public:
 	void SetPosZ(float val) { m_pos.z = val; };
 	void SetPos(const Vector3& val) { m_pos = val; };
 
-	bool GetJumpState() { return m_jumpState; }
-	void SetJumpState(bool val) { m_jumpState = val; }
+	
+
 protected:
 	int m_id;
 	OBJ_TYPE m_type;
 	Vector3 m_pos;
-	// 회전 방향 데이터
-	Vector3 m_rot;
-	bool m_jumpState;
-
 };

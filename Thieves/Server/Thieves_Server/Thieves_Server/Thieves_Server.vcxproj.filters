@@ -46,6 +46,9 @@
     <Filter Include="소스 파일\object\map_object">
       <UniqueIdentifier>{da17359a-e99a-4556-a2db-219cc24d9e86}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\map">
+      <UniqueIdentifier>{4aac2e61-34b0-4d59-b7ce-6c26c3724380}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -86,6 +89,12 @@
     </ClCompile>
     <ClCompile Include="map_object.cpp">
       <Filter>소스 파일\object\map_object</Filter>
+    </ClCompile>
+    <ClCompile Include="collision_checker.cpp">
+      <Filter>헤더 파일\utill\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="map_manager.cpp">
+      <Filter>소스 파일\map</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +151,24 @@
     </ClInclude>
     <ClInclude Include="map_object.h">
       <Filter>소스 파일\object\map_object</Filter>
+    </ClInclude>
+    <ClInclude Include="collisioner.h">
+      <Filter>헤더 파일\utill\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="vec3.h">
+      <Filter>헤더 파일\utill</Filter>
+    </ClInclude>
+    <ClInclude Include="collision_checker.h">
+      <Filter>헤더 파일\utill\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="map_info.h">
+      <Filter>소스 파일\map</Filter>
+    </ClInclude>
+    <ClInclude Include="map_manager.h">
+      <Filter>소스 파일\map</Filter>
+    </ClInclude>
+    <ClInclude Include="vec2.h">
+      <Filter>헤더 파일\utill</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

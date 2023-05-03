@@ -16,6 +16,7 @@ public:
 
 	virtual void Reset()
 	{
+		m_is_active = false;		// true면 in_game false면 받을 수 있음.
 		ZeroMemory(m_name, MAX_NAME_SIZE + 1);
 	}
 
@@ -31,6 +32,7 @@ public:
 
 	int		m_last_move_time = 0;
 protected:
+	std::atomic_bool m_is_active = false;
 	int		m_room_id;
 
 	char m_name[MAX_NAME_SIZE + 1];

@@ -41,16 +41,16 @@ void Player::Init(SOCKET& c_socket)
 
 }
 
+// Player reset -> Disconnect
 void Player::ResetPlayer()
 {
-
-	
-	is_matching = false;
+	//is_matching = false;
 	ZeroMemory(m_password, MAX_PASSWORD_SIZE + 1);
-	m_mach_user_size = 0;
+	//m_mach_user_size = 0;
 	m_socket = INVALID_SOCKET;
 }
 
+// Game reset
 void Player::Reset()
 {
 
