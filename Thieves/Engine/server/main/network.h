@@ -7,6 +7,8 @@
 #include <string>
 #include "packet_manager.h"
 #include "send_manager.h"
+#include "server/thieves_server/thieves_packet_manager.h"
+#include "server/thieves_server/thieves_send_manager.h"
 #include "server/ptr.h"
 class Network {
 private:
@@ -45,7 +47,7 @@ public:
 			worker.join();
 	};
 
-	bool Init(client_fw::UPtr<PacketManager>&& packet_manager, client_fw::UPtr<SendManager>&& send_manager);
+	bool Init(client_fw::UPtr<ThievesPacketManager>&& packet_manager, client_fw::UPtr<ThievesSendManager>&& send_manager);
 	bool Connect();
 
 	static void error_display(int err_no)
@@ -77,6 +79,12 @@ public:
 		//worker.join();
 	}
 
+	client_fw::UPtr<ThievesPacketManager>& GetPacketManager() { return m_packet_manager; };
+	client_fw::UPtr<ThievesSendManager>& GetSendManager() { return m_send_manager; };
+
+	std::unordered_map<int, shared_ptr<NetworkMoveObj>>& GetNetworkObjMap() { return m_packet_manager->GetObjMap(); }
+
+
 	void SendMessageToServer(const shared_ptr<MessageEventInfo>& message);
 	void SendMovePacket(char direction, Vec3 pos, Vec3 vec, float deltatime, char);
 	void SendStartPacket();
@@ -96,8 +104,8 @@ private:
 		return m_id;
 	}
 
-	client_fw::UPtr<PacketManager>m_packet_manager;
-	client_fw::UPtr<SendManager>m_send_manager;
+	client_fw::UPtr<ThievesPacketManager>m_packet_manager;
+	client_fw::UPtr<ThievesSendManager>m_send_manager;
 	// 이전 이동 패킷이 전송된 시점을 저장하는 변수
 	std::chrono::system_clock::time_point m_move_time;
 

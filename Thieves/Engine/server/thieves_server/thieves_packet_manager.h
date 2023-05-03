@@ -15,7 +15,7 @@ public:
 	virtual ~ThievesPacketManager() = default;
 
 	virtual void Init()override;
-
+	
 	void ProcessMove(int c_id, unsigned char* p);
 	void ProcessSignin(int c_id, unsigned char* p);
 	void ProcessObjInfo(int c_id, unsigned char* p);
@@ -36,6 +36,9 @@ public:
 	
 	char GetActionType() { return pl_action; }
 	void SetActionType(char type_val) { pl_action = type_val; }
+
+	std::unordered_map<int, shared_ptr<NetworkMoveObj>>& GetObjMap() { return m_obj_map; };
+
 private:
 	std::unordered_map<int, shared_ptr<NetworkMoveObj>>m_obj_map;
 	GameInfo m_game_info;

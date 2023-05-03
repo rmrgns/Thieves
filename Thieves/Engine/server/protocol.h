@@ -130,12 +130,17 @@ struct sc_packet_sign_up_ok {
 // 서버 -> 클라의 경우 포지션과 룩 벡터 모두 보내줘야 하기는 한다.
 // 자기 자신의 경우는 그냥 룩 벡터에 대해서는 적용시키지 않도록 하기만 하면 된다.
 // 이미 id 데이터를 가지고 있기 때문에 이 부분은 문제가 없을 것이다.
+
+// -> 정정함. 단순하게 이 패킷이 자신과의 연결만 하는 데이터 였다면 그렇게 해야 하겠지만,
+// 모든 플레이어에 대한 패킷이라고 한다면 룩 벡터도 부여해 주어야 한다.
+
 struct sc_packet_move {
 	unsigned char size;
 	char	type;
 	int		id;
 	bool	recv_bool;
-	float	posX, posZ;
+	float	posX, posY, posZ;
+	float   rotX, rotZ;
 	char	action_type; // action type
 };
 

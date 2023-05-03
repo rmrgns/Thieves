@@ -157,9 +157,11 @@ void PacketManager::SendMovePacket(int c_id, int mover)
 	packet.type = SC_PACKET_MOVE;
 
 	packet.posX = p->GetPosX();
-	//packet.posY = p->GetPosY();
+	packet.posY = p->GetPosY();
 	packet.posZ = p->GetPosZ();
 
+	packet.rotX = p->GetRotX();
+	packet.rotZ = p->GetRotZ();
 
 	packet.recv_bool = true;
 
@@ -389,6 +391,8 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 		cl->SetPosZ(cl->GetPosZ() - right.z * _speed * packet->deltaTime);
 	}
 
+	cl->SetRotX(packet->vecX);
+	cl->SetRotZ(packet->vecZ);
 	//cl->SetPosY(packet->vecY);
 
 	cl->state_lock.lock();

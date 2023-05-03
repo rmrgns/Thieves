@@ -26,7 +26,7 @@ bool Network::matching_end = false;
 //}
 
 // 윈도우 소켓 초기화, 소켓 생성 및 초기화
-bool Network::Init(client_fw::UPtr<PacketManager>&& packet_manager, client_fw::UPtr<SendManager>&& send_manager)
+bool Network::Init(client_fw::UPtr<ThievesPacketManager>&& packet_manager, client_fw::UPtr<ThievesSendManager>&& send_manager)
 {
 	m_id = 0;
 	m_move_time = chrono::system_clock::now();

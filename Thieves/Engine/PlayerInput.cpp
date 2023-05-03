@@ -102,11 +102,6 @@ void PlayerInput::LateUpdate()
 		 GetAnimator()->Play(_index);
 	 }
 
-	if (INPUT->GetButtonDown(KEY_TYPE::Q))
-	{
-		GET_SINGLE(SceneManager)->SetBuildPlayer(true);
-	}
-
 	// ĳ���� ����
 	if (INPUT->GetButtonDown(KEY_TYPE::SPACE))
 	{
@@ -128,10 +123,10 @@ void PlayerInput::LateUpdate()
 			_action_type = (char)PL_ACTION_TYPE::ATTACK;
 			_attackState = 1;
 	}
-	GET_SINGLE(SceneManager)->SetPlayerPosition(pos);
+	//GET_SINGLE(SceneManager)->SetPlayerPosition(pos);
 	PlayerAttack();
 	PlayerMove();
-	GetTransform()->SetLocalPosition(pos);
+	//GetTransform()->SetLocalPosition(pos);
 
 	
 }
@@ -140,10 +135,10 @@ void PlayerInput::PlayerMove() {
 
 	//Vec3 pos = GEngine->GetThievesPacketManager()->GetVec();
 	
-	Vec3 pos;
-	pos.x = GET_SINGLE(SceneManager)->GetPlayerPositionX();
-	pos.y = recv_pos.y;
-	pos.z = GET_SINGLE(SceneManager)->GetPlayerPositionZ();
+	//Vec3 pos;
+	//pos.x = GET_SINGLE(SceneManager)->GetPlayerPositionX();
+	//pos.y = recv_pos.y;
+	//pos.z = GET_SINGLE(SceneManager)->GetPlayerPositionZ();
 	
 
 	//	GET_SINGLE(SceneManager)->SetPlayerPosition(pos);
@@ -163,14 +158,14 @@ void PlayerInput::PlayerMove() {
 	}
 	
 	// ī�޶� ĳ���� position ��ġ -> 1��Ī
-	GET_SINGLE(SceneManager)->SetPlayerPosition(pos);
+	//GET_SINGLE(SceneManager)->SetPlayerPosition(pos);
 
-	Vec3 rotation;
-	rotation.y = GET_SINGLE(SceneManager)->GetPlayerRotation().y;
+	//Vec3 rotation;
+	//rotation.y = GET_SINGLE(SceneManager)->GetPlayerRotation().y;
 	 
-	GetTransform()->SetLocalRotation(rotation);
+	//GetTransform()->SetLocalRotation(rotation);
 	//GetTransform()->SetLocalPosition(pos);
-	recv_pos = GetTransform()->GetLocalPosition();
+	//recv_pos = GetTransform()->GetLocalPosition();
 
 }
 

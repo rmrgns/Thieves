@@ -34,20 +34,13 @@ void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
 	int mid = packet->id;
 	auto mover = m_obj_map.find(packet->id);
 
-	SetVecX(packet->posX);
-	SetVecZ(packet->posZ);
-	SetRecv(packet->recv_bool);
-	SetActionType(packet->action_type);
-	
-	GET_SINGLE(SceneManager)->SetPlayerPositionX(recv_pos.x);
-	GET_SINGLE(SceneManager)->SetPlayerPositionZ(recv_pos.z);
-	
 	if (mover != m_obj_map.end())
 	{
 		//if (mover->second->GetIsActive() == false)return;
-		if (isnan(packet->posX) ||  isnan(packet->posZ))return;
+		if (isnan(packet->posX) ||  isnan(packet->posZ)) return;
 		
-		mover->second->SetPosition(move(recv_pos));
+		mover->second->SetPosition(Vec3(packet->posX, packet->posY, packet->posZ));
+		mover->second->SetRotation(Vec3(packet->rotX, 0.0f, packet->rotZ));
 		
 	}
 }
@@ -64,11 +57,16 @@ void ThievesPacketManager::ProcessSignin(int c_id, unsigned char* p)
 void ThievesPacketManager::ProcessObjInfo(int c_id, unsigned char* p)
 {
 	sc_packet_obj_info* packet = reinterpret_cast<sc_packet_obj_info*>(p);
-	NetworkObj* obj = NULL;
+	//NetworkObj* obj = NULL;
 	Network::matching_end = true;
 	NW_OBJ_TYPE nw_type;
 	
+	// 이거 가독성 너무 안좋다. 이런 방식으로 적어주면 좋을듯 -> 김혁동임
+	// 
+	// 패킷 아이디가 게임 정보의 네트워크 아이디와 같다면 오브젝트 타입을 조작 플레이어 타입으로, 아니라면 패킷에서 받은 오브젝트 타입으로 한다.
 	packet->id == m_game_info.GetNetworkID() ? nw_type = NW_OBJ_TYPE::OT_MY_PLAYER : nw_type = (NW_OBJ_TYPE)packet->object_type;
+
+	// 해당 데이터를 네트워크의 id를 키로 해서 네트워크 오브젝트에 넣는다.
 	auto res = m_obj_map.try_emplace(packet->id, CreateSPtr<NetworkMoveObj>(
 		packet->id,
 		nw_type,
