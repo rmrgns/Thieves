@@ -315,23 +315,21 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 			gameObject->SetName(L"Thief");
 			gameObject->SetCheckFrustum(false);
 			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
-			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 3.1415f, 0.f));
 			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-			//gameObject->AddComponent(make_shared<TestObjectMove>());
 			gameObject->AddComponent(make_shared<PlayerInput>());
 			gameObject->AddComponent(make_shared<NetworkSystem>());
-			
-			if (Network::GetInst()->GetNetworkObjMap().end()
-				!= Network::GetInst()->GetNetworkObjMap().find(Network::GetInst()->GetPacketManager()->GetGameInfo().GetNetworkID())) {	
-				int id = Network::GetInst()->GetNetworkObjMap().find(Network::GetInst()->GetPacketManager()->GetGameInfo().GetNetworkID())->second->GetID();
-				gameObject->GetNetworkSystem()->SetNetworkId(id);
+				
+			// 자신의 NetworkID에 해당하는 데이터를 NetworkSystem에서 사용하도록 함.
+			int myID = Network::GetInst()->GetPacketManager()->GetGameInfo().GetNetworkID();
+
+			if (Network::GetInst()->GetNetworkObjMap().end() != Network::GetInst()->GetNetworkObjMap().find(myID)) {
+				gameObject->GetNetworkSystem()->SetNetworkId(myID);
 				gameObject->GetNetworkSystem()->SetNetworkingType(NetworkType::PLAYER);
 			}
 			
 			int32 index = 2;
 			gameObject->GetAnimator()->Play(index);
 			scene->AddGameObject(gameObject);
-			//gameObject->AddComponent(make_shared<TestDragon>());
 		}
 	}
 #pragma endregion
@@ -339,7 +337,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 #pragma region OtherPlayers
 	{
 
-		
+		std::vector<int> occupied_id;
 
 		for (int i = 0; i < 2; ++i)
 		{
@@ -352,18 +350,27 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 				
 				gameObject->SetName(L"Thief");
 				gameObject->SetCheckFrustum(false);
-				gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
-				//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 3.1415f, 0.f));
+				gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, -100.f, 0.f));
 				gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-				//gameObject->AddComponent(make_shared<TestObjectMove>());
 				gameObject->AddComponent(make_shared<NetworkSystem>());
 
-
+				// 이미 존재하는 오브젝트들에 대해 NetworkSystem을 설정한다.
+				// 새로 생성되는 오브젝트들의 경우에는 ObjInfo가 왔을 때에 설정해 주면 된다.
+				for (auto& p : Network::GetInst()->GetNetworkObjMap()) {
+					if (p.second->GetType() == NW_OBJ_TYPE::OT_PLAYER) {
+						if ((occupied_id.empty() || std::find(occupied_id.begin(), occupied_id.end(), p.first) != occupied_id.end()))
+						{
+							occupied_id.emplace_back(p.first);
+							gameObject->GetNetworkSystem()->SetNetworkId(p.first);
+							gameObject->GetNetworkSystem()->SetNetworkingType(NetworkType::OTHER_PLAYER);
+							break;
+						}
+					}
+				}
 
 				int32 index = 2;
 				gameObject->GetAnimator()->Play(index);
 				scene->AddGameObject(gameObject);
-				//gameObject->AddComponent(make_shared<TestDragon>());
 			}
 		}
 	}

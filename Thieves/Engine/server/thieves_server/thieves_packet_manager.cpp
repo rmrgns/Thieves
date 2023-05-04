@@ -45,7 +45,9 @@ void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
 		
 		
 		mover->second->SetPosition(Vec3(packet->posX, packet->posY, packet->posZ));
-		mover->second->SetRotation(Vec3(packet->rotX, 0.0f, packet->rotZ));
+		
+		//가져온 rot 값은 look vector 이므로 이 부분을 Rotation 각도 값으로 변경해 주어야 함.
+		mover->second->SetRotation(Vec3(0.0f, atan2(packet->rotX, packet->rotZ), 0.0f));
 		
 	}
 }
@@ -81,6 +83,38 @@ void ThievesPacketManager::ProcessObjInfo(int c_id, unsigned char* p)
 		packet->y,
 		packet->z
 	));
+
+
+	// 만약 이미 게임이 진행되고 있는 상태라면 새롭게 지정해 주어야 함.
+	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
+	{
+		auto& objects = GET_SINGLE(SceneManager)->GetActiveScene()->GetGameObjects();
+		for (auto& obj : objects)
+		{
+			auto nsys = obj->GetNetworkSystem();
+			if (nsys)
+			{
+				if (nsys->GetNetworkingType() == NetworkType::NONE)
+				{
+					nsys->SetNetworkId(packet->id);
+					switch (nw_type)
+					{
+					case NW_OBJ_TYPE::OT_PLAYER:
+					{
+						nsys->SetNetworkingType(NetworkType::OTHER_PLAYER);
+					}
+					break;
+					// 현재 OT_PLAYER 이외에는 들어와서는 안됨
+					case NW_OBJ_TYPE::OT_MY_PLAYER:
+					case NW_OBJ_TYPE::OT_NONE:
+					default:
+						break;
+					}
+					break;
+				}
+			}
+		}
+	}
 
 	// 오브젝트 spqwn 및 m_objmap[pakcet->id] 전송하여 id값마다 스폰
 }
