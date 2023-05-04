@@ -282,9 +282,30 @@ void PacketManager::Disconnect(int c_id)
 	MoveObjManager::GetInst()->Disconnect(c_id);
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 
-	lock_guard<mutex>state_guard(cl->state_lock);
-	if (cl->GetRoomID() == 0)
+	Room* room = m_room_manager->GetRoom(cl->GetRoomID());
+	auto& objs = room->GetObjList();
+
+	objs.erase(remove(objs.begin(), objs.end(), c_id));
+
+	sc_packet_remove_object packet;
+
+	packet.size = sizeof(packet);
+	packet.type = SC_PACKET_REMOVE_OBJECT;
+	packet.id = c_id;
+
+	for (int& obj : objs)
+	{
+		MoveObjManager::GetInst()->GetPlayer(obj)->DoSend(sizeof(packet), &packet);
+	}
+
+	cl->state_lock.lock();
+	if (cl->GetRoomID() == 0) {
 		cl->SetState(STATE::ST_FREE);
+		cl->ResetPlayer();
+	}
+	cl->state_lock.unlock();
+
+	
 }
 
 bool PacketManager::IsRoomInGame(int room_id)

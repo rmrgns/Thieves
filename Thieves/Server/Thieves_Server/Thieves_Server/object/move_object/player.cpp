@@ -43,7 +43,8 @@ void Player::Init(SOCKET& c_socket)
 
 void Player::ResetPlayer()
 {
-
+	SetPos(Vector3());
+	SetRot(Vector3());
 	m_is_active = false;
 	is_matching = false;
 	ZeroMemory(m_password, MAX_PASSWORD_SIZE + 1);

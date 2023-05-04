@@ -28,6 +28,7 @@ void ThievesPacketManager::Init()
 	RegisterRecvFunction(SC_PACKET_MOVE, [this](int c_id, unsigned char* p) {ProcessMove(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_OBJ_INFO, [this](int c_id, unsigned char* p) {ProcessObjInfo(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_SIGN_IN_OK, [this](int c_id, unsigned char* p) {ProcessSignin(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_REMOVE_OBJECT, [this](int c_id, unsigned char* p) {ProcessRemoveObj(c_id, p); });
 
 
 }
@@ -117,6 +118,31 @@ void ThievesPacketManager::ProcessObjInfo(int c_id, unsigned char* p)
 	}
 
 	// 오브젝트 spqwn 및 m_objmap[pakcet->id] 전송하여 id값마다 스폰
+}
+
+void ThievesPacketManager::ProcessRemoveObj(int c_id, unsigned char* p)
+{
+	sc_packet_remove_object* packet = reinterpret_cast<sc_packet_remove_object*>(p);
+
+	m_obj_map.erase(packet->id);
+
+	auto& objects = GET_SINGLE(SceneManager)->GetActiveScene()->GetGameObjects();
+
+	for (auto& obj : objects) {
+
+		auto nsys = obj->GetNetworkSystem();
+
+		if (nsys)
+		{
+			if ((nsys->GetNetworkingType() != NetworkType::NONE) && (nsys->GetNetworkId() == packet->id))
+			{
+				nsys->SetNetworkId(-1);
+				nsys->SetNetworkingType(NetworkType::NONE);
+				nsys->GetTransform()->SetLocalPosition(Vec3(0.0f, -300.0f, 0.0f));
+			}
+		}
+	}
+
 }
 
 
