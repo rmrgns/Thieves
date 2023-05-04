@@ -48,7 +48,7 @@ void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
 		
 		//가져온 rot 값은 look vector 이므로 이 부분을 Rotation 각도 값으로 변경해 주어야 함.
 		mover->second->SetRotation(Vec3(0.0f, atan2(packet->rotX, packet->rotZ), 0.0f));
-		
+		mover->second->SetActionType(packet->action_type);
 	}
 }
 

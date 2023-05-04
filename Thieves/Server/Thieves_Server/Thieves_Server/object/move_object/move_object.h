@@ -33,6 +33,9 @@ public:
 
 	void SetOriginPos(const Vector3& val) { m_origin_pos = val; }
 
+	void SetAnimationNumber(const int& val) { animNum = val; };
+	int GetAnimationNumber() { return animNum; };
+
 	int		m_last_move_time = 0;
 protected:
 	std::atomic_bool m_is_active = false;
@@ -41,4 +44,5 @@ protected:
 	char m_name[MAX_NAME_SIZE + 1];
 	//Vector4 m_rotation;
 	Vector3 m_origin_pos;
+	int animNum = -1;
 };

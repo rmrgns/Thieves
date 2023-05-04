@@ -68,7 +68,7 @@ const char SC_PACKET_COMPLETE_JUMP = 19;			// 점프 완료 패킷
 struct cs_packet_move {
 	unsigned char size;
 	char	type;
-	char	direction;			// 1 : 앞,  2: 뒤, 3:왼, 4:오
+	char	direction;			// 비트연산으로 계산. 앞왼뒤오 순서.
 	int		move_time; //디버그 용 -> 보낸시간 -받은시간 = 통신하는 시간
 	float	vecX, vecZ;	// look vec
 	float	deltaTime;	//delta time
