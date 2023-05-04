@@ -6,6 +6,12 @@
 #include "Timer.h"
 #include "Transform.h"
 #include "Camera.h"
+
+#include "server/main/network.h"
+#include "server/thieves_server/thieves_packet_manager.h"
+#include "server/main/network_move_object.h"
+#include "server/thieves_server/game_info.h"
+
 PlayerCamera::PlayerCamera()
 {
 }
@@ -17,7 +23,10 @@ PlayerCamera::~PlayerCamera()
 void PlayerCamera::LateUpdate()
 {
 	//Vec3 pos = GetTransform()->GetLocalPosition();
-	Vec3 pos = GET_SINGLE(SceneManager)->GetPlayerPosition();
+	
+	int myID = Network::GetInst()->GetPacketManager()->GetGameInfo().GetNetworkID();
+	Vec3 pos(0.0f, 0.0f, 0.0f);
+	if(myID != -1) pos = Network::GetInst()->GetNetworkObjMap().find(myID)->second->GetPosition();
 	pos.y += 125.f;
 	//pos.x += 100.f;
 	// ī�޶� ���콺����
@@ -69,7 +78,8 @@ void PlayerCamera::CameraRotation()
 	}
 
 	// ī�޶� ĳ���� rotation ��ġ -> 1��Ī
-	GET_SINGLE(SceneManager)->SetPlayerRotation(rotation);
+	int myID = Network::GetInst()->GetPacketManager()->GetGameInfo().GetNetworkID();
+	if(myID != -1) Network::GetInst()->GetNetworkObjMap().find(myID)->second->SetRotation(rotation);
 	
 	GetTransform()->SetLocalRotation(rotation);
 }

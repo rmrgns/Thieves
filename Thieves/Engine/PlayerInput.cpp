@@ -35,37 +35,11 @@ void PlayerInput::LateUpdate()
 		INPUT->GetButton(KEY_TYPE::D))
 	{
 		_moveState = true;
+		
 		if (_attackState == 0 && _index != 0  && _jumpState == 0)
 		{
 			_index = 0;
 			GetAnimator()->Play(_index);
-		}
-		if (INPUT->GetButton(KEY_TYPE::W))
-		{
-			direction = 1;
-			Network::GetInst()->SendMovePacket(direction, pos,
-				GetTransform()->GetLook(), DELTA_TIME);
-		}
-		if (INPUT->GetButton(KEY_TYPE::S))
-		{
-			direction = 2;
-
-			Network::GetInst()->SendMovePacket(direction, pos,
-				GetTransform()->GetLook(), DELTA_TIME);
-		}
-		if (INPUT->GetButton(KEY_TYPE::A))
-		{
-			direction = 3;
-
-			Network::GetInst()->SendMovePacket(direction, pos,
-				GetTransform()->GetLook(), DELTA_TIME);
-		}
-		if (INPUT->GetButton(KEY_TYPE::D))
-		{
-			direction = 4;
-
-			Network::GetInst()->SendMovePacket(direction, pos,
-				GetTransform()->GetLook(), DELTA_TIME);
 		}
 	}
 	 if (INPUT->GetButtonUp(KEY_TYPE::W) ||
@@ -97,30 +71,40 @@ void PlayerInput::LateUpdate()
 		 GetAnimator()->Play(_index);
 	 }
 
-	 if (INPUT->GetButtonDown(KEY_TYPE::Q))
-	 {
-		 GET_SINGLE(SceneManager)->SetBuildPlayer(true);
-	 }
+
+	// ĳ���� ����
+	if (INPUT->GetButtonDown(KEY_TYPE::SPACE))
+	{
+		if (_jumpState == 0) {
+			_action_type = (char)PL_ACTION_TYPE::JUMP;
+			_jumpState = 1;
+		}
+	
+		// 점프 시작 패킷 전송
+	}
+
+	// ĳ���� ����
+	Jump(pos);
 
 	// Attack
 	if (INPUT->GetButtonDown(KEY_TYPE::LBUTTON))
 	{
 		if(_attackState == 0)
+			_action_type = (char)PL_ACTION_TYPE::ATTACK;
 			_attackState = 1;
 	}
 
+	//GET_SINGLE(SceneManager)->SetPlayerPosition(pos);
 	PlayerAttack();
 	PlayerMove();
+	//GetTransform()->SetLocalPosition(pos);
+
+	
 }
 
 void PlayerInput::PlayerMove() {
 
 	//Vec3 pos = GEngine->GetThievesPacketManager()->GetVec();
-	
-	Vec3 pos;
-	pos.x = GET_SINGLE(SceneManager)->GetPlayerPositionX();
-	pos.y = recv_pos.y;
-	pos.z = GET_SINGLE(SceneManager)->GetPlayerPositionZ();
 
 
 	if (_checkCameraRotation == true)
@@ -148,15 +132,7 @@ void PlayerInput::PlayerMove() {
 	}
 	
 	// ī�޶� ĳ���� position ��ġ -> 1��Ī
-	GET_SINGLE(SceneManager)->SetPlayerPosition(pos);
-
-	Vec3 rotation;
-	rotation.y = GET_SINGLE(SceneManager)->GetPlayerRotation().y;
-
-	GetTransform()->SetLocalPosition(pos);
-	GetTransform()->SetLocalRotation(rotation);
-	
-	recv_pos = GetTransform()->GetLocalPosition();
+	//GET_SINGLE(SceneManager)->SetPlayerPosition(pos);
 
 }
 

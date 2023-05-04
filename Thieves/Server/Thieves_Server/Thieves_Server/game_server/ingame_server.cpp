@@ -34,11 +34,11 @@ bool InGameServer::OnRecv(int c_id, EXP_OVER* exp_over, DWORD num_bytes)
 // 이벤트 종류에 따라 다르게 동작
 void InGameServer::OnEvent(int c_id, EXP_OVER* exp_over)
 {
-	/*if (false == m_PacketManager->IsRoomInGame(exp_over->room_id))
+	if (false == m_PacketManager->IsRoomInGame(exp_over->room_id))
 	{
 		delete exp_over;
 		return;
-	}*/
+	}
 
 	switch (exp_over->_comp_op)
 	{

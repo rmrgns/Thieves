@@ -26,7 +26,7 @@ bool Network::matching_end = false;
 //}
 
 // 윈도우 소켓 초기화, 소켓 생성 및 초기화
-bool Network::Init(client_fw::UPtr<PacketManager>&& packet_manager, client_fw::UPtr<SendManager>&& send_manager)
+bool Network::Init(client_fw::UPtr<ThievesPacketManager>&& packet_manager, client_fw::UPtr<ThievesSendManager>&& send_manager)
 {
 	m_id = 0;
 	m_move_time = chrono::system_clock::now();
@@ -134,10 +134,10 @@ void Network::SendMessageToServer(const shared_ptr<MessageEventInfo>& message)
 }
 
 void Network::SendMovePacket(char direction,
-	Vec3 pos, Vec3 vec, float deltatime)
+	Vec3 pos, Vec3 vec, float deltatime, char action_type)
 {
 	m_send_manager->SendMovePacket(m_s_socket, direction,
-		pos, vec, deltatime);
+		pos, vec, deltatime, action_type);
 
 	//auto end_t = std::chrono::system_clock::now();
 	//if (m_move_time <= end_t) {
@@ -151,5 +151,9 @@ void Network::SendStartPacket()
 	m_send_manager->SendStartPacket(m_s_socket);
 }
 
+void Network::SendSignInPacket()
+{
+	m_send_manager->SendSignInPacket(m_s_socket);
+}
 
 // Packet Test

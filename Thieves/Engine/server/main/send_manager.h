@@ -11,7 +11,7 @@ public:
 	
 	// Send
 	virtual void SendMovePacket(const SOCKET& s_socket, char direction,
-		Vec3 pos, Vec3 vec, float deltatime) {};
+		Vec3 pos, Vec3 vec, float deltatime, char action_type) {};
 	virtual void SendStartPacket(const SOCKET& s_socket) {};
 
 

@@ -44,4 +44,7 @@ private:
 
 	// Animation Index
 	int32		_index = 2;
+
+	// player action
+	char _action_type;
 };

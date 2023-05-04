@@ -100,13 +100,13 @@ void PacketManager::ProcessRecv(int c_id , EXP_OVER* exp_over, DWORD num_bytes)
 {
 	if (num_bytes == 0) {
 		Disconnect(c_id);
-		std::cout << "�߸��� ����" << std::endl;
+		std::cout << "disconnect" << std::endl;
 	}
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 	int remain_data = num_bytes + cl->m_prev_size;
 	unsigned char* packet_start = exp_over->_net_buf;
 	int packet_size = packet_start[0];
-	if (packet_size == 0)std::cout << "packet_size�� 0" << cl->GetID();
+	if (packet_size == 0) std::cout << "packet_size 0" << cl->GetID();
 	while (packet_size <= remain_data) {
 		ProcessPacket(c_id, packet_start);
 		remain_data -= packet_size;
@@ -157,15 +157,22 @@ void PacketManager::SendMovePacket(int c_id, int mover)
 	packet.type = SC_PACKET_MOVE;
 
 	packet.posX = p->GetPosX();
-	//packet.posY = p->GetPosY();
+	packet.posY = p->GetPosY();
 	packet.posZ = p->GetPosZ();
 
+	packet.rotX = p->GetRotX();
+	packet.rotZ = p->GetRotZ();
 
 	packet.recv_bool = true;
 
+	packet.action_type = p->GetAnimationNumber();
+
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 //	cout << "ID : " << c_id << " x " << packet.posX << " y " << packet.posY << "z " << packet.posZ << endl;
-	cout << "ID : " << c_id << " x " << packet.posX  << "z " << packet.posZ << endl;
+//	cout << "ID : " << c_id << " x " << packet.posX  << "z " << packet.posZ << endl;
+	cout << "ID : " << c_id << " mover " << mover << " x " << packet.posX << "z " << packet.posZ << endl;
+	//cout << "ID : " << c_id << " x " << packet.posX  << "z " << packet.posZ << endl;
+
 
 	cl->DoSend(sizeof(packet), &packet);
 }
@@ -275,9 +282,30 @@ void PacketManager::Disconnect(int c_id)
 	MoveObjManager::GetInst()->Disconnect(c_id);
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 
-	lock_guard<mutex>state_guard(cl->state_lock);
-	if (cl->GetRoomID() == -1)
+	Room* room = m_room_manager->GetRoom(cl->GetRoomID());
+	auto& objs = room->GetObjList();
+
+	objs.erase(remove(objs.begin(), objs.end(), c_id));
+
+	sc_packet_remove_object packet;
+
+	packet.size = sizeof(packet);
+	packet.type = SC_PACKET_REMOVE_OBJECT;
+	packet.id = c_id;
+
+	for (int& obj : objs)
+	{
+		MoveObjManager::GetInst()->GetPlayer(obj)->DoSend(sizeof(packet), &packet);
+	}
+
+	cl->state_lock.lock();
+	if (cl->GetRoomID() == 0) {
 		cl->SetState(STATE::ST_FREE);
+		cl->ResetPlayer();
+	}
+	cl->state_lock.unlock();
+
+	
 }
 
 bool PacketManager::IsRoomInGame(int room_id)
@@ -295,6 +323,12 @@ bool PacketManager::IsRoomInGame(int room_id)
 
 void PacketManager::EndGame(int room_id)
 {
+	Room* room = m_room_manager->GetRoom(room_id);
+
+	for (auto obj_id : room->GetObjList())
+	{
+		MoveObjManager::GetInst()->GetMoveObj(obj_id)->Reset();
+	}
 }
 
 void PacketManager::CreateDBThread()
@@ -326,12 +360,13 @@ void PacketManager::ProcessTimer(HANDLE hiocp)
 void PacketManager::ProcessSignIn(int c_id, unsigned char* p)
 {
 	cs_packet_sign_in* packet = reinterpret_cast<cs_packet_sign_in*>(p);
-	db_task dt;
-	dt.dt = DB_TASK_TYPE::SIGN_IN;
-	dt.obj_id = c_id;
-	strcpy_s(dt.user_id, packet->name);
-	strcpy_s(dt.user_password, packet->password);
-	m_db_queue.push(move(dt));
+	//db_task dt;
+	//dt.dt = DB_TASK_TYPE::SIGN_IN;
+	//dt.obj_id = c_id;
+	//strcpy_s(dt.user_id, packet->name);
+	//strcpy_s(dt.user_password, packet->password);
+	//m_db_queue.push(move(dt));
+	SendSignInOK(c_id);
 }
 
 void PacketManager::ProcessSignUp(int c_id, unsigned char* p)
@@ -351,36 +386,36 @@ void PacketManager::ProcessAttack(int c_id, unsigned char* p)
 
 void PacketManager::ProcessMove(int c_id, unsigned char* p)
 {
-	std::cout << "MOVE " << std::endl;
+	//std::cout << "MOVE " << std::endl;
 	cs_packet_move* packet = reinterpret_cast<cs_packet_move*>(p);
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 	
-	if (packet->direction == 1)
+	if ((packet->direction & 8) == 8)
 	{
-		// 1��
+		// 앞
 		cl->SetPosX(cl->GetPosX() + packet->vecX * _speed * packet->deltaTime);
 		cl->SetPosZ(cl->GetPosZ() + packet->vecZ * _speed * packet->deltaTime);
 	}
-	if (packet->direction == 2)
+	if ((packet->direction & 4) == 4)
 	{
-		cl->SetPosX(cl->GetPosX() - packet->vecX * _speed * packet->deltaTime);
-		cl->SetPosZ(cl->GetPosZ() - packet->vecZ * _speed * packet->deltaTime);
-	}
-	if (packet->direction == 3)
-	{
-		// �� ���Ϳ� �� ���͸� �����ϸ� right ���Ͱ� ������.
-		// ���� ���Ϳ� ���� ���� ������ ������ ���� ������ ������ ������.
+		// 왼
 		Vector3 look = Vector3(packet->vecX, 0.0f, packet->vecZ);
 		Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
 		Vector3 right = look.Cross(up);
 
 		cl->SetPosX(cl->GetPosX() + right.x * _speed * packet->deltaTime);
 		cl->SetPosZ(cl->GetPosZ() + right.z * _speed * packet->deltaTime);
+
 	}
-	if (packet->direction == 4)
+	if ((packet->direction & 2) == 2)
 	{
-		// �� ���Ϳ� �� ���͸� �����ϸ� right ���Ͱ� ������.
-		// ���� ���Ϳ� ���� ���� ������ ������ ���� ������ ������ ������.
+		// 뒤
+		cl->SetPosX(cl->GetPosX() - packet->vecX * _speed * packet->deltaTime);
+		cl->SetPosZ(cl->GetPosZ() - packet->vecZ * _speed * packet->deltaTime);
+	}
+	if ((packet->direction & 1) == 1)
+	{
+		// 오
 		Vector3 look = Vector3(packet->vecX, 0.0f, packet->vecZ);
 		Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
 		Vector3 right = look.Cross(up);
@@ -389,7 +424,11 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 		cl->SetPosZ(cl->GetPosZ() - right.z * _speed * packet->deltaTime);
 	}
 
+	cl->SetRotX(packet->vecX);
+	cl->SetRotZ(packet->vecZ);
 	//cl->SetPosY(packet->vecY);
+
+	cl->SetAnimationNumber(packet->action_type);
 
 	cl->state_lock.lock();
 	if (cl->GetState() != STATE::ST_INGAME)
@@ -427,6 +466,7 @@ void PacketManager::ProcessGameStart(int c_id, unsigned char* p)
 	player->state_lock.lock();
 	player->SetState(STATE::ST_INGAME);
 	player->SetRoomID(0);
+	player->SetIsActive(true);
 	player->state_lock.unlock();
 	
 

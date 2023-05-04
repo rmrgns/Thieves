@@ -4,19 +4,19 @@
 //// 각 상태에 따른 상태
 
 // 캐릭터 상태
-enum class COMP_OP {
-	OP_RECV,
-	OP_SEND,
-	OP_ACCEPT,
-	OP_POLICE_SPAWN,
-	OP_POLICE_MOVE,
-	OP_POLICE_ATTACK,
-	OP_PLAYER_MOVE,
-	OP_PLAYER_ATTACK
+//enum class COMP_OP {
+//	OP_RECV,
+//	OP_SEND,
+//	OP_ACCEPT,
+//	//	OP_POLICE_SPAWN,
+//	//	OP_POLICE_MOVE,
+//	//	OP_POLICE_ATTACK,
+//	//	OP_PLAYER_MOVE,
+//	//	OP_PLAYER_ATTACK
+//
+//};
 
-};
-
-// 게임 상태
+// game state
 enum class STATE {
 	ST_FREE,
 	ST_ACCEPT,
@@ -31,13 +31,14 @@ enum class ROOM_STATE
 	RT_RESET
 };
 
-// 룸 상태
+// Room state
 enum class ROOM_TYPE {
 	RT_FREE,
 	RE_INGAME,
 	RT_RESET
 };
 
+// Object type
 enum class OBJ_TYPE
 {
 	OT_MAPOBJ,
@@ -58,6 +59,7 @@ enum class ENEMY_STATE {
 //
 //};
 
+// Login type
 enum class LOGINFAIL_TYPE {
 	OK,
 	DB_ERROR,
@@ -67,7 +69,16 @@ enum class LOGINFAIL_TYPE {
 	NO_ID
 };
 
+// DB
 enum class DB_TASK_TYPE {
 	SIGN_IN,
 	SIGN_UP
+};
+
+// Player action 
+enum class PL_ACTION_TYPE {
+	NONE,
+	MOVE,
+	JUMP,
+	ATTACK
 };

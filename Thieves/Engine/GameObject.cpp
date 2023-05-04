@@ -11,6 +11,7 @@
 #include "BaseCollider.h"
 #include "Animator.h"
 #include "TextObject.h"
+#include "NetworkSystem.h"
 
 GameObject::GameObject() : Object(OBJECT_TYPE::GAMEOBJECT)
 {
@@ -153,6 +154,12 @@ shared_ptr<Physics> GameObject::GetPhysics()
 {
 	shared_ptr<Component> component = GetFixedComponent(COMPONENT_TYPE::PHYSICS);
 	return static_pointer_cast<Physics>(component);
+}
+
+shared_ptr<NetworkSystem> GameObject::GetNetworkSystem()
+{
+	shared_ptr<Component> component = GetFixedComponent(COMPONENT_TYPE::NETWORKOBJECT);
+	return static_pointer_cast<NetworkSystem>(component);
 }
 
 void GameObject::AddComponent(shared_ptr<Component> component)

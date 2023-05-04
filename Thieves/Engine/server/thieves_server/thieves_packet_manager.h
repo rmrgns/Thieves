@@ -15,10 +15,11 @@ public:
 	virtual ~ThievesPacketManager() = default;
 
 	virtual void Init()override;
-
+	
 	void ProcessMove(int c_id, unsigned char* p);
 	void ProcessSignin(int c_id, unsigned char* p);
 	void ProcessObjInfo(int c_id, unsigned char* p);
+	void ProcessRemoveObj(int c_id, unsigned char* p);
 
 
 	// 추가필요
@@ -33,11 +34,19 @@ public:
 	Vec3 GetPlayerInput() { return recv_pos; }
 	bool GetRecv() {return bRecv; }
 	void SetRecv(bool& bool_recv) { bRecv = bool_recv; }
+	
+	char GetActionType() { return pl_action; }
+	void SetActionType(char type_val) { pl_action = type_val; }
+
+	std::unordered_map<int, shared_ptr<NetworkMoveObj>>& GetObjMap() { return m_obj_map; };
+	GameInfo& GetGameInfo() { return m_game_info; };
 
 private:
 	std::unordered_map<int, shared_ptr<NetworkMoveObj>>m_obj_map;
 	GameInfo m_game_info;
 
+	char pl_action;
 	bool bRecv;
 	Vec3 recv_pos;
+	//Vec3 recv_pos;
 };

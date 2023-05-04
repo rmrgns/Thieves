@@ -19,7 +19,7 @@ void PacketManager::ProcessRecv(int client_id, EXP_OVER* exp_over, DWORD num_byt
 {
 	if (num_byte == 0)
 	{
-		std::cout << "받은게 없음" << std::endl;
+	//	std::cout << "받은게 없음" << std::endl;
 	}
 
 	int remain_data = num_byte + m_prev_size;
@@ -32,7 +32,7 @@ void PacketManager::ProcessRecv(int client_id, EXP_OVER* exp_over, DWORD num_byt
 		if (remain_data > 0) packet_size = packet_start[0];
 		else break;
 	}
-	std::cout << "패킷 처리" << std::endl;
+	//std::cout << "패킷 처리" << std::endl;
 
 	if (0 < remain_data) {
 		m_prev_size = remain_data;
@@ -57,7 +57,6 @@ void PacketManager::ProcessPacket(int c_id, unsigned char* p)
 	auto iter = m_recv_func_map.find(packet_type);
 	if (iter != m_recv_func_map.end() && false == m_stop_recv)
 	{
-		//(this->*(iter->second))(c_id, p);
 		(iter->second)(c_id, p);
 	}
 
