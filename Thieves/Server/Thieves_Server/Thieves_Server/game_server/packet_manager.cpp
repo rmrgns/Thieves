@@ -8,6 +8,10 @@
 #include "room/room.h"
 #include "database/db.h"
 #include "object/moveobj_manager.h"
+#include "map_manager.h"
+#include "collisioner.h"
+#include "collision_checker.h"
+
 //concurrency::concurrent_priority_queue<timer_event> PacketManager::g_timer_queue = concurrency::concurrent_priority_queue<timer_event>();
 
 using namespace std;
@@ -17,6 +21,7 @@ PacketManager::PacketManager()
 {
 	MoveObjManager::GetInst();
 	m_room_manager = new RoomManager;
+	m_map_manager = new MapManager;
 	m_db = new DB;
 
 }
@@ -25,6 +30,7 @@ void PacketManager::Init()
 {
 	MoveObjManager::GetInst()->InitPlayer();
 	m_room_manager->InitRoom();
+	m_map_manager->LoadMap("map.txt");
 
 	m_db->Init();
 }
@@ -166,7 +172,7 @@ void PacketManager::SendMovePacket(int c_id, int mover)
 	//if (packet.posY <= 0.f)
 	//	packet.jump_state = false;
 	//else
-	packet.jump_state = p->GetJumpState();
+//	packet.jump_state = p->GetJumpState();
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 //	cout << "ID : " << c_id << " jump "<< packet.jump_state << " x " << packet.posX << " y " << packet.posY << "z " << packet.posZ << endl;
 //	cout << "ID : " << c_id << " x " << packet.posX  << "z " << packet.posZ << endl;

@@ -74,6 +74,4 @@ bool CollisionChecker::segmentIntersection(Vector2 a, Vector2 b, Vector2 c, Vect
         return paralleSegments(a, b, c, d, p);
     //p가 두 선분에 포함되어 있는 경우에만 참을 반환한다. 
     return inBoundingRectangle(p, a, b) && inBoundingRectangle(p, c, d);
-
-
 }

@@ -64,3 +64,20 @@ struct db_task {
 	char user_id[MAX_NAME_SIZE];
 	char user_password[MAX_PASSWORD_SIZE];
 };
+
+struct BoxCollision2D
+{
+	BoxCollision2D(const Vector3& min_pos, const Vector3 max_pos)
+	{
+		p[0] = Vector2(min_pos.x, min_pos.z);
+		p[1] = Vector2(min_pos.x, max_pos.z);
+		p[2] = Vector2(max_pos.x, min_pos.z);
+		p[3] = Vector2(max_pos.x, max_pos.z);
+	}
+	Vector2 p[4];
+};
+
+constexpr unsigned int HashCode(const char* str)
+{
+	return str[0] ? static_cast<unsigned int>(str[0]) + 0xEDB8832Full * HashCode(str + 1) : 8603;
+}
