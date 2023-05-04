@@ -100,13 +100,13 @@ void PacketManager::ProcessRecv(int c_id , EXP_OVER* exp_over, DWORD num_bytes)
 {
 	if (num_bytes == 0) {
 		Disconnect(c_id);
-		std::cout << "�߸��� ����" << std::endl;
+		std::cout << "disconnect" << std::endl;
 	}
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 	int remain_data = num_bytes + cl->m_prev_size;
 	unsigned char* packet_start = exp_over->_net_buf;
 	int packet_size = packet_start[0];
-	if (packet_size == 0)std::cout << "packet_size�� 0" << cl->GetID();
+	if (packet_size == 0) std::cout << "packet_size 0" << cl->GetID();
 	while (packet_size <= remain_data) {
 		ProcessPacket(c_id, packet_start);
 		remain_data -= packet_size;
@@ -167,7 +167,8 @@ void PacketManager::SendMovePacket(int c_id, int mover)
 
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 //	cout << "ID : " << c_id << " x " << packet.posX << " y " << packet.posY << "z " << packet.posZ << endl;
-	cout << "ID : " << c_id << " x " << packet.posX  << "z " << packet.posZ << endl;
+//	cout << "ID : " << c_id << " x " << packet.posX  << "z " << packet.posZ << endl;
+	cout << "ID : " << c_id << " mover " << mover << " x " << packet.posX << "z " << packet.posZ << endl;
 
 	cl->DoSend(sizeof(packet), &packet);
 }
@@ -278,7 +279,7 @@ void PacketManager::Disconnect(int c_id)
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 
 	lock_guard<mutex>state_guard(cl->state_lock);
-	if (cl->GetRoomID() == -1)
+	if (cl->GetRoomID() == 0)
 		cl->SetState(STATE::ST_FREE);
 }
 
@@ -297,6 +298,12 @@ bool PacketManager::IsRoomInGame(int room_id)
 
 void PacketManager::EndGame(int room_id)
 {
+	Room* room = m_room_manager->GetRoom(room_id);
+
+	for (auto obj_id : room->GetObjList())
+	{
+		MoveObjManager::GetInst()->GetMoveObj(obj_id)->Reset();
+	}
 }
 
 void PacketManager::CreateDBThread()
@@ -354,7 +361,7 @@ void PacketManager::ProcessAttack(int c_id, unsigned char* p)
 
 void PacketManager::ProcessMove(int c_id, unsigned char* p)
 {
-	std::cout << "MOVE " << std::endl;
+	//std::cout << "MOVE " << std::endl;
 	cs_packet_move* packet = reinterpret_cast<cs_packet_move*>(p);
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 	
@@ -432,6 +439,7 @@ void PacketManager::ProcessGameStart(int c_id, unsigned char* p)
 	player->state_lock.lock();
 	player->SetState(STATE::ST_INGAME);
 	player->SetRoomID(0);
+	player->SetIsActive(true);
 	player->state_lock.unlock();
 	
 

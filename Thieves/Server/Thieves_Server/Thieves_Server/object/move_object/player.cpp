@@ -44,7 +44,7 @@ void Player::Init(SOCKET& c_socket)
 void Player::ResetPlayer()
 {
 
-	
+	m_is_active = false;
 	is_matching = false;
 	ZeroMemory(m_password, MAX_PASSWORD_SIZE + 1);
 	m_mach_user_size = 0;
@@ -53,7 +53,7 @@ void Player::ResetPlayer()
 
 void Player::Reset()
 {
-
+	m_is_active = false;
 	m_mach_user_size = 0;
 	m_last_move_time = 0;
 	m_room_id = 1;
