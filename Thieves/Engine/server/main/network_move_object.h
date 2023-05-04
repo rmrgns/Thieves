@@ -48,13 +48,13 @@ public:
 	void SetType(const NW_OBJ_TYPE val) { m_obj_type = val; }
 	const NW_OBJ_TYPE GetType()const { return m_obj_type; }
 	
-	void SetActionType(const PL_ACTION_TYPE val) { m_action_type = val; }
-	const PL_ACTION_TYPE GetActionType()const { return m_action_type; }
+	void SetActionType(const int& val) { m_action_type = val; }
+	const int GetActionType()const { return m_action_type; }
 
 	bool GetIsActive() { return m_is_active; }
 	void SetIsActive(bool val) { m_is_active; }
 private:
 	NW_OBJ_TYPE m_obj_type;
-	PL_ACTION_TYPE m_action_type;
+	int m_action_type;
 	bool m_is_active = true;
 };

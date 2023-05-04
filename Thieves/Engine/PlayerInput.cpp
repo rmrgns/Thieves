@@ -35,42 +35,11 @@ void PlayerInput::LateUpdate()
 		INPUT->GetButton(KEY_TYPE::D))
 	{
 		_moveState = true;
-		if (_action_type == (char)PL_ACTION_TYPE::JUMP) 
-			return;
-		else
-			_action_type = (char)PL_ACTION_TYPE::MOVE;
 		
 		if (_attackState == 0 && _index != 0  && _jumpState == 0)
 		{
 			_index = 0;
 			GetAnimator()->Play(_index);
-		}
-		if (INPUT->GetButton(KEY_TYPE::W))
-		{
-			direction = 1;
-			Network::GetInst()->SendMovePacket(direction, pos,
-				GetTransform()->GetLook(), DELTA_TIME, _action_type);
-		}
-		if (INPUT->GetButton(KEY_TYPE::S))
-		{
-			direction = 2;
-
-			Network::GetInst()->SendMovePacket(direction, pos,
-				GetTransform()->GetLook(), DELTA_TIME, _action_type);
-		}
-		if (INPUT->GetButton(KEY_TYPE::A))
-		{
-			direction = 3;
-
-			Network::GetInst()->SendMovePacket(direction, pos,
-				GetTransform()->GetLook(), DELTA_TIME, _action_type);
-		}
-		if (INPUT->GetButton(KEY_TYPE::D))
-		{
-			direction = 4;
-
-			Network::GetInst()->SendMovePacket(direction, pos,
-				GetTransform()->GetLook(), DELTA_TIME, _action_type);
 		}
 	}
 	 if (INPUT->GetButtonUp(KEY_TYPE::W) ||

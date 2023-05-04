@@ -165,9 +165,11 @@ void PacketManager::SendMovePacket(int c_id, int mover)
 
 	packet.recv_bool = true;
 
+	packet.action_type = p->GetAnimationNumber();
+
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 //	cout << "ID : " << c_id << " x " << packet.posX << " y " << packet.posY << "z " << packet.posZ << endl;
-	cout << "ID : " << c_id << " x " << packet.posX  << "z " << packet.posZ << endl;
+	//cout << "ID : " << c_id << " x " << packet.posX  << "z " << packet.posZ << endl;
 
 	cl->DoSend(sizeof(packet), &packet);
 }
@@ -358,32 +360,32 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 	cs_packet_move* packet = reinterpret_cast<cs_packet_move*>(p);
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 	
-	if (packet->direction == 1)
+	if ((packet->direction & 8) == 8)
 	{
-		// 1��
+		// 앞
 		cl->SetPosX(cl->GetPosX() + packet->vecX * _speed * packet->deltaTime);
 		cl->SetPosZ(cl->GetPosZ() + packet->vecZ * _speed * packet->deltaTime);
 	}
-	if (packet->direction == 2)
+	if ((packet->direction & 4) == 4)
 	{
-		cl->SetPosX(cl->GetPosX() - packet->vecX * _speed * packet->deltaTime);
-		cl->SetPosZ(cl->GetPosZ() - packet->vecZ * _speed * packet->deltaTime);
-	}
-	if (packet->direction == 3)
-	{
-		// �� ���Ϳ� �� ���͸� �����ϸ� right ���Ͱ� ������.
-		// ���� ���Ϳ� ���� ���� ������ ������ ���� ������ ������ ������.
+		// 왼
 		Vector3 look = Vector3(packet->vecX, 0.0f, packet->vecZ);
 		Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
 		Vector3 right = look.Cross(up);
 
 		cl->SetPosX(cl->GetPosX() + right.x * _speed * packet->deltaTime);
 		cl->SetPosZ(cl->GetPosZ() + right.z * _speed * packet->deltaTime);
+
 	}
-	if (packet->direction == 4)
+	if ((packet->direction & 2) == 2)
 	{
-		// �� ���Ϳ� �� ���͸� �����ϸ� right ���Ͱ� ������.
-		// ���� ���Ϳ� ���� ���� ������ ������ ���� ������ ������ ������.
+		// 뒤
+		cl->SetPosX(cl->GetPosX() - packet->vecX * _speed * packet->deltaTime);
+		cl->SetPosZ(cl->GetPosZ() - packet->vecZ * _speed * packet->deltaTime);
+	}
+	if ((packet->direction & 1) == 1)
+	{
+		// 오
 		Vector3 look = Vector3(packet->vecX, 0.0f, packet->vecZ);
 		Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
 		Vector3 right = look.Cross(up);
@@ -395,6 +397,8 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 	cl->SetRotX(packet->vecX);
 	cl->SetRotZ(packet->vecZ);
 	//cl->SetPosY(packet->vecY);
+
+	cl->SetAnimationNumber(packet->action_type);
 
 	cl->state_lock.lock();
 	if (cl->GetState() != STATE::ST_INGAME)
