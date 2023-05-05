@@ -44,6 +44,12 @@ protected:
 	OBJECT_TYPE _objectType = OBJECT_TYPE::NONE;
 	wstring _name;
 
+	//int _objectID;
+	//Vec3 _objectPosition;
+	//Vec4 _objectRotation;
+	//std::string _objectName;
+
+
 protected:
 	uint32 _id = 0;
 };

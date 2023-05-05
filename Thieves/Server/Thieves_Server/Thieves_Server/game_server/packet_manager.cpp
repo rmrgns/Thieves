@@ -8,6 +8,10 @@
 #include "room/room.h"
 #include "database/db.h"
 #include "object/moveobj_manager.h"
+#include "map_manager.h"
+#include "collisioner.h"
+#include "collision_checker.h"
+
 //concurrency::concurrent_priority_queue<timer_event> PacketManager::g_timer_queue = concurrency::concurrent_priority_queue<timer_event>();
 
 using namespace std;
@@ -17,6 +21,7 @@ PacketManager::PacketManager()
 {
 	MoveObjManager::GetInst();
 	m_room_manager = new RoomManager;
+	m_map_manager = new MapManager;
 	m_db = new DB;
 
 }
@@ -25,6 +30,7 @@ void PacketManager::Init()
 {
 	MoveObjManager::GetInst()->InitPlayer();
 	m_room_manager->InitRoom();
+	m_map_manager->LoadMap("map.txt");
 
 	m_db->Init();
 }
@@ -134,7 +140,6 @@ void PacketManager::ProcessRecv(int c_id , EXP_OVER* exp_over, DWORD num_bytes)
 //	}
 //	SetTimerEvent(0, 0, EVENT_TYPE::EVENT_PLAYER_MOVE, 10);
 //}
-
 //void PacketManager::UpdateObjMove()//�ϴ� ����
 //{
 //	for (int i = 0; i < MAX_USER; ++i)
@@ -159,7 +164,6 @@ void PacketManager::SendMovePacket(int c_id, int mover)
 	packet.posX = p->GetPosX();
 	packet.posY = p->GetPosY();
 	packet.posZ = p->GetPosZ();
-
 	packet.rotX = p->GetRotX();
 	packet.rotZ = p->GetRotZ();
 
@@ -529,7 +533,7 @@ void PacketManager::StartGame(int room_id)
 		if (i < room->GetMaxUser())
 		{
 			pl = MoveObjManager::GetInst()->GetPlayer(obj_list[i]);
-			pl->SetPos({ 0.0f,0.0f,0.0f});
+			pl->SetPos({ 20.0f,0.0f,0.0f});
 			//pl->SetColorType(COLOR_TYPE(i + 1));
 			continue;
 		}

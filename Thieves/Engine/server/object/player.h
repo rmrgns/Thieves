@@ -3,8 +3,12 @@
 
 class Player
 {
+public:
+	Player();
+	~Player();
 private:
 	Vec3 PlayerPos;
+
 
 public:
 	Player();

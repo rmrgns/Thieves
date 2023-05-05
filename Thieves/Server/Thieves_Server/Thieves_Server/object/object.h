@@ -19,6 +19,7 @@ public:
 		m_pos.y = y;
 		m_pos.z = z;
 
+
 		m_rot.x = 0.0f;
 		m_rot.y = 0.0f;
 		m_rot.z = 0.0f;
@@ -26,6 +27,7 @@ public:
 //		m_pos.x = f_x;
 //		m_pos.y = f_y;
 //		m_pos.z = f_z;
+
 	};
 	float GetPosX()const { return m_pos.x; };
 	float GetPosY()const { return m_pos.y; };
@@ -52,12 +54,9 @@ public:
 	void SetRotY(float val) { m_rot.y = val; };
 	void SetRotZ(float val) { m_rot.z = val; };
 	void SetRot(const Vector3& val) { m_pos = val; };
+
 protected:
 	int m_id;
 	OBJ_TYPE m_type;
 	Vector3 m_pos;
-	// 회전 방향 데이터
-	Vector3 m_rot;
-
-
 };

@@ -38,7 +38,7 @@ public:
 	// Server
 	shared_ptr<ThievesPacketManager> GetThievesPacketManager() { return _thievesPacketManager; }
 	shared_ptr<ThievesSendManager> GetThievesSendManager() { return _thievesSendManager; }
-
+	shared_ptr<GameInfo> GetGameInfo() { return _gameInfo; }
 
 
 	//shared_ptr<TextObject> GetText() { return _TextObject; }
@@ -76,8 +76,10 @@ private:
 	shared_ptr<ComputeDescriptorHeap> _computeDescHeap = make_shared<ComputeDescriptorHeap>();
 	shared_ptr<Text> _text = make_shared<Text>();
 	shared_ptr<TextObject> _textObject = make_shared<TextObject>();
+	
 	shared_ptr<ThievesPacketManager> _thievesPacketManager = make_shared<ThievesPacketManager>();
 	shared_ptr<ThievesSendManager> _thievesSendManager = make_shared<ThievesSendManager>();
+	shared_ptr<GameInfo> _gameInfo = make_shared<GameInfo>();
 
 	//shared_ptr<TextObject> _TextObject = make_shared<TextObject>();
 

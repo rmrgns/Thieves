@@ -72,14 +72,14 @@ void TestCameraScript::LateUpdate()
 		GetTransform()->SetLocalRotation(rotation);
 	}
 
-	// picking ÄÚµå
+	// picking ï¿½Úµï¿½
 	/*if (INPUT->GetButtonDown(KEY_TYPE::RBUTTON))
 	{
 		const POINT& pos = INPUT->GetMousePos();
 		GET_SINGLE(SceneManager)->Pick(pos.x, pos.y);
 	}*/
 
-	// Ä«¸Þ¶ó ¸¶¿ì½ºÁ¦¾î on/off (temp code)
+	// Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ì½ºï¿½ï¿½ï¿½ï¿½ on/off (temp code)
 	if (INPUT->GetButtonDown(KEY_TYPE::L))
 	{
 		if (_checkCameraRotation == true)
@@ -88,16 +88,12 @@ void TestCameraScript::LateUpdate()
 			_checkCameraRotation = true;
 	}
 
-	// Ä«¸Þ¶ó ¸¶¿ì½ºÁ¦¾î
+	// Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ì½ºï¿½ï¿½ï¿½ï¿½
 	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME && _checkCameraRotation == true)
 	{
 		CameraRotation();
 	}
 
-	//Network::GetInst()->SendMovePacket(direction, pos,
-	//	GetTransform()->GetLook(),
-	//	DELTA_TIME, _action_type);
-	
 
 	GetTransform()->SetLocalPosition(pos);
 }
@@ -105,8 +101,8 @@ void TestCameraScript::LateUpdate()
 
 void TestCameraScript::CameraRotation()
 {
-	const POINT& point = INPUT->GetMousePos();	// ÇöÀç ¸¶¿ì½ºÁÂÇ¥¸¦ pointº¯¼ö¿¡ ÀúÀå
-	float mouseX = static_cast<float>(point.x);	// pointº¯¼öÀÇ °ªÀ» float°ªÀ¸·Î º¯°æ
+	const POINT& point = INPUT->GetMousePos();	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ì½ºï¿½ï¿½Ç¥ï¿½ï¿½ pointï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	float mouseX = static_cast<float>(point.x);	// pointï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ floatï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	float mouseY = static_cast<float>(point.y);
 
 	POINT WindowCenter = GEngine->GetWindowCenter();

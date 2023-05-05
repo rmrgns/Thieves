@@ -28,6 +28,21 @@ void PlayerInput::LateUpdate()
 	Vec3 pos = GetTransform()->GetLocalPosition();
 
 	direction = 0;
+
+	// ĳ���� ����
+	if (INPUT->GetButtonDown(KEY_TYPE::SPACE))
+	{
+		if (_jumpState == 0) {
+			_jumpState = 1;
+
+		}
+		// 점프 시작 패킷 전송)
+
+	}
+
+	// ĳ���� ����
+	Jump(pos);		// 수정필요
+
 	// ĳ���� WASD�̵�
 	if (INPUT->GetButton(KEY_TYPE::W) ||
 		INPUT->GetButton(KEY_TYPE::S) ||
@@ -42,7 +57,10 @@ void PlayerInput::LateUpdate()
 			GetAnimator()->Play(_index);
 		}
 	}
-	 if (INPUT->GetButtonUp(KEY_TYPE::W) ||
+	// MOVE SEND
+	//Network::GetInst()->SendMovePacket(direction, pos, GetTransform()->GetLook(), DELTA_TIME, _jumpState);
+	 
+	if (INPUT->GetButtonUp(KEY_TYPE::W) ||
 	 	INPUT->GetButtonUp(KEY_TYPE::S) ||
 	 	INPUT->GetButtonUp(KEY_TYPE::A) ||
 	 	INPUT->GetButtonUp(KEY_TYPE::D))
@@ -136,8 +154,6 @@ void PlayerInput::PlayerMove() {
 
 }
 
-
-
 void PlayerInput::PlayerRotation()
 {
 	const POINT& point = INPUT->GetMousePos();	// ���� ���콺��ǥ�� point������ ����
@@ -167,10 +183,13 @@ void PlayerInput::Jump(Vec3& pos)
 	{
 		_index = 3;
 		GetAnimator()->Play(_index);
-		_jumpState = 2;
+		//_jumpState = 2;
 	}
-	else if (_jumpState == 2)
+	//else if (_jumpState == 2)
+	//{
+	else if(pos.y <= 0)
 	{
+
 		_jumpSpeed -= 100.f * DELTA_TIME;
 		pos += GetTransform()->GetUp() * _jumpSpeed * DELTA_TIME;
 
@@ -178,11 +197,14 @@ void PlayerInput::Jump(Vec3& pos)
 		{
 			pos.y = 0;
 			_jumpCount = 0;
+
 			_jumpState = 0;
 			_jumpSpeed = 100.f;
 			return;
 		}
+
 	}
+	
 }
 
 void PlayerInput::PlayerAttack()

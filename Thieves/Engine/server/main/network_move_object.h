@@ -9,19 +9,19 @@ enum class NW_OBJ_TYPE
 	OT_PLAYER
 };
 
-//DBError : DB¿¡·¯
-//UserFull : »ç¿ëÀÚ °¡µæÂü
-//AlreadyLogin : ÇöÀç Á¢¼ÓÁßÀÎ °èÁ¤
-//InvalidPW : ºñ¹øÀÌ Æ²¸²
-//InvalidID :  ¾ø´Â ¾ÆÀÌµð
-//ExistID : ÀÌ¹Ì ÀÖ´Â ¾ÆÀÌµð
+//DBError : DBï¿½ï¿½ï¿½ï¿½
+//UserFull : ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//AlreadyLogin : ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+//InvalidPW : ï¿½ï¿½ï¿½ï¿½ï¿½ Æ²ï¿½ï¿½
+//InvalidID :  ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìµï¿½
+//ExistID : ï¿½Ì¹ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½Ìµï¿½
 enum class eLoginFailType
 {
 	kDBError, kUserFull,
 	kAlreadyLogin, kInvalidPW,
 	kInvalidID, kExistID,
 };
-//°ÔÀÓ °´Ã¼ÀÇ ¼Ó¼ºÀ» ÀúÀåÇÏ°í ¼³Á¤ÇÏ´Â ¸â¹ö º¯¼ö
+//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½Ó¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 class NetworkMoveObj : public NetworkObj
 {
@@ -34,6 +34,7 @@ public:
 		m_position = Vec3(x, y, z);
 		//m_action_type = action_type;
 	
+
 	}
 	NetworkMoveObj(const NetworkMoveObj& other)
 	{

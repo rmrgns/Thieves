@@ -41,6 +41,7 @@ void Player::Init(SOCKET& c_socket)
 
 }
 
+// Player reset -> Disconnect
 void Player::ResetPlayer()
 {
 	SetPos(Vector3());
@@ -48,10 +49,11 @@ void Player::ResetPlayer()
 	m_is_active = false;
 	is_matching = false;
 	ZeroMemory(m_password, MAX_PASSWORD_SIZE + 1);
-	m_mach_user_size = 0;
+	//m_mach_user_size = 0;
 	m_socket = INVALID_SOCKET;
 }
 
+// Game reset
 void Player::Reset()
 {
 	m_is_active = false;

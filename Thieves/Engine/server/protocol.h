@@ -2,74 +2,76 @@
 
 const short SERVER_PORT = 7777;
 
-// ¸Ê Å©±â
+// ï¿½ï¿½ Å©ï¿½ï¿½
 
-const int MAX_NAME_SIZE = 20;		// ¾ÆÀÌµð »çÀÌÁî
-const int MAX_PASSWORD_SIZE = 20;	// ºñ¹Ð ¹øÈ£ »çÀÌÁî
-const int MAX_CHAT_SIZE = 100;		// Ã¤ÆÃ »çÀÌÁî
+const int MAX_NAME_SIZE = 20;		// ï¿½ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+const int MAX_PASSWORD_SIZE = 20;	// ï¿½ï¿½ï¿½ ï¿½ï¿½È£ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+const int MAX_CHAT_SIZE = 100;		// Ã¤ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-const int MAX_ROOM_SIZE = 8;		// ¹æ ÃÖ´ë Å©±â
+const int MAX_ROOM_SIZE = 8;		// ï¿½ï¿½ ï¿½Ö´ï¿½ Å©ï¿½ï¿½
 
-const int MAX_USER = MAX_ROOM_SIZE * 8;		// µ¿Á¢ °¡´É ÀÎ¿ø
+const int MAX_USER = MAX_ROOM_SIZE * 8;		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Î¿ï¿½
 
 const int USER_NUM = 8;
-// ¼öÁ¤
+// ï¿½ï¿½ï¿½ï¿½
 const float FOV_RANGE = 0.f;
 
 constexpr int MAX_NPC = 7;
 
-// °æÂû NPCÀÇ °¹¼ö
-// µµµÏ AIÀÇ °¹¼ö
-const int PLAYER_HP = 5;		// ÇÃ·¹ÀÌ¾î HP
-const int PLAYER_DAMAGE = 1;	// ÇÃ·¹ÀÌ¾î DMG
-// ÇÃ·¹ÀÌ¾î ÀÌµ¿°Å¸®
-// ÇÃ·¹ÀÌ¾î °ø°Ý »ç°Å¸®
+// ï¿½ï¿½ï¿½ï¿½ NPCï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+// ï¿½ï¿½ï¿½ï¿½ AIï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+const int PLAYER_HP = 5;		// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ HP
+const int PLAYER_DAMAGE = 1;	// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ DMG
+// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Ìµï¿½ï¿½Å¸ï¿½
+// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¸ï¿½
 // ID
 
 // CS
-const char CS_PACKET_SIGN_IN = 1;			// ·Î±×ÀÎ
-const char CS_PACKET_SIGN_UP = 2;			// °¡ÀÔ
-const char CS_PACKET_MOVE = 3;				// ÀÌµ¿
-const char CS_PACKET_ATTACK = 4;			// °ø°Ý
-const char CS_PACKET_CHAT = 5;				// Ã¤ÆÃ
-const char CS_PACKET_HIT = 6;				// ÇÇ°Ý
-const char CS_PACKET_GAME_START = 7;		// °ÔÀÓ ½ÃÀÛ
+const char CS_PACKET_SIGN_IN = 1;			// ï¿½Î±ï¿½ï¿½ï¿½
+const char CS_PACKET_SIGN_UP = 2;			// ï¿½ï¿½ï¿½ï¿½
+const char CS_PACKET_MOVE = 3;				// ï¿½Ìµï¿½
+const char CS_PACKET_ATTACK = 4;			// ï¿½ï¿½ï¿½ï¿½
+const char CS_PACKET_CHAT = 5;				// Ã¤ï¿½ï¿½
+const char CS_PACKET_HIT = 6;				// ï¿½Ç°ï¿½
+const char CS_PACKET_GAME_START = 7;		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 const char CS_PACKET_MATCHING = 8;
 const char CS_PACKET_TEST = 9;
-const char CS_PACKET_START_JUMP = 10;				// Á¡ÇÁ ½ÃÀÛ ÆÐÅ¶
-const char CS_PACKET_COMPLETE_JUMP = 11;				// Á¡ÇÁ ¿Ï·á ÆÐÅ¶
+const char CS_PACKET_START_JUMP = 10;				// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¶
+const char CS_PACKET_COMPLETE_JUMP = 11;				// ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½ ï¿½ï¿½Å¶
+
 
 
 
 // SC
-const char SC_PACKET_SIGN_IN_OK = 1;		// ·Î±×ÀÎ OK
-const char SC_PACKET_SIGN_UP_OK = 2;		// °¡ÀÔ OK
-const char SC_PACKET_MOVE = 3;				// ÀÌµ¿
-const char SC_PACKET_PUT_OBJECT = 4;		// ÇÃ·¹ÀÌ¾î »ý¼º
-const char SC_PACKET_REMOVE_OBJECT = 5;		// ÇÃ·¹ÀÌ¾î Á¦°Å
-const char SC_PACKET_CHAT = 6;				// Ã¤ÆÃ
-const char SC_PACKET_LOGIN_FAIL = 7;		// ·Î±×ÀÎ ½ÇÆÐ
+const char SC_PACKET_SIGN_IN_OK = 1;		// ï¿½Î±ï¿½ï¿½ï¿½ OK
+const char SC_PACKET_SIGN_UP_OK = 2;		// ï¿½ï¿½ï¿½ï¿½ OK
+const char SC_PACKET_MOVE = 3;				// ï¿½Ìµï¿½
+const char SC_PACKET_PUT_OBJECT = 4;		// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½
+const char SC_PACKET_REMOVE_OBJECT = 5;		// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½
+const char SC_PACKET_CHAT = 6;				// Ã¤ï¿½ï¿½
+const char SC_PACKET_LOGIN_FAIL = 7;		// ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 const char SC_PACKET_TIME = 8;
-const char SC_PACKET_POLICE_ATTACK = 9;		// °æÂû ¾îÅÃ
-const char SC_PACKET_PLAYER_ATTACK = 10;	// ÇÃ·¹ÀÌ¾î ¾îÅÃ
+const char SC_PACKET_POLICE_ATTACK = 9;		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+const char SC_PACKET_PLAYER_ATTACK = 10;	// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½
 const char SC_PACKET_WIN = 11;				// win
 const char SC_PACKET_DEFEAT = 12;			// defeat
 const char SC_PACKET_STUN = 13;				// stun
-const char SC_PAKCET_INTERACTION = 14;		// »óÈ£ÀÛ¿ë
-const char SC_PACKET_PHASE = 15;			// ÆäÀÌÁî º¯°æ  
+const char SC_PAKCET_INTERACTION = 14;		// ï¿½ï¿½È£ï¿½Û¿ï¿½
+const char SC_PACKET_PHASE = 15;			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½  
 const char SC_PACKET_TEST = 16;
-const char SC_PACKET_OBJ_INFO = 17;		// OBJ Á¤º¸
-const char SC_PACKET_START_JUMP = 18;			// Á¡ÇÁ ½ÃÀÛ ÆÐÅ¶
-const char SC_PACKET_COMPLETE_JUMP = 19;			// Á¡ÇÁ ¿Ï·á ÆÐÅ¶
+const char SC_PACKET_OBJ_INFO = 17;		// OBJ ï¿½ï¿½ï¿½ï¿½
+const char SC_PACKET_START_JUMP = 18;			// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¶
+const char SC_PACKET_COMPLETE_JUMP = 19;			// ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½ ï¿½ï¿½Å¶
+
 //#pragma pack (push, 1)
 
-// Å¬¶óÀÌ¾ðÆ® -> ¼­¹ö·Î º¸³»´Â ÆÐÅ¶Àº ¾î¶² Å°¸¦ ¾ó¸¶³ª ´­·¶´ÂÁö¿¡ ´ëÇØ¼­¸¸ º¸³»ÁÖ¸é µÈ´Ù.
-// ¾îÂ÷ÇÇ ¼­¹ö¿¡¼­ À§Ä¡¸¦ °è»êÇÏ¿© Å¬¶óÀÌ¾ðÆ®·Î º¸³»ÁÙ °ÍÀÌ±â ¶§¹®¿¡ ¹®Á¦°¡ ¾ø´Ù.
+// Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ® -> ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¶ï¿½ï¿½ ï¿½î¶² Å°ï¿½ï¿½ ï¿½ó¸¶³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ø¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ ï¿½È´ï¿½.
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
 struct cs_packet_move {
 	unsigned char size;
 	char	type;
-	char	direction;			// ºñÆ®¿¬»êÀ¸·Î °è»ê. ¾Õ¿ÞµÚ¿À ¼ø¼­.
-	int		move_time; //µð¹ö±× ¿ë -> º¸³½½Ã°£ -¹ÞÀº½Ã°£ = Åë½ÅÇÏ´Â ½Ã°£
+	char	direction;			// ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½. ï¿½Õ¿ÞµÚ¿ï¿½ ï¿½ï¿½ï¿½ï¿½.
+	int		move_time; //ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ -> ï¿½ï¿½ï¿½ï¿½ï¿½Ã°ï¿½ -ï¿½ï¿½ï¿½ï¿½ï¿½Ã°ï¿½ = ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ã°ï¿½
 	float	vecX, vecZ;	// look vec
 	float	deltaTime;	//delta time
 	char	action_type; // action type
@@ -127,12 +129,12 @@ struct sc_packet_sign_up_ok {
 	char type;
 };
 
-// ¼­¹ö -> Å¬¶óÀÇ °æ¿ì Æ÷Áö¼Ç°ú ·è º¤ÅÍ ¸ðµÎ º¸³»Áà¾ß ÇÏ±â´Â ÇÑ´Ù.
-// ÀÚ±â ÀÚ½ÅÀÇ °æ¿ì´Â ±×³É ·è º¤ÅÍ¿¡ ´ëÇØ¼­´Â Àû¿ë½ÃÅ°Áö ¾Êµµ·Ï ÇÏ±â¸¸ ÇÏ¸é µÈ´Ù.
-// ÀÌ¹Ì id µ¥ÀÌÅÍ¸¦ °¡Áö°í ÀÖ±â ¶§¹®¿¡ ÀÌ ºÎºÐÀº ¹®Á¦°¡ ¾øÀ» °ÍÀÌ´Ù.
+// ï¿½ï¿½ï¿½ï¿½ -> Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï±ï¿½ï¿½ ï¿½Ñ´ï¿½.
+// ï¿½Ú±ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½×³ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Í¿ï¿½ ï¿½ï¿½ï¿½Ø¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Å°ï¿½ï¿½ ï¿½Êµï¿½ï¿½ï¿½ ï¿½Ï±â¸¸ ï¿½Ï¸ï¿½ ï¿½È´ï¿½.
+// ï¿½Ì¹ï¿½ id ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Îºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì´ï¿½.
 
-// -> Á¤Á¤ÇÔ. ´Ü¼øÇÏ°Ô ÀÌ ÆÐÅ¶ÀÌ ÀÚ½Å°úÀÇ ¿¬°á¸¸ ÇÏ´Â µ¥ÀÌÅÍ ¿´´Ù¸é ±×·¸°Ô ÇØ¾ß ÇÏ°ÚÁö¸¸,
-// ¸ðµç ÇÃ·¹ÀÌ¾î¿¡ ´ëÇÑ ÆÐÅ¶ÀÌ¶ó°í ÇÑ´Ù¸é ·è º¤ÅÍµµ ºÎ¿©ÇØ ÁÖ¾î¾ß ÇÑ´Ù.
+// -> ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. ï¿½Ü¼ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ ï¿½ï¿½Å¶ï¿½ï¿½ ï¿½Ú½Å°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½á¸¸ ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ù¸ï¿½ ï¿½×·ï¿½ï¿½ï¿½ ï¿½Ø¾ï¿½ ï¿½Ï°ï¿½ï¿½ï¿½ï¿½ï¿½,
+// ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î¿¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¶ï¿½Ì¶ï¿½ï¿½ ï¿½Ñ´Ù¸ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Íµï¿½ ï¿½Î¿ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½ ï¿½Ñ´ï¿½.
 
 struct sc_packet_move {
 	unsigned char size;
@@ -142,6 +144,7 @@ struct sc_packet_move {
 	float	posX, posY, posZ;
 	float   rotX, rotZ;
 	char	action_type; // action type
+
 };
 
 
@@ -168,13 +171,13 @@ struct sc_packet_chat {
 struct sc_packet_login_fail {
 	unsigned char size;
 	char type;
-	char reason;		// 1: DBerror,  2:»ç¿ëÀÚ Full, 3:ÀÌ¹Ì Á¢¼ÓÁß, 4:ºñ¹øÆ²¸², 5:¾ÆÀÌµð¾øÀ½, 6:ÇØ´ç¾ÆÀÌµð ÀÌ¹ÌÁ¸Àç
+	char reason;		// 1: DBerror,  2:ï¿½ï¿½ï¿½ï¿½ï¿½ Full, 3:ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, 4:ï¿½ï¿½ï¿½Æ²ï¿½ï¿½, 5:ï¿½ï¿½ï¿½Ìµï¿½ï¿½ï¿½ï¿½, 6:ï¿½Ø´ï¿½ï¿½ï¿½Ìµï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½
 };
 struct sc_packet_time {
 	unsigned char size;
 	char	type;
 	float time;
-	int send_time;//ÃßÈÄ¿¡ ¾ø¾Ö¾ßµÉ¼öµµ ÀÖÀ½
+	int send_time;//ï¿½ï¿½ï¿½Ä¿ï¿½ ï¿½ï¿½ï¿½Ö¾ßµÉ¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 };
 struct sc_packet_player_attack {
 	unsigned char size;

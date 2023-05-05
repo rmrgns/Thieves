@@ -29,7 +29,7 @@ private:
     
     char m_password[MAX_PASSWORD_SIZE + 1];
     short m_mach_user_size = 0;
-    
+    bool m_jumpState;
 
 public:
 
@@ -48,4 +48,6 @@ public:
     char* GetPassword() { return m_password; }
     short GetMatchUserSize() { return m_mach_user_size; }
     void SetMatchUserSize(short val) { m_mach_user_size = val; }
+    bool GetJumpState() { return m_jumpState; }
+    void SetJumpState(bool val) { m_jumpState = val; }
 };

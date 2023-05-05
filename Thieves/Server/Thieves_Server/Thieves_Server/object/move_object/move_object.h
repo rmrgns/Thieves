@@ -1,7 +1,7 @@
 #pragma once
 #include "object/object.h"
 
-//ÇÃ·¹ÀÌ¾î¿Í npcÀÇ ºÎ¸ð
+//ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ npcï¿½ï¿½ ï¿½Î¸ï¿½
 class MoveObj :public Object
 {
 public:
@@ -17,6 +17,7 @@ public:
 	virtual void Reset()
 	{
 		m_is_active = false;
+
 		ZeroMemory(m_name, MAX_NAME_SIZE + 1);
 	}
 
@@ -51,7 +52,7 @@ protected:
 	//Vector4 m_rotation;
 	Vector3 m_origin_pos;
 	int animNum = -1;
-	bool isJump = false; // ÇöÀç Á¡ÇÁ ÁßÀÎÁö ¾Æ´ÑÁö¸¦ ³ªÅ¸³»´Â º¯¼ö
-	float upVelocity = 0.0f; // À§ÂÊ ¹æÇâ ¼Óµµ¸¦ ³ªÅ¸³»´Â º¯¼ö
+	bool isJump = false; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	float upVelocity = 0.0f; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Óµï¿½ï¿½ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 };

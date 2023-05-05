@@ -27,16 +27,20 @@ void ThievesSendManager::SendSignInPacket(const SOCKET& s_socket)
 
 void ThievesSendManager::SendMovePacket(const SOCKET& s_socket, char direction,
 	Vec3 pos, Vec3 vec, float deltatime, char action_type)
+
 {
 	cs_packet_move packet;
 	packet.size = sizeof(packet);
 	packet.type = CS_PACKET_MOVE;
 
+
 	packet.vecX = vec.x;
+
 	packet.vecZ = vec.z;
 
 	packet.deltaTime = deltatime;
 	packet.direction = direction;
+	packet.jumpstate = jumpstate;
 
 	packet.action_type = (char)action_type;
 

@@ -14,6 +14,7 @@ public:
         Vec3 pos, Vec3 vec, float deltatime, char )override;
     void SendAttackPacket(const SOCKET& s_socket, const Vec3& forward_vec, char);
 
+
     //void SendSignInPacket(const SOCKET& s_socket, char*, char*);
     //void SendSignUPPacket(const SOCKET& s_socket, char*, char*);
     //void SendMatchingPacket(const SOCKET& s_socket, int user_num);

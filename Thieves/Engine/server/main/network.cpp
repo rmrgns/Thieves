@@ -25,7 +25,7 @@ bool Network::matching_end = false;
 //	return true;
 //}
 
-// À©µµ¿ì ¼ÒÄÏ ÃÊ±âÈ­, ¼ÒÄÏ »ý¼º ¹× ÃÊ±âÈ­
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ê±ï¿½È­
 bool Network::Init(client_fw::UPtr<ThievesPacketManager>&& packet_manager, client_fw::UPtr<ThievesSendManager>&& send_manager)
 {
 	m_id = 0;
@@ -46,7 +46,7 @@ bool Network::Init(client_fw::UPtr<ThievesPacketManager>&& packet_manager, clien
 }
 
 
-// ¼­¹ö¿¬°á
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 bool Network::Connect()
 {
 	SOCKADDR_IN server_addr;
@@ -68,7 +68,7 @@ bool Network::Connect()
 	return true;
 }
 
-// ¼­¹ö Worker ½º·¹µå
+// ï¿½ï¿½ï¿½ï¿½ Worker ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void Network::Worker()
 {
 	if (false == Connect())
@@ -122,7 +122,7 @@ void Network::Worker()
 	}
 	cout << "Worker End " << endl;
 }
-// Recv ÆÐÅ¶ Ã³¸®
+// Recv ï¿½ï¿½Å¶ Ã³ï¿½ï¿½
 void Network::OnRecv(int client_id, EXP_OVER* exp_over, DWORD num_byte, SOCKET& socket)
 {
 	m_packet_manager->ProcessRecv(client_id, exp_over, num_byte, socket);
@@ -138,6 +138,7 @@ void Network::SendMovePacket(char direction,
 {
 	m_send_manager->SendMovePacket(m_s_socket, direction,
 		pos, vec, deltatime, action_type);
+
 
 	//auto end_t = std::chrono::system_clock::now();
 	//if (m_move_time <= end_t) {
