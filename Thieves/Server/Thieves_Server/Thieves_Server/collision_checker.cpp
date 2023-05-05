@@ -1,3 +1,4 @@
+#include "pch.h"
 #include<algorithm>
 #include "collision_checker.h"
 

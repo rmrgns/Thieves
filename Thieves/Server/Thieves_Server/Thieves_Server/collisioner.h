@@ -1,5 +1,5 @@
 #pragma once
-#include"vec3.h"
+#include"vec/vec3.h"
 
 class Collisioner {
 public:

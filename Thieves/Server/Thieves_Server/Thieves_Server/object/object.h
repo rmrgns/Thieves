@@ -59,4 +59,5 @@ protected:
 	int m_id;
 	OBJ_TYPE m_type;
 	Vector3 m_pos;
+	Vector3 m_rot;
 };

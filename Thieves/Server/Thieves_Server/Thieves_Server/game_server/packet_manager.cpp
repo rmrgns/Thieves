@@ -395,39 +395,47 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 	
 	if ((packet->direction & 8) == 8)
 	{
-		// 앞
-		cl->SetPosX(cl->GetPosX() + packet->vecX * _speed * packet->deltaTime);
-		cl->SetPosZ(cl->GetPosZ() + packet->vecZ * _speed * packet->deltaTime);
+		if (false == m_map_manager->CheckInRange(cl->GetPos(), OBJ_TYPE::OT_MAPOBJ)) {
+			// 앞
+			cl->SetPosX(cl->GetPosX() + packet->vecX * _speed * packet->deltaTime);
+			cl->SetPosZ(cl->GetPosZ() + packet->vecZ * _speed * packet->deltaTime);
+		}
 	}
 
 	if ((packet->direction & 4) == 4)
 	{
-		// 왼
-		Vector3 look = Vector3(packet->vecX, 0.0f, packet->vecZ);
-		Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
-		Vector3 right = look.Cross(up);
+		if (false == m_map_manager->CheckInRange(cl->GetPos(), OBJ_TYPE::OT_MAPOBJ)) {
+			// 왼
+			Vector3 look = Vector3(packet->vecX, 0.0f, packet->vecZ);
+			Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
+			Vector3 right = look.Cross(up);
 
-		cl->SetPosX(cl->GetPosX() + right.x * _speed * packet->deltaTime);
-		cl->SetPosZ(cl->GetPosZ() + right.z * _speed * packet->deltaTime);
+			cl->SetPosX(cl->GetPosX() + right.x * _speed * packet->deltaTime);
+			cl->SetPosZ(cl->GetPosZ() + right.z * _speed * packet->deltaTime);
+		}
 
 	}
 
 	if ((packet->direction & 2) == 2)
 	{
-		// 뒤
-		cl->SetPosX(cl->GetPosX() - packet->vecX * _speed * packet->deltaTime);
-		cl->SetPosZ(cl->GetPosZ() - packet->vecZ * _speed * packet->deltaTime);
+		if (false == m_map_manager->CheckInRange(cl->GetPos(), OBJ_TYPE::OT_MAPOBJ)) {
+			// 뒤
+			cl->SetPosX(cl->GetPosX() - packet->vecX * _speed * packet->deltaTime);
+			cl->SetPosZ(cl->GetPosZ() - packet->vecZ * _speed * packet->deltaTime);
+		}
 	}
 
 	if ((packet->direction & 1) == 1)
 	{
-		// 오
-		Vector3 look = Vector3(packet->vecX, 0.0f, packet->vecZ);
-		Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
-		Vector3 right = look.Cross(up);
+		if (false == m_map_manager->CheckInRange(cl->GetPos(), OBJ_TYPE::OT_MAPOBJ)) {
+			// 오
+			Vector3 look = Vector3(packet->vecX, 0.0f, packet->vecZ);
+			Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
+			Vector3 right = look.Cross(up);
 
-		cl->SetPosX(cl->GetPosX() - right.x * _speed * packet->deltaTime);
-		cl->SetPosZ(cl->GetPosZ() - right.z * _speed * packet->deltaTime);
+			cl->SetPosX(cl->GetPosX() - right.x * _speed * packet->deltaTime);
+			cl->SetPosZ(cl->GetPosZ() - right.z * _speed * packet->deltaTime);
+		}
 	}
 
 	if ((packet->direction & 16) == 16)

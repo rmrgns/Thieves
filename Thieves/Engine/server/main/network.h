@@ -110,5 +110,6 @@ private:
 	client_fw::UPtr<ThievesSendManager>m_send_manager;
 	// ���� �̵� ��Ŷ�� ���۵� ������ �����ϴ� ����
 	std::chrono::system_clock::time_point m_move_time;
-
+	//const char* SERVERADDR = "110.5.241.37";
+	const char* SERVERADDR = "127.0.0.1";
 };

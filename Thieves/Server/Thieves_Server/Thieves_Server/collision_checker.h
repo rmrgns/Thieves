@@ -1,6 +1,6 @@
 #pragma once
-#include"vec3.h"
-#include"vec2.h"
+#include"vec/vec3.h"
+#include"vec/vec2.h"
 #include"collisioner.h"
 class CollisionChecker
 {
