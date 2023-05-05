@@ -35,7 +35,7 @@ void Camera::FinalUpdate()
 	else
 		_matProjection = ::XMMatrixOrthographicLH(_width * _scale, _height * _scale, _near, _far);
 
-	//_frustum.FinalUpdate();
+	_frustum.FinalUpdate();
 }
 
 void Camera::SortGameObject()

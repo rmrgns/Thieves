@@ -3,6 +3,7 @@
 #include "Engine.h"
 #include "Scene.h"
 #include "SceneManager.h"
+#include "Input.h"
 
 void Text::Init()
 {
@@ -10,34 +11,32 @@ void Text::Init()
 	CreateD2DDevice();
 	SetTextInfo(0);
 	_rect = D2D1::RectF(0.0f, 0.0f, GEngine->GetWindow().width, GEngine->GetWindow().height);
+
 }
 
 void Text::Update()
 {
+
 	// 텍스트 출력
 	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOGIN)
 	{
 		SetTextInfo(1);
 		wstring text2 = L"Thieves Login Screen";
-		SetText(text2, 0.f, 0.f, 1.f, 1.f);
+		SetText(text2, 0.f, 10.f, 1.f, 1.f);
 
 		SetTextInfo(0);
 		wstring text = L"Thieves ID";
 		SetText(text, 500.f, 400.f, 1.f, 1.f);
+		wstring ID = INPUT->GetUserID();
+		SetText(ID, 500.f, 450.f, 1.f, 1.f);
 
-		SetTextInfo(0);
 		wstring text1 = L"Thieves Password";
 		SetText(text1, 500.f, 500.f, 1.f, 1.f);
+		wstring Password = INPUT->GetUserPassword();
+		SetText(Password, 500.f, 550.f, 1.f, 1.f);
+		//wstring test = L"한글 테스트";
+		//SetText(test, 100.f, 500.f, 1.f, 1.f);
 
-		wstring test = L"한글 테스트";
-		SetText(test, 100.f, 500.f, 1.f, 1.f);
-
-	}
-	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
-	{
-		SetTextInfo(1);
-		wstring text4 = L"asdasdasd";
-		SetText(text4, 0.f, 0.f, 1.f, 1.f);
 	}
 	else if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
 	{
@@ -190,6 +189,6 @@ void Text::SetText(wstring text, float posX, float posY, float scaleX, float sca
 		D2D1::Matrix3x2F::Translation(posX, posY));
 	_d2dDeviceContext->SetTransform(matrix);
 	_d2dDeviceContext->DrawTextW(text.c_str(), static_cast<UINT32>(text.size()), _writeTextFormat.Get(), &_rect, _solidColorBrush.Get());
-
+	
 }
 

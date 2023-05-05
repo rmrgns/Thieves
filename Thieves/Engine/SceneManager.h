@@ -6,6 +6,7 @@ enum class CURRENT_SCENE
 {
 	NONE,
 	LOGIN,
+	LOBBY,
 	GAME,
 	// ...
 	END

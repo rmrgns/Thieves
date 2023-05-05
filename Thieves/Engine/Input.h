@@ -82,6 +82,10 @@ public:
 	
 	wstring GetUserID() const { return _userID; }
 	void InitUserId() { _userID = L""; }
+	wstring GetUserPassword() const { return _userPassword; }
+	void InitUserPassword() { _userPassword = L""; }
+
+	bool GetCheckIDorPassword() const { return _checkIDorPassword; }
 
 	wstring GetServerID() const { return _serverID; }
 private:
@@ -94,6 +98,8 @@ private:
 	POINT _mousePos = {};
 	POINT _prevMousePos = {};
 	wstring _userID;
+	wstring _userPassword;
 	wstring _serverID = L"TEST";
+	bool _checkIDorPassword = false;
 };
 

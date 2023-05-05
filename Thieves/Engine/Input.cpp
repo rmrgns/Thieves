@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Input.h"
 #include "Engine.h"
+#include "SceneManager.h"
 
 void Input::Init(HWND hwnd)
 {
@@ -31,8 +32,27 @@ void Input::Update()
 			else
 			{
 				state = KEY_STATE::DOWN;
-				//if (isgraph(key))
-				//	_userID += key;
+				if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOGIN)
+				{
+					if (_checkIDorPassword == false)
+					{
+						if (key == VK_RETURN)
+						{
+							_checkIDorPassword = true;
+						}
+						else
+							_userID += key;
+					}
+					else
+					{
+						if (key == VK_RETURN)
+						{
+							_checkIDorPassword = false;
+						}
+						else
+							_userPassword += key;
+					}
+				}
 			}
 		}
 		else

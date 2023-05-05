@@ -58,6 +58,6 @@ private:
 
 	bool _checkFrustum = true;
 	uint8 _layerIndex = 0;
-	bool _static = true;
+	bool _static = true;		// shadow on/off
 };
 
