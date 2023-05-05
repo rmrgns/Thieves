@@ -168,9 +168,8 @@ void PacketManager::SendMovePacket(int c_id, int mover)
 	packet.action_type = p->GetAnimationNumber();
 
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
-//	cout << "ID : " << c_id << " x " << packet.posX << " y " << packet.posY << "z " << packet.posZ << endl;
-//	cout << "ID : " << c_id << " x " << packet.posX  << "z " << packet.posZ << endl;
-	cout << "ID : " << c_id << " mover " << mover << " x " << packet.posX << "z " << packet.posZ << endl;
+
+	//cout << "ID : " << c_id << " mover " << mover << " x " << packet.posX << "z " << packet.posZ << endl;
 	//cout << "ID : " << c_id << " x " << packet.posX  << "z " << packet.posZ << endl;
 
 
@@ -239,7 +238,7 @@ void PacketManager::SendObjInfo(int c_id, int obj_id)
 	packet.y = obj->GetPosY();
 	packet.z = obj->GetPosZ();
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
-	cout << "Send OBJ INFO ID : " << c_id << " x " << packet.x << " y " << packet.y << "z " << packet.z << endl;
+	cout << "Send OBJ INFO ID : " << c_id << ", x : " << packet.x << ", y : " << packet.y << ", z : " << packet.z << endl;
 	cl->DoSend(sizeof(packet), &packet);
 
 }
@@ -396,6 +395,7 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 		cl->SetPosX(cl->GetPosX() + packet->vecX * _speed * packet->deltaTime);
 		cl->SetPosZ(cl->GetPosZ() + packet->vecZ * _speed * packet->deltaTime);
 	}
+
 	if ((packet->direction & 4) == 4)
 	{
 		// 왼
@@ -407,12 +407,14 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 		cl->SetPosZ(cl->GetPosZ() + right.z * _speed * packet->deltaTime);
 
 	}
+
 	if ((packet->direction & 2) == 2)
 	{
 		// 뒤
 		cl->SetPosX(cl->GetPosX() - packet->vecX * _speed * packet->deltaTime);
 		cl->SetPosZ(cl->GetPosZ() - packet->vecZ * _speed * packet->deltaTime);
 	}
+
 	if ((packet->direction & 1) == 1)
 	{
 		// 오
@@ -424,11 +426,33 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 		cl->SetPosZ(cl->GetPosZ() - right.z * _speed * packet->deltaTime);
 	}
 
+	if ((packet->direction & 16) == 16)
+	{
+		// 점프
+		if (!cl->GetJump())
+		{
+			cl->SetJump(true);
+			cl->SetUpVelocity(1000.0f);
+		}
+	}
+
 	cl->SetRotX(packet->vecX);
 	cl->SetRotZ(packet->vecZ);
 	//cl->SetPosY(packet->vecY);
 
 	cl->SetAnimationNumber(packet->action_type);
+
+	if (cl->GetJump())
+	{
+		cl->SetUpVelocity(cl->GetUpVelocity() + (packet->deltaTime * -3000.0f));
+		cl->SetPosY(cl->GetPosY() + (cl->GetUpVelocity() * packet->deltaTime));
+
+		if (cl->GetPosY() < 0.f)
+		{
+			cl->SetPosY(0.0f);
+			cl->SetJump(false);
+		}
+	}
 
 	cl->state_lock.lock();
 	if (cl->GetState() != STATE::ST_INGAME)

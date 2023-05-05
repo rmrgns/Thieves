@@ -36,6 +36,12 @@ public:
 	void SetAnimationNumber(const int& val) { animNum = val; };
 	int GetAnimationNumber() { return animNum; };
 
+	void SetJump(const bool& val) { isJump = val; };
+	bool GetJump() { return isJump; };
+
+	void SetUpVelocity(const float& val) { upVelocity = val; };
+	float GetUpVelocity() { return upVelocity; };
+
 	int		m_last_move_time = 0;
 protected:
 	std::atomic_bool m_is_active = false;
@@ -45,4 +51,7 @@ protected:
 	//Vector4 m_rotation;
 	Vector3 m_origin_pos;
 	int animNum = -1;
+	bool isJump = false; // 현재 점프 중인지 아닌지를 나타내는 변수
+	float upVelocity = 0.0f; // 위쪽 방향 속도를 나타내는 변수
+
 };

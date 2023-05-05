@@ -120,7 +120,7 @@ void PlayerInput::PlayerMove() {
 	}
 
 	// ĳ���� ����
-	Jump(pos);
+	//Jump(pos);
 
 	// ī�޶� ���콺���� on/off (temp code)
 	if (INPUT->GetButtonDown(KEY_TYPE::L))

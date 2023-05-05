@@ -41,22 +41,27 @@ void NetworkSystem::Update()
 
 		if (INPUT->GetButton(KEY_TYPE::W))
 		{
-			inputData = inputData | 8; // 1000;
+			inputData = inputData | 8; // 00001000;
 		}
 
 		if (INPUT->GetButton(KEY_TYPE::A))
 		{
-			inputData = inputData | 4; // 0100
+			inputData = inputData | 4; // 00000100
 		}
 
 		if (INPUT->GetButton(KEY_TYPE::S))
 		{
-			inputData = inputData | 2; // 0010
+			inputData = inputData | 2; // 00000010
 		}
 
 		if (INPUT->GetButton(KEY_TYPE::D))
 		{
-			inputData = inputData | 1; // 0001
+			inputData = inputData | 1; // 00000001
+		}
+
+		if (INPUT->GetButton(KEY_TYPE::SPACE))
+		{
+			inputData = inputData | 16; // 00010000
 		}
 
 		Network::GetInst()->SendMovePacket(inputData, GetTransform()->GetLocalPosition(),
