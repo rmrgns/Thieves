@@ -12,6 +12,8 @@ public:
 
 
 private:
-	bool	_lightState = false;
+	bool	_lightStateDir = false;
+	bool	_lightStateSpt = false;
+	bool	_lightStatePnt = false;
 };
 
