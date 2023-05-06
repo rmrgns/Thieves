@@ -49,12 +49,17 @@ void LoginScript::LateUpdate()
 	if (INPUT->GetButtonUp(KEY_TYPE::ENTER))
 	{
 		
-		if (INPUT->GetUserID() == INPUT->GetServerID())
+		if (INPUT->GetUserID() == INPUT->GetServerID() && INPUT->GetUserPassword() == L"TEST")
 		{
 			GET_SINGLE(SceneManager)->SetCheckChangeScene(true);
 			GEngine->SetChangeScene(L"Game");
 		}
-		INPUT->InitUserId();
+		if (INPUT->GetCheckIDorPassword() == false)
+		{
+			INPUT->InitUserId();
+			INPUT->InitUserPassword();
+		}
+
 	}
 
 }
