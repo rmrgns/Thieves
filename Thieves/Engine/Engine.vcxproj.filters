@@ -252,6 +252,9 @@
     <ClCompile Include="NetworkSystem.cpp">
       <Filter>Object\Component</Filter>
     </ClCompile>
+    <ClCompile Include="LightEffect.cpp">
+      <Filter>Object\Script</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -472,6 +475,9 @@
     </ClInclude>
     <ClInclude Include="NetworkSystem.h">
       <Filter>Object\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="LightEffect.h">
+      <Filter>Object\Script</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

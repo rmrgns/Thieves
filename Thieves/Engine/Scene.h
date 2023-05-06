@@ -35,7 +35,7 @@ public:
 
 
 	const vector<shared_ptr<GameObject>>& GetGameObjects() { return _gameObjects; }
-
+	// const vector<shared_ptr<class Light>>& GetLight() { return _lights; }
 private:
 	vector<shared_ptr<GameObject>>		_gameObjects;
 	vector<shared_ptr<class Camera>>	_cameras;
