@@ -39,11 +39,14 @@ void PlayerParticle::LateUpdate()
 	if (INPUT->GetButtonDown(KEY_TYPE::LBUTTON))
 	{
 		if (_attackState == 0)
+		{
 			_attackState = 1;
+			_currentPos = pos;
+		}
 	}
 	
 	PlayerAttack();
-	GetTransform()->SetLocalPosition(pos);
+	GetTransform()->SetLocalPosition(_currentPos);
 	GetTransform()->SetLocalRotation(rotation);
 }
 
