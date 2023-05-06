@@ -10,10 +10,6 @@ private:
 	Vec3 PlayerPos;
 
 
-public:
-	Player();
-	~Player();
-
 	void Init() {};
 
 	void GetPos();

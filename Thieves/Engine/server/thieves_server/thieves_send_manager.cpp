@@ -40,7 +40,7 @@ void ThievesSendManager::SendMovePacket(const SOCKET& s_socket, char direction,
 
 	packet.deltaTime = deltatime;
 	packet.direction = direction;
-	packet.jumpstate = jumpstate;
+//	packet.jumpstate = jumpstate;
 
 	packet.action_type = (char)action_type;
 
