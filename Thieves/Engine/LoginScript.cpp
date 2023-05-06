@@ -19,24 +19,25 @@ LoginScript::~LoginScript()
 
 void LoginScript::LateUpdate()
 {
-	if (_start == false) 
+	
+	if (INPUT->GetButtonDown(KEY_TYPE::O))
 	{
-		if (INPUT->GetButtonDown(KEY_TYPE::O))
+		if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOGIN)
 		{
-			_start = true;
-			
+
 			GET_SINGLE(SceneManager)->SetCheckChangeScene(true);
 			GEngine->SetChangeScene(L"Game");
 
 			Network::GetInst()->SendSignInPacket();
 			Network::GetInst()->SendStartPacket();
-			
+
 		}
 	}
 
 	if (INPUT->GetButtonDown(KEY_TYPE::P))
 	{
 		INPUT->InitUserId();
+		INPUT->InitUserPassword();
 		GET_SINGLE(SceneManager)->SetCheckChangeScene(true);
 		GEngine->SetChangeScene(L"Login");
 	}
