@@ -36,26 +36,29 @@ void Light::Render()
 {
 	assert(_lightIndex >= 0);
 
-	GetTransform()->PushData();
-
-	if (static_cast<LIGHT_TYPE>(_lightInfo.lightType) == LIGHT_TYPE::DIRECTIONAL_LIGHT)
+	if (_lightState == true)
 	{
-		shared_ptr<Texture> shadowTex = GET_SINGLE(Resources)->Get<Texture>(L"ShadowTarget");
-		_lightMaterial->SetTexture(2, shadowTex);
+		GetTransform()->PushData();
 
-		Matrix matVP = _shadowCamera->GetCamera()->GetViewMatrix() * _shadowCamera->GetCamera()->GetProjectionMatrix();
-		_lightMaterial->SetMatrix(0, matVP);
+		if (static_cast<LIGHT_TYPE>(_lightInfo.lightType) == LIGHT_TYPE::DIRECTIONAL_LIGHT)
+		{
+			shared_ptr<Texture> shadowTex = GET_SINGLE(Resources)->Get<Texture>(L"ShadowTarget");
+			_lightMaterial->SetTexture(2, shadowTex);
+
+			Matrix matVP = _shadowCamera->GetCamera()->GetViewMatrix() * _shadowCamera->GetCamera()->GetProjectionMatrix();
+			_lightMaterial->SetMatrix(0, matVP);
+		}
+		else
+		{
+			float scale = 2 * _lightInfo.range;
+			GetTransform()->SetLocalScale(Vec3(scale, scale, scale));
+		}
+
+		_lightMaterial->SetInt(0, _lightIndex);
+		_lightMaterial->PushGraphicsData();
+
+		_volumeMesh->Render();
 	}
-	else
-	{
-		float scale = 2 * _lightInfo.range;
-		GetTransform()->SetLocalScale(Vec3(scale, scale, scale));
-	}
-
-	_lightMaterial->SetInt(0, _lightIndex);
-	_lightMaterial->PushGraphicsData();
-
-	_volumeMesh->Render();
 }
 
 void Light::RenderShadow()

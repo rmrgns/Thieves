@@ -60,6 +60,9 @@ public:
 
 	void SetLightIndex(int8 index) { _lightIndex = index; }
 
+	void SetLightState(bool state) { _lightState = state; }
+	bool GetLightState() { return _lightState; }
+
 private:
 	LightInfo _lightInfo = {};
 
@@ -68,5 +71,7 @@ private:
 	shared_ptr<class Material> _lightMaterial;
 
 	shared_ptr<GameObject> _shadowCamera;
+
+	bool _lightState = true;
 };
 
