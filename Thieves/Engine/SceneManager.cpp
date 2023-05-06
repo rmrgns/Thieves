@@ -12,12 +12,9 @@
 #include "Physics.h"
 
 // Script
-#include "TestCameraScript.h"
-#include "TestObjectMove.h"
 #include "LoginScript.h"
 #include "PlayerInput.h"
 #include "PlayerCamera.h"
-#include "TestDragon.h"
 #include "PlayerParticle.h"
 #include "LightEffect.h"
 
@@ -571,11 +568,9 @@ shared_ptr<Scene> SceneManager::LoadLoginScene()
 
 #pragma region ThiefIcon
 	{
-		
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
 		obj->SetName(L"THIEFICON");
 		obj->AddComponent(make_shared<Transform>());
-		obj->AddComponent(make_shared<TestObjectMove>());
 		obj->GetTransform()->SetLocalScale(Vec3(10.f, 10.f, 10.f));
 		obj->GetTransform()->SetLocalPosition(Vec3(-20.f, -15.f, 50.f));
 		obj->SetStatic(false);
