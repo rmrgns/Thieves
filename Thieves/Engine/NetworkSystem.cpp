@@ -26,6 +26,9 @@ void NetworkSystem::Update()
 	case NetworkType::NONE:
 	{
 		// 정해진 타입이 없을 때에는 그냥 리턴해줌.
+		// -> 어째서인지 0, 0, 0에 생성되므로 여기서 안보이게 처리를 하는것이 나아보임.
+		this->GetTransform()->SetLocalPosition(Vec3(0.f, -300.f, 0.f));
+		this->GetTransform()->SetLocalRotation(Vec3(0.f, 0.f, 0.f));
 		return;
 	}
 		break;

@@ -358,7 +358,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 				// 새로 생성되는 오브젝트들의 경우에는 ObjInfo가 왔을 때에 설정해 주면 된다.
 				for (auto& p : Network::GetInst()->GetNetworkObjMap()) {
 					if (p.second->GetType() == NW_OBJ_TYPE::OT_PLAYER) {
-						if ((occupied_id.empty() || std::find(occupied_id.begin(), occupied_id.end(), p.first) != occupied_id.end()))
+						if ((occupied_id.empty() || std::find(occupied_id.begin(), occupied_id.end(), p.first) == occupied_id.end()))
 						{
 							occupied_id.emplace_back(p.first);
 							gameObject->GetNetworkSystem()->SetNetworkId(p.first);

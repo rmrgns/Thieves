@@ -281,20 +281,31 @@ void PacketManager::Disconnect(int c_id)
 	MoveObjManager::GetInst()->Disconnect(c_id);
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 
-	Room* room = m_room_manager->GetRoom(cl->GetRoomID());
-	auto& objs = room->GetObjList();
-
-	objs.erase(remove(objs.begin(), objs.end(), c_id));
-
-	sc_packet_remove_object packet;
-
-	packet.size = sizeof(packet);
-	packet.type = SC_PACKET_REMOVE_OBJECT;
-	packet.id = c_id;
-
-	for (int& obj : objs)
+	if (cl->GetState() == STATE::ST_INGAME)
 	{
-		MoveObjManager::GetInst()->GetPlayer(obj)->DoSend(sizeof(packet), &packet);
+		Room* room = m_room_manager->GetRoom(cl->GetRoomID());
+		auto& objs = room->GetObjList();
+
+
+		if (!objs.empty())
+		{
+			if (find(objs.begin(), objs.end(), c_id) != objs.end())
+			{
+				objs.erase(remove(objs.begin(), objs.end(), c_id));
+			}
+		}
+
+		sc_packet_remove_object packet;
+
+		packet.size = sizeof(packet);
+		packet.type = SC_PACKET_REMOVE_OBJECT;
+		packet.id = c_id;
+
+		for (int& obj : objs)
+		{
+			MoveObjManager::GetInst()->GetPlayer(obj)->DoSend(sizeof(packet), &packet);
+		}
+
 	}
 
 	cl->state_lock.lock();
@@ -303,7 +314,7 @@ void PacketManager::Disconnect(int c_id)
 		cl->ResetPlayer();
 	}
 	cl->state_lock.unlock();
-
+	
 	
 }
 
