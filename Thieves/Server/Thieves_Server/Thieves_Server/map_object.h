@@ -10,7 +10,7 @@ public:
 		m_id = id;
 		m_pos = pos;
 		m_type = type;
-		m_ground_pos = Vector3(pos.x, pos.y - extent.y, pos.z);
+		m_ground_pos = Vector3(pos.x, 0 , pos.z);
 		SetMinPos();
 		SetMaxPos();
 		//std::cout << m_min_pos << std::endl;

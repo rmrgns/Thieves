@@ -14,7 +14,7 @@ enum class MAP_OBJ_TYPE
 class MapInfo
 {
 public:
-	MapInfo(std::string name, Vector3 pos)
+	MapInfo(std::string name, Vector3 pos, int col_count)
 		:name(name), position(pos)
 	{
 
@@ -24,7 +24,6 @@ public:
 
 	std::string name;
 	Vector3 position;
-
 };
 
 struct MapTile {

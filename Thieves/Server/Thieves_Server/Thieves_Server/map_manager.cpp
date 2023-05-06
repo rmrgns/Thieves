@@ -23,13 +23,12 @@ void MapManager::LoadMap(const std::string& path)
 	stringstream ss;
 	string line;
 	string prefix;
-	string temp_name;
-	UINT temp_mesh_count, temp_col_count;
+	UINT temp_col_count = 0;
 	Vector3 temp_pos;
 	std::vector<Vector3> scales;
 	std::vector<Vector3> collision_centers;
+
 	std::vector<Vector3> collision_size;
-	std::vector<Vector3> positions;
 
 	// 맵 파일에서 한 줄 씩 읽기
 
@@ -44,6 +43,7 @@ void MapManager::LoadMap(const std::string& path)
 		{
 		case HashCode("center"):
 		{
+			temp_col_count++;
 			ss >> temp_pos.x >> temp_pos.y >> temp_pos.z;
 			collision_centers.emplace_back(std::move(temp_pos));
 			break;
@@ -54,35 +54,36 @@ void MapManager::LoadMap(const std::string& path)
 			break;
 		}
 		}
+
 	}
-
-	for (auto& act_info : actor_info_data)
+	
+	// 수정 필요 if 이 좌표안에 있으면 true 아니면 false 출력
+	for (int i = 0 ; i < temp_col_count; ++i)
 	{
-		if (act_info.collision_count <= 0)
-			continue;
-
-		for (int i = col_index; i < col_index + act_info.collision_count; ++i)
-		{
+//		if (temp_col_count <= 0)
+//			continue;
+		
+//		for (int i = 0; i < temp_col_count; ++i)
+//		{
 			//map_obj_manager 만들기
-			Vector3 pos{ act_info.position + collision_centers[i] };
+			m_map_objects.emplace_back(i, collision_centers[i], scales[i], true, OBJ_TYPE::OT_BASE);
 
-			m_map_objects.emplace_back(i, pos, collision_size[i], true, OBJ_TYPE::OT_BASE);
-
-		}
-		col_index += act_info.collision_count;
+	//	}
+			
 	}
+	
 
-	for (auto& act_info : actor_info_data)
-	{
-
-		if (act_info.collision_count <= 0)
-			continue;
-		for (int i = col_index; i < col_index + act_info.collision_count; ++i)
-		{
-			//map_obj_manager 만들기
-			Vector3 pos{ act_info.position + collision_centers[i] };
-			m_map_objects.emplace_back(i, pos, collision_size[i], true, OBJ_TYPE::OT_MAPOBJ);
-		}
+//	for (auto& act_info : actor_info_data)
+//	{
+//
+//		if (act_info.collision_count <= 0)
+//			continue;
+//		for (int i = col_index; i < col_index + act_info.collision_count; ++i)
+//		{
+//			//map_obj_manager 만들기
+//			Vector3 pos{ act_info.position + collision_centers[i] };
+//			m_map_objects.emplace_back(i, pos, collision_size[i], true, OBJ_TYPE::OT_MAPOBJ);
+//		}
 		//switch (HashCode(act_info.name.c_str()))
 		//{
 		//	//물체들
@@ -128,9 +129,9 @@ void MapManager::LoadMap(const std::string& path)
 		//}
 		//break;
 		//}
-		col_index += act_info.collision_count;
+//		col_index += act_info.collision_count;
 		//MapObj추가
-	}
+//	}
 
 	BlockTileMap();
 }
@@ -152,8 +153,10 @@ void MapManager::BlockTileMap()
 							m_tile_map[i][j].type = MAP_OBJ_TYPE::BLOCK;
 						else
 							m_tile_map[i][j].type = MAP_OBJ_TYPE::UNBLOCK;
-						if (map_obj.GetType() == OBJ_TYPE::OT_BASE)m_tile_map[i][j].type = MAP_OBJ_TYPE::BASE;
-						else if (map_obj.GetType() == OBJ_TYPE::OT_SPAWN_AREA)m_tile_map[i][j].type = MAP_OBJ_TYPE::SPAWN_AREA;
+						//if (map_obj.GetType() == OBJ_TYPE::OT_BASE)
+						//	m_tile_map[i][j].type = MAP_OBJ_TYPE::BASE;
+						//else if (map_obj.GetType() == OBJ_TYPE::OT_SPAWN_AREA)
+						//	m_tile_map[i][j].type = MAP_OBJ_TYPE::SPAWN_AREA;
 					}
 				}
 			}
