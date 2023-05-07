@@ -75,6 +75,8 @@ void ThievesPacketManager::ProcessObjInfo(int c_id, unsigned char* p)
 	packet->id == m_game_info.GetNetworkID() ? nw_type = NW_OBJ_TYPE::OT_MY_PLAYER : nw_type = NW_OBJ_TYPE::OT_PLAYER;
 	//-> 나중에 NPC 처리를 할 때에는 이 부분을 변경해 주어야 함.
 
+	bool isNewData = true;
+	if (m_obj_map.contains(packet->id)) isNewData = false;
 
 	// 해당 데이터를 네트워크의 id를 키로 해서 네트워크 오브젝트에 넣는다.
 	auto res = m_obj_map.try_emplace(packet->id, CreateSPtr<NetworkMoveObj>(
@@ -86,11 +88,12 @@ void ThievesPacketManager::ProcessObjInfo(int c_id, unsigned char* p)
 	));
 
 
+	if (!isNewData) return;
+
 	// 만약 이미 게임이 진행되고 있는 상태라면 새롭게 지정해 주어야 함.
 	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
 	{
 		if (m_game_info.GetNetworkID() == packet->id) return;
-		if (m_obj_map.contains(packet->id)) return;
 
 		auto& objects = GET_SINGLE(SceneManager)->GetActiveScene()->GetGameObjects();
 
