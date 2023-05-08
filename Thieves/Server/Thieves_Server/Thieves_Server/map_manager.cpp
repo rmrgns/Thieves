@@ -45,11 +45,19 @@ void MapManager::LoadMap(const std::string& path)
 		{
 			temp_col_count++;
 			ss >> temp_pos.x >> temp_pos.y >> temp_pos.z;
+			temp_pos.x = temp_pos.x * 10;
+			temp_pos.y = temp_pos.y * 10;
+			temp_pos.z = temp_pos.z * 10;
+
+			
 			collision_centers.emplace_back(std::move(temp_pos));
 			break;
 		}
 		case HashCode("size"): {
 			ss >> temp_pos.x >> temp_pos.y >> temp_pos.z;
+			temp_pos.x = temp_pos.x * 5;
+			temp_pos.y = temp_pos.y * 5;
+			temp_pos.z = temp_pos.z * 5;
 			scales.emplace_back(std::move(temp_pos));
 			break;
 		}
@@ -60,16 +68,7 @@ void MapManager::LoadMap(const std::string& path)
 	// 수정 필요 if 이 좌표안에 있으면 true 아니면 false 출력
 	for (int i = 0 ; i < temp_col_count; ++i)
 	{
-//		if (temp_col_count <= 0)
-//			continue;
-		
-//		for (int i = 0; i < temp_col_count; ++i)
-//		{
-			//map_obj_manager 만들기
-			m_map_objects.emplace_back(i, collision_centers[i], scales[i], true, OBJ_TYPE::OT_BASE);
-
-	//	}
-			
+			m_map_objects.emplace_back(i, collision_centers[i], scales[i], true, OBJ_TYPE::OT_MAPOBJ);	
 	}
 	
 
@@ -140,15 +139,15 @@ void MapManager::BlockTileMap()
 {
 	for (auto& map_obj : m_map_objects)
 	{
-		for (int i = 0; i < 180; ++i)
+		for (int i = 0; i < 1800; ++i)
 		{
-			for (int j = 0; j < 180; ++j)
+			for (int j = 0; j < 1800; ++j)
 			{
-				if (m_tile_map[i][j].type == MAP_OBJ_TYPE::NONE)
-				{
-					if (map_obj.GetMinPos().x <= m_tile_map[i][j].x && map_obj.GetMaxPos().x >= m_tile_map[i][j].x &&
-						map_obj.GetMinPos().z <= m_tile_map[i][j].z && map_obj.GetMaxPos().z >= m_tile_map[i][j].z)
+					if (m_tile_map[i][j].type == MAP_OBJ_TYPE::NONE)
 					{
+						if (map_obj.GetMinPos().x <= m_tile_map[i][j].x && map_obj.GetMaxPos().x >= m_tile_map[i][j].x &&
+							map_obj.GetMinPos().z <= m_tile_map[i][j].z && map_obj.GetMaxPos().z >= m_tile_map[i][j].z)
+						{
 						if (true == map_obj.GetIsBlocked())
 							m_tile_map[i][j].type = MAP_OBJ_TYPE::BLOCK;
 						else
@@ -157,6 +156,10 @@ void MapManager::BlockTileMap()
 						//	m_tile_map[i][j].type = MAP_OBJ_TYPE::BASE;
 						//else if (map_obj.GetType() == OBJ_TYPE::OT_SPAWN_AREA)
 						//	m_tile_map[i][j].type = MAP_OBJ_TYPE::SPAWN_AREA;
+						}
+					else {
+							if(m_tile_map[i][j].type != MAP_OBJ_TYPE::BLOCK )
+								m_tile_map[i][j].type = MAP_OBJ_TYPE::UNBLOCK;
 					}
 				}
 			}
@@ -164,9 +167,9 @@ void MapManager::BlockTileMap()
 	}
 	int sx, sy;
 	int dx, dy;
-	for (int i = 0; i < 180; ++i)
+	for (int i = 0; i < 1800; ++i)
 	{
-		for (int j = 0; j < 180; ++j)
+		for (int j = 0; j < 1800; ++j)
 		{
 			if (m_tile_map[i][j].type == MAP_OBJ_TYPE::BLOCK)
 			{

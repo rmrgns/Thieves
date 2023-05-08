@@ -174,7 +174,7 @@ void PacketManager::SendMovePacket(int c_id, int mover)
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 
 	//cout << "ID : " << c_id << " mover " << mover << " x " << packet.posX << "z " << packet.posZ << endl;
-	//cout << "ID : " << c_id << " x " << packet.posX  << "z " << packet.posZ << endl;
+	cout << "ID : " << c_id << " x " << packet.posX  << "z " << packet.posZ << endl;
 
 
 	cl->DoSend(sizeof(packet), &packet);

@@ -20,6 +20,7 @@ public:
 	MapObj() = default;
 	~MapObj() = default;
 	bool GetIsBlocked() { return m_is_blocking; }
+	void SetIsBlocked(bool val) { m_is_blocking = val; }
 	const Vector3& GetMaxPos()const { return m_max_pos; }
 	const Vector3& GetMinPos()const { return m_min_pos; }
 	const Vector3& GetGroundPos()const { return m_ground_pos; }
