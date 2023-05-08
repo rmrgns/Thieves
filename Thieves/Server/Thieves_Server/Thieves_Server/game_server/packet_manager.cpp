@@ -8,6 +8,8 @@
 #include "room/room.h"
 #include "database/db.h"
 #include "object/moveobj_manager.h"
+#include "object/MapManager.h"
+#include "OBB.h"
 //concurrency::concurrent_priority_queue<timer_event> PacketManager::g_timer_queue = concurrency::concurrent_priority_queue<timer_event>();
 
 using namespace std;
@@ -17,6 +19,7 @@ PacketManager::PacketManager()
 {
 	MoveObjManager::GetInst();
 	m_room_manager = new RoomManager;
+	m_map_manager = new MapManager;
 	m_db = new DB;
 
 }
@@ -25,7 +28,7 @@ void PacketManager::Init()
 {
 	MoveObjManager::GetInst()->InitPlayer();
 	m_room_manager->InitRoom();
-
+	m_map_manager->LoadMap();
 	m_db->Init();
 }
 
@@ -400,6 +403,8 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 	cs_packet_move* packet = reinterpret_cast<cs_packet_move*>(p);
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 	
+	Vector3 oldPos = cl->GetPos();
+
 	if ((packet->direction & 8) == 8)
 	{
 		// 앞
@@ -447,9 +452,25 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 		}
 	}
 
+	
+
+
 	cl->SetRotX(packet->vecX);
 	cl->SetRotZ(packet->vecZ);
 	//cl->SetPosY(packet->vecY);
+
+	Vector3 ObbCenter = cl->GetPos();
+	ObbCenter.y += 75.f;
+
+	OBB playerOBB = OBB(ObbCenter,
+		Vector3(25.f, 75.f, 25.f),
+		Vector3(0.f, 1.f, 0.f),
+		Vector3(cl->GetRotX(), 0.f, cl->GetRotZ()).Cross(Vector3(0.0f, 1.0f, 0.0f))
+		, Vector3(cl->GetRotX(), 0.f, cl->GetRotZ()));
+
+
+
+	if (m_map_manager->isCollision(playerOBB)) cl->SetPos(oldPos);
 
 	cl->SetAnimationNumber(packet->action_type);
 
