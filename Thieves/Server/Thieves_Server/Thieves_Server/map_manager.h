@@ -10,10 +10,10 @@ class MapManager
 public:
 	MapManager() {
 		// map √ ±‚»≠
-		for (int i = 0; i < 180; ++i) {
-			for (int j = 0; j < 180; ++j) {
-				m_tile_map[i][j].x = j * 10 + 10 - 900;
-				m_tile_map[i][j].z = i * 10 + 10 - 900;
+		for (int i = 0; i < MAP_WIDTH; ++i) {
+			for (int j = 0; j < MAP_WIDTH; ++j) {
+				m_tile_map[i][j].x = j * 1 + 1 - 900;
+				m_tile_map[i][j].z = i * 1 + 1 - 900;
 				m_tile_map[i][j].type = MAP_OBJ_TYPE::NONE;
 			}
 		}
@@ -59,6 +59,6 @@ public:
 
 private:
 	std::vector<MapObj> m_map_objects; // ∏  ∞¥√º ∫§≈Õ
-	MapTile m_tile_map[1800][1800]; // ∏  ≈∏¿œ ∏ 
+	MapTile m_tile_map[MAP_WIDTH][MAP_WIDTH]; // ∏  ≈∏¿œ ∏ 
 };
 

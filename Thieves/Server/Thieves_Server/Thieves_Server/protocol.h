@@ -2,6 +2,8 @@
 
 const short SERVER_PORT = 7777;
 
+const int MAP_WIDTH = 180;
+
 // �� ũ��
 
 const int MAX_NAME_SIZE = 20;		// ���̵� ������

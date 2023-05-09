@@ -51,6 +51,7 @@ void MapManager::LoadMap(const std::string& path)
 
 			
 			collision_centers.emplace_back(std::move(temp_pos));
+			
 			break;
 		}
 		case HashCode("size"): {
@@ -70,67 +71,7 @@ void MapManager::LoadMap(const std::string& path)
 	{
 			m_map_objects.emplace_back(i, collision_centers[i], scales[i], true, OBJ_TYPE::OT_MAPOBJ);	
 	}
-	
 
-//	for (auto& act_info : actor_info_data)
-//	{
-//
-//		if (act_info.collision_count <= 0)
-//			continue;
-//		for (int i = col_index; i < col_index + act_info.collision_count; ++i)
-//		{
-//			//map_obj_manager 만들기
-//			Vector3 pos{ act_info.position + collision_centers[i] };
-//			m_map_objects.emplace_back(i, pos, collision_size[i], true, OBJ_TYPE::OT_MAPOBJ);
-//		}
-		//switch (HashCode(act_info.name.c_str()))
-		//{
-		//	//물체들
-		//case HashCode("Base"):
-		//{
-		//	for (int i = col_index; i < col_index + act_info.collision_count; ++i)
-		//	{
-		//		//map_obj_manager 만들기
-		//		Vector3 pos{ act_info.position + collision_centers[i] };
-		//		m_map_objects.emplace_back(i, pos, collision_size[i], true, OBJ_TYPE::OT_BASE);
-		//	}
-		//	break;
-		//}
-		//case HashCode("Wall"):
-		//{
-		//	for (int i = col_index; i < col_index + act_info.collision_count; ++i)
-		//	{
-		//		//map_obj_manager 만들기
-		//		Vector3 pos{ act_info.position + collision_centers[i] };
-		//		m_map_objects.emplace_back(i, pos, collision_size[i], true, OBJ_TYPE::OT_MAPOBJ);
-		//	}
-		//}
-		//break;
-		////영역들
-		//case HashCode("ActivityArea"):
-		//{
-		//	for (int i = col_index; i < col_index + act_info.collision_count; ++i)
-		//	{
-		//		//map_obj_manager 만들기
-		//		Vector3 pos{ act_info.position + collision_centers[i] };
-		//		m_map_objects.emplace_back(i, pos, collision_size[i], false, OBJ_TYPE::OT_ACTIViTY_AREA);
-		//	}
-		//	break;
-		//}
-		//case HashCode("SpawnArea"):
-		//{
-		//	for (int i = col_index; i < col_index + act_info.collision_count; ++i)
-		//	{
-		//		//map_obj_manager 만들기
-		//		Vector3 pos{ act_info.position + collision_centers[i] };
-		//		m_map_objects.emplace_back(i, pos, collision_size[i], false, OBJ_TYPE::OT_SPAWN_AREA);
-		//	}
-		//}
-		//break;
-		//}
-//		col_index += act_info.collision_count;
-		//MapObj추가
-//	}
 
 	BlockTileMap();
 }
@@ -139,37 +80,34 @@ void MapManager::BlockTileMap()
 {
 	for (auto& map_obj : m_map_objects)
 	{
-		for (int i = 0; i < 1800; ++i)
+		for (int i = 0; i < MAP_WIDTH; ++i)
 		{
-			for (int j = 0; j < 1800; ++j)
+			for (int j = 0; j < MAP_WIDTH; ++j)
 			{
 					if (m_tile_map[i][j].type == MAP_OBJ_TYPE::NONE)
 					{
 						if (map_obj.GetMinPos().x <= m_tile_map[i][j].x && map_obj.GetMaxPos().x >= m_tile_map[i][j].x &&
 							map_obj.GetMinPos().z <= m_tile_map[i][j].z && map_obj.GetMaxPos().z >= m_tile_map[i][j].z)
 						{
-						if (true == map_obj.GetIsBlocked())
 							m_tile_map[i][j].type = MAP_OBJ_TYPE::BLOCK;
-						else
-							m_tile_map[i][j].type = MAP_OBJ_TYPE::UNBLOCK;
-						//if (map_obj.GetType() == OBJ_TYPE::OT_BASE)
-						//	m_tile_map[i][j].type = MAP_OBJ_TYPE::BASE;
-						//else if (map_obj.GetType() == OBJ_TYPE::OT_SPAWN_AREA)
-						//	m_tile_map[i][j].type = MAP_OBJ_TYPE::SPAWN_AREA;
 						}
-					else {
-							if(m_tile_map[i][j].type != MAP_OBJ_TYPE::BLOCK )
-								m_tile_map[i][j].type = MAP_OBJ_TYPE::UNBLOCK;
+						else
+						{
+							m_tile_map[i][j].type = MAP_OBJ_TYPE::UNBLOCK;
+						}
 					}
-				}
+//					else
+//							m_tile_map[i][j].type = MAP_OBJ_TYPE::UNBLOCK;
+					
+				
 			}
 		}
 	}
 	int sx, sy;
 	int dx, dy;
-	for (int i = 0; i < 1800; ++i)
+	for (int i = 0; i < MAP_WIDTH; ++i)
 	{
-		for (int j = 0; j < 1800; ++j)
+		for (int j = 0; j < MAP_WIDTH; ++j)
 		{
 			if (m_tile_map[i][j].type == MAP_OBJ_TYPE::BLOCK)
 			{
@@ -178,22 +116,6 @@ void MapManager::BlockTileMap()
 			else if (m_tile_map[i][j].type == MAP_OBJ_TYPE::UNBLOCK)
 			{
 				cout << "2";
-			}
-			//else if (m_tile_map[i][j].type == MAP_OBJ_TYPE::BASE)
-			//{
-			//	cout << "B";
-			//	dy = i;
-			//	dx = j;
-			//}
-			//else if (m_tile_map[i][j].type == MAP_OBJ_TYPE::SPAWN_AREA)
-			//{
-			//	sy = i;
-			//	sx = j;
-			//	cout << "S";
-			//}
-			else
-			{
-				cout << "0";
 			}
 		}
 		cout << endl;
@@ -211,7 +133,8 @@ bool MapManager::CheckCollision(BoxCollision& obj_collision)
 	for (auto& map_obj : m_map_objects)
 	{
 		if (map_obj.GetIsBlocked() == false)continue;
-//		if (CollisionChecker::CheckCollisions(obj_collision, BoxCollision(map_obj.GetPos(), map_obj.GetExtent())))return true;
+//		if (CollisionChecker::CheckCollisions(obj_collision, BoxCollision(map_obj.GetPos(), map_obj.GetExtent())))
+//			return true;
 
 	}
 	return false;
