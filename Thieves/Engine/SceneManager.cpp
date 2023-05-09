@@ -337,7 +337,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 
 		std::vector<int> occupied_id;
 
-		for (int i = 0; i < 2; ++i)
+		for (int i = 0; i < 7; ++i)
 		{
 			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Thief.fbx");
 

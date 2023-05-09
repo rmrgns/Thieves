@@ -13,6 +13,7 @@ public:
 	OBB() = default;
 
 	OBB(Vector3 Center, Vector3 Extents, Vector3 up, Vector3 right, Vector3 look) {
+
 		// 센터와 익스텐트는 그대로 넣는다
 		m_obb.Center = DirectX::XMFLOAT3(Center.x, Center.y, Center.z);
 		m_obb.Extents = DirectX::XMFLOAT3(Extents.x, Extents.y, Extents.z);
