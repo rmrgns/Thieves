@@ -504,8 +504,9 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		particle->AddComponent(make_shared<ParticleSystem>());
 		particle->SetCheckFrustum(false);
 		particle->AddComponent(make_shared<PlayerParticle>());
-		particle->GetParticleSystem()->UseParticle(false);
-		particle->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+		particle->GetParticleSystem()->UseParticle(true);
+		particle->GetParticleSystem()->MakeParticle(L"blood", L"..\\Resources\\Texture\\Particle\\pngwing.com.png");
+		particle->GetTransform()->SetLocalPosition(Vec3(0.f, 100.f, 0.f));
 		scene->AddGameObject(particle);
 	}
 #pragma endregion
