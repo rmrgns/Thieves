@@ -4,6 +4,8 @@
 #include "collision_checker.h"
 #include<fstream>
 #include<sstream>
+#include <string>
+#include <algorithm>
 #include<vector>
 #include<bitset>
 
@@ -18,112 +20,120 @@ void MapManager::LoadMap(const std::string& path)
 		cout << "Fail : map load" << endl;
 		return;
 	}
+
+
 	vector<MapInfo>actor_info_data;
 	actor_info_data.reserve(1000);
-	stringstream ss;
-	string line;
-	string prefix;
-	UINT temp_col_count = 0;
-	Vector3 temp_pos;
-	std::vector<Vector3> scales;
-	std::vector<Vector3> collision_centers;
 
-	std::vector<Vector3> collision_size;
+
+	UINT temp_col_count = 0;
+
+//	stringstream ss;
+//	string line;
+//	string prefix;
+//	Vector3 temp_pos;
+
+
+//	std::vector<Vector3> scales;
+//	std::vector<Vector3> collision_centers;
+//	std::vector<Vector3> collision_size;
+
+	std::vector<std::string>words{ std::istream_iterator<std::string>{map_file}, {} };
+
+	
+	while (!words.empty())
+	{
+		auto next = std::find(words.begin(), words.end(), "end");
+		next++;
+
+		auto reader = words.begin();
+
+		//start end
+		reader++;
+		reader++;
+
+		//center
+		Vector3 center = Vector3();
+		center.x = std::stof((*reader)) * -100.0f; reader++;
+		center.y = std::stof((*reader)) * 100.0f; reader++;
+		center.z = std::stof((*reader)) * -100.0f; reader++;
+
+		//extent
+		reader++;
+
+		Vector3 extent = Vector3();
+		extent.x = std::stof((*reader)) * 100.0f; reader++;
+		extent.y = std::stof((*reader)) * 100.0f; reader++;
+		extent.z = std::stof((*reader)) * 100.0f; reader++;
+
+		//up
+		reader++;
+
+		Vector3 up = Vector3();
+		up.x = std::stof((*reader)); reader++;
+		up.y = std::stof((*reader)); reader++;
+		up.z = std::stof((*reader)); reader++;
+
+		//right
+		reader++;
+
+		Vector3 right = Vector3();
+		right.x = std::stof((*reader)); reader++;
+		right.y = std::stof((*reader)); reader++;
+		right.z = std::stof((*reader)); reader++;
+
+		//right
+		reader++;
+
+		Vector3 look = Vector3();
+		look.x = std::stof((*reader)); reader++;
+		look.y = std::stof((*reader)); reader++;
+		look.z = std::stof((*reader)); reader++;
+
+//		MapObjs.push_back(std::make_shared<OBB>(center, extent, up, right, look));
+		m_map_objects.emplace_back(center, extent, up, right, look);
+
+		temp_col_count++;
+		words.erase(words.begin(), next);
+	}
 
 	// 맵 파일에서 한 줄 씩 읽기
-
-	while (getline(map_file, line))
-	{
-		ss.clear();
-		prefix.clear();
-		ss.str(line);
-		ss >> prefix;
-
-		switch (HashCode(prefix.c_str()))
-		{
-		case HashCode("center"):
-		{
-			temp_col_count++;
-			ss >> temp_pos.x >> temp_pos.y >> temp_pos.z;
-			temp_pos.x = temp_pos.x * 10;
-			temp_pos.y = temp_pos.y * 10;
-			temp_pos.z = temp_pos.z * 10;
-
-			
-			collision_centers.emplace_back(std::move(temp_pos));
-			
-			break;
-		}
-		case HashCode("size"): {
-			ss >> temp_pos.x >> temp_pos.y >> temp_pos.z;
-			temp_pos.x = temp_pos.x * 5;
-			temp_pos.y = temp_pos.y * 5;
-			temp_pos.z = temp_pos.z * 5;
-			scales.emplace_back(std::move(temp_pos));
-			break;
-		}
-		}
-
-	}
-	
-	// 수정 필요 if 이 좌표안에 있으면 true 아니면 false 출력
-	for (int i = 0 ; i < temp_col_count; ++i)
-	{
-			m_map_objects.emplace_back(i, collision_centers[i], scales[i], true, OBJ_TYPE::OT_MAPOBJ);	
-	}
-
-
-	BlockTileMap();
-}
-
-void MapManager::BlockTileMap()
-{
-	for (auto& map_obj : m_map_objects)
-	{
-		for (int i = 0; i < MAP_WIDTH; ++i)
-		{
-			for (int j = 0; j < MAP_WIDTH; ++j)
-			{
-					if (m_tile_map[i][j].type == MAP_OBJ_TYPE::NONE)
-					{
-						if (map_obj.GetMinPos().x <= m_tile_map[i][j].x && map_obj.GetMaxPos().x >= m_tile_map[i][j].x &&
-							map_obj.GetMinPos().z <= m_tile_map[i][j].z && map_obj.GetMaxPos().z >= m_tile_map[i][j].z)
-						{
-							m_tile_map[i][j].type = MAP_OBJ_TYPE::BLOCK;
-						}
-						else
-						{
-							m_tile_map[i][j].type = MAP_OBJ_TYPE::UNBLOCK;
-						}
-					}
-//					else
-//							m_tile_map[i][j].type = MAP_OBJ_TYPE::UNBLOCK;
-					
-				
-			}
-		}
-	}
-	int sx, sy;
-	int dx, dy;
-	for (int i = 0; i < MAP_WIDTH; ++i)
-	{
-		for (int j = 0; j < MAP_WIDTH; ++j)
-		{
-			if (m_tile_map[i][j].type == MAP_OBJ_TYPE::BLOCK)
-			{
-				cout << "1";
-			}
-			else if (m_tile_map[i][j].type == MAP_OBJ_TYPE::UNBLOCK)
-			{
-				cout << "2";
-			}
-		}
-		cout << endl;
-	}
-//	Astar* astar = new Astar;
-//	bool ret = astar->SearchMapTileLoad(m_tile_map, sx, sy, dx, dy);
-//	ret ? cout << "찾" : cout << "못찾";
-//	delete astar;
+	//while (getline(map_file, line))
+	//{
+	//	ss.clear();
+	//	prefix.clear();
+	//	ss.str(line);
+	//	ss >> prefix;
+	//	switch (HashCode(prefix.c_str()))
+	//	{
+	//	case HashCode("center"):
+	//	{
+	//		temp_col_count++;
+	//		ss >> temp_pos.x >> temp_pos.y >> temp_pos.z;
+	//		temp_pos.x = temp_pos.x * 10;
+	//		temp_pos.y = temp_pos.y * 10;
+	//		temp_pos.z = temp_pos.z * 10;
+	//		
+	//		collision_centers.emplace_back(std::move(temp_pos));
+	//		
+	//		break;
+	//	}
+	//	case HashCode("size"): {
+	//		ss >> temp_pos.x >> temp_pos.y >> temp_pos.z;
+	//		temp_pos.x = temp_pos.x * 5;
+	//		temp_pos.y = temp_pos.y * 5;
+	//		temp_pos.z = temp_pos.z * 5;
+	//		scales.emplace_back(std::move(temp_pos));
+	//		break;
+	//	}
+	//	}
+	//}	
+	//// 수정 필요 if 이 좌표안에 있으면 true 아니면 false 출력
+	//for (int i = 0 ; i < temp_col_count; ++i)
+	//{
+	//		m_map_objects.emplace_back(i, collision_centers[i], scales[i], true, OBJ_TYPE::OT_MAPOBJ);	
+	//}
+	//	BlockTileMap();
 }
 
 

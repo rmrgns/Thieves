@@ -154,6 +154,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="map_manager.cpp" />
     <ClCompile Include="map_object.cpp" />
+    <ClCompile Include="OBB.cpp" />
     <ClCompile Include="object\moveobj_manager.cpp" />
     <ClCompile Include="object\move_object\enemy.cpp" />
     <ClCompile Include="object\move_object\player.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="map_info.h" />
     <ClInclude Include="map_manager.h" />
     <ClInclude Include="map_object.h" />
+    <ClInclude Include="OBB.h" />
     <ClInclude Include="object\moveobj_manager.h" />
     <ClInclude Include="object\move_object\enemy.h" />
     <ClInclude Include="object\move_object\move_object.h" />

@@ -30,7 +30,7 @@ void PacketManager::Init()
 {
 	MoveObjManager::GetInst()->InitPlayer();
 	m_room_manager->InitRoom();
-	m_map_manager->LoadMap("map.txt");
+	m_map_manager->LoadMap("ColiderData.txt");
 
 	m_db->Init();
 }

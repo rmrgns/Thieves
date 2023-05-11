@@ -22,4 +22,5 @@ public:
 	static bool inBoundingRectangle(Vector2 p, Vector2 a, Vector2 b);
 	static bool segmentIntersection(Vector2 a, Vector2 b, Vector2 c, Vector2 d, Vector2& p);
 
+	void CheckOBB(BoxCollision& a, BoxCollision& b);
 };
