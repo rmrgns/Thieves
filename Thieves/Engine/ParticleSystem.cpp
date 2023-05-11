@@ -16,10 +16,6 @@ ParticleSystem::ParticleSystem() : Component(COMPONENT_TYPE::PARTICLE_SYSTEM)
 
 	_mesh = GET_SINGLE(Resources)->LoadPointMesh();
 	_material = GET_SINGLE(Resources)->Get<Material>(L"Particle");
-	shared_ptr<Texture> tex = GET_SINGLE(Resources)->Load<Texture>(
-		L"Bubbles", L"..\\Resources\\Texture\\Particle\\pngwing.com.png");
-
-	_material->SetTexture(0, tex);
 
 	_computeMaterial = GET_SINGLE(Resources)->Get<Material>(L"ComputeParticle");
 }
@@ -29,6 +25,37 @@ ParticleSystem::~ParticleSystem()
 }
 
 void ParticleSystem::FinalUpdate()
+{
+	ParticleLogic();
+}
+
+void ParticleSystem::Render()
+{
+	if (_useParticle == true)
+	{
+		GetTransform()->PushData();
+
+		_particleBuffer->PushGraphicsData(SRV_REGISTER::t9);
+		_material->SetFloat(0, _startScale);
+		_material->SetFloat(1, _endScale);
+		_material->PushGraphicsData();
+
+		_mesh->Render(_maxParticle);
+	}
+}
+
+void ParticleSystem::MakeParticle(wstring name, wstring path)
+{
+	wstring pt_name = name;
+	wstring pt_path = path;
+
+	shared_ptr<Texture> tex = GET_SINGLE(Resources)->Load<Texture>(
+		pt_name, pt_path);
+
+	_material->SetTexture(0, tex);
+}
+
+void ParticleSystem::ParticleLogic()
 {
 	_accTime += DELTA_TIME;
 
@@ -49,19 +76,4 @@ void ParticleSystem::FinalUpdate()
 	_computeMaterial->SetVec4(0, Vec4(_minLifeTime, _maxLifeTime, _minSpeed, _maxSpeed));
 
 	_computeMaterial->Dispatch(1, 1, 1);
-}
-
-void ParticleSystem::Render()
-{
-	if (_useParticle == true)
-	{
-		GetTransform()->PushData();
-
-		_particleBuffer->PushGraphicsData(SRV_REGISTER::t9);
-		_material->SetFloat(0, _startScale);
-		_material->SetFloat(1, _endScale);
-		_material->PushGraphicsData();
-
-		_mesh->Render(_maxParticle);
-	}
 }

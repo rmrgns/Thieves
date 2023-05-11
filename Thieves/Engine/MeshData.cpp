@@ -7,7 +7,6 @@
 #include "Transform.h"
 #include "MeshRenderer.h"
 #include "Animator.h"
-#include "Physics.h"
 
 MeshData::MeshData() : Object(OBJECT_TYPE::MESH_DATA)
 {
@@ -66,7 +65,6 @@ vector<shared_ptr<GameObject>> MeshData::Instantiate()
 		shared_ptr<GameObject> gameObject = make_shared<GameObject>();
 		gameObject->AddComponent(make_shared<Transform>());
 		gameObject->AddComponent(make_shared<MeshRenderer>());
-		gameObject->AddComponent(make_shared<Physics>());
 		gameObject->GetMeshRenderer()->SetMesh(info.mesh);
 
 		for (uint32 i = 0; i < info.materials.size(); i++)
