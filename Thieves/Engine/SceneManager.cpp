@@ -337,7 +337,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 
 		std::vector<int> occupied_id;
 
-		for (int i = 0; i < 2; ++i)
+		for (int i = 0; i < 7; ++i)
 		{
 			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Thief.fbx");
 
@@ -414,30 +414,30 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		}
 	}
 #pragma endregion
-#pragma region Object
-	{
-		shared_ptr<GameObject> obj = make_shared<GameObject>();
-		obj->SetName(L"OBJ");
-		obj->AddComponent(make_shared<Transform>());
-		obj->AddComponent(make_shared<SphereCollider>());
-		obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
-		obj->GetTransform()->SetLocalPosition(Vec3(0, 100.f, 200.f));
-		obj->SetStatic(true);
-		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
-		{
-			shared_ptr<Mesh> sphereMesh = GET_SINGLE(Resources)->LoadSphereMesh();
-			meshRenderer->SetMesh(sphereMesh);
-		}
-		{
-			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
-			meshRenderer->SetMaterial(material->Clone());
-		}
-		dynamic_pointer_cast<SphereCollider>(obj->GetCollider())->SetRadius(0.5f);
-		dynamic_pointer_cast<SphereCollider>(obj->GetCollider())->SetCenter(Vec3(0.f, 0.f, 0.f));
-		obj->AddComponent(meshRenderer);
-		scene->AddGameObject(obj);
-	}
-#pragma endregion
+//#pragma region Object
+//	{
+//		shared_ptr<GameObject> obj = make_shared<GameObject>();
+//		obj->SetName(L"OBJ");
+//		obj->AddComponent(make_shared<Transform>());
+//		obj->AddComponent(make_shared<SphereCollider>());
+//		obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
+//		obj->GetTransform()->SetLocalPosition(Vec3(0, 100.f, 200.f));
+//		obj->SetStatic(true);
+//		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+//		{
+//			shared_ptr<Mesh> sphereMesh = GET_SINGLE(Resources)->LoadSphereMesh();
+//			meshRenderer->SetMesh(sphereMesh);
+//		}
+//		{
+//			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
+//			meshRenderer->SetMaterial(material->Clone());
+//		}
+//		dynamic_pointer_cast<SphereCollider>(obj->GetCollider())->SetRadius(0.5f);
+//		dynamic_pointer_cast<SphereCollider>(obj->GetCollider())->SetCenter(Vec3(0.f, 0.f, 0.f));
+//		obj->AddComponent(meshRenderer);
+//		scene->AddGameObject(obj);
+//	}
+//#pragma endregion
 #pragma region Directional Light
 	{
 		shared_ptr<GameObject> light = make_shared<GameObject>();
@@ -480,14 +480,14 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		shared_ptr<GameObject> light = make_shared<GameObject>();
 		light->SetName(L"Spt_Light");
 		light->AddComponent(make_shared<Transform>());
-		light->GetTransform()->SetLocalPosition(Vec3(75.f, 0.f, 150.f));
+		light->GetTransform()->SetLocalPosition(Vec3(75.f, 500.f, 150.f));
 		light->AddComponent(make_shared<Light>());
-		light->GetLight()->SetLightDirection(Vec3(-1.f, 0, 0));
+		light->GetLight()->SetLightDirection(Vec3(0.f, -1.f, 0));
 		light->GetLight()->SetLightType(LIGHT_TYPE::SPOT_LIGHT);
-		light->GetLight()->SetDiffuse(Vec3(0.0f, 0.f, 0.5f));
-		light->GetLight()->SetAmbient(Vec3(0.0f, 0.0f, 0.1f));
-		light->GetLight()->SetSpecular(Vec3(0.0f, 0.0f, 0.1f));
-		light->GetLight()->SetLightRange(200.f);
+		light->GetLight()->SetDiffuse(Vec3(0.5f, 0.5f, 0.5f));
+		light->GetLight()->SetAmbient(Vec3(0.1f, 0.1f, 0.1f));
+		light->GetLight()->SetSpecular(Vec3(0.1f, 0.1f, 0.1f));
+		light->GetLight()->SetLightRange(1000.f);
 		light->GetLight()->SetLightAngle(3.14f / 2);
 		light->AddComponent(make_shared<LightEffect>());
 
