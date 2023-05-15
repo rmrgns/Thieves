@@ -40,11 +40,11 @@
     <Filter Include="헤더 파일\utill">
       <UniqueIdentifier>{ae2ccd3e-3990-4453-b5f7-811863e4ed46}</UniqueIdentifier>
     </Filter>
-    <Filter Include="헤더 파일\utill\collision">
-      <UniqueIdentifier>{bceb6d54-87b0-4b66-83f3-fef50ff36adf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\object\map_object">
       <UniqueIdentifier>{da17359a-e99a-4556-a2db-219cc24d9e86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\collision">
+      <UniqueIdentifier>{e5fbe293-ef28-4492-93fa-d7707b6b714b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -86,6 +86,15 @@
     </ClCompile>
     <ClCompile Include="map_object.cpp">
       <Filter>소스 파일\object\map_object</Filter>
+    </ClCompile>
+    <ClCompile Include="OBB.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="collision_detection.cpp">
+      <Filter>소스 파일\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="object\MapManager.cpp">
+      <Filter>소스 파일\object\move_object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +151,18 @@
     </ClInclude>
     <ClInclude Include="map_object.h">
       <Filter>소스 파일\object\map_object</Filter>
+    </ClInclude>
+    <ClInclude Include="OBB.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="collision_detection.h">
+      <Filter>소스 파일\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="object\MapManager.h">
+      <Filter>소스 파일\object\move_object</Filter>
+    </ClInclude>
+    <ClInclude Include="c_box.h">
+      <Filter>소스 파일\collision</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

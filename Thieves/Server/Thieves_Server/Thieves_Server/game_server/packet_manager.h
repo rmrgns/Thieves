@@ -1,6 +1,6 @@
 #pragma once
 #include "define.h"
-
+#include "CollisionDetection.hpp"
 #include<concurrent_queue.h>
 #include <thread>
 
@@ -54,7 +54,6 @@ public:
 	void ProcessTimer(HANDLE hiocp);
 //	void ProcessEvent(HANDLE hiocp, timer_event& ev);
 
-	
 
 private:
 	RoomManager* m_room_manager;

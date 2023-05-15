@@ -10,6 +10,8 @@
 #include "object/moveobj_manager.h"
 #include "object/MapManager.h"
 #include "OBB.h"
+#include "CollisionDetection.hpp"
+
 //concurrency::concurrent_priority_queue<timer_event> PacketManager::g_timer_queue = concurrency::concurrent_priority_queue<timer_event>();
 
 using namespace std;
@@ -457,8 +459,31 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 
 	cl->SetRotX(packet->vecX);
 	cl->SetRotZ(packet->vecZ);
-	//cl->SetPosY(packet->vecY);
+	
 
+	// collider
+	Vector3 PlayerRight = Vector3(cl->GetRotX(), 0.f, cl->GetRotZ()).Cross(Vector3(0.0f, 1.0f, 0.0f));
+	CBox PlayerBox;
+	PlayerBox.center[0] = cl->GetPosX();
+	PlayerBox.center[1] = cl->GetPosY()+75.f;
+	PlayerBox.center[2] = cl->GetPosZ();
+	
+	PlayerBox.extent[0] = 25.f;
+	PlayerBox.extent[1] = 25.f;
+	PlayerBox.extent[2] = 25.f;
+	
+	PlayerBox.axis[0][0] = PlayerRight.x;
+	PlayerBox.axis[0][1] = PlayerRight.y;
+	PlayerBox.axis[0][2] = PlayerRight.z;
+	PlayerBox.axis[1][0] = cl->GetRotX();
+	PlayerBox.axis[1][1] = cl->GetRotY();
+	PlayerBox.axis[1][2] = cl->GetRotZ();
+	PlayerBox.axis[2][0] = cl->GetRotX();
+	PlayerBox.axis[2][1] = 0.f;
+	PlayerBox.axis[2][2] = cl->GetRotZ();
+
+
+//	Pl
 	Vector3 ObbCenter = cl->GetPos();
 	ObbCenter.y += 75.f;
 
@@ -468,9 +493,9 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 		Vector3(cl->GetRotX(), 0.f, cl->GetRotZ()).Cross(Vector3(0.0f, 1.0f, 0.0f))
 		, Vector3(cl->GetRotX(), 0.f, cl->GetRotZ()));
 
-
-
 	if (m_map_manager->isCollision(playerOBB)) cl->SetPos(oldPos);
+
+
 
 	cl->SetAnimationNumber(packet->action_type);
 
@@ -504,6 +529,8 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 		SendMovePacket(other_pl, c_id);
 	}	
 }
+
+
 
 void PacketManager::ProcessMatching(int c_id, unsigned char* p)
 {
