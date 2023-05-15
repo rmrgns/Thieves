@@ -65,6 +65,14 @@ void PacketManager::ProcessPacket(int c_id, unsigned char* p)
 		ProcessGameStart(c_id, p);
 		break;
 	}
+	case CS_PACKET_LOAD_PROGRESSING: {
+		ProcessLoadProgressing(c_id, p);
+		break;
+	}	
+	case CS_PACKET_LOAD_END: {
+		ProcessLoadProgressing(c_id, p);
+		break;
+	}
 	case CS_PACKET_TEST: {
 		//ProcessTest(c_id, p);
 		break;
@@ -248,10 +256,12 @@ void PacketManager::SendObjInfo(int c_id, int obj_id)
 
 void PacketManager::SendTime(int c_id, float round_time)
 {
+	
 }
 
 void PacketManager::SendAttackPacket(int c_id, int room_id)
 {
+
 }
 
 void PacketManager::SendGameWin(int c_id)
@@ -264,10 +274,35 @@ void PacketManager::SendGameDefeat(int c_id)
 
 void PacketManager::SendStun(int c_id, int obj_id)
 {
+
 }
 
 void PacketManager::SendPhasePacket(int c_id, int curr_phase)
 {
+}
+
+void PacketManager::SendLoadProgress(int c_id, int p_id, int progressed)
+{
+	sc_packet_load_progress_percent packet;
+	packet.type = SC_PACKET_LOAD_PROGRESS_PERCENT;
+	packet.size = sizeof(packet);
+	packet.id = p_id;
+	packet.percent = progressed;
+
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
+	
+}
+
+void PacketManager::SendLoadEnd(int c_id, int p_id)
+{
+	sc_packet_load_end packet;
+	packet.type = SC_PACKET_LOAD_END;
+	packet.size = sizeof(packet);
+	packet.id = p_id;
+
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
 }
 
 void PacketManager::End()
@@ -538,6 +573,20 @@ void PacketManager::ProcessGameStart(int c_id, unsigned char* p)
 
 	}
 	StartGame(room->GetRoomID());
+}
+
+void PacketManager::ProcessLoadProgressing(int c_id, unsigned char* p)
+{
+	cs_packet_load_progressing* packet = reinterpret_cast<cs_packet_load_progressing*>(p);
+	packet->progressed;
+
+	
+
+}
+
+void PacketManager::ProcessLoadEnd(int c_id, unsigned char* p)
+{
+
 }
 
 void PacketManager::ProcessDamageCheat(int c_id, unsigned char* p)

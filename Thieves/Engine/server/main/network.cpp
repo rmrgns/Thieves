@@ -146,6 +146,14 @@ void Network::SendMovePacket(char direction,
 	//}
 }
 
+void Network::SendLoadProgressPacket(char progressed)
+{
+}
+
+void Network::SendLoadEndPacket()
+{
+}
+
 void Network::SendStartPacket()
 {
 	m_send_manager->SendStartPacket(m_s_socket);

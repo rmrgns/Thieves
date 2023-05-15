@@ -1,66 +1,70 @@
 #pragma once
 
-const short SERVER_PORT = 8471;
+constexpr short SERVER_PORT = 8471;
 
 // 맵 크기
 
-const int MAX_NAME_SIZE = 20;		// 아이디 사이즈
-const int MAX_PASSWORD_SIZE = 20;	// 비밀 번호 사이즈
-const int MAX_CHAT_SIZE = 100;		// 채팅 사이즈
+constexpr int MAX_NAME_SIZE = 20;		// 아이디 사이즈
+constexpr int MAX_PASSWORD_SIZE = 20;	// 비밀 번호 사이즈
+constexpr int MAX_CHAT_SIZE = 100;		// 채팅 사이즈
 
-const int MAX_ROOM_SIZE = 8;		// 방 최대 크기
+constexpr int MAX_ROOM_SIZE = 8;		// 방 최대 크기
 
-const int MAX_USER = MAX_ROOM_SIZE * 8;		// 동접 가능 인원
+constexpr int MAX_USER = MAX_ROOM_SIZE * 8;		// 동접 가능 인원
 
-const int USER_NUM = 8;
+constexpr int USER_NUM = 8;
 // 수정
-const float FOV_RANGE = 0.f;
+constexpr float FOV_RANGE = 0.f;
 
 constexpr int MAX_NPC = 7;
 
 // 경찰 NPC의 갯수
 // 도둑 AI의 갯수
-const int PLAYER_HP = 5;		// 플레이어 HP
-const int PLAYER_DAMAGE = 1;	// 플레이어 DMG
+constexpr int PLAYER_HP = 5;		// 플레이어 HP
+constexpr int PLAYER_DAMAGE = 1;	// 플레이어 DMG
 // 플레이어 이동거리
 // 플레이어 공격 사거리
 // ID
 
 // CS
-const char CS_PACKET_SIGN_IN = 1;			// 로그인
-const char CS_PACKET_SIGN_UP = 2;			// 가입
-const char CS_PACKET_MOVE = 3;				// 이동
-const char CS_PACKET_ATTACK = 4;			// 공격
-const char CS_PACKET_CHAT = 5;				// 채팅
-const char CS_PACKET_HIT = 6;				// 피격
-const char CS_PACKET_GAME_START = 7;		// 게임 시작
-const char CS_PACKET_MATCHING = 8;
-const char CS_PACKET_TEST = 9;
-const char CS_PACKET_START_JUMP = 10;				// 점프 시작 패킷
-const char CS_PACKET_COMPLETE_JUMP = 11;				// 점프 완료 패킷
+constexpr char CS_PACKET_SIGN_IN = 1;			// 로그인
+constexpr char CS_PACKET_SIGN_UP = 2;			// 가입
+constexpr char CS_PACKET_MOVE = 3;				// 이동
+constexpr char CS_PACKET_ATTACK = 4;			// 공격
+constexpr char CS_PACKET_CHAT = 5;				// 채팅
+constexpr char CS_PACKET_HIT = 6;				// 피격
+constexpr char CS_PACKET_GAME_START = 7;		// 게임 시작
+constexpr char CS_PACKET_MATCHING = 8;
+constexpr char CS_PACKET_TEST = 9;
+constexpr char CS_PACKET_START_JUMP = 10;				// 점프 시작 패킷
+constexpr char CS_PACKET_COMPLETE_JUMP = 11;				// 점프 완료 패킷
+constexpr char CS_PACKET_LOAD_PROGRESSING = 12;
+constexpr char CS_PACKET_LOAD_END = 13;
 
 
 
 // SC
-const char SC_PACKET_SIGN_IN_OK = 1;		// 로그인 OK
-const char SC_PACKET_SIGN_UP_OK = 2;		// 가입 OK
-const char SC_PACKET_MOVE = 3;				// 이동
-const char SC_PACKET_PUT_OBJECT = 4;		// 플레이어 생성
-const char SC_PACKET_REMOVE_OBJECT = 5;		// 플레이어 제거
-const char SC_PACKET_CHAT = 6;				// 채팅
-const char SC_PACKET_LOGIN_FAIL = 7;		// 로그인 실패
-const char SC_PACKET_TIME = 8;
-const char SC_PACKET_POLICE_ATTACK = 9;		// 경찰 어택
-const char SC_PACKET_PLAYER_ATTACK = 10;	// 플레이어 어택
-const char SC_PACKET_WIN = 11;				// win
-const char SC_PACKET_DEFEAT = 12;			// defeat
-const char SC_PACKET_STUN = 13;				// stun
-const char SC_PAKCET_INTERACTION = 14;		// 상호작용
-const char SC_PACKET_PHASE = 15;			// 페이즈 변경  
-const char SC_PACKET_TEST = 16;
-const char SC_PACKET_OBJ_INFO = 17;		// OBJ 정보
-const char SC_PACKET_START_JUMP = 18;			// 점프 시작 패킷
-const char SC_PACKET_COMPLETE_JUMP = 19;			// 점프 완료 패킷
+constexpr char SC_PACKET_SIGN_IN_OK = 1;		// 로그인 OK
+constexpr char SC_PACKET_SIGN_UP_OK = 2;		// 가입 OK
+constexpr char SC_PACKET_MOVE = 3;				// 이동
+constexpr char SC_PACKET_PUT_OBJECT = 4;		// 플레이어 생성
+constexpr char SC_PACKET_REMOVE_OBJECT = 5;		// 플레이어 제거
+constexpr char SC_PACKET_CHAT = 6;				// 채팅
+constexpr char SC_PACKET_LOGIN_FAIL = 7;		// 로그인 실패
+constexpr char SC_PACKET_TIME = 8;
+constexpr char SC_PACKET_POLICE_ATTACK = 9;		// 경찰 어택
+constexpr char SC_PACKET_PLAYER_ATTACK = 10;	// 플레이어 어택
+constexpr char SC_PACKET_WIN = 11;				// win
+constexpr char SC_PACKET_DEFEAT = 12;			// defeat
+constexpr char SC_PACKET_STUN = 13;				// stun
+constexpr char SC_PAKCET_INTERACTION = 14;		// 상호작용
+constexpr char SC_PACKET_PHASE = 15;			// 페이즈 변경  
+constexpr char SC_PACKET_TEST = 16;
+constexpr char SC_PACKET_OBJ_INFO = 17;		// OBJ 정보
+constexpr char SC_PACKET_START_JUMP = 18;			// 점프 시작 패킷
+constexpr char SC_PACKET_COMPLETE_JUMP = 19;			// 점프 완료 패킷
+constexpr char SC_PACKET_LOAD_PROGRESS_PERCENT = 20;
+constexpr char SC_PACKET_LOAD_END = 21;
 //#pragma pack (push, 1)
 
 // 클라이언트 -> 서버로 보내는 패킷은 어떤 키를 얼마나 눌렀는지에 대해서만 보내주면 된다.
@@ -115,6 +119,22 @@ struct cs_packet_game_start {
 	char	type;
 
 };
+
+struct cs_packet_load_progressing {
+	unsigned char size;
+	char type;
+	char progressed;
+};
+
+struct cs_packet_load_end {
+	unsigned char size;
+	char type;
+};
+
+
+//------------------------------------------------------------------
+
+
 
 struct sc_packet_sign_in_ok {
 	unsigned char size;
@@ -212,4 +232,17 @@ struct sc_packet_obj_info {
 	float	x, y, z;
 	bool	start;
 	char	object_type;
+};
+
+struct sc_packet_load_progress_percent {
+	unsigned char size;
+	char type;
+	int id;
+	char percent;
+};
+
+struct sc_packet_load_end {
+	unsigned char size;
+	char type;
+	int id;
 };

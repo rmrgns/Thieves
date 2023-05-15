@@ -41,6 +41,10 @@ public:
 	void SendStun(int c_id, int obj_id);
 	void SendPhasePacket(int c_id, int curr_phase);
 
+	void SendLoadProgress(int c_id, int p_id, int progressed);
+
+	void SendLoadEnd(int c_id, int p_id);
+
 	void End();
 	void Disconnect(int c_id);
 	bool IsRoomInGame(int room_id);
@@ -73,6 +77,8 @@ private:
 	void ProcessMatching(int c_id, unsigned char* p);
 	void ProcessHit(int c_id, unsigned char* p);
 	void ProcessGameStart(int c_id, unsigned char* p);
+	void ProcessLoadProgressing(int c_id, unsigned char* p);
+	void ProcessLoadEnd(int c_id, unsigned char* p);
 	void ProcessDamageCheat(int c_id, unsigned char* p);
 	void StartGame(int room_id);
 

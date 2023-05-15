@@ -28,6 +28,12 @@
 
 #include "server/main/network.h"
 #include "server/thieves_server/thieves_packet_manager.h"
+
+
+
+
+
+
 void SceneManager::Update()
 {
 	if (_activeScene == nullptr)
@@ -38,12 +44,24 @@ void SceneManager::Update()
 	_activeScene->FinalUpdate();
 }
 
+
+
+
+
+
+
 // TEMP
 void SceneManager::Render()
 {
 	if (_activeScene)
 		_activeScene->Render();
 }
+
+
+
+
+
+
 
 void SceneManager::LoadScene(wstring sceneName)
 {
@@ -61,7 +79,7 @@ void SceneManager::LoadScene(wstring sceneName)
 	}
 	else if (sceneName == L"GameScene")
 	{
-		_activeScene = LoadTestScene();
+		_activeScene = LoadGameScene();
 		_currentScene = CURRENT_SCENE::GAME;
 	}
 	else
@@ -73,6 +91,12 @@ void SceneManager::LoadScene(wstring sceneName)
 	_activeScene->Start();
 }
 
+
+
+
+
+
+
 void SceneManager::SetLayerName(uint8 index, const wstring& name)
 {
 	// ���� ������ ����
@@ -83,6 +107,13 @@ void SceneManager::SetLayerName(uint8 index, const wstring& name)
 	_layerIndex[name] = index;
 }
 
+
+
+
+
+
+
+
 uint8 SceneManager::LayerNameToIndex(const wstring& name)
 {
 	auto findIt = _layerIndex.find(name);
@@ -91,6 +122,16 @@ uint8 SceneManager::LayerNameToIndex(const wstring& name)
 
 	return findIt->second;
 }
+
+
+
+
+
+
+
+
+
+
 
 shared_ptr<GameObject> SceneManager::Pick(int32 screenX, int32 screenY)
 {
@@ -143,6 +184,16 @@ shared_ptr<GameObject> SceneManager::Pick(int32 screenX, int32 screenY)
 	return picked;
 }
 
+
+
+
+
+
+
+
+
+
+
 void SceneManager::BuildPlayer()
 {
 	// �ٸ� �÷��̾� ��ǥ
@@ -162,8 +213,21 @@ void SceneManager::BuildPlayer()
 	}
 }
 
-shared_ptr<Scene> SceneManager::LoadTestScene()
+
+
+
+
+
+
+
+
+
+
+
+
+shared_ptr<Scene> SceneManager::LoadGameScene()
 {
+	_LoadText = L"Load Start";
 #pragma region LayerMask
 	SetLayerName(0, L"Default");
 	SetLayerName(1, L"UI");
@@ -171,6 +235,10 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 
 	shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
 	
+	_LoadText = L"Load Compute Shader";
+
+	Network::GetInst()->SendLoadProgressPacket();
+
 #pragma region ComputeShader
 	{
 		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"ComputeShader");
@@ -190,6 +258,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		material->Dispatch(1, 1024, 1);
 	}
 #pragma endregion
+
+	_LoadText = L"Load Main Camera";
 
 	shared_ptr<Scene> scene = make_shared<Scene>();
 	
@@ -211,6 +281,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}	
 #pragma endregion
 
+	_LoadText = L"Load UI Camera";
+
 #pragma region UI_Camera
 	{
 		shared_ptr<GameObject> camera = make_shared<GameObject>();
@@ -225,6 +297,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		scene->AddGameObject(camera);
 	}
 #pragma endregion
+
+	_LoadText = L"Load SkyBox";
 
 #pragma region SkyBox
 	{
@@ -267,6 +341,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 //	}
 //#pragma endregion
 	
+	_LoadText = L"Load UI";
+	
 #pragma region UI_Test
 	for (int32 i = 0; i < 1; i++)
 	{
@@ -301,6 +377,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 #pragma endregion
 
+	_LoadText = L"Load Player FBX Data";
 
 #pragma region FBX
 	{
@@ -332,6 +409,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 #pragma endregion
 
+	_LoadText = L"Load Other Player FBX Data";
+
 #pragma region OtherPlayers
 	{
 
@@ -339,6 +418,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 
 		for (int i = 0; i < 7; ++i)
 		{
+			_LoadText = L"Load Other Player FBX Data  / 7";
 			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Thief.fbx");
 
 			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
@@ -393,6 +473,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 //	}
 //#pragma endregion
 
+	_LoadText = L"Load Map";
+
 #pragma region Map
 	{
 
@@ -438,6 +520,9 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 //		scene->AddGameObject(obj);
 //	}
 //#pragma endregion
+
+	_LoadText = L"Load Directinal Light";
+
 #pragma region Directional Light
 	{
 		shared_ptr<GameObject> light = make_shared<GameObject>();
@@ -454,6 +539,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		scene->AddGameObject(light);
 	}
 #pragma endregion
+	
+	_LoadText = L"Load Point Light";
 
 #pragma region Point Light
 	{
@@ -474,6 +561,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		scene->AddGameObject(light);
 	}
 #pragma endregion
+
+	_LoadText = L"Load Spot Light";
 
 #pragma region Spot Light
 	{
@@ -496,6 +585,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 #pragma endregion
 
+	_LoadText = L"Load Particle";
+
 #pragma region ParticleSystem
 	{
 		shared_ptr<GameObject> particle = make_shared<GameObject>();
@@ -511,13 +602,27 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 #pragma endregion
 
+	_LoadText = L"Wait Other Players...";
+
 	scene->SetSceneLoaded(true);
 
 	return scene;
 }
 
+
+
+
+
+
+
+
+
+
+
 shared_ptr<Scene> SceneManager::LoadLoginScene()
 {
+	_LoadText = L"Load Start";
+
 #pragma region LayerMask
 	SetLayerName(0, L"Default");
 
@@ -525,6 +630,8 @@ shared_ptr<Scene> SceneManager::LoadLoginScene()
 
 	shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
 	shared_ptr<Scene> scene = make_shared<Scene>();
+
+	_LoadText = L"Load Main Camera";
 
 #pragma region Camera
 	{
@@ -539,6 +646,8 @@ shared_ptr<Scene> SceneManager::LoadLoginScene()
 		scene->AddGameObject(camera);
 	}
 #pragma endregion
+
+	_LoadText = L"Load Login Image";
 
 #pragma region LoginScreen
 	{
@@ -567,6 +676,8 @@ shared_ptr<Scene> SceneManager::LoadLoginScene()
 	}
 #pragma endregion
 
+	_LoadText = L"Load Icon";
+
 #pragma region ThiefIcon
 	{
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
@@ -590,6 +701,8 @@ shared_ptr<Scene> SceneManager::LoadLoginScene()
 
 	}
 #pragma endregion
+
+	_LoadText = L"Load Directional Light";
 
 #pragma region Directional Light
 	{
@@ -618,7 +731,22 @@ shared_ptr<Scene> SceneManager::LoadLoginScene()
 //	}
 //#pragma endregion
 
+	_LoadText = L"Load End.";
+
 	scene->SetSceneLoaded(true);
+
+	return scene;
+}
+
+shared_ptr<Scene> SceneManager::LoadLoadingScene()
+{
+#pragma region LayerMask
+	SetLayerName(0, L"Default");
+
+#pragma endregion
+
+	shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+	shared_ptr<Scene> scene = make_shared<Scene>();
 
 	return scene;
 }

@@ -8,6 +8,7 @@ enum class CURRENT_SCENE
 	LOGIN,
 	LOBBY,
 	GAME,
+	LOADING,
 	// ...
 	END
 };
@@ -38,6 +39,9 @@ public:
 	void SetCheckChangeScene(bool check) { _checkChangeScene = check; }
 	CURRENT_SCENE GetCurrentScene() { return _currentScene; }
 
+	const wstring& GetLoadText() { return _LoadText; }
+	void SetLoadText(const wstring& wstr) { _LoadText = wstr; }
+
 	//Vec3 GetPlayerPosition() { return _playerPosition; }
 	//float GetPlayerPositionX() { return _playerPosition.x; }
 	//float GetPlayerPositionY() { return _playerPosition.y; }
@@ -55,14 +59,18 @@ public:
 	void BuildPlayer();
 
 private:
-	shared_ptr<Scene> LoadTestScene();
+	shared_ptr<Scene> LoadGameScene();
 	shared_ptr<Scene> LoadLoginScene();
+	shared_ptr<Scene> LoadLoadingScene();
 
 private:
 	shared_ptr<Scene> _activeScene;
+	shared_ptr<Scene> _loadProgressScene;
 	bool _checkChangeScene = false;
 	wstring _changeSceneName = L"";
 	CURRENT_SCENE _currentScene = CURRENT_SCENE::NONE;
+
+	wstring _LoadText = L"";
 
 	array<wstring, MAX_LAYER> _layerNames;
 	map<wstring, uint8> _layerIndex;
