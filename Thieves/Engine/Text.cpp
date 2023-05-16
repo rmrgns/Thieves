@@ -186,7 +186,7 @@ void Text::SetTextInfo(TEXT_FORMAT infoNumber)
 		// 텍스트 폰트 등
 		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"Verdana", nullptr,
 			DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_ITALIC, DWRITE_FONT_STRETCH_NORMAL,
-			50, L"en-us", _writeTextFormat.GetAddressOf()));
+			25, L"en-us", _writeTextFormat.GetAddressOf()));
 		break;
 	default:
 		break;

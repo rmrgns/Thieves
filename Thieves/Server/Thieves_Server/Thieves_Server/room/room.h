@@ -30,8 +30,7 @@ public:
 
 	void SetState(ROOM_STATE val) { m_room_state = val; }
 	void SetRoundStartTime();
-	void SetRoundTime();
-	float GetRoundTime() { return round_time; }
+	float GetRoundTime();
 	void SetRound(int val) { curr_round = val; }
 
 	std::vector<int>& GetObjList()
