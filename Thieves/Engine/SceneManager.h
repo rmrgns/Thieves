@@ -27,6 +27,8 @@ public:
 	void Render();
 	void LoadScene(wstring sceneName);
 
+	void ChangeToLoadedScene();
+
 	void SetLayerName(uint8 index, const wstring& name);
 	const wstring& IndexToLayerName(uint8 index) { return _layerNames[index]; }
 	uint8 LayerNameToIndex(const wstring& name);
@@ -59,8 +61,8 @@ public:
 	void BuildPlayer();
 
 private:
-	shared_ptr<Scene> LoadGameScene();
-	shared_ptr<Scene> LoadLoginScene();
+	void LoadGameScene();
+	void LoadLoginScene();
 	shared_ptr<Scene> LoadLoadingScene();
 
 private:
@@ -69,6 +71,7 @@ private:
 	bool _checkChangeScene = false;
 	wstring _changeSceneName = L"";
 	CURRENT_SCENE _currentScene = CURRENT_SCENE::NONE;
+	CURRENT_SCENE _currentLoadProgressScene = CURRENT_SCENE::NONE;
 
 	wstring _LoadText = L"";
 
