@@ -255,6 +255,9 @@
     <ClCompile Include="LightEffect.cpp">
       <Filter>Object\Script</Filter>
     </ClCompile>
+    <ClCompile Include="FlashLightScript.cpp">
+      <Filter>Object\Script</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -477,6 +480,9 @@
       <Filter>Object\Component</Filter>
     </ClInclude>
     <ClInclude Include="LightEffect.h">
+      <Filter>Object\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="FlashLightScript.h">
       <Filter>Object\Script</Filter>
     </ClInclude>
   </ItemGroup>

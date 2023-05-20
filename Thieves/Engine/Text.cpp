@@ -35,9 +35,9 @@ void Text::Update()
 	}
 	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
 	{
-		SetTextInfo(1);
-		wstring text4 = L"asdasdasd";
-		SetText(text4, 0.f, 0.f, 1.f, 1.f);
+		//SetTextInfo(1);
+		//wstring text4 = L"asdasdasd";
+		//SetText(text4, 0.f, 0.f, 1.f, 1.f);
 	}
 	else if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
 	{

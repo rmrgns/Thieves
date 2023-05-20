@@ -193,6 +193,7 @@
     <ClInclude Include="Engine.h" />
     <ClInclude Include="EnginePch.h" />
     <ClInclude Include="FBXLoader.h" />
+    <ClInclude Include="FlashLightScript.h" />
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Input.h" />
@@ -271,6 +272,7 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="EnginePch.cpp" />
     <ClCompile Include="FBXLoader.cpp" />
+    <ClCompile Include="FlashLightScript.cpp" />
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Input.cpp" />

@@ -6,6 +6,7 @@
 #include "Timer.h"
 #include "Transform.h"
 #include "Camera.h"
+#include "GameObject.h"
 
 #include "server/main/network.h"
 #include "server/thieves_server/thieves_packet_manager.h"
@@ -43,8 +44,6 @@ void PlayerCamera::LateUpdate()
 		else
 			_checkCameraRotation = true;
 	}
-
-	
 
 	GetTransform()->SetLocalPosition(pos);
 }

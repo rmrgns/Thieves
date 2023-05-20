@@ -157,7 +157,7 @@ void PlayerInput::PlayerRotation()
 
 	//rotation.x += DELTA_TIME * (mouseY - viewMouseY) * _mouseRotateSpeed;
 	rotation.y += DELTA_TIME * (mouseX - viewMouseX) * _mouseRotateSpeed;
-
+	GET_SINGLE(SceneManager)->SetLookVec(GetTransform()->GetLook());
 	GetTransform()->SetLocalRotation(rotation);
 }
 

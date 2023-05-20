@@ -17,6 +17,7 @@
 #include "PlayerCamera.h"
 #include "PlayerParticle.h"
 #include "LightEffect.h"
+#include "FlashLightScript.h"
 
 #include "Resources.h"
 #include "ParticleSystem.h"
@@ -447,8 +448,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		light->AddComponent(make_shared<Light>());
 		light->GetLight()->SetLightDirection(Vec3(0, -1, 1.f));
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
-		light->GetLight()->SetDiffuse(Vec3(0.0f, 1.0f, 1.0f));
-		light->GetLight()->SetAmbient(Vec3(1.0f, 1.0f, 1.0f));
+		light->GetLight()->SetDiffuse(Vec3(0.5f, 0.5f, 0.5f));
+		light->GetLight()->SetAmbient(Vec3(0.2f, 0.2f, 0.2f));
 		light->GetLight()->SetSpecular(Vec3(0.0f, 0.0f, 0.0f));
 
 		scene->AddGameObject(light);
@@ -480,16 +481,17 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		shared_ptr<GameObject> light = make_shared<GameObject>();
 		light->SetName(L"Spt_Light");
 		light->AddComponent(make_shared<Transform>());
-		light->GetTransform()->SetLocalPosition(Vec3(75.f, 0.f, 150.f));
+		light->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
 		light->AddComponent(make_shared<Light>());
-		light->GetLight()->SetLightDirection(Vec3(-1.f, 0, 0));
+		light->GetLight()->SetLightDirection(Vec3(1.f, 0.f, 1.0f));
 		light->GetLight()->SetLightType(LIGHT_TYPE::SPOT_LIGHT);
-		light->GetLight()->SetDiffuse(Vec3(0.0f, 0.f, 0.5f));
-		light->GetLight()->SetAmbient(Vec3(0.0f, 0.0f, 0.1f));
+		light->GetLight()->SetDiffuse(Vec3(0.0f, 0.5f, 0.5f));
+		light->GetLight()->SetAmbient(Vec3(0.5f, 0.5f, 0.5f));
 		light->GetLight()->SetSpecular(Vec3(0.0f, 0.0f, 0.1f));
-		light->GetLight()->SetLightRange(200.f);
-		light->GetLight()->SetLightAngle(3.14f / 2);
+		light->GetLight()->SetLightRange(5000.f);
+		light->GetLight()->SetLightAngle(3.14f / 4);
 		light->AddComponent(make_shared<LightEffect>());
+		light->AddComponent(make_shared<FlashLightScript>());
 
 		//light->GetLight()->SetLightState(false);
 		scene->AddGameObject(light);
