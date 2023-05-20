@@ -28,12 +28,12 @@ FlashLightScript::~FlashLightScript()
 void FlashLightScript::LateUpdate()
 {
 	Vec3 pos(0.0f, 0.0f, 0.0f);
-
+	
 	int myID = Network::GetInst()->GetPacketManager()->GetGameInfo().GetNetworkID();
 	
 	if (myID != -1) pos = Network::GetInst()->GetNetworkObjMap().find(myID)->second->GetPosition();
 	//if (myID != -1) rotation = Network::GetInst()->GetNetworkObjMap().find(myID)->second->GetRotation();
-
+	pos.y += 75.f;
 	// Player의 LookVector를 가져온다
 	Vec3 look = GET_SINGLE(SceneManager)->GetLookVec();
 

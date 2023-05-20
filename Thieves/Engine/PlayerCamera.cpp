@@ -79,6 +79,6 @@ void PlayerCamera::CameraRotation()
 	// ī�޶� ĳ���� rotation ��ġ -> 1��Ī
 	int myID = Network::GetInst()->GetPacketManager()->GetGameInfo().GetNetworkID();
 	if(myID != -1) Network::GetInst()->GetNetworkObjMap().find(myID)->second->SetRotation(rotation);
-	
+	GET_SINGLE(SceneManager)->SetLookVec(GetTransform()->GetLook());
 	GetTransform()->SetLocalRotation(rotation);
 }
