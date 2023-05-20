@@ -31,9 +31,6 @@
 
 #include <thread>
 
-
-
-
 void SceneManager::Update()
 {
 	if (_activeScene == nullptr)
@@ -44,24 +41,12 @@ void SceneManager::Update()
 	_activeScene->FinalUpdate();
 }
 
-
-
-
-
-
-
 // TEMP
 void SceneManager::Render()
 {
 	if (_activeScene)
 		_activeScene->Render();
 }
-
-
-
-
-
-
 
 void SceneManager::LoadScene(wstring sceneName)
 {
@@ -94,8 +79,6 @@ void SceneManager::LoadScene(wstring sceneName)
 	_activeScene->Start();
 }
 
-
-
 void SceneManager::ChangeToLoadedScene()
 {
 
@@ -111,9 +94,6 @@ void SceneManager::ChangeToLoadedScene()
 	_activeScene->Start();
 }
 
-
-
-
 void SceneManager::SetLayerName(uint8 index, const wstring& name)
 {
 	// ���� ������ ����
@@ -124,13 +104,6 @@ void SceneManager::SetLayerName(uint8 index, const wstring& name)
 	_layerIndex[name] = index;
 }
 
-
-
-
-
-
-
-
 uint8 SceneManager::LayerNameToIndex(const wstring& name)
 {
 	auto findIt = _layerIndex.find(name);
@@ -139,15 +112,6 @@ uint8 SceneManager::LayerNameToIndex(const wstring& name)
 
 	return findIt->second;
 }
-
-
-
-
-
-
-
-
-
 
 
 shared_ptr<GameObject> SceneManager::Pick(int32 screenX, int32 screenY)
@@ -201,16 +165,6 @@ shared_ptr<GameObject> SceneManager::Pick(int32 screenX, int32 screenY)
 	return picked;
 }
 
-
-
-
-
-
-
-
-
-
-
 void SceneManager::BuildPlayer()
 {
 	// �ٸ� �÷��̾� ��ǥ
@@ -229,18 +183,6 @@ void SceneManager::BuildPlayer()
 		_activeScene->AddGameObject(gameObject);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 void SceneManager::LoadGameScene()
 {
@@ -645,15 +587,6 @@ void SceneManager::LoadGameScene()
 	ChangeToLoadedScene();
 }
 
-
-
-
-
-
-
-
-
-
 void SceneManager::LoadLoginScene()
 {
 	_LoadText = L"Load Start";
@@ -686,14 +619,14 @@ void SceneManager::LoadLoginScene()
 	Network::GetInst()->SendLoadProgressPacket((char)200 / 5);
 #pragma region LoginScreen
 	{
-		float width = static_cast<float>(GEngine->GetWindow().width);
-		float height = static_cast<float>(GEngine->GetWindow().height);
+		float width = static_cast<float>(GEngine->GetWindow().width) / 448.f;
+		float height = static_cast<float>(GEngine->GetWindow().height) / 263.f;
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
 		obj->SetName(L"LOGINSCREEN");
 		obj->AddComponent(make_shared<Transform>());
 		obj->AddComponent(make_shared<LoginScript>());
-		obj->GetTransform()->SetLocalScale(Vec3(width / 7.0f, height / 7.0f, 100.f));
-		obj->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 100.f));
+		obj->GetTransform()->SetLocalScale(Vec3(width, height, 1.f));
+		obj->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 1.f));
 		obj->SetStatic(false);
 
 		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
@@ -710,6 +643,31 @@ void SceneManager::LoadLoginScene()
 		
 	}
 #pragma endregion
+
+	/*#pragma region Object
+		{
+			shared_ptr<GameObject> obj = make_shared<GameObject>();
+			obj->SetName(L"OBJ");
+			obj->AddComponent(make_shared<Transform>());
+			obj->AddComponent(make_shared<SphereCollider>());
+			obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
+			obj->GetTransform()->SetLocalPosition(Vec3(0, 100.f, 200.f));
+			obj->SetStatic(true);
+			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			{
+				shared_ptr<Mesh> sphereMesh = GET_SINGLE(Resources)->LoadSphereMesh();
+				meshRenderer->SetMesh(sphereMesh);
+			}
+			{
+				shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
+				meshRenderer->SetMaterial(material->Clone());
+			}
+			dynamic_pointer_cast<SphereCollider>(obj->GetCollider())->SetRadius(0.5f);
+			dynamic_pointer_cast<SphereCollider>(obj->GetCollider())->SetCenter(Vec3(0.f, 0.f, 0.f));
+			obj->AddComponent(meshRenderer);
+			scene->AddGameObject(obj);
+		}
+	#pragma endregion*/
 
 	_LoadText = L"Load Icon";
 	Network::GetInst()->SendLoadProgressPacket((char)400 / 5);

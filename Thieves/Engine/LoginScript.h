@@ -11,6 +11,7 @@ public:
 
 private:
 	float		_speed = 20.f;
+	int32		_resolutionOption = 0;
 
 };
 

@@ -63,4 +63,18 @@ void LoginScript::LateUpdate()
 
 	}
 
+	if (INPUT->GetButtonDown(KEY_TYPE::I))
+	{
+		if (_resolutionOption == 0)
+		{
+			GEngine->ResizeWindow(800, 600);
+			_resolutionOption = 1;
+		}
+		else
+		{
+			GEngine->ResizeWindow(1200, 800);
+			_resolutionOption = 0;
+		}
+	}
+
 }

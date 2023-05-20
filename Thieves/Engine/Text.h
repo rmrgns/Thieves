@@ -29,6 +29,7 @@ public:
 	void SetTextInfo(TEXT_FORMAT infoNumber);
 	// 텍스트 제작 (텍스트 내용, 텍스트 좌표x값, 텍스트 좌표y값, 텍스트 가로크기, 텍스트 세로크기, 화면 크기)
 	void SetText(wstring text, float posX, float posY, float scaleX, float scaleY);
+	void SetBitmapImage(wstring path, float posX, float posY, float scaleX, float scaleY);
 private:
 	ComPtr<ID3D11On12Device>	_d3d11On12Device = nullptr;
 	ComPtr<ID3D11DeviceContext> _d3d11DeviceContext = nullptr;

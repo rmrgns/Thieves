@@ -27,14 +27,12 @@ enum class KEY_TYPE
 	O = 'O',	// temp : GameScene전환
 	P = 'P',	// temp : LoginScene전환
 	L = 'L',
+	I = 'I',
 
 	KEY_1 = '1',
 	KEY_2 = '2',
 	KEY_3 = '3',
 	KEY_4 = '4',
-
-	// packet test
-	//L = 'L',
 
 	ESC = VK_ESCAPE,
 	ENTER = VK_RETURN,

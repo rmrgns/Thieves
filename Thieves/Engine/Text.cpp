@@ -16,26 +16,27 @@ void Text::Init()
 
 void Text::Update()
 {
-
+	WindowInfo window = GEngine->GetWindow();
 	// 텍스트 출력
 	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOGIN)
 	{
 		SetTextInfo(TEXT_FORMAT::DEFALUT);
 		wstring text2 = L"Thieves Login Screen";
-		SetText(text2, 0.f, 10.f, 1.f, 1.f);
+		SetText(text2, 0.f, window.height / 60.f, 1.f, 1.f);
 
 		SetTextInfo(TEXT_FORMAT::LOGIN);
 		wstring text = L"Thieves ID";
-		SetText(text, 500.f, 400.f, 1.f, 1.f);
+		SetText(text, window.width * ( 5.f / 8.f), window.height * (2.f / 3.f), 1.f, 1.f);
 		wstring ID = INPUT->GetUserID();
-		SetText(ID, 500.f, 450.f, 1.f, 1.f);
+		SetText(ID, window.width * (5.f / 8.f), window.height * (3.f / 4.f), 1.f, 1.f);
 
 		wstring text1 = L"Thieves Password";
-		SetText(text1, 500.f, 500.f, 1.f, 1.f);
+		SetText(text1, window.width * (5.f / 8.f), window.height * (5.f / 8.f), 1.f, 1.f);
 		wstring Password = INPUT->GetUserPassword();
-		SetText(Password, 500.f, 550.f, 1.f, 1.f);
+		SetText(Password, window.width * (5.f / 8.f), window.height * (5.5f / 8.f), 1.f, 1.f);
 		//wstring test = L"한글 테스트";
 		//SetText(test, 100.f, 500.f, 1.f, 1.f);
+
 
 	}
 	else if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
@@ -204,5 +205,15 @@ void Text::SetText(wstring text, float posX, float posY, float scaleX, float sca
 	_d2dDeviceContext->SetTransform(matrix);
 	_d2dDeviceContext->DrawTextW(text.c_str(), static_cast<UINT32>(text.size()), _writeTextFormat.Get(), &_rect, _solidColorBrush.Get());
 	
+}
+
+void Text::SetBitmapImage(wstring path, float posX, float posY, float scaleX, float scaleY)
+{
+	wstring _path = path;
+	D2D1::Matrix3x2F matrix{};
+	
+	// HBITMAP _bitMap = CreateBitmap(800.f,600.f,L"",)
+	// _d2dDeviceContext->CreateBitmap(D2d1_SIZE_U();
+	// _d2dDeviceContext->DrawBitmap()
 }
 
