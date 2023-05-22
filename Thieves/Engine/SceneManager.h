@@ -7,6 +7,7 @@ enum class CURRENT_SCENE
 	NONE,
 	LOGIN,
 	LOBBY,
+	ROOM,
 	GAME,
 	LOADING,
 	// ...
@@ -63,6 +64,7 @@ public:
 private:
 	void LoadGameScene();
 	void LoadLoginScene();
+	void LoadRobbyScene();
 	shared_ptr<Scene> LoadLoadingScene();
 
 private:

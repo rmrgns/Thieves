@@ -75,6 +75,9 @@ void SceneManager::LoadScene(wstring sceneName)
 	_activeScene = LoadLoadingScene();
 	_currentScene = CURRENT_SCENE::LOADING;
 
+	_activeScene->Awake();
+	_activeScene->Start();
+
 	if (sceneName == L"LoginScene")
 	{
 		std::thread th{ &SceneManager::LoadLoginScene, this};
@@ -90,8 +93,7 @@ void SceneManager::LoadScene(wstring sceneName)
 		return;
 	}
 
-	_activeScene->Awake();
-	_activeScene->Start();
+
 }
 
 
@@ -642,6 +644,14 @@ void SceneManager::LoadGameScene()
 	_loadProgressScene = scene;
 	_currentLoadProgressScene = CURRENT_SCENE::GAME;
 
+	// 만약 나중에 로딩이 모든 사람들의 로딩이 끝난 뒤 보여야 하는 경우라면 
+	// 이 부분에서 설정해 주어야 한다
+	/*
+	while (true)
+	{
+		SleepEx(0, false);
+	}
+	*/
 	ChangeToLoadedScene();
 }
 
@@ -688,11 +698,12 @@ void SceneManager::LoadLoginScene()
 	{
 		float width = static_cast<float>(GEngine->GetWindow().width);
 		float height = static_cast<float>(GEngine->GetWindow().height);
+		
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
 		obj->SetName(L"LOGINSCREEN");
 		obj->AddComponent(make_shared<Transform>());
 		obj->AddComponent(make_shared<LoginScript>());
-		obj->GetTransform()->SetLocalScale(Vec3(width / 7.0f, height / 7.0f, 100.f));
+		obj->GetTransform()->SetLocalScale(Vec3(width / 15.0f, height / 15.0f, 100.f));
 		obj->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 100.f));
 		obj->SetStatic(false);
 
@@ -777,6 +788,74 @@ void SceneManager::LoadLoginScene()
 }
 
 
+
+
+void SceneManager::LoadRobbyScene()
+{
+	_LoadText = L"Load Start";
+	Network::GetInst()->SendLoadProgressPacket((char)0 / 5);
+#pragma region LayerMask
+	SetLayerName(0, L"Default");
+
+#pragma endregion
+
+	shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+	shared_ptr<Scene> scene = make_shared<Scene>();
+
+	_LoadText = L"Load Main Camera";
+	Network::GetInst()->SendLoadProgressPacket((char)100 / 5);
+#pragma region Camera
+	{
+		shared_ptr<GameObject> camera = make_shared<GameObject>();
+		camera->SetName(L"Main_Camera");
+		camera->AddComponent(make_shared<Transform>());
+		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45��
+
+		camera->GetCamera()->SetFar(10000.f);
+		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+
+		scene->AddGameObject(camera);
+	}
+#pragma endregion
+
+	_LoadText = L"Load Directional Light";
+	Network::GetInst()->SendLoadProgressPacket((char)400 / 5);
+#pragma region Directional Light
+	{
+		shared_ptr<GameObject> light = make_shared<GameObject>();
+		light->AddComponent(make_shared<Transform>());
+		light->GetTransform()->SetLocalPosition(Vec3(0, 1000, 500));
+		light->AddComponent(make_shared<Light>());
+		light->GetLight()->SetLightDirection(Vec3(0, -1, 1.f));
+		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
+		light->GetLight()->SetDiffuse(Vec3(1.f, 1.f, 1.f));
+		light->GetLight()->SetAmbient(Vec3(0.1f, 0.1f, 0.1f));
+		light->GetLight()->SetSpecular(Vec3(0.1f, 0.1f, 0.1f));
+
+		scene->AddGameObject(light);
+	}
+#pragma endregion
+
+	//#pragma region ParticleSystem
+	//	{
+	//		shared_ptr<GameObject> particle = make_shared<GameObject>();
+	//		particle->AddComponent(make_shared<Transform>());
+	//		particle->AddComponent(make_shared<ParticleSystem>());
+	//		particle->SetCheckFrustum(false);
+	//		particle->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 100.f));
+	//		scene->AddGameObject(particle);
+	//	}
+	//#pragma endregion
+
+	_LoadText = L"Load End.";
+	Network::GetInst()->SendLoadEndPacket();
+	scene->SetSceneLoaded(true);
+
+	_loadProgressScene = scene;
+	_currentLoadProgressScene = CURRENT_SCENE::LOGIN;
+
+	ChangeToLoadedScene();
+}
 
 
 

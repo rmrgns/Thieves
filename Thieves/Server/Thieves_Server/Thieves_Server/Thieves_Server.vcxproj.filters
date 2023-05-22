@@ -46,6 +46,9 @@
     <Filter Include="소스 파일\object\map_object">
       <UniqueIdentifier>{da17359a-e99a-4556-a2db-219cc24d9e86}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Robby">
+      <UniqueIdentifier>{b8831e67-0b64-4c44-ad0e-5c20bd84512f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -86,6 +89,15 @@
     </ClCompile>
     <ClCompile Include="map_object.cpp">
       <Filter>소스 파일\object\map_object</Filter>
+    </ClCompile>
+    <ClCompile Include="OBB.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="object\MapManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Lobby.cpp">
+      <Filter>소스 파일\Robby</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +154,15 @@
     </ClInclude>
     <ClInclude Include="map_object.h">
       <Filter>소스 파일\object\map_object</Filter>
+    </ClInclude>
+    <ClInclude Include="OBB.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="object\MapManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Lobby.h">
+      <Filter>소스 파일\Robby</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

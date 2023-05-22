@@ -8,6 +8,7 @@ class MoveObjManager;
 class DB;
 class RoomManager;
 class MapManager;
+class Lobby;
 
 class PacketManager {
 public:
@@ -61,6 +62,7 @@ public:
 	
 
 private:
+	Lobby* m_Lobby;
 	RoomManager* m_room_manager;
 	DB* m_db;
 	MapManager* m_map_manager;

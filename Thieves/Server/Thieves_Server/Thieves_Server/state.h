@@ -21,6 +21,8 @@ enum class STATE {
 	ST_FREE,
 	ST_ACCEPT,
 	ST_LOGIN,
+	ST_INROOM,
+	ST_INROOMREDDY,
 	ST_INGAME
 };
 

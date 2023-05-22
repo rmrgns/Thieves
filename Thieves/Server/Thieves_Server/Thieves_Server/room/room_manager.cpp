@@ -1,6 +1,13 @@
 #include "pch.h"
 #include "room_manager.h"
 #include "room.h"
+#include "object/MapManager.h"
+
+RoomManager::RoomManager()
+{
+	
+}
+
 void RoomManager::InitRoom()
 {
 	for (int i = 0; i < MAX_ROOM_SIZE; ++i)

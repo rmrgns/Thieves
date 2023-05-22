@@ -55,6 +55,18 @@ void Text::Update()
 			SetText(text6, 0.f, 0.f, 1.f, 1.f);
 		}
 	}
+	else if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOBBY)
+	{
+		SetTextInfo(TEXT_FORMAT::DEFALUT);
+		wstring text = L"This Is LOBBY!";
+		SetText(text, 0.f, 0.f, 1.f, 1.f);
+	}
+	else if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::ROOM)
+	{
+		SetTextInfo(TEXT_FORMAT::DEFALUT);
+		wstring text = L"This Is ROOM!";
+		SetText(text, 0.f, 0.f, 1.f, 1.f);
+	}
 	else if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOADING)
 	{
 		SetTextInfo(TEXT_FORMAT::LOADING);

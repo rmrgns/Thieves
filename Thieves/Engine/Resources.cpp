@@ -664,7 +664,7 @@ void Resources::CreateDefaultMaterial()
 
 	// LoginScreen
 	{
-		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Deferred");
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Forward");
 		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"Login", L"..\\Resources\\Texture\\thieves_login.jpg");
 		shared_ptr<Material> material = make_shared<Material>();
 		material->SetShader(shader);
@@ -674,7 +674,7 @@ void Resources::CreateDefaultMaterial()
 
 	// ThiefIcon
 	{
-		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Deferred");
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Forward");
 		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"ThiefIcon", L"..\\Resources\\Texture\\thief_icon.jpg");
 		shared_ptr<Material> material = make_shared<Material>();
 		material->SetShader(shader);

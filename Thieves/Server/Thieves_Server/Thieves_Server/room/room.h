@@ -20,6 +20,8 @@ public:
 	void EnterRoom(int c_id);
 	void ResetRoom();
 
+	void LeaveRoom(int c_id);
+
 	int GetRoomID() { return room_id; }
 	int GetMaxUser() { return max_user; }
 	int GetMaxNPC() { return max_npc; }

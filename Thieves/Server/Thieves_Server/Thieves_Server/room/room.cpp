@@ -36,13 +36,22 @@ void Room::ResetRoom()
 	m_obj_list.clear();
 }
 
+void Room::LeaveRoom(int c_id)
+{
+	if (std::find(m_obj_list.begin(), m_obj_list.end(), c_id) != m_obj_list.end())
+	{
+		
+	}
+}
+
 void Room::SetRoundStartTime()
 {
 	m_start_time = std::chrono::system_clock::now();
 }
 
 float Room::GetRoundTime() {
-	auto time = std::chrono::duration_cast<std::chrono::milliseconds>(m_start_time - std::chrono::system_clock::now());
+	auto time = std::chrono::duration_cast<std::chrono::milliseconds>(m_start_time
+		- std::chrono::system_clock::now());
 	round_time = (float)time.count();
 	round_time /= 1000.0f;
 	return round_time;

@@ -3,10 +3,12 @@
 #include <iostream>
 #include"define.h"
 class Room;
+class MapManager* m_map_manager;
+
 class RoomManager
 {
 public:
-	RoomManager() = default;
+	RoomManager();
 	~RoomManager()
 	{
 		DestroyRoom();

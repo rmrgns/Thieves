@@ -21,6 +21,7 @@ void Device::Init()
 	// - ppDevice : 생성된 장치가 매개변수에 설정
 	::CreateDXGIFactory(IID_PPV_ARGS(&_dxgi));
 
+
 	// CreateDevice
 	// - 디스플레이 어댑터(그래픽 카드)를 나타내는 객체
 	// - pAdapter : nullptr 지정하면 시스템 기본 디스플레이 어댑터

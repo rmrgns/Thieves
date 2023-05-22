@@ -6,6 +6,7 @@
 #include "packet_manager.h"
 #include "room/room_manager.h"
 #include "room/room.h"
+#include "Lobby.h"
 #include "database/db.h"
 #include "object/moveobj_manager.h"
 #include "object/MapManager.h"
@@ -18,6 +19,7 @@ using namespace std;
 PacketManager::PacketManager()
 {
 	MoveObjManager::GetInst();
+	m_Lobby = new Lobby;
 	m_room_manager = new RoomManager;
 	m_map_manager = new MapManager;
 	m_db = new DB;
@@ -27,6 +29,7 @@ PacketManager::PacketManager()
 void PacketManager::Init()
 {
 	MoveObjManager::GetInst()->InitPlayer();
+	m_Lobby->Init();
 	m_room_manager->InitRoom();
 	m_map_manager->LoadMap();
 	m_db->Init();

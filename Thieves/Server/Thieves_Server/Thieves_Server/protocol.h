@@ -34,12 +34,16 @@ constexpr char CS_PACKET_ATTACK = 4;			// 공격
 constexpr char CS_PACKET_CHAT = 5;				// 채팅
 constexpr char CS_PACKET_HIT = 6;				// 피격
 constexpr char CS_PACKET_GAME_START = 7;		// 게임 시작
-constexpr char CS_PACKET_MATCHING = 8;
-constexpr char CS_PACKET_TEST = 9;
+constexpr char CS_PACKET_MATCHING = 8;			// 매칭 -> 현재는 사용 안하기로
+constexpr char CS_PACKET_TEST = 9;				// 패킷 확인용
 constexpr char CS_PACKET_START_JUMP = 10;				// 점프 시작 패킷
 constexpr char CS_PACKET_COMPLETE_JUMP = 11;				// 점프 완료 패킷
-constexpr char CS_PACKET_LOAD_PROGRESSING = 12;
-constexpr char CS_PACKET_LOAD_END = 13;
+constexpr char CS_PACKET_LOAD_PROGRESSING = 12;	// 로딩 중 진행 상황 패킷
+constexpr char CS_PACKET_LOAD_END = 13;			// 로딩 완료 패킷
+constexpr char CS_PACKET_ENTER_ROOM = 14;
+constexpr char CS_PACKET_LEAVE_ROOM = 15;
+constexpr char CS_PACKET_PLAYER_READY = 16;
+constexpr char CS_PACKET_PLAYER_CANCLE_READY = 17;
 
 
 
@@ -65,6 +69,10 @@ constexpr char SC_PACKET_START_JUMP = 18;			// 점프 시작 패킷
 constexpr char SC_PACKET_COMPLETE_JUMP = 19;			// 점프 완료 패킷
 constexpr char SC_PACKET_LOAD_PROGRESS_PERCENT = 20;
 constexpr char SC_PACKET_LOAD_END = 21;
+constexpr char SC_PACKET_ENTER_ROOM = 22;
+constexpr char SC_PACKET_LEAVE_ROOM = 23;
+constexpr char SC_PACKET_PLAYER_READY = 24;
+constexpr char SC_PACKET_PLAYER_CANCLE_READY;
 //#pragma pack (push, 1)
 
 // 클라이언트 -> 서버로 보내는 패킷은 어떤 키를 얼마나 눌렀는지에 대해서만 보내주면 된다.
