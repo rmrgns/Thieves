@@ -1,5 +1,5 @@
 #pragma once
-#include <vector>
+#include <unordered_set>
 
 class RoomManager;
 
@@ -15,8 +15,10 @@ public:
 
 	void LeaveLobby(int c_id);
 
+	std::unordered_set<int>& GetPlayerList() { return player_list; };
+
 private:
-	std::vector<int> player_list;
+	std::unordered_set<int> player_list;
 
 
 };

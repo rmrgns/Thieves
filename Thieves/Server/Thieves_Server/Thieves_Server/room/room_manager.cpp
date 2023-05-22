@@ -27,7 +27,7 @@ int RoomManager::GetEmptyRoom()
 		r->m_state_lock.lock();
 		if (ROOM_STATE::RT_FREE == r->GetState())
 		{
-			r->SetState(ROOM_STATE::RT_INGAME);
+			r->SetState(ROOM_STATE::RT_USED);
 			r->m_state_lock.unlock();
 			return r->GetRoomID();
 		}

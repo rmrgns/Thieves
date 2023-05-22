@@ -44,6 +44,7 @@ constexpr char CS_PACKET_ENTER_ROOM = 14;
 constexpr char CS_PACKET_LEAVE_ROOM = 15;
 constexpr char CS_PACKET_PLAYER_READY = 16;
 constexpr char CS_PACKET_PLAYER_CANCLE_READY = 17;
+constexpr char CS_PACKET_PLAYER_LOG_OUT = 18;	// 로그아웃
 
 
 
@@ -72,7 +73,8 @@ constexpr char SC_PACKET_LOAD_END = 21;
 constexpr char SC_PACKET_ENTER_ROOM = 22;
 constexpr char SC_PACKET_LEAVE_ROOM = 23;
 constexpr char SC_PACKET_PLAYER_READY = 24;
-constexpr char SC_PACKET_PLAYER_CANCLE_READY;
+constexpr char SC_PACKET_PLAYER_CANCLE_READY = 25;
+constexpr char SC_PACKET_LOG_OUT_OK = 26;
 //#pragma pack (push, 1)
 
 // 클라이언트 -> 서버로 보내는 패킷은 어떤 키를 얼마나 눌렀는지에 대해서만 보내주면 된다.
@@ -139,6 +141,31 @@ struct cs_packet_load_end {
 	char type;
 };
 
+struct cs_packet_enter_room {
+	unsigned char size;
+	char type;
+	int room_id;
+};
+
+struct cs_packet_leave_room {
+	unsigned char size;
+	char type;
+};
+
+struct cs_packet_player_ready {
+	unsigned char size;
+	char type;
+};
+
+struct cs_packet_player_cancle_ready {
+	unsigned char size;
+	char type;
+};
+
+struct cs_packet_player_log_out {
+	unsigned char size;
+	char type;
+};
 
 //------------------------------------------------------------------
 
@@ -250,6 +277,36 @@ struct sc_packet_load_progress_percent {
 };
 
 struct sc_packet_load_end {
+	unsigned char size;
+	char type;
+	int id;
+};
+
+struct sc_packet_enter_room {
+	unsigned char size;
+	char type;
+	int id;
+};
+
+struct sc_packet_leave_room {
+	unsigned char size;
+	char type;
+	int id;
+};
+
+struct sc_packet_player_ready {
+	unsigned char size;
+	char type;
+	int id;
+};
+
+struct sc_packet_player_cancle_ready {
+	unsigned char size;
+	char type;
+	int id;
+};
+
+struct sc_packet_log_out {
 	unsigned char size;
 	char type;
 	int id;

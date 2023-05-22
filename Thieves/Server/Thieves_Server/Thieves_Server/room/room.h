@@ -1,5 +1,6 @@
 #pragma once
 #include<vector>
+#include<unordered_set>
 #include<mutex>
 #include<atomic>
 #include<chrono>
@@ -35,7 +36,12 @@ public:
 	float GetRoundTime();
 	void SetRound(int val) { curr_round = val; }
 
-	std::vector<int>& GetObjList()
+	bool IsPlayerReady(int c_id) { return m_ready_player_list.contains(c_id); }
+
+	void PlayerReady(int c_id) { m_ready_player_list.insert(c_id); }
+	void PlayerCancleReady(int c_id) { m_ready_player_list.erase(c_id); }
+
+	std::unordered_set<int>& GetObjList()
 	{
 		return m_obj_list;
 	}
@@ -47,7 +53,8 @@ private:
 	ROOM_STATE m_room_state;
 	int max_npc;
 	int curr_round;
-	std::vector<int>m_obj_list;
+	std::unordered_set<int>m_obj_list;
+	std::unordered_set<int>m_ready_player_list;
 	std::chrono::system_clock::time_point m_start_time;
 	float round_time;
 };

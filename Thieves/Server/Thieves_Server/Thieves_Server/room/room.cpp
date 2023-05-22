@@ -7,7 +7,7 @@ Room::Room(int room_id)
 {
 	m_start_time = chrono::system_clock::now();
 	m_room_state = ROOM_STATE::RT_FREE;
-	m_obj_list.reserve(100);
+	m_obj_list.reserve(max_user + max_npc);
 }
 
 Room::~Room()
@@ -23,7 +23,7 @@ void Room::Init(int user_num)
 
 void Room::EnterRoom(int c_id)
 {
-	m_obj_list.push_back(c_id);
+	m_obj_list.insert(c_id);
 }
 
 void Room::ResetRoom()
@@ -38,10 +38,20 @@ void Room::ResetRoom()
 
 void Room::LeaveRoom(int c_id)
 {
-	if (std::find(m_obj_list.begin(), m_obj_list.end(), c_id) != m_obj_list.end())
+	if (m_obj_list.contains(c_id))
 	{
-		
+		m_obj_list.erase(c_id);
 	}
+
+
+	
+	if (m_obj_list.empty())
+	{
+		m_state_lock.lock();
+		m_room_state = ROOM_STATE::RT_FREE;
+		m_state_lock.unlock();
+	}
+	
 }
 
 void Room::SetRoundStartTime()

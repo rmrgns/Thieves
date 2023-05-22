@@ -46,6 +46,12 @@ public:
 
 	void SendLoadEnd(int c_id, int p_id);
 
+	void SendEnterRoom(int c_id, int p_id);
+	void SendLeaveRoom(int c_id, int p_id);
+	void SendPlayerReady(int c_id, int p_id);
+	void SendPlayerCancleReady(int c_id, int p_id);
+
+
 	void End();
 	void Disconnect(int c_id);
 	bool IsRoomInGame(int room_id);
@@ -81,6 +87,11 @@ private:
 	void ProcessGameStart(int c_id, unsigned char* p);
 	void ProcessLoadProgressing(int c_id, unsigned char* p);
 	void ProcessLoadEnd(int c_id, unsigned char* p);
+	void ProcessEnterRoom(int c_id, unsigned char* p);
+	void ProcessLeaveRoom(int c_id, unsigned char* p);
+	void ProcessPlayerReady(int c_id, unsigned char* p);
+	void ProcessPlayerCancleReady(int c_id, unsigned char* p);
+	void ProvessLogOut(int c_id, unsigned char* p);
 	void ProcessDamageCheat(int c_id, unsigned char* p);
 	void StartGame(int room_id);
 
