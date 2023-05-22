@@ -743,7 +743,13 @@ void PacketManager::ProcessLeaveRoom(int c_id, unsigned char* p)
 	// 플레이어는 데이터를 바꿨는데 룸에서는 안바뀐거임.
 	if (!room->GetObjList().contains(c_id)) return;
 
+	player->state_lock.lock();
+	player->SetRoomID(c_id);
+	player->state_lock.unlock();
+
+	room->m_state_lock.lock();
 	room->LeaveRoom(c_id);
+	room->m_state_lock.unlock();
 
 	if (room->GetState() != ROOM_STATE::RT_FREE)
 	{
