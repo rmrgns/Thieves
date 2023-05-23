@@ -78,6 +78,8 @@ constexpr char SC_PACKET_PLAYER_READY = 24;
 constexpr char SC_PACKET_PLAYER_CANCLE_READY = 25;
 constexpr char SC_PACKET_LOG_OUT_OK = 26;
 constexpr char SC_PACKET_ALL_PLAYER_LOAD_END = 27;
+constexpr char SC_PACKET_ROOMS_DATA_FOR_LOBBY = 28;
+constexpr char SC_PACKET_ROOMS_DATA_FOR_ROOM = 29;
 //#pragma pack (push, 1)
 
 // 클라이언트 -> 서버로 보내는 패킷은 어떤 키를 얼마나 눌렀는지에 대해서만 보내주면 된다.
@@ -170,11 +172,15 @@ struct cs_packet_player_log_out {
 	char type;
 };
 
-struct cs_packet_all_player_load_end {
+struct cs_packet_request_rooms_data_for_lobby {
 	unsigned char size;
 	char type;
 };
 
+struct cs_packet_request_rooms_data_for_room {
+	unsigned char size;
+	char type;
+};
 
 //------------------------------------------------------------------
 
@@ -319,4 +325,24 @@ struct sc_packet_log_out {
 	unsigned char size;
 	char type;
 	int id;
+};
+
+struct sc_packet_all_player_load_end {
+	unsigned char size;
+	char type;
+};
+
+struct sc_packet_rooms_data_for_lobby {
+	unsigned char size;
+	char type;
+	int roomID;
+};
+
+struct sc_packet_rooms_data_for_room {
+	unsigned char size;
+	char type;
+	int userId[8];
+	char userName[8][MAX_NAME_SIZE];
+
+
 };
