@@ -19,7 +19,11 @@ public:
 	int GetEmptyRoom();
 	Room* GetRoom(int r_id) { return m_rooms[r_id]; }
 
+	std::array<Room*, MAX_ROOM_SIZE>& GetRooms() {
+		return m_rooms;
+	}
+
 private:
-	std::array<Room*, MAX_ROOM_SIZE>m_rooms;
+	std::array<Room*, MAX_ROOM_SIZE> m_rooms;
 
 };

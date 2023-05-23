@@ -5,6 +5,7 @@ using namespace std;
 
 Room::Room(int room_id)
 {
+	m_room_id = room_id;
 	m_start_time = chrono::system_clock::now();
 	m_room_state = ROOM_STATE::RT_FREE;
 	m_obj_list.reserve(max_user + max_npc);

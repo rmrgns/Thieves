@@ -64,7 +64,8 @@ public:
 private:
 	void LoadGameScene();
 	void LoadLoginScene();
-	void LoadRobbyScene();
+	void LoadLobbyScene();
+	void LoadRoomScene();
 	shared_ptr<Scene> LoadLoadingScene();
 
 private:

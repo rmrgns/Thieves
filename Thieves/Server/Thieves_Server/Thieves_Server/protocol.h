@@ -8,10 +8,11 @@ constexpr int MAX_NAME_SIZE = 20;		// 아이디 사이즈
 constexpr int MAX_PASSWORD_SIZE = 20;	// 비밀 번호 사이즈
 constexpr int MAX_CHAT_SIZE = 100;		// 채팅 사이즈
 
-constexpr int MAX_ROOM_SIZE = 8;		// 방 최대 크기
+constexpr int MAX_ROOM_SIZE = 8;		// 방 최대 개수
 
 constexpr int MAX_USER = MAX_ROOM_SIZE * 8;		// 동접 가능 인원
 
+// 룸 하나의 최대 인원
 constexpr int USER_NUM = 8;
 // 수정
 constexpr float FOV_RANGE = 0.f;
@@ -25,6 +26,13 @@ constexpr int PLAYER_DAMAGE = 1;	// 플레이어 DMG
 // 플레이어 이동거리
 // 플레이어 공격 사거리
 // ID
+
+//--------- 여기는 서버에서 클라이언트에게 에러 코드를 전달해 줄때 어떤 에러인지 알려주는 용도
+constexpr int ERROR_GAME_IN_PROGRESS = 1;		// 게임이 진행중인 방에 들어가려고 했을 때
+constexpr int ERROR_ROOM_IS_FULL = 2;			// 룸 안에 사람이 가득 차있는 경우
+
+//---------
+
 
 // CS
 constexpr char CS_PACKET_SIGN_IN = 1;			// 로그인
@@ -46,7 +54,7 @@ constexpr char CS_PACKET_PLAYER_READY = 16;
 constexpr char CS_PACKET_PLAYER_CANCLE_READY = 17;
 constexpr char CS_PACKET_PLAYER_LOG_OUT = 18;	// 로그아웃
 constexpr char CS_PACKET_REQUEST_ROOMS_DATA_FOR_LOBBY = 19; // 로비에서 보여줄 데이터를 받기
-constexpr char CS_PACKET_REQUEST_ROOMS_DATA_FOR_ROOM = 19; // 룸에서 보여줄 데이터를 받기
+constexpr char CS_PACKET_REQUEST_ROOMS_DATA_FOR_ROOM = 20; // 룸에서 보여줄 데이터를 받기
 
 
 
@@ -70,16 +78,20 @@ constexpr char SC_PACKET_TEST = 16;
 constexpr char SC_PACKET_OBJ_INFO = 17;		// OBJ 정보
 constexpr char SC_PACKET_START_JUMP = 18;			// 점프 시작 패킷
 constexpr char SC_PACKET_COMPLETE_JUMP = 19;			// 점프 완료 패킷
-constexpr char SC_PACKET_LOAD_PROGRESS_PERCENT = 20;
-constexpr char SC_PACKET_LOAD_END = 21;
-constexpr char SC_PACKET_ENTER_ROOM = 22;
-constexpr char SC_PACKET_LEAVE_ROOM = 23;
-constexpr char SC_PACKET_PLAYER_READY = 24;
-constexpr char SC_PACKET_PLAYER_CANCLE_READY = 25;
-constexpr char SC_PACKET_LOG_OUT_OK = 26;
-constexpr char SC_PACKET_ALL_PLAYER_LOAD_END = 27;
-constexpr char SC_PACKET_ROOMS_DATA_FOR_LOBBY = 28;
-constexpr char SC_PACKET_ROOMS_DATA_FOR_ROOM = 29;
+constexpr char SC_PACKET_LOAD_PROGRESS_PERCENT = 20;	// 게임 로딩중 진행도 패킷
+constexpr char SC_PACKET_LOAD_END = 21; // 게임 로딩 완료 패킷. 플레이어 하나에 대한 패킷이므로, 모두 끝난 경우는 ALL_PLAYER_LOAD_END로 해주어야 한다
+constexpr char SC_PACKET_ENTER_ROOM = 22; // 클라이언트가 룸으로 들어갈 때 줄 패킷
+constexpr char SC_PACKET_LEAVE_ROOM = 23; // 클라이언트가 룸에서 나갈 때 줄 패킷
+constexpr char SC_PACKET_PLAYER_READY = 24; // 클라이언트가 룸 안에서 레디를 했을 때 줄 패킷
+constexpr char SC_PACKET_PLAYER_CANCLE_READY = 25; // 클라이언트가 룸 안에서 레디를 취소 했을 때 패킷
+constexpr char SC_PACKET_LOG_OUT_OK = 26; // 클라이언트가 로그아웃 했을 때 줄 패킷
+constexpr char SC_PACKET_ALL_PLAYER_LOAD_END = 27; // 모든 플레이어가 로딩이 끝났을 때 줄 패킷
+constexpr char SC_PACKET_ROOMS_DATA_FOR_LOBBY = 28; // 플레이어가 로비에 들어 갔을 때 룸 들에 대한 정보를 줄 패킷
+constexpr char SC_PACKET_ROOMS_DATA_FOR_LOBBY_END = 29; // 위의 패킷에서 룸당 하나씩 보내줄 것이므로 끝났음을 표시해 주어야 함. (WSASend가 많이 불리므로 나중에 고쳐야 할 수도 잇다.)
+constexpr char SC_PACKET_ROOMS_DATA_FOR_ROOM = 30; // 플레이어가 룸에 들어 갔을 때 룸 내부의 정보를 줄 패킷
+constexpr char SC_PACKET_ROOMS_DATA_FOR_ROOM_END = 31; // LOBBY_END와 비슷하게 끝났음을 알리는 패킷. (이것도 마찬가지로 WSASend가 많이 불리게 되므로 고쳐야 할 수도 잇음)
+constexpr char SC_PACKET_ERROR = 32; // 어떤 식으로든 에러를 보내야 할때
+
 //#pragma pack (push, 1)
 
 // 클라이언트 -> 서버로 보내는 패킷은 어떤 키를 얼마나 눌렀는지에 대해서만 보내주면 된다.
@@ -336,13 +348,30 @@ struct sc_packet_rooms_data_for_lobby {
 	unsigned char size;
 	char type;
 	int roomID;
+	char playerNum;
+	bool isInGame;
+};
+
+struct sc_packet_rooms_data_for_lobby_end {
+	unsigned char size;
+	char type;
 };
 
 struct sc_packet_rooms_data_for_room {
 	unsigned char size;
 	char type;
-	int userId[8];
-	char userName[8][MAX_NAME_SIZE];
+	int userId;
+	char userName[MAX_NAME_SIZE];
 
+};
 
+struct sc_packet_rooms_data_for_room_end {
+	unsigned char size;
+	char type;
+};
+
+struct sc_packet_error {
+	unsigned char size;
+	char type;
+	char err_type;
 };

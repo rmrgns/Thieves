@@ -51,6 +51,12 @@ public:
 	void SendPlayerReady(int c_id, int p_id);
 	void SendPlayerCancleReady(int c_id, int p_id);
 
+	void SendRoomsDataForLobby(int c_id, int room_id);
+	void SendRoomsDataForLobbyEnd(int c_id);
+	void SendRoomsDataForRoom(int c_id, int p_id);
+	void SendRoomsDataForRoomEnd(int c_id);
+	void SendError(int c_id, int err_type);
+
 
 	void End();
 	void Disconnect(int c_id);
@@ -92,6 +98,8 @@ private:
 	void ProcessPlayerReady(int c_id, unsigned char* p);
 	void ProcessPlayerCancleReady(int c_id, unsigned char* p);
 	void ProcessLogOut(int c_id, unsigned char* p);
+	void ProcessRoomsDataInLobby(int c_id, unsigned char* p);
+	void ProcessRoomsDataInRoom(int c_id, unsigned char* p);
 	void ProcessDamageCheat(int c_id, unsigned char* p);
 	void StartGame(int room_id);
 

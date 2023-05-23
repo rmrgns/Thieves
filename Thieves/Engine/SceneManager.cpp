@@ -790,7 +790,7 @@ void SceneManager::LoadLoginScene()
 
 
 
-void SceneManager::LoadRobbyScene()
+void SceneManager::LoadLobbyScene()
 {
 	_LoadText = L"Load Start";
 	Network::GetInst()->SendLoadProgressPacket((char)0 / 5);
@@ -855,6 +855,11 @@ void SceneManager::LoadRobbyScene()
 	_currentLoadProgressScene = CURRENT_SCENE::LOGIN;
 
 	ChangeToLoadedScene();
+}
+
+void SceneManager::LoadRoomScene()
+{
+
 }
 
 

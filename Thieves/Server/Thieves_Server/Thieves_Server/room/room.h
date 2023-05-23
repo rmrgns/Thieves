@@ -23,7 +23,7 @@ public:
 
 	void LeaveRoom(int c_id);
 
-	int GetRoomID() { return room_id; }
+	int GetRoomID() { return m_room_id; }
 	int GetMaxUser() { return max_user; }
 	int GetMaxNPC() { return max_npc; }
 	int GetRound() { return curr_round; }
@@ -41,6 +41,16 @@ public:
 	void PlayerReady(int c_id) { m_ready_player_list.insert(c_id); }
 	void PlayerCancleReady(int c_id) { m_ready_player_list.erase(c_id); }
 
+	int GetNumberOfPlayer() {
+		int num = 0;
+		for (int pl : m_obj_list)
+		{
+			if (true == MoveObjManager::GetInst()->IsPlayer(pl)) num++;
+		}
+
+		return num;
+	}
+
 	std::unordered_set<int>& GetObjList()
 	{
 		return m_obj_list;
@@ -48,7 +58,7 @@ public:
 
 	std::mutex m_state_lock;
 private:
-	int room_id;
+	int m_room_id;
 	int max_user;
 	ROOM_STATE m_room_state;
 	int max_npc;

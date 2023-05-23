@@ -89,6 +89,15 @@ void PacketManager::ProcessPacket(int c_id, unsigned char* p)
 	case CS_PACKET_PLAYER_CANCLE_READY: {
 		break;
 	}
+	case CS_PACKET_PLAYER_LOG_OUT: {
+		break;
+	}
+	case CS_PACKET_REQUEST_ROOMS_DATA_FOR_LOBBY: {
+		break;
+	}
+	case CS_PACKET_REQUEST_ROOMS_DATA_FOR_ROOM: {
+		break;
+	}
 	case CS_PACKET_TEST: {
 		//ProcessTest(c_id, p);
 		break;
@@ -360,6 +369,70 @@ void PacketManager::SendPlayerCancleReady(int c_id, int p_id)
 	packet.type = SC_PACKET_PLAYER_CANCLE_READY;
 	packet.size = sizeof(packet);
 	packet.id = p_id;
+
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
+}
+
+void PacketManager::SendRoomsDataForLobby(int c_id, int room_id)
+{
+	sc_packet_rooms_data_for_lobby packet;
+	packet.type = SC_PACKET_ROOMS_DATA_FOR_LOBBY;
+	packet.size = sizeof(packet);
+	packet.roomID = room_id;
+
+	Room* room = m_room_manager->GetRoom(room_id);
+
+	packet.playerNum = room->GetNumberOfPlayer();
+	packet.isInGame = room->GetState() == ROOM_STATE::RT_INGAME ? true : false;
+
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
+}
+
+void PacketManager::SendRoomsDataForLobbyEnd(int c_id)
+{
+	sc_packet_rooms_data_for_lobby_end packet;
+	packet.type = SC_PACKET_ROOMS_DATA_FOR_LOBBY_END;
+	packet.size = sizeof(packet);
+
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
+}
+
+void PacketManager::SendRoomsDataForRoom(int c_id, int p_id)
+{
+	sc_packet_rooms_data_for_room packet;
+	packet.type = SC_PACKET_ROOMS_DATA_FOR_ROOM;
+	packet.size = sizeof(packet);
+	packet.userId = p_id;
+	char* name = MoveObjManager::GetInst()->GetPlayer(p_id)->GetName();
+
+	for (int i = 0; i < MAX_NAME_SIZE; ++i) {
+		packet.userName[i] = name[i];
+		if (name[i] == '\0') { break; }	
+	}
+
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
+}
+
+void PacketManager::SendRoomsDataForRoomEnd(int c_id)
+{
+	sc_packet_rooms_data_for_room_end packet;
+	packet.type = SC_PACKET_ROOMS_DATA_FOR_ROOM_END;
+	packet.size = sizeof(packet);
+
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
+}
+
+void PacketManager::SendError(int c_id, int err_type)
+{
+	sc_packet_error packet;
+	packet.type = SC_PACKET_ERROR;
+	packet.size = sizeof(packet);
+	packet.err_type = err_type;
 
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 	cl->DoSend(sizeof(packet), &packet);
@@ -707,10 +780,22 @@ void PacketManager::ProcessEnterRoom(int c_id, unsigned char* p)
 	else
 	{
 		room = m_room_manager->GetRoom(packet->room_id);
+
+		if (room->GetState() == ROOM_STATE::RT_INGAME) {
+			SendError(c_id, ERROR_GAME_IN_PROGRESS);
+			return;
+		}
+
+		if (room->GetNumberOfPlayer() >= USER_NUM) {
+			SendError(c_id, ERROR_ROOM_IS_FULL);
+			return;
+		}
 	}
 
+
+
 	player->state_lock.lock();
-	player->SetRoomID(c_id);
+	player->SetRoomID(room->GetRoomID());
 	player->state_lock.unlock();
 	room->m_state_lock.lock();
 	room->EnterRoom(c_id);
@@ -809,6 +894,34 @@ void PacketManager::ProcessLogOut(int c_id, unsigned char* p)
 	player->state_lock.lock();
 	player->SetState(STATE::ST_ACCEPT);
 	player->state_lock.unlock();
+}
+
+void PacketManager::ProcessRoomsDataInLobby(int c_id, unsigned char* p)
+{
+	for (Room* room : m_room_manager->GetRooms())
+	{
+		if (room->GetState() == ROOM_STATE::RT_FREE) continue;
+		
+		SendRoomsDataForLobby(c_id, room->GetRoomID());
+	}
+
+	SendRoomsDataForLobbyEnd(c_id);
+}
+
+void PacketManager::ProcessRoomsDataInRoom(int c_id, unsigned char* p)
+{
+	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
+
+	Room* room = m_room_manager->GetRoom(player->GetRoomID());
+
+	for (int pl : room->GetObjList())
+	{
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+
+		SendRoomsDataForRoom(c_id, pl);
+	}
+
+	SendRoomsDataForRoomEnd(c_id);
 }
 
 void PacketManager::ProcessDamageCheat(int c_id, unsigned char* p)
