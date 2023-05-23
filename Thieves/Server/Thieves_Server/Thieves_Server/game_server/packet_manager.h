@@ -1,8 +1,9 @@
 #pragma once
 #include "define.h"
-#include "CollisionDetection.hpp"
+//#include "CollisionDetection.hpp"
 #include<concurrent_queue.h>
 #include <thread>
+#include "CBox.h"
 
 class MoveObjManager;
 class DB;
@@ -72,11 +73,5 @@ private:
 	void ProcessMatching(int c_id, unsigned char* p);
 	void ProcessHit(int c_id, unsigned char* p);
 	void ProcessGameStart(int c_id, unsigned char* p);
-	void ProcessDamageCheat(int c_id, unsigned char* p);
 	void StartGame(int room_id);
-
-	// Test 
-	void TestProcessGameStart(int c_id, unsigned char* p);
-	void TestProcessMove(int c_id, unsigned char* p);
-	void TestStartGame(int room_id);
 };

@@ -15,5 +15,5 @@ public:
 	~MapObj() = default;
 
 private:
-	OBB m_boundingBox;
+//	OBB m_boundingBox;
 };

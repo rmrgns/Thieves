@@ -2,8 +2,10 @@
 #include <vector>
 
 #include "OBB.h"
-#include "map_object.h"
-#include "c_box.h"
+#include "CBox.h"
+#include "collision_detection.h"
+
+#//include "c_box.h"
 
 
 class MapManager
@@ -14,10 +16,10 @@ public:
 
 	void LoadMap();
 	
-	bool isCollision(OBB& playerObb);
+	
+	bool checkCollision(CBox& playerBox);
 
 private:
-	std::vector<std::shared_ptr<OBB>> MapObjs;
-	std::vector<std::shared_ptr<ColliderBox>>c_box;
+	std::vector<std::shared_ptr<CBox>> MapCBox;
 };
 

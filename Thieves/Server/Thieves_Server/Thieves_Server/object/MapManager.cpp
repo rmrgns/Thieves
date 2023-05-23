@@ -3,6 +3,8 @@
 #include <string>
 #include <algorithm>
 #include "MapManager.h"
+#include "CBox.h"
+
 
 void MapManager::LoadMap()
 {
@@ -18,60 +20,67 @@ void MapManager::LoadMap()
 		auto reader = words.begin();
 
 		//start 와 end
-		reader++; 
 		reader++;
+		reader++;
+		
+		float centerCBox[3] {};
+		float extentCBox[3]{};
+		float axisCBox[3][3]{};
 
-		//center
-		Vector3 center = Vector3();
-		center.x = std::stof((*reader)) * -100.0f; reader++;
-		center.y = std::stof((*reader)) * 100.0f; reader++;
-		center.z = std::stof((*reader)) * -100.0f; reader++;
+		
 
+		//center		
+		centerCBox[0] = std::stof((*reader)) * -100.0f; reader++;
+		centerCBox[1] = std::stof((*reader)) * 100.0f; reader++;
+		centerCBox[2] = std::stof((*reader)) * -100.0f; reader++;
+		
 		//extent
-		reader++;
-
-		Vector3 extent = Vector3();
-		extent.x = std::stof((*reader)) * 100.0f; reader++;
-		extent.y = std::stof((*reader)) * 100.0f; reader++;
-		extent.z = std::stof((*reader)) * 100.0f; reader++;
-
+		reader++;	
+		
+		extentCBox[0] = std::stof((*reader)) * 1000.0f; reader++;
+		extentCBox[1] = std::stof((*reader)) * 1000.0f; reader++;
+		extentCBox[2] = std::stof((*reader)) * 1000.0f; reader++;
 		//up
 		reader++;
 
-		Vector3 up = Vector3();
-		up.x = std::stof((*reader)); reader++;
-		up.y = std::stof((*reader)); reader++;
-		up.z = std::stof((*reader)); reader++;
-
+		axisCBox[1][0] = std::stof((*reader)); reader++;
+		axisCBox[1][1] = std::stof((*reader)); reader++;
+		axisCBox[1][2] = std::stof((*reader)); reader++;
 		//right
 		reader++;
 
-		Vector3 right = Vector3();
-		right.x = std::stof((*reader)); reader++;
-		right.y = std::stof((*reader)); reader++;
-		right.z = std::stof((*reader)); reader++;
 
-		//right
+//		float rightCBox[3];
+		axisCBox[0][0] = std::stof((*reader)); reader++;
+		axisCBox[0][1] = std::stof((*reader)); reader++;
+		axisCBox[0][2] = std::stof((*reader)); reader++;
+
+		//look
 		reader++;
 
-		Vector3 look = Vector3();
-		look.x = std::stof((*reader)); reader++;
-		look.y = std::stof((*reader)); reader++;
-		look.z = std::stof((*reader)); reader++;
+		axisCBox[2][0] = std::stof((*reader)); reader++;
+		axisCBox[2][1] = std::stof((*reader)); reader++;
+		axisCBox[2][2] = std::stof((*reader)); reader++;
 
-		MapObjs.push_back(std::make_shared<OBB>(center, extent, up, right, look));
-
+		float translation[3] = { 0.0f, 0.0f, 0.0f };
+		MapCBox.push_back(std::make_shared<CBox>(centerCBox, extentCBox,axisCBox , translation));
 		words.erase(words.begin(), next);
 	}
 
 }
 
-bool MapManager::isCollision(OBB& playerObb)
+
+// true이면 충돌 
+bool MapManager::checkCollision(CBox& playerBox)
 {
-	for (auto& obj : MapObjs)
+	for (auto& obj : MapCBox)
 	{
-		if (obj->ObbIntersectWithBox(playerObb)) return true;
+		if (obj->BoxBoxIntersection(playerBox))
+		{
+			// 충돌했어.
+			return true;
+		}
 	}
-	
+	// 충돌안했어
 	return false;
 }

@@ -146,6 +146,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Astar.cpp" />
+    <ClCompile Include="CBox.cpp" />
+    <ClCompile Include="CBox.h" />
     <ClCompile Include="collision_detection.cpp" />
     <ClCompile Include="database\db.cpp" />
     <ClCompile Include="game_server\ingame_server.cpp" />
@@ -165,7 +167,6 @@
   <ItemGroup>
     <ClInclude Include="Astar.h" />
     <ClInclude Include="collision_detection.h" />
-    <ClInclude Include="c_box.h" />
     <ClInclude Include="database\db.h" />
     <ClInclude Include="define.h" />
     <ClInclude Include="game_server\ingame_server.h" />
