@@ -10,8 +10,6 @@ public:
 	//virtual void ProcessSend(const SOCKET& s_socket, shared_ptr<MessageEventInfo>& message) {};
 	
 	// Send
-	virtual void SendMovePacket(const SOCKET& s_socket, char direction,
-		Vec3 pos, Vec3 vec, float deltatime, char action_type) {};
 	virtual void SendStartPacket(const SOCKET& s_socket) {};
 
 

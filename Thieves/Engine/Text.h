@@ -1,5 +1,11 @@
 #pragma once
 
+enum class TEXT_FORMAT {
+	DEFALUT,
+	LOGIN,
+	LOADING
+};
+
 class Text
 {
 public:
@@ -20,7 +26,7 @@ public:
 
 	// Update에 추가하는 화면에 텍스트를 그리는 함수들
 	// 텍스트 설정 (n값으로 텍스트 설정값 변경)
-	void SetTextInfo(int infoNumber);
+	void SetTextInfo(TEXT_FORMAT infoNumber);
 	// 텍스트 제작 (텍스트 내용, 텍스트 좌표x값, 텍스트 좌표y값, 텍스트 가로크기, 텍스트 세로크기, 화면 크기)
 	void SetText(wstring text, float posX, float posY, float scaleX, float scaleY);
 private:

@@ -9,7 +9,7 @@ void Text::Init()
 {
 	CreateD3D11On12Device();
 	CreateD2DDevice();
-	SetTextInfo(0);
+	SetTextInfo(TEXT_FORMAT::DEFALUT);
 	_rect = D2D1::RectF(0.0f, 0.0f, GEngine->GetWindow().width, GEngine->GetWindow().height);
 
 }
@@ -20,11 +20,11 @@ void Text::Update()
 	// 텍스트 출력
 	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOGIN)
 	{
-		SetTextInfo(1);
+		SetTextInfo(TEXT_FORMAT::DEFALUT);
 		wstring text2 = L"Thieves Login Screen";
 		SetText(text2, 0.f, 10.f, 1.f, 1.f);
 
-		SetTextInfo(0);
+		SetTextInfo(TEXT_FORMAT::LOGIN);
 		wstring text = L"Thieves ID";
 		SetText(text, 500.f, 400.f, 1.f, 1.f);
 		wstring ID = INPUT->GetUserID();
@@ -45,15 +45,20 @@ void Text::Update()
 		SetText(text2, 0.f, 0.f, 1.f, 1.f);*/
 
 		if (GEngine->GetThievesPacketManager()->GetRecv()) {
-			SetTextInfo(1);
+			SetTextInfo(TEXT_FORMAT::DEFALUT);
 			wstring text5 = L"TRUE";
 			SetText(text5, 0.f, 0.f, 1.f, 1.f);
 		}
 		else {
-			SetTextInfo(1);
+			SetTextInfo(TEXT_FORMAT::DEFALUT);
 			wstring text6 = L"FALSE";
 			SetText(text6, 0.f, 0.f, 1.f, 1.f);
 		}
+	}
+	else if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOADING)
+	{
+		SetTextInfo(TEXT_FORMAT::LOADING);
+		SetText(GET_SINGLE(SceneManager)->GetLoadText(), 0.f, 0.f, 1.f, 1.f);
 	}
 } 
 
@@ -148,11 +153,11 @@ void Text::Render2D()
 	_d3d11DeviceContext->Flush();
 }
 
-void Text::SetTextInfo(int infoNumber)
+void Text::SetTextInfo(TEXT_FORMAT infoNumber)
 {
 	switch (infoNumber)
 	{
-	case 0:
+	case TEXT_FORMAT::LOGIN:
 		// 텍스트 색깔
 		ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Crimson), _solidColorBrush.GetAddressOf()));
 
@@ -164,7 +169,7 @@ void Text::SetTextInfo(int infoNumber)
 		//_writeTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 		//_writeTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 		break;
-	case 1:
+	case TEXT_FORMAT::DEFALUT:
 		// 텍스트 색깔
 		ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), _solidColorBrush.GetAddressOf()));
 
@@ -173,6 +178,15 @@ void Text::SetTextInfo(int infoNumber)
 			DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_ITALIC, DWRITE_FONT_STRETCH_NORMAL,
 			50, L"en-us", _writeTextFormat.GetAddressOf()));
 
+		break;
+	case TEXT_FORMAT::LOADING:
+		// 텍스트 색깔
+		ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), _solidColorBrush.GetAddressOf()));
+
+		// 텍스트 폰트 등
+		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"Verdana", nullptr,
+			DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_ITALIC, DWRITE_FONT_STRETCH_NORMAL,
+			25, L"en-us", _writeTextFormat.GetAddressOf()));
 		break;
 	default:
 		break;

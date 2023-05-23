@@ -25,11 +25,12 @@ public:
 	int GetMaxNPC() { return max_npc; }
 	int GetRound() { return curr_round; }
 	
-	std::chrono::system_clock::time_point GetRoundTime() { return m_round_time; }
+	std::chrono::system_clock::time_point GetStartRoundTime() { return m_start_time; }
 	ROOM_STATE GetState() { return m_room_state; }
 
 	void SetState(ROOM_STATE val) { m_room_state = val; }
-	void SetRoundTime(int seconds);
+	void SetRoundStartTime();
+	float GetRoundTime();
 	void SetRound(int val) { curr_round = val; }
 
 	std::vector<int>& GetObjList()
@@ -45,5 +46,6 @@ private:
 	int max_npc;
 	int curr_round;
 	std::vector<int>m_obj_list;
-	std::chrono::system_clock::time_point	m_round_time;
+	std::chrono::system_clock::time_point m_start_time;
+	float round_time;
 };

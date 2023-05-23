@@ -43,6 +43,19 @@ void ThievesSendManager::SendMovePacket(const SOCKET& s_socket, char direction,
 	SendPacket(s_socket, sizeof(packet), &packet);
 }
 
+void ThievesSendManager::SendLoadProgressPacket(const SOCKET& s_socket, char direction,
+	char progressed)
+{
+	cs_packet_load_progressing packet;
+	packet.size = sizeof(packet);
+	packet.type = CS_PACKET_LOAD_PROGRESSING;
+
+	packet.progressed = progressed;
+
+
+	SendPacket(s_socket, sizeof(packet), &packet);
+}
+
 void ThievesSendManager::SendAttackPacket(const SOCKET& s_socket, const Vec3& forward_vec
 	, char action_type)
 {

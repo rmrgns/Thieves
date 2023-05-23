@@ -8,6 +8,7 @@ enum class CURRENT_SCENE
 	LOGIN,
 	LOBBY,
 	GAME,
+	LOADING,
 	// ...
 	END
 };
@@ -26,6 +27,8 @@ public:
 	void Render();
 	void LoadScene(wstring sceneName);
 
+	void ChangeToLoadedScene();
+
 	void SetLayerName(uint8 index, const wstring& name);
 	const wstring& IndexToLayerName(uint8 index) { return _layerNames[index]; }
 	uint8 LayerNameToIndex(const wstring& name);
@@ -37,6 +40,9 @@ public:
 	bool GetCheckChangeScene() { return _checkChangeScene; }
 	void SetCheckChangeScene(bool check) { _checkChangeScene = check; }
 	CURRENT_SCENE GetCurrentScene() { return _currentScene; }
+
+	const wstring& GetLoadText() { return _LoadText; }
+	void SetLoadText(const wstring& wstr) { _LoadText = wstr; }
 
 	//Vec3 GetPlayerPosition() { return _playerPosition; }
 	//float GetPlayerPositionX() { return _playerPosition.x; }
@@ -55,14 +61,19 @@ public:
 	void BuildPlayer();
 
 private:
-	shared_ptr<Scene> LoadTestScene();
-	shared_ptr<Scene> LoadLoginScene();
+	void LoadGameScene();
+	void LoadLoginScene();
+	shared_ptr<Scene> LoadLoadingScene();
 
 private:
 	shared_ptr<Scene> _activeScene;
+	shared_ptr<Scene> _loadProgressScene;
 	bool _checkChangeScene = false;
 	wstring _changeSceneName = L"";
 	CURRENT_SCENE _currentScene = CURRENT_SCENE::NONE;
+	CURRENT_SCENE _currentLoadProgressScene = CURRENT_SCENE::NONE;
+
+	wstring _LoadText = L"";
 
 	array<wstring, MAX_LAYER> _layerNames;
 	map<wstring, uint8> _layerIndex;

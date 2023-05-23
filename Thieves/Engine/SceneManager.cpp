@@ -28,6 +28,12 @@
 
 #include "server/main/network.h"
 #include "server/thieves_server/thieves_packet_manager.h"
+
+#include <thread>
+
+
+
+
 void SceneManager::Update()
 {
 	if (_activeScene == nullptr)
@@ -38,12 +44,24 @@ void SceneManager::Update()
 	_activeScene->FinalUpdate();
 }
 
+
+
+
+
+
+
 // TEMP
 void SceneManager::Render()
 {
 	if (_activeScene)
 		_activeScene->Render();
 }
+
+
+
+
+
+
 
 void SceneManager::LoadScene(wstring sceneName)
 {
@@ -54,15 +72,18 @@ void SceneManager::LoadScene(wstring sceneName)
 		_activeScene.reset();
 	}
 
+	_activeScene = LoadLoadingScene();
+	_currentScene = CURRENT_SCENE::LOADING;
+
 	if (sceneName == L"LoginScene")
 	{
-		_activeScene = LoadLoginScene();
-		_currentScene = CURRENT_SCENE::LOGIN;
+		std::thread th{ &SceneManager::LoadLoginScene, this};
+		th.detach();
 	}
 	else if (sceneName == L"GameScene")
 	{
-		_activeScene = LoadTestScene();
-		_currentScene = CURRENT_SCENE::GAME;
+		std::thread th{ &SceneManager::LoadGameScene, this };
+		th.detach();
 	}
 	else
 	{
@@ -72,6 +93,26 @@ void SceneManager::LoadScene(wstring sceneName)
 	_activeScene->Awake();
 	_activeScene->Start();
 }
+
+
+
+void SceneManager::ChangeToLoadedScene()
+{
+
+	if (_activeScene != nullptr)
+	{
+		_activeScene.reset();
+	}
+	
+	_activeScene = _loadProgressScene;
+	_currentScene = _currentLoadProgressScene;
+
+	_activeScene->Awake();
+	_activeScene->Start();
+}
+
+
+
 
 void SceneManager::SetLayerName(uint8 index, const wstring& name)
 {
@@ -83,6 +124,13 @@ void SceneManager::SetLayerName(uint8 index, const wstring& name)
 	_layerIndex[name] = index;
 }
 
+
+
+
+
+
+
+
 uint8 SceneManager::LayerNameToIndex(const wstring& name)
 {
 	auto findIt = _layerIndex.find(name);
@@ -91,6 +139,16 @@ uint8 SceneManager::LayerNameToIndex(const wstring& name)
 
 	return findIt->second;
 }
+
+
+
+
+
+
+
+
+
+
 
 shared_ptr<GameObject> SceneManager::Pick(int32 screenX, int32 screenY)
 {
@@ -143,6 +201,16 @@ shared_ptr<GameObject> SceneManager::Pick(int32 screenX, int32 screenY)
 	return picked;
 }
 
+
+
+
+
+
+
+
+
+
+
 void SceneManager::BuildPlayer()
 {
 	// �ٸ� �÷��̾� ��ǥ
@@ -162,8 +230,22 @@ void SceneManager::BuildPlayer()
 	}
 }
 
-shared_ptr<Scene> SceneManager::LoadTestScene()
+
+
+
+
+
+
+
+
+
+
+
+
+void SceneManager::LoadGameScene()
 {
+	_LoadText = L"Load Start"; // 1
+	Network::GetInst()->SendLoadProgressPacket((char)0);
 #pragma region LayerMask
 	SetLayerName(0, L"Default");
 	SetLayerName(1, L"UI");
@@ -171,6 +253,10 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 
 	shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
 	
+	_LoadText = L"Load Compute Shader"; // 2
+
+	Network::GetInst()->SendLoadProgressPacket((char)100/21);
+
 #pragma region ComputeShader
 	{
 		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"ComputeShader");
@@ -191,6 +277,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 #pragma endregion
 
+	_LoadText = L"Load Main Camera"; // 3
+	Network::GetInst()->SendLoadProgressPacket((char)200 / 21);
 	shared_ptr<Scene> scene = make_shared<Scene>();
 	
 #pragma region Camera
@@ -211,6 +299,9 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}	
 #pragma endregion
 
+	_LoadText = L"Load UI Camera"; // 4
+	Network::GetInst()->SendLoadProgressPacket((char)300 / 21);
+
 #pragma region UI_Camera
 	{
 		shared_ptr<GameObject> camera = make_shared<GameObject>();
@@ -226,6 +317,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 #pragma endregion
 
+	_LoadText = L"Load SkyBox"; // 5
+	Network::GetInst()->SendLoadProgressPacket((char)400 / 21);
 #pragma region SkyBox
 	{
 		shared_ptr<GameObject> skybox = make_shared<GameObject>();
@@ -267,6 +360,9 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 //	}
 //#pragma endregion
 	
+	_LoadText = L"Load UI"; // 6
+	Network::GetInst()->SendLoadProgressPacket((char)500 / 21);
+	
 #pragma region UI_Test
 	for (int32 i = 0; i < 1; i++)
 	{
@@ -301,6 +397,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 #pragma endregion
 
+	_LoadText = L"Load Player FBX Data"; // 7
+	Network::GetInst()->SendLoadProgressPacket((char)600 / 21);
 
 #pragma region FBX
 	{
@@ -332,6 +430,9 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 #pragma endregion
 
+	_LoadText = L"Load Other Player FBX Data";// 8
+	Network::GetInst()->SendLoadProgressPacket((char)700 / 21);
+
 #pragma region OtherPlayers
 	{
 
@@ -339,6 +440,11 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 
 		for (int i = 0; i < 7; ++i)
 		{
+			_LoadText = L"Load Other Player FBX Data ";
+			_LoadText.append(to_wstring(i));
+			_LoadText.append(L" / 7");
+			Network::GetInst()->SendLoadProgressPacket((char)(800 + i * 100) / 21);
+			 // 9 10 11 12 13 14 15 
 			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Thief.fbx");
 
 			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
@@ -393,6 +499,9 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 //	}
 //#pragma endregion
 
+	_LoadText = L"Load Map"; // 16
+	Network::GetInst()->SendLoadProgressPacket((char)1500 / 21);
+
 #pragma region Map
 	{
 
@@ -438,6 +547,10 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 //		scene->AddGameObject(obj);
 //	}
 //#pragma endregion
+
+	_LoadText = L"Load Directinal Light"; // 17
+	Network::GetInst()->SendLoadProgressPacket((char)1500 / 21);
+
 #pragma region Directional Light
 	{
 		shared_ptr<GameObject> light = make_shared<GameObject>();
@@ -454,6 +567,9 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		scene->AddGameObject(light);
 	}
 #pragma endregion
+	
+	_LoadText = L"Load Point Light"; // 18
+	Network::GetInst()->SendLoadProgressPacket((char)1700 / 21);
 
 #pragma region Point Light
 	{
@@ -474,6 +590,9 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		scene->AddGameObject(light);
 	}
 #pragma endregion
+
+	_LoadText = L"Load Spot Light"; // 19
+	Network::GetInst()->SendLoadProgressPacket((char)1800 / 21);
 
 #pragma region Spot Light
 	{
@@ -496,6 +615,9 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 #pragma endregion
 
+	_LoadText = L"Load Particle"; // 20
+	Network::GetInst()->SendLoadProgressPacket((char)1900 / 21);
+
 #pragma region ParticleSystem
 	{
 		shared_ptr<GameObject> particle = make_shared<GameObject>();
@@ -511,13 +633,31 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 #pragma endregion
 
+	_LoadText = L"Wait Other Players..."; // 21
+	Network::GetInst()->SendLoadEndPacket();
+	
+
 	scene->SetSceneLoaded(true);
 
-	return scene;
+	_loadProgressScene = scene;
+	_currentLoadProgressScene = CURRENT_SCENE::GAME;
+
+	ChangeToLoadedScene();
 }
 
-shared_ptr<Scene> SceneManager::LoadLoginScene()
+
+
+
+
+
+
+
+
+
+void SceneManager::LoadLoginScene()
 {
+	_LoadText = L"Load Start";
+	Network::GetInst()->SendLoadProgressPacket((char)0 / 5);
 #pragma region LayerMask
 	SetLayerName(0, L"Default");
 
@@ -526,6 +666,8 @@ shared_ptr<Scene> SceneManager::LoadLoginScene()
 	shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
 	shared_ptr<Scene> scene = make_shared<Scene>();
 
+	_LoadText = L"Load Main Camera";
+	Network::GetInst()->SendLoadProgressPacket((char)100 / 5);
 #pragma region Camera
 	{
 		shared_ptr<GameObject> camera = make_shared<GameObject>();
@@ -540,6 +682,8 @@ shared_ptr<Scene> SceneManager::LoadLoginScene()
 	}
 #pragma endregion
 
+	_LoadText = L"Load Login Image";
+	Network::GetInst()->SendLoadProgressPacket((char)200 / 5);
 #pragma region LoginScreen
 	{
 		float width = static_cast<float>(GEngine->GetWindow().width);
@@ -567,6 +711,8 @@ shared_ptr<Scene> SceneManager::LoadLoginScene()
 	}
 #pragma endregion
 
+	_LoadText = L"Load Icon";
+	Network::GetInst()->SendLoadProgressPacket((char)400 / 5);
 #pragma region ThiefIcon
 	{
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
@@ -591,6 +737,8 @@ shared_ptr<Scene> SceneManager::LoadLoginScene()
 	}
 #pragma endregion
 
+	_LoadText = L"Load Directional Light";
+	Network::GetInst()->SendLoadProgressPacket((char)400 / 5);
 #pragma region Directional Light
 	{
 		shared_ptr<GameObject> light = make_shared<GameObject>();
@@ -618,7 +766,44 @@ shared_ptr<Scene> SceneManager::LoadLoginScene()
 //	}
 //#pragma endregion
 
+	_LoadText = L"Load End.";
+	Network::GetInst()->SendLoadEndPacket();
 	scene->SetSceneLoaded(true);
+
+	_loadProgressScene = scene;
+	_currentLoadProgressScene = CURRENT_SCENE::LOGIN;
+
+	ChangeToLoadedScene();
+}
+
+
+
+
+
+
+shared_ptr<Scene> SceneManager::LoadLoadingScene()
+{
+#pragma region LayerMask
+	SetLayerName(0, L"Default");
+
+#pragma endregion
+
+	shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+	shared_ptr<Scene> scene = make_shared<Scene>();
+
+#pragma region Camera
+	{
+		shared_ptr<GameObject> camera = make_shared<GameObject>();
+		camera->SetName(L"Main_Camera");
+		camera->AddComponent(make_shared<Transform>());
+		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45��
+
+		camera->GetCamera()->SetFar(10000.f);
+		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+
+		scene->AddGameObject(camera);
+	}
+#pragma endregion
 
 	return scene;
 }

@@ -5,7 +5,7 @@ using namespace std;
 
 Room::Room(int room_id)
 {
-	m_round_time = chrono::system_clock::now();
+	m_start_time = chrono::system_clock::now();
 	m_room_state = ROOM_STATE::RT_FREE;
 	m_obj_list.reserve(100);
 }
@@ -32,11 +32,18 @@ void Room::ResetRoom()
 	max_npc = 0;
 	curr_round = 0;
 
-	m_round_time = std::chrono::system_clock::now();
+	m_start_time = std::chrono::system_clock::now();
 	m_obj_list.clear();
 }
 
-void Room::SetRoundTime(int seconds)
+void Room::SetRoundStartTime()
 {
-	m_round_time = std::chrono::system_clock::now() + (std::chrono::milliseconds(1) * seconds);
+	m_start_time = std::chrono::system_clock::now();
+}
+
+float Room::GetRoundTime() {
+	auto time = std::chrono::duration_cast<std::chrono::milliseconds>(m_start_time - std::chrono::system_clock::now());
+	round_time = (float)time.count();
+	round_time /= 1000.0f;
+	return round_time;
 }
