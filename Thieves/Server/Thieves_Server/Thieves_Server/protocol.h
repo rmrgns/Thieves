@@ -45,6 +45,8 @@ constexpr char CS_PACKET_LEAVE_ROOM = 15;
 constexpr char CS_PACKET_PLAYER_READY = 16;
 constexpr char CS_PACKET_PLAYER_CANCLE_READY = 17;
 constexpr char CS_PACKET_PLAYER_LOG_OUT = 18;	// 로그아웃
+constexpr char CS_PACKET_REQUEST_ROOMS_DATA_FOR_LOBBY = 19; // 로비에서 보여줄 데이터를 받기
+constexpr char CS_PACKET_REQUEST_ROOMS_DATA_FOR_ROOM = 19; // 룸에서 보여줄 데이터를 받기
 
 
 
@@ -75,6 +77,7 @@ constexpr char SC_PACKET_LEAVE_ROOM = 23;
 constexpr char SC_PACKET_PLAYER_READY = 24;
 constexpr char SC_PACKET_PLAYER_CANCLE_READY = 25;
 constexpr char SC_PACKET_LOG_OUT_OK = 26;
+constexpr char SC_PACKET_ALL_PLAYER_LOAD_END = 27;
 //#pragma pack (push, 1)
 
 // 클라이언트 -> 서버로 보내는 패킷은 어떤 키를 얼마나 눌렀는지에 대해서만 보내주면 된다.
@@ -166,6 +169,12 @@ struct cs_packet_player_log_out {
 	unsigned char size;
 	char type;
 };
+
+struct cs_packet_all_player_load_end {
+	unsigned char size;
+	char type;
+};
+
 
 //------------------------------------------------------------------
 

@@ -765,14 +765,50 @@ void PacketManager::ProcessPlayerReady(int c_id, unsigned char* p)
 {
 	cs_packet_player_ready* packet = reinterpret_cast<cs_packet_player_ready*>(p);
 	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
+
+	Room* room = m_room_manager->GetRoom(player->GetRoomID());
+
+	if (!room->IsPlayerReady(c_id)) {
+		room->m_state_lock.lock();
+		room->PlayerReady(c_id);
+		room->m_state_lock.unlock();
+	}
+
+	for (auto pl : room->GetObjList())
+	{
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+		SendPlayerReady(pl, c_id);
+	}
 }
 
 void PacketManager::ProcessPlayerCancleReady(int c_id, unsigned char* p)
 {
+	cs_packet_player_ready* packet = reinterpret_cast<cs_packet_player_ready*>(p);
+	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
+
+	Room* room = m_room_manager->GetRoom(player->GetRoomID());
+
+	if (room->IsPlayerReady(c_id)) {
+		room->m_state_lock.lock();
+		room->PlayerCancleReady(c_id);
+		room->m_state_lock.unlock();
+	}
+
+	for (auto pl : room->GetObjList())
+	{
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+		SendPlayerCancleReady(pl, c_id);
+	}
 }
 
-void PacketManager::ProvessLogOut(int c_id, unsigned char* p)
+void PacketManager::ProcessLogOut(int c_id, unsigned char* p)
 {
+	cs_packet_player_ready* packet = reinterpret_cast<cs_packet_player_ready*>(p);
+	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
+
+	player->state_lock.lock();
+	player->SetState(STATE::ST_ACCEPT);
+	player->state_lock.unlock();
 }
 
 void PacketManager::ProcessDamageCheat(int c_id, unsigned char* p)

@@ -91,7 +91,7 @@ private:
 	void ProcessLeaveRoom(int c_id, unsigned char* p);
 	void ProcessPlayerReady(int c_id, unsigned char* p);
 	void ProcessPlayerCancleReady(int c_id, unsigned char* p);
-	void ProvessLogOut(int c_id, unsigned char* p);
+	void ProcessLogOut(int c_id, unsigned char* p);
 	void ProcessDamageCheat(int c_id, unsigned char* p);
 	void StartGame(int room_id);
 
