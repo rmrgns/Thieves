@@ -38,12 +38,15 @@ public:
 
 public:
 	shared_ptr<Scene> GetActiveScene() { return _activeScene; }
+	shared_ptr<Scene> GetLoadProgressScene() { return _loadProgressScene; }
 	bool GetCheckChangeScene() { return _checkChangeScene; }
 	void SetCheckChangeScene(bool check) { _checkChangeScene = check; }
 	CURRENT_SCENE GetCurrentScene() { return _currentScene; }
+	CURRENT_SCENE GetCurrentLoadProgressScene() { return _currentLoadProgressScene; }
 
 	const wstring& GetLoadText() { return _LoadText; }
 	void SetLoadText(const wstring& wstr) { _LoadText = wstr; }
+	void SetRoomNum(int val) { _room_num = val; }
 
 	//Vec3 GetPlayerPosition() { return _playerPosition; }
 	//float GetPlayerPositionX() { return _playerPosition.x; }
@@ -81,7 +84,7 @@ private:
 	array<wstring, MAX_LAYER> _layerNames;
 	map<wstring, uint8> _layerIndex;
 
-
+	int _room_num = -1;
 	//Vec3 _playerPosition;	// �÷��̾� ��ǥ
 	//Vec3 _playerRotation;	// �÷��̾� ȸ����
 	//bool _BuildPlayer = false;		// �÷��̾� ����

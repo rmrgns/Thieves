@@ -30,6 +30,7 @@ constexpr int PLAYER_DAMAGE = 1;	// 플레이어 DMG
 //--------- 여기는 서버에서 클라이언트에게 에러 코드를 전달해 줄때 어떤 에러인지 알려주는 용도
 constexpr int ERROR_GAME_IN_PROGRESS = 1;		// 게임이 진행중인 방에 들어가려고 했을 때
 constexpr int ERROR_ROOM_IS_FULL = 2;			// 룸 안에 사람이 가득 차있는 경우
+constexpr int ERROR_ROOM_NOT_EXIST = 3;			// 
 
 //---------
 
@@ -81,16 +82,17 @@ constexpr char SC_PACKET_COMPLETE_JUMP = 19;			// 점프 완료 패킷
 constexpr char SC_PACKET_LOAD_PROGRESS_PERCENT = 20;	// 게임 로딩중 진행도 패킷
 constexpr char SC_PACKET_LOAD_END = 21; // 게임 로딩 완료 패킷. 플레이어 하나에 대한 패킷이므로, 모두 끝난 경우는 ALL_PLAYER_LOAD_END로 해주어야 한다
 constexpr char SC_PACKET_ENTER_ROOM = 22; // 클라이언트가 룸으로 들어갈 때 줄 패킷
-constexpr char SC_PACKET_LEAVE_ROOM = 23; // 클라이언트가 룸에서 나갈 때 줄 패킷
-constexpr char SC_PACKET_PLAYER_READY = 24; // 클라이언트가 룸 안에서 레디를 했을 때 줄 패킷
-constexpr char SC_PACKET_PLAYER_CANCLE_READY = 25; // 클라이언트가 룸 안에서 레디를 취소 했을 때 패킷
-constexpr char SC_PACKET_LOG_OUT_OK = 26; // 클라이언트가 로그아웃 했을 때 줄 패킷
-constexpr char SC_PACKET_ALL_PLAYER_LOAD_END = 27; // 모든 플레이어가 로딩이 끝났을 때 줄 패킷
-constexpr char SC_PACKET_ROOMS_DATA_FOR_LOBBY = 28; // 플레이어가 로비에 들어 갔을 때 룸 들에 대한 정보를 줄 패킷
-constexpr char SC_PACKET_ROOMS_DATA_FOR_LOBBY_END = 29; // 위의 패킷에서 룸당 하나씩 보내줄 것이므로 끝났음을 표시해 주어야 함. (WSASend가 많이 불리므로 나중에 고쳐야 할 수도 잇다.)
-constexpr char SC_PACKET_ROOMS_DATA_FOR_ROOM = 30; // 플레이어가 룸에 들어 갔을 때 룸 내부의 정보를 줄 패킷
-constexpr char SC_PACKET_ROOMS_DATA_FOR_ROOM_END = 31; // LOBBY_END와 비슷하게 끝났음을 알리는 패킷. (이것도 마찬가지로 WSASend가 많이 불리게 되므로 고쳐야 할 수도 잇음)
-constexpr char SC_PACKET_ERROR = 32; // 어떤 식으로든 에러를 보내야 할때
+constexpr char SC_PACKET_ENTER_ROOM_OK = 23;
+constexpr char SC_PACKET_LEAVE_ROOM = 24; // 클라이언트가 룸에서 나갈 때 줄 패킷
+constexpr char SC_PACKET_PLAYER_READY = 25; // 클라이언트가 룸 안에서 레디를 했을 때 줄 패킷
+constexpr char SC_PACKET_PLAYER_CANCLE_READY = 26; // 클라이언트가 룸 안에서 레디를 취소 했을 때 패킷
+constexpr char SC_PACKET_LOG_OUT_OK = 27; // 클라이언트가 로그아웃 했을 때 줄 패킷
+constexpr char SC_PACKET_ALL_PLAYER_LOAD_END = 28; // 모든 플레이어가 로딩이 끝났을 때 줄 패킷
+constexpr char SC_PACKET_ROOMS_DATA_FOR_LOBBY = 29; // 플레이어가 로비에 들어 갔을 때 룸 들에 대한 정보를 줄 패킷
+constexpr char SC_PACKET_ROOMS_DATA_FOR_LOBBY_END = 30; // 위의 패킷에서 룸당 하나씩 보내줄 것이므로 끝났음을 표시해 주어야 함. (WSASend가 많이 불리므로 나중에 고쳐야 할 수도 잇다.)
+constexpr char SC_PACKET_ROOMS_DATA_FOR_ROOM = 31; // 플레이어가 룸에 들어 갔을 때 룸 내부의 정보를 줄 패킷
+constexpr char SC_PACKET_ROOMS_DATA_FOR_ROOM_END = 32; // LOBBY_END와 비슷하게 끝났음을 알리는 패킷. (이것도 마찬가지로 WSASend가 많이 불리게 되므로 고쳐야 할 수도 잇음)
+constexpr char SC_PACKET_ERROR = 33; // 어떤 식으로든 에러를 보내야 할때
 
 //#pragma pack (push, 1)
 
@@ -313,6 +315,13 @@ struct sc_packet_enter_room {
 	unsigned char size;
 	char type;
 	int id;
+	char userName[MAX_NAME_SIZE];
+};
+
+struct sc_packet_enter_room_ok {
+	unsigned char size;
+	char type;
+	int room_id;
 };
 
 struct sc_packet_leave_room {
@@ -362,6 +371,7 @@ struct sc_packet_rooms_data_for_room {
 	char type;
 	int userId;
 	char userName[MAX_NAME_SIZE];
+	bool isReady;
 
 };
 

@@ -200,6 +200,8 @@
     <ClInclude Include="InstancingManager.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightEffect.h" />
+    <ClInclude Include="LobbyScene.h" />
+    <ClInclude Include="LobbyScript.h" />
     <ClInclude Include="LoginScript.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
@@ -216,6 +218,7 @@
     <ClInclude Include="PlayerParticle.h" />
     <ClInclude Include="RenderTargetGroup.h" />
     <ClInclude Include="Resources.h" />
+    <ClInclude Include="RoomScene.h" />
     <ClInclude Include="RootSignature.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
@@ -278,6 +281,8 @@
     <ClCompile Include="InstancingManager.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="LightEffect.cpp" />
+    <ClCompile Include="LobbyScene.cpp" />
+    <ClCompile Include="LobbyScript.cpp" />
     <ClCompile Include="LoginScript.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -299,6 +304,7 @@
     <ClCompile Include="PlayerParticle.cpp" />
     <ClCompile Include="RenderTargetGroup.cpp" />
     <ClCompile Include="Resources.cpp" />
+    <ClCompile Include="RoomScene.cpp" />
     <ClCompile Include="RootSignature.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />

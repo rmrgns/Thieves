@@ -52,6 +52,9 @@
     <Filter Include="Server\event">
       <UniqueIdentifier>{8f7c781b-d008-4873-9879-8b03aa2ed5b2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{a1c8bfa6-da9f-46f0-bbba-a899f1c6a3cd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -253,6 +256,15 @@
       <Filter>Object\Component</Filter>
     </ClCompile>
     <ClCompile Include="LightEffect.cpp">
+      <Filter>Object\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="LobbyScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="LobbyScript.cpp">
       <Filter>Object\Script</Filter>
     </ClCompile>
   </ItemGroup>
@@ -477,6 +489,15 @@
       <Filter>Object\Component</Filter>
     </ClInclude>
     <ClInclude Include="LightEffect.h">
+      <Filter>Object\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="LobbyScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="LobbyScript.h">
       <Filter>Object\Script</Filter>
     </ClInclude>
   </ItemGroup>

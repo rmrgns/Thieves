@@ -25,11 +25,7 @@ void LoginScript::LateUpdate()
 		if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOGIN)
 		{
 
-			GET_SINGLE(SceneManager)->SetCheckChangeScene(true);
-			GEngine->SetChangeScene(L"Game");
-
 			Network::GetInst()->SendSignInPacket();
-			Network::GetInst()->SendStartPacket();
 
 		}
 	}

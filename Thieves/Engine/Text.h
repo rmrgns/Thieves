@@ -3,7 +3,8 @@
 enum class TEXT_FORMAT {
 	DEFALUT,
 	LOGIN,
-	LOADING
+	LOADING,
+	INROOM
 };
 
 class Text

@@ -6,7 +6,7 @@
 #include<chrono>
 #include<array>
 #include "state.h"
-class Object;
+class MoveObjManager;
 
 class Room
 {
@@ -41,15 +41,7 @@ public:
 	void PlayerReady(int c_id) { m_ready_player_list.insert(c_id); }
 	void PlayerCancleReady(int c_id) { m_ready_player_list.erase(c_id); }
 
-	int GetNumberOfPlayer() {
-		int num = 0;
-		for (int pl : m_obj_list)
-		{
-			if (true == MoveObjManager::GetInst()->IsPlayer(pl)) num++;
-		}
-
-		return num;
-	}
+	int GetNumberOfPlayer();
 
 	std::unordered_set<int>& GetObjList()
 	{

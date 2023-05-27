@@ -1,6 +1,7 @@
 #include "room.h"
 #include "pch.h"
 #include "object/object.h"
+#include "object/moveobj_manager.h"
 using namespace std;
 
 Room::Room(int room_id)
@@ -66,4 +67,16 @@ float Room::GetRoundTime() {
 	round_time = (float)time.count();
 	round_time /= 1000.0f;
 	return round_time;
+}
+
+int Room::GetNumberOfPlayer()
+{
+	int num = 0;
+	for (int pl : m_obj_list)
+	{
+		if (true == MoveObjManager::GetInst()->IsPlayer(pl)) num++;
+	}
+
+	return num;
+
 }

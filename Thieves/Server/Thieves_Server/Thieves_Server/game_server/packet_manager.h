@@ -47,6 +47,7 @@ public:
 	void SendLoadEnd(int c_id, int p_id);
 
 	void SendEnterRoom(int c_id, int p_id);
+	void SendEnterRoomOk(int c_id, int room_id);
 	void SendLeaveRoom(int c_id, int p_id);
 	void SendPlayerReady(int c_id, int p_id);
 	void SendPlayerCancleReady(int c_id, int p_id);

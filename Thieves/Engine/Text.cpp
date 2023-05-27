@@ -2,6 +2,8 @@
 #include "Text.h"
 #include "Engine.h"
 #include "Scene.h"
+#include "LobbyScene.h"
+#include "RoomScene.h"
 #include "SceneManager.h"
 #include "Input.h"
 
@@ -58,14 +60,60 @@ void Text::Update()
 	else if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOBBY)
 	{
 		SetTextInfo(TEXT_FORMAT::DEFALUT);
-		wstring text = L"This Is LOBBY!";
-		SetText(text, 0.f, 0.f, 1.f, 1.f);
+		wstring text7 = L"This Is LOBBY!";
+		SetText(text7, 0.f, 10.f, 1.f, 1.f);
+		
+		shared_ptr<LobbyScene> lScene = static_pointer_cast<LobbyScene>(GET_SINGLE(SceneManager)->GetActiveScene());
+
+		SetTextInfo(TEXT_FORMAT::INROOM);
+		float count = 0.f;
+
+		if (lScene->GetRoomsData().empty()) {
+			wstring text8 = L"Room Empty";
+			SetText(text8, 200.f, 100.f, 1.f, 1.f);
+		}
+
+		for (auto& data : lScene->GetRoomsData())
+		{
+			wstring tempText = L"";
+			tempText.append(to_wstring(data.second.id));
+			tempText.append(L" ");
+			tempText.append(to_wstring(data.second.nPlayer));
+			tempText.append(L"/8 ");
+			if (data.second.isInGame) tempText.append(L"Game Playing!");
+
+			SetText(tempText, 200.f, 100.f + 50.f * count, 1.f, 1.f);
+
+			count += 1.0f;
+		}
+		
 	}
 	else if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::ROOM)
 	{
 		SetTextInfo(TEXT_FORMAT::DEFALUT);
 		wstring text = L"This Is ROOM!";
 		SetText(text, 0.f, 0.f, 1.f, 1.f);
+
+		shared_ptr<RoomScene> rScene = static_pointer_cast<RoomScene>(GET_SINGLE(SceneManager)->GetActiveScene());
+
+
+		SetTextInfo(TEXT_FORMAT::INROOM);
+		float count = 0.f;
+		for (auto& data : rScene->GetRoomData())
+		{
+			wstring tempText = L"";
+			tempText.append(data.second.name);
+			SetText(tempText, 200.f, 100.f + 50.f * count, 1.f, 1.f);
+
+			wstring tempText2 = L"";
+
+			if (data.second.isReady) {
+				tempText2.append(L"Ready!");
+				SetText(tempText2, 250.f, 100.f + 50.f * count, 1.f, 1.f);
+			}
+
+			count += 1.0f;
+		}
 	}
 	else if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOADING)
 	{
@@ -192,6 +240,15 @@ void Text::SetTextInfo(TEXT_FORMAT infoNumber)
 
 		break;
 	case TEXT_FORMAT::LOADING:
+		// 텍스트 색깔
+		ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), _solidColorBrush.GetAddressOf()));
+
+		// 텍스트 폰트 등
+		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"Verdana", nullptr,
+			DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_ITALIC, DWRITE_FONT_STRETCH_NORMAL,
+			25, L"en-us", _writeTextFormat.GetAddressOf()));
+		break;
+	case TEXT_FORMAT::INROOM:
 		// 텍스트 색깔
 		ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), _solidColorBrush.GetAddressOf()));
 
