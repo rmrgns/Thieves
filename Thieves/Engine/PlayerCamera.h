@@ -10,7 +10,7 @@ public:
 
 	void CameraRotation();
 private:
-	float		_speed = 200.f;
+	float		_speed = 1000.f;
 	float		_mouseTranslationSpeed = 600.f;
 	float		_mouseRotateSpeed = 0.5f;
 

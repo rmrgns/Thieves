@@ -6,6 +6,8 @@
 #include "Timer.h"
 #include "Transform.h"
 #include "Camera.h"
+#include "Scene.h"
+#include "GameObject.h"
 
 #include "server/main/network.h"
 #include "server/thieves_server/thieves_packet_manager.h"
@@ -22,13 +24,13 @@ PlayerCamera::~PlayerCamera()
 
 void PlayerCamera::LateUpdate()
 {
-	//Vec3 pos = GetTransform()->GetLocalPosition();
+	Vec3 pos = GetTransform()->GetLocalPosition();
 	
 	int myID = Network::GetInst()->GetPacketManager()->GetGameInfo().GetNetworkID();
-	Vec3 pos(0.0f, 0.0f, 0.0f);
+	//Vec3 pos(0.0f, 0.0f, 0.0f);
+
 	if(myID != -1) pos = Network::GetInst()->GetNetworkObjMap().find(myID)->second->GetPosition();
 	pos.y += 125.f;
-	//pos.x += 100.f;
 	// ī�޶� ���콺����
 	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME && _checkCameraRotation == true)
 	{
@@ -43,9 +45,25 @@ void PlayerCamera::LateUpdate()
 		else
 			_checkCameraRotation = true;
 	}
+	/*if (INPUT->GetButton(KEY_TYPE::W))
+		pos += GetTransform()->GetLook() * _speed * DELTA_TIME;
 
-	
+	if (INPUT->GetButton(KEY_TYPE::S))
+		pos -= GetTransform()->GetLook() * _speed * DELTA_TIME;
 
+	if (INPUT->GetButton(KEY_TYPE::A))
+		pos -= GetTransform()->GetRight() * _speed * DELTA_TIME;
+
+	if (INPUT->GetButton(KEY_TYPE::D))
+		pos += GetTransform()->GetRight() * _speed * DELTA_TIME;*/
+	for (auto& GameObject : GET_SINGLE(SceneManager)->GetActiveScene()->GetGameObjects())
+	{
+		if (GameObject->GetName() == L"Thief")
+		{
+			pos = GameObject->GetTransform()->GetLocalPosition();
+		}
+	}
+	pos.y += 125.f;
 	GetTransform()->SetLocalPosition(pos);
 }
 

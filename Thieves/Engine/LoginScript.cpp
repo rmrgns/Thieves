@@ -28,8 +28,8 @@ void LoginScript::LateUpdate()
 			GET_SINGLE(SceneManager)->SetCheckChangeScene(true);
 			GEngine->SetChangeScene(L"Game");
 
-			Network::GetInst()->SendSignInPacket();
-			Network::GetInst()->SendStartPacket();
+			//Network::GetInst()->SendSignInPacket();
+			//Network::GetInst()->SendStartPacket();
 
 		}
 	}

@@ -13,6 +13,8 @@ Light::Light() : Component(COMPONENT_TYPE::LIGHT)
 	_shadowCamera = make_shared<GameObject>();
 	_shadowCamera->AddComponent(make_shared<Transform>());
 	_shadowCamera->AddComponent(make_shared<Camera>());
+	_shadowCamera->GetCamera()->SetFOV(XM_PI / 1.3f);
+	
 	uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
 	_shadowCamera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true); // UI´Â ¾È ÂïÀ½
 }

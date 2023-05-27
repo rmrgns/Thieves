@@ -19,7 +19,7 @@ public:
 
 private:
 	// Player Move
-	float		_speed = 200.f;
+	float		_speed = 1000.f;
 	bool		_moveState = false;
 
 	// Player Rotate Speed

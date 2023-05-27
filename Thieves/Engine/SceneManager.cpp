@@ -290,7 +290,7 @@ void SceneManager::LoadGameScene()
 		//camera->AddComponent(make_shared<TestCameraScript>());
 		camera->AddComponent(make_shared<PlayerCamera>());
 		camera->AddComponent(make_shared<LoginScript>());
-		camera->GetCamera()->SetFar(30000.f);
+		camera->GetCamera()->SetFar(10000.f);
 		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
 		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
 		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true); // UI�� �� ����
@@ -410,10 +410,10 @@ void SceneManager::LoadGameScene()
 		{
 			gameObject->SetName(L"Thief");
 			gameObject->SetCheckFrustum(false);
-			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 50.f, 0.f));
 			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 			gameObject->AddComponent(make_shared<PlayerInput>());
-			gameObject->AddComponent(make_shared<NetworkSystem>());
+			//gameObject->AddComponent(make_shared<NetworkSystem>());
 				
 			// 자신의 NetworkID에 해당하는 데이터를 NetworkSystem에서 사용하도록 함.
 			int myID = Network::GetInst()->GetPacketManager()->GetGameInfo().GetNetworkID();
@@ -422,7 +422,8 @@ void SceneManager::LoadGameScene()
 				gameObject->GetNetworkSystem()->SetNetworkId(myID);
 				gameObject->GetNetworkSystem()->SetNetworkingType(NetworkType::PLAYER);
 			}
-			
+			gameObject->SetStatic(false);
+			gameObject->SetCheckFrustum(false);
 			int32 index = 2;
 			gameObject->GetAnimator()->Play(index);
 			scene->AddGameObject(gameObject);
@@ -433,52 +434,52 @@ void SceneManager::LoadGameScene()
 	_LoadText = L"Load Other Player FBX Data";// 8
 	Network::GetInst()->SendLoadProgressPacket((char)700 / 21);
 
-#pragma region OtherPlayers
-	{
-
-		std::vector<int> occupied_id;
-
-		for (int i = 0; i < 7; ++i)
-		{
-			_LoadText = L"Load Other Player FBX Data ";
-			_LoadText.append(to_wstring(i));
-			_LoadText.append(L" / 7");
-			Network::GetInst()->SendLoadProgressPacket((char)(800 + i * 100) / 21);
-			 // 9 10 11 12 13 14 15 
-			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Thief.fbx");
-
-			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-
-			for (auto& gameObject : gameObjects)
-			{
-				
-				gameObject->SetName(L"Thief");
-				gameObject->SetCheckFrustum(false);
-				gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, -300.f, 0.f));
-				gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-				gameObject->AddComponent(make_shared<NetworkSystem>());
-
-				// 이미 존재하는 오브젝트들에 대해 NetworkSystem을 설정한다.
-				// 새로 생성되는 오브젝트들의 경우에는 ObjInfo가 왔을 때에 설정해 주면 된다.
-				for (auto& p : Network::GetInst()->GetNetworkObjMap()) {
-					if (p.second->GetType() == NW_OBJ_TYPE::OT_PLAYER) {
-						if ((occupied_id.empty() || std::find(occupied_id.begin(), occupied_id.end(), p.first) == occupied_id.end()))
-						{
-							occupied_id.emplace_back(p.first);
-							gameObject->GetNetworkSystem()->SetNetworkId(p.first);
-							gameObject->GetNetworkSystem()->SetNetworkingType(NetworkType::OTHER_PLAYER);
-							break;
-						}
-					}
-				}
-
-				int32 index = 2;
-				gameObject->GetAnimator()->Play(index);
-				scene->AddGameObject(gameObject);
-			}
-		}
-	}
-#pragma endregion
+//#pragma region OtherPlayers
+//	{
+//
+//		std::vector<int> occupied_id;
+//
+//		for (int i = 0; i < 7; ++i)
+//		{
+//			_LoadText = L"Load Other Player FBX Data ";
+//			_LoadText.append(to_wstring(i));
+//			_LoadText.append(L" / 7");
+//			Network::GetInst()->SendLoadProgressPacket((char)(800 + i * 100) / 21);
+//			 // 9 10 11 12 13 14 15 
+//			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Thief.fbx");
+//
+//			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+//
+//			for (auto& gameObject : gameObjects)
+//			{
+//				
+//				gameObject->SetName(L"Thief");
+//				gameObject->SetCheckFrustum(false);
+//				gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, -300.f, 0.f));
+//				gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+//				gameObject->AddComponent(make_shared<NetworkSystem>());
+//
+//				// 이미 존재하는 오브젝트들에 대해 NetworkSystem을 설정한다.
+//				// 새로 생성되는 오브젝트들의 경우에는 ObjInfo가 왔을 때에 설정해 주면 된다.
+//				for (auto& p : Network::GetInst()->GetNetworkObjMap()) {
+//					if (p.second->GetType() == NW_OBJ_TYPE::OT_PLAYER) {
+//						if ((occupied_id.empty() || std::find(occupied_id.begin(), occupied_id.end(), p.first) == occupied_id.end()))
+//						{
+//							occupied_id.emplace_back(p.first);
+//							gameObject->GetNetworkSystem()->SetNetworkId(p.first);
+//							gameObject->GetNetworkSystem()->SetNetworkingType(NetworkType::OTHER_PLAYER);
+//							break;
+//						}
+//					}
+//				}
+//
+//				int32 index = 2;
+//				gameObject->GetAnimator()->Play(index);
+//				scene->AddGameObject(gameObject);
+//			}
+//		}
+//	}
+//#pragma endregion
 
 //#pragma region PoliceFBX
 //	{
@@ -502,27 +503,27 @@ void SceneManager::LoadGameScene()
 	_LoadText = L"Load Map"; // 16
 	Network::GetInst()->SendLoadProgressPacket((char)1500 / 21);
 
-#pragma region Map
-	{
-
-		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Map.fbx");
-
-		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-
-		for (auto& gameObject : gameObjects)
-		{
-			gameObject->SetName(L"Map");
-			gameObject->SetCheckFrustum(true);
-			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
-			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 3.1415f, 0.f));
-			gameObject->GetTransform()->SetLocalScale(Vec3(60.f, 100.f, 60.f));
-			//gameObject->AddComponent(make_shared<TestObjectMove>());
-			//gameObject->AddComponent(make_shared<PlayerInput>());
-			scene->AddGameObject(gameObject);
-			//gameObject->AddComponent(make_shared<TestDragon>());
-		}
-	}
-#pragma endregion
+//#pragma region Map
+//	{
+//
+//		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Map.fbx");
+//
+//		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+//
+//		for (auto& gameObject : gameObjects)
+//		{
+//			gameObject->SetName(L"Map");
+//			gameObject->SetCheckFrustum(true);
+//			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+//			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 3.1415f, 0.f));
+//			gameObject->GetTransform()->SetLocalScale(Vec3(60.f, 100.f, 60.f));
+//			//gameObject->AddComponent(make_shared<TestObjectMove>());
+//			//gameObject->AddComponent(make_shared<PlayerInput>());
+//			scene->AddGameObject(gameObject);
+//			//gameObject->AddComponent(make_shared<TestDragon>());
+//		}
+//	}
+//#pragma endregion
 //#pragma region Object
 //	{
 //		shared_ptr<GameObject> obj = make_shared<GameObject>();
@@ -556,40 +557,57 @@ void SceneManager::LoadGameScene()
 		shared_ptr<GameObject> light = make_shared<GameObject>();
 		light->SetName(L"Dir_Light");
 		light->AddComponent(make_shared<Transform>());
-		light->GetTransform()->SetLocalPosition(Vec3(0, 1000, 1000));
-		light->AddComponent(make_shared<Light>());
-		light->GetLight()->SetLightDirection(Vec3(0, -1, 1.f));
-		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
-		light->GetLight()->SetDiffuse(Vec3(0.0f, 1.0f, 1.0f));
-		light->GetLight()->SetAmbient(Vec3(1.0f, 1.0f, 1.0f));
-		light->GetLight()->SetSpecular(Vec3(0.0f, 0.0f, 0.0f));
+		light->GetTransform()->SetLocalPosition(Vec3(0, 1000, 0));
 
+		light->AddComponent(make_shared<Light>());
+		light->GetLight()->SetLightDirection(Vec3(0.f, -1, 0.f));
+		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
+		light->GetLight()->SetDiffuse(Vec3(1.0f, 1.0f, 1.0f));
+		light->GetLight()->SetAmbient(Vec3(0.1f, 0.1f, 0.1f));
+		light->GetLight()->SetSpecular(Vec3(0.1f, 0.1f, 0.1f));
+		light->SetCheckFrustum(true);
 		scene->AddGameObject(light);
 	}
 #pragma endregion
-	
+#pragma region Directional Light
+	{
+		shared_ptr<GameObject> light = make_shared<GameObject>();
+		light->SetName(L"Dir_Light");
+		light->AddComponent(make_shared<Transform>());
+		light->GetTransform()->SetLocalPosition(Vec3(0, 10000, 0));
+		
+		light->AddComponent(make_shared<Light>());
+		light->GetLight()->SetLightDirection(Vec3(0.f, -1, 0.f));
+		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
+		light->GetLight()->SetDiffuse(Vec3(1.0f, 1.0f, 1.0f));
+		light->GetLight()->SetAmbient(Vec3(0.1f, 0.1f, 0.1f));
+		light->GetLight()->SetSpecular(Vec3(0.1f, 0.1f, 0.1f));
+		
+		scene->AddGameObject(light);
+	}
+#pragma endregion
 	_LoadText = L"Load Point Light"; // 18
 	Network::GetInst()->SendLoadProgressPacket((char)1700 / 21);
 
-#pragma region Point Light
-	{
-		shared_ptr<GameObject> light = make_shared<GameObject>();
-		light->SetName(L"Pnt_Light");
-		light->AddComponent(make_shared<Transform>());
-		light->GetTransform()->SetLocalPosition(Vec3(0.f, 100.f, 150.f));
-		light->AddComponent(make_shared<Light>());
-		//light->GetLight()->SetLightDirection(Vec3(-1.f, -1.f, 0));
-		light->GetLight()->SetLightType(LIGHT_TYPE::POINT_LIGHT);
-		light->GetLight()->SetDiffuse(Vec3(0.0f, 0.5f, 0.0f));
-		light->GetLight()->SetAmbient(Vec3(0.0f, 0.3f, 0.0f));
-		light->GetLight()->SetSpecular(Vec3(0.0f, 0.3f, 0.0f));
-		light->GetLight()->SetLightRange(200.f);
-		light->AddComponent(make_shared<LightEffect>());
-
-		//light->GetLight()->SetLightState(false);
-		scene->AddGameObject(light);
-	}
-#pragma endregion
+//#pragma region Point Light
+//	{
+//		shared_ptr<GameObject> light = make_shared<GameObject>();
+//		light->SetName(L"Pnt_Light");
+//		light->AddComponent(make_shared<Transform>());
+//		light->GetTransform()->SetLocalPosition(Vec3(0.f, 100.f, 150.f));
+//		light->AddComponent(make_shared<Light>());
+//		//light->GetLight()->SetLightDirection(Vec3(-1.f, -1.f, 0));
+//		light->GetLight()->SetLightType(LIGHT_TYPE::POINT_LIGHT);
+//		light->GetLight()->SetDiffuse(Vec3(0.0f, 0.5f, 0.0f));
+//		light->GetLight()->SetAmbient(Vec3(0.0f, 0.3f, 0.0f));
+//		light->GetLight()->SetSpecular(Vec3(0.0f, 0.3f, 0.0f));
+//		light->GetLight()->SetLightRange(200.f);
+//		light->AddComponent(make_shared<LightEffect>());
+//
+//		//light->GetLight()->SetLightState(false);
+//		scene->AddGameObject(light);
+//	}
+//#pragma endregion
 
 	_LoadText = L"Load Spot Light"; // 19
 	Network::GetInst()->SendLoadProgressPacket((char)1800 / 21);
@@ -599,7 +617,7 @@ void SceneManager::LoadGameScene()
 		shared_ptr<GameObject> light = make_shared<GameObject>();
 		light->SetName(L"Spt_Light");
 		light->AddComponent(make_shared<Transform>());
-		light->GetTransform()->SetLocalPosition(Vec3(75.f, 500.f, 150.f));
+		light->GetTransform()->SetLocalPosition(Vec3(0.f, 100.f, 0.f));
 		light->AddComponent(make_shared<Light>());
 		light->GetLight()->SetLightDirection(Vec3(0.f, -1.f, 0));
 		light->GetLight()->SetLightType(LIGHT_TYPE::SPOT_LIGHT);
@@ -630,6 +648,49 @@ void SceneManager::LoadGameScene()
 		particle->GetParticleSystem()->MakeParticle(L"blood", L"..\\Resources\\Texture\\Particle\\pngwing.com.png");
 		particle->GetTransform()->SetLocalPosition(Vec3(0.f, 100.f, 0.f));
 		scene->AddGameObject(particle);
+	}
+#pragma endregion
+
+#pragma region Plane
+	{
+		shared_ptr<GameObject> obj = make_shared<GameObject>();
+		obj->AddComponent(make_shared<Transform>());
+		obj->GetTransform()->SetLocalScale(Vec3(10000.f, 1.f, 10000.f));
+		obj->GetTransform()->SetLocalPosition(Vec3(0.f, -10.f, 0.f));
+		obj->SetStatic(true);
+		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+		{
+			shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadCubeMesh();
+			meshRenderer->SetMesh(mesh);
+		}
+		{
+			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject")->Clone();
+			material->SetInt(0, 0);
+			meshRenderer->SetMaterial(material);
+		}
+		obj->AddComponent(meshRenderer);
+		scene->AddGameObject(obj);
+	}
+#pragma endregion
+
+#pragma region Object
+	{
+		shared_ptr<GameObject> obj = make_shared<GameObject>();
+		obj->AddComponent(make_shared<Transform>());
+		obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
+		obj->GetTransform()->SetLocalPosition(Vec3(0, 110.f, 500.f));
+		obj->SetStatic(false);
+		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+		{
+			shared_ptr<Mesh> sphereMesh = GET_SINGLE(Resources)->LoadSphereMesh();
+			meshRenderer->SetMesh(sphereMesh);
+		}
+		{
+			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
+			meshRenderer->SetMaterial(material->Clone());
+		}
+		obj->AddComponent(meshRenderer);
+		scene->AddGameObject(obj);
 	}
 #pragma endregion
 
