@@ -422,7 +422,7 @@ void SceneManager::LoadGameScene()
 				gameObject->GetNetworkSystem()->SetNetworkId(myID);
 				gameObject->GetNetworkSystem()->SetNetworkingType(NetworkType::PLAYER);
 			}
-			
+			gameObject->SetStatic(false);
 			int32 index = 2;
 			gameObject->GetAnimator()->Play(index);
 			scene->AddGameObject(gameObject);
@@ -556,13 +556,13 @@ void SceneManager::LoadGameScene()
 		shared_ptr<GameObject> light = make_shared<GameObject>();
 		light->SetName(L"Dir_Light");
 		light->AddComponent(make_shared<Transform>());
-		light->GetTransform()->SetLocalPosition(Vec3(0, 1000, 1000));
+		light->GetTransform()->SetLocalPosition(Vec3(0, 1000, 0));
 		light->AddComponent(make_shared<Light>());
 		light->GetLight()->SetLightDirection(Vec3(0, -1, 1.f));
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
-		light->GetLight()->SetDiffuse(Vec3(0.0f, 1.0f, 1.0f));
-		light->GetLight()->SetAmbient(Vec3(1.0f, 1.0f, 1.0f));
-		light->GetLight()->SetSpecular(Vec3(0.0f, 0.0f, 0.0f));
+		light->GetLight()->SetDiffuse(Vec3(1.f, 1.f, 1.f));
+		light->GetLight()->SetAmbient(Vec3(0.1f, 0.1f, 0.1f));
+		light->GetLight()->SetSpecular(Vec3(0.1f, 0.1f, 0.1f));
 
 		scene->AddGameObject(light);
 	}

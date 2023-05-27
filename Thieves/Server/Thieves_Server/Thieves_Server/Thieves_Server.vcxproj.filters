@@ -90,11 +90,8 @@
     <ClCompile Include="object\MapManager.cpp">
       <Filter>소스 파일\object\move_object</Filter>
     </ClCompile>
-    <ClCompile Include="CBox.h">
-      <Filter>소스 파일\collision</Filter>
-    </ClCompile>
     <ClCompile Include="CBox.cpp">
-      <Filter>소스 파일\collision</Filter>
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +151,9 @@
     </ClInclude>
     <ClInclude Include="object\MapManager.h">
       <Filter>소스 파일\object\move_object</Filter>
+    </ClInclude>
+    <ClInclude Include="CBox.h">
+      <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
