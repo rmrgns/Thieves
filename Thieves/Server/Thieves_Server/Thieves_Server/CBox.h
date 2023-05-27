@@ -27,21 +27,22 @@ public:
 	}
 	~CBox() {};
 
-
-	bool BoxBoxIntersectionTest(const CBox& box0, const CBox& box1);
 	bool BoxBoxIntersection(const CBox& box0);
-	bool BoxBoxIntersection2(const CBox& box0);
-	
+	Vector3 CalculateSliding(CBox& playerBox, Vector3 playerVelocity);
 	float center[3];
 	float axis[3][3];		
 	float extent[3];		
 	float translation[3];	
 
+	float VecDotProduct2(const Vector3& a, const Vector3& b) {
+		return a.x * b.x + a.y * b.y + a.z * b.z;
+	}
 };
 
 inline float DotProduct(const float v0[3], const float v1[3])
 {//=v0.v1
 	return v0[0] * v1[0] + v0[1] * v1[1] + v0[2] * v1[2];
 }
+
 #define fc_fabs fabsf
 

@@ -9,14 +9,8 @@
 #include "database/db.h"
 #include "object/moveobj_manager.h"
 #include "object/MapManager.h"
-#include "OBB.h"
-
-//#include "CollisionDetection.hpp"
-
-//concurrency::concurrent_priority_queue<timer_event> PacketManager::g_timer_queue = concurrency::concurrent_priority_queue<timer_event>();
 
 using namespace std;
-
 
 PacketManager::PacketManager()
 {
@@ -549,10 +543,13 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 	PlayerBox.translation[1] = cl->GetPosY() - oldPos.y;
 	PlayerBox.translation[2] = cl->GetPosZ() - oldPos.z;
 
-	if (m_map_manager->checkCollision(PlayerBox)) 
-		cl->SetPos(oldPos);
+	cl->SetPos(m_map_manager->checkCollision(PlayerBox, oldPos));
+//	if (m_map_manager->checkCollision(PlayerBox, oldPos)) {
+//		// 충돌 했어
+//		
+//		cl->SetPos(oldPos);
+//	}
 
-	// 충돌 안했어.
 	cl->state_lock.lock();
 	if (cl->GetState() != STATE::ST_INGAME)
 	{
@@ -677,4 +674,3 @@ void PacketManager::StartGame(int room_id)
 		//SendWaveInfo(c_id, next_round, room->GetMaxUser() * next_round, room->GetMaxUser() * (next_round + 1));
 	}
 }
-

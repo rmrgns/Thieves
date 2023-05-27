@@ -87,16 +87,10 @@
     <ClCompile Include="map_object.cpp">
       <Filter>소스 파일\object\map_object</Filter>
     </ClCompile>
-    <ClCompile Include="collision_detection.cpp">
-      <Filter>소스 파일\collision</Filter>
-    </ClCompile>
     <ClCompile Include="object\MapManager.cpp">
       <Filter>소스 파일\object\move_object</Filter>
     </ClCompile>
     <ClCompile Include="CBox.h">
-      <Filter>소스 파일\collision</Filter>
-    </ClCompile>
-    <ClCompile Include="OBB.cpp">
       <Filter>소스 파일\collision</Filter>
     </ClCompile>
     <ClCompile Include="CBox.cpp">
@@ -158,14 +152,8 @@
     <ClInclude Include="map_object.h">
       <Filter>소스 파일\object\map_object</Filter>
     </ClInclude>
-    <ClInclude Include="collision_detection.h">
-      <Filter>소스 파일\collision</Filter>
-    </ClInclude>
     <ClInclude Include="object\MapManager.h">
       <Filter>소스 파일\object\move_object</Filter>
-    </ClInclude>
-    <ClInclude Include="OBB.h">
-      <Filter>소스 파일\collision</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

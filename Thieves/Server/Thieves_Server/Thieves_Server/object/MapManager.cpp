@@ -71,16 +71,27 @@ void MapManager::LoadMap()
 
 
 // true이면 충돌 
-bool MapManager::checkCollision(CBox& playerBox)
+Vector3 MapManager::checkCollision(CBox& playerBox, Vector3& playerOldPos)
 {
+	playerOldPos.y += 75.f;
+
+	Vector3 currentPlayerPos(playerBox.center[0], playerBox.center[1], playerBox.center[2]);
+	Vector3 boxVelocity(currentPlayerPos - playerOldPos);
+
+
+	// 충돌하는 순간의 맵 데이터
 	for (auto& obj : MapCBox)
 	{
 		if (obj->BoxBoxIntersection(playerBox))
 		{
 			// 충돌했어.
-			return true;
+			playerOldPos.y -= 75.f;
+			return (playerOldPos + obj->CalculateSliding(playerBox, boxVelocity));
 		}
 	}
+
+	currentPlayerPos.y -= 75.f;
+	playerOldPos.y -= 75.f;
 	// 충돌안했어
-	return false;
+	return currentPlayerPos;
 }
