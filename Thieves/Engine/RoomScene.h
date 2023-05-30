@@ -39,6 +39,10 @@ public:
 	bool GetRecvDataEnd() { return isRecvDataEnd; };
 
 	void SetPlayerReady(int id, bool val) { m_pData.find(id)->second.isReady = val; }
+	bool GetPlayerReady(int id) { return m_pData.find(id)->second.isReady; }
+
+	void SetRoomMasterId(int id) { m_room_master_id = id; };
+	int GetRoomMasterId() { return m_room_master_id; };
 
 	std::unordered_map<int, PlayerDataInRoom>& GetRoomData() {
 		return m_pData;
@@ -48,6 +52,7 @@ private:
 	int m_room_id = -1;
 	// 룸 내부 플레이어의 데이터를 저장하는 곳
 	unordered_map<int, PlayerDataInRoom> m_pData;
+	int m_room_master_id = -1;
 	bool isRecvDataEnd = true;
 };
 

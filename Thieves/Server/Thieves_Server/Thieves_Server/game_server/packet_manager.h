@@ -46,6 +46,8 @@ public:
 
 	void SendLoadEnd(int c_id, int p_id);
 
+	void SendAllPlayerLoadEnd(int c_id);
+
 	void SendEnterRoom(int c_id, int p_id);
 	void SendEnterRoomOk(int c_id, int room_id);
 	void SendLeaveRoom(int c_id, int p_id);
@@ -56,8 +58,8 @@ public:
 	void SendRoomsDataForLobbyEnd(int c_id);
 	void SendRoomsDataForRoom(int c_id, int p_id);
 	void SendRoomsDataForRoomEnd(int c_id);
-	void SendError(int c_id, int err_type);
-
+	void SendError(int c_id, int err_type, int err_val);
+	void SendGameStart(int c_id);
 
 	void End();
 	void Disconnect(int c_id);

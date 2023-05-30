@@ -41,7 +41,10 @@ public:
 	void PlayerReady(int c_id);
 	void PlayerCancleReady(int c_id);
 
+	int GetRoomMasterId() { return m_room_master_id; }
+
 	int GetNumberOfPlayer();
+	int GetNumberOfReadyPlayer();
 
 	std::unordered_set<int>& GetObjList()
 	{
@@ -55,6 +58,7 @@ private:
 	ROOM_STATE m_room_state;
 	int max_npc;
 	int curr_round;
+	int m_room_master_id;
 	std::unordered_set<int>m_obj_list;
 	std::unordered_set<int>m_ready_player_list;
 	std::chrono::system_clock::time_point m_start_time;

@@ -101,6 +101,11 @@ void Text::Update()
 		float count = 0.f;
 		for (auto& data : rScene->GetRoomData())
 		{
+			if (data.second.id == rScene->GetRoomMasterId())
+			{
+				wstring masterText = L"Master";
+				SetText(masterText, 100.f, 100.f + 50.f * count, 1.f, 1.f);
+			}
 			wstring tempText = L"";
 			tempText.append(data.second.name);
 			SetText(tempText, 200.f, 100.f + 50.f * count, 1.f, 1.f);

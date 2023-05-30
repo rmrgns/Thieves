@@ -7,6 +7,7 @@ using namespace std;
 Room::Room(int room_id)
 {
 	m_room_id = room_id;
+	m_room_master_id = -1;
 	m_start_time = chrono::system_clock::now();
 	m_room_state = ROOM_STATE::RT_FREE;
 	m_obj_list.reserve(max_user + max_npc);
@@ -29,6 +30,9 @@ void Room::EnterRoom(int c_id)
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 	cl->state_lock.lock();
 	cl->SetState(STATE::ST_INROOM);
+	if (m_room_master_id == -1) {
+		m_room_master_id = c_id;
+	}
 	cl->state_lock.unlock();
 }
 
@@ -37,16 +41,18 @@ void Room::ResetRoom()
 	max_user = 0;
 	max_npc = 0;
 	curr_round = 0;
-
+	m_room_master_id = -1;
 	m_start_time = std::chrono::system_clock::now();
 	m_obj_list.clear();
 }
 
 void Room::LeaveRoom(int c_id)
 {
+
+	
 	if (m_obj_list.contains(c_id))
 	{
-		m_obj_list.erase(c_id);
+		m_obj_list.erase(c_id);	
 		Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 		cl->state_lock.lock();
 		cl->SetState(STATE::ST_LOGIN);
@@ -59,7 +65,13 @@ void Room::LeaveRoom(int c_id)
 	{
 		m_state_lock.lock();
 		m_room_state = ROOM_STATE::RT_FREE;
+		m_room_master_id = -1;
 		m_state_lock.unlock();
+	}
+	else {
+		if (m_room_master_id == c_id) {
+			m_room_master_id = *(m_obj_list.begin());
+		}
 	}
 	
 }
@@ -107,4 +119,15 @@ int Room::GetNumberOfPlayer()
 
 	return num;
 
+}
+
+int Room::GetNumberOfReadyPlayer()
+{
+	int num = 0;
+	for (int pl : m_ready_player_list)
+	{
+		if (true == MoveObjManager::GetInst()->IsPlayer(pl)) num++;
+	}
+
+	return num;
 }

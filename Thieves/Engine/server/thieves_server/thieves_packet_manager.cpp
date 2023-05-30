@@ -17,6 +17,7 @@
 #include "Scene.h"
 #include "RoomScene.h"
 #include "LobbyScene.h"
+#include "InGameScene.h"
 #include "GameObject.h"
 #include "NetworkSystem.h"
 
@@ -41,6 +42,7 @@ void ThievesPacketManager::Init()
 	RegisterRecvFunction(SC_PACKET_PLAYER_CANCLE_READY, [this](int c_id, unsigned char* p) {ProcessPlayerCancleReady(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_ENTER_ROOM_OK, [this](int c_id, unsigned char* p) {ProcessEnterRoomOk(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_ERROR, [this](int c_id, unsigned char* p) {ProcessError(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_GAME_START, [this](int c_id, unsigned char* p) {ProcessGameStart(c_id, p); });
 }
 
 void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
@@ -239,10 +241,12 @@ void ThievesPacketManager::ProcessInRoomDataEnd(int c_id, unsigned char* p)
 	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::ROOM) {
 		shared_ptr<RoomScene> rScene = static_pointer_cast<RoomScene>(GET_SINGLE(SceneManager)->GetActiveScene());
 		rScene->SetRecvDataEnd(true);
+		rScene->SetRoomMasterId(packet->master_id);
 	}
 	else if (GET_SINGLE(SceneManager)->GetCurrentLoadProgressScene() == CURRENT_SCENE::ROOM) {
 		shared_ptr<RoomScene> rScene = static_pointer_cast<RoomScene>(GET_SINGLE(SceneManager)->GetLoadProgressScene());
 		rScene->SetRecvDataEnd(true);
+		rScene->SetRoomMasterId(packet->master_id);
 	}
 	else {
 		return;
@@ -255,10 +259,16 @@ void ThievesPacketManager::ProcessPlayerLeft(int c_id, unsigned char* p)
 	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::ROOM) {
 		shared_ptr<RoomScene> rScene = static_pointer_cast<RoomScene>(GET_SINGLE(SceneManager)->GetActiveScene());
 		rScene->RemovePlayerData(packet->id);
+		if (packet->master_id != -1) {
+			rScene->SetRoomMasterId(packet->master_id);
+		}
 	}
 	else if (GET_SINGLE(SceneManager)->GetCurrentLoadProgressScene() == CURRENT_SCENE::ROOM) {
 		shared_ptr<RoomScene> rScene = static_pointer_cast<RoomScene>(GET_SINGLE(SceneManager)->GetLoadProgressScene());
 		rScene->RemovePlayerData(packet->id);
+		if (packet->master_id != -1) {
+			rScene->SetRoomMasterId(packet->master_id);
+		}
 	}
 	else {
 		return;
@@ -327,6 +337,14 @@ void ThievesPacketManager::ProcessEnterRoomOk(int c_id, unsigned char* p)
 	GEngine->SetChangeScene(L"Room");
 }
 
+void ThievesPacketManager::ProcessAllPlayerLoadend(int c_id, unsigned char* p)
+{
+	sc_packet_all_player_load_end* packet = reinterpret_cast<sc_packet_all_player_load_end*>(p);
+
+	shared_ptr<InGameScene> iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetLoadProgressScene());
+	iScene->SetAllPlayerLoaded(true);
+}
+
 void ThievesPacketManager::ProcessError(int c_id, unsigned char* p)
 {
 	sc_packet_error* packet = reinterpret_cast<sc_packet_error*>(p);
@@ -343,6 +361,14 @@ void ThievesPacketManager::ProcessError(int c_id, unsigned char* p)
 		break;
 	}
 
+}
+
+void ThievesPacketManager::ProcessGameStart(int c_id, unsigned char* p)
+{
+	sc_packet_game_start* packet = reinterpret_cast<sc_packet_game_start*>(p);
+
+	GET_SINGLE(SceneManager)->SetCheckChangeScene(true);
+	GEngine->SetChangeScene(L"Game");
 }
 
 

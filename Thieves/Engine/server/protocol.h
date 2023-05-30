@@ -30,7 +30,8 @@ constexpr int PLAYER_DAMAGE = 1;	// 플레이어 DMG
 //--------- 여기는 서버에서 클라이언트에게 에러 코드를 전달해 줄때 어떤 에러인지 알려주는 용도
 constexpr int ERROR_GAME_IN_PROGRESS = 1;		// 게임이 진행중인 방에 들어가려고 했을 때
 constexpr int ERROR_ROOM_IS_FULL = 2;			// 룸 안에 사람이 가득 차있는 경우
-constexpr int ERROR_ROOM_NOT_EXIST = 3;			// 
+constexpr int ERROR_ROOM_NOT_EXIST = 3;			// 룸이 없음
+constexpr int ERROR_PLAYER_NOT_READY = 4;
 
 //---------
 
@@ -93,7 +94,7 @@ constexpr char SC_PACKET_ROOMS_DATA_FOR_LOBBY_END = 30; // 위의 패킷에서 룸당 하
 constexpr char SC_PACKET_ROOMS_DATA_FOR_ROOM = 31; // 플레이어가 룸에 들어 갔을 때 룸 내부의 정보를 줄 패킷
 constexpr char SC_PACKET_ROOMS_DATA_FOR_ROOM_END = 32; // LOBBY_END와 비슷하게 끝났음을 알리는 패킷. (이것도 마찬가지로 WSASend가 많이 불리게 되므로 고쳐야 할 수도 잇음)
 constexpr char SC_PACKET_ERROR = 33; // 어떤 식으로든 에러를 보내야 할때
-
+constexpr char SC_PACKET_GAME_START = 34; // 아니 게임 시작 패킷이 없는게 말이 됨?
 //#pragma pack (push, 1)
 
 // 클라이언트 -> 서버로 보내는 패킷은 어떤 키를 얼마나 눌렀는지에 대해서만 보내주면 된다.
@@ -328,6 +329,7 @@ struct sc_packet_leave_room {
 	unsigned char size;
 	char type;
 	int id;
+	int master_id; // 룸 마스터가 변경될 때에 사용
 };
 
 struct sc_packet_player_ready {
@@ -378,10 +380,17 @@ struct sc_packet_rooms_data_for_room {
 struct sc_packet_rooms_data_for_room_end {
 	unsigned char size;
 	char type;
+	int master_id; // 룸 마스터의 번호 전송
 };
 
 struct sc_packet_error {
 	unsigned char size;
 	char type;
 	char err_type;
+	char err_val; // 에러에 특정 값이 필요한 경우
+};
+
+struct sc_packet_game_start {
+	unsigned char size;
+	char type;
 };

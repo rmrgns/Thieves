@@ -3,6 +3,7 @@
 #include "Scene.h"
 #include "LobbyScene.h"
 #include "RoomScene.h"
+#include "InGameScene.h"
 
 #include "Engine.h"
 #include "Material.h"
@@ -269,7 +270,7 @@ void SceneManager::LoadGameScene()
 
 	_LoadText = L"Load Main Camera"; // 3
 	Network::GetInst()->SendLoadProgressPacket((char)200 / 21);
-	shared_ptr<Scene> scene = make_shared<Scene>();
+	shared_ptr<InGameScene> scene = make_shared<InGameScene>();
 	
 #pragma region Camera
 	{
@@ -634,12 +635,13 @@ void SceneManager::LoadGameScene()
 
 	// 만약 나중에 로딩이 모든 사람들의 로딩이 끝난 뒤 보여야 하는 경우라면 
 	// 이 부분에서 설정해 주어야 한다
-	/*
+	
 	while (true)
 	{
-		SleepEx(0, false);
+		if (scene->IsAllPlayerLoaded()) break;
+		Sleep(0);
 	}
-	*/
+	
 	ChangeToLoadedScene();
 }
 
