@@ -26,6 +26,10 @@ void Room::Init(int user_num)
 void Room::EnterRoom(int c_id)
 {
 	m_obj_list.insert(c_id);
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->state_lock.lock();
+	cl->SetState(STATE::ST_INROOM);
+	cl->state_lock.unlock();
 }
 
 void Room::ResetRoom()
@@ -43,6 +47,10 @@ void Room::LeaveRoom(int c_id)
 	if (m_obj_list.contains(c_id))
 	{
 		m_obj_list.erase(c_id);
+		Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+		cl->state_lock.lock();
+		cl->SetState(STATE::ST_LOGIN);
+		cl->state_lock.unlock();
 	}
 
 
@@ -67,6 +75,26 @@ float Room::GetRoundTime() {
 	round_time = (float)time.count();
 	round_time /= 1000.0f;
 	return round_time;
+}
+
+void Room::PlayerReady(int c_id)
+{
+	m_ready_player_list.insert(c_id);
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->state_lock.lock();
+	cl->SetState(STATE::ST_INROOMREDDY);
+	cl->state_lock.unlock();
+}
+
+void Room::PlayerCancleReady(int c_id)
+{
+	if (m_ready_player_list.contains(c_id)) {
+		m_ready_player_list.erase(c_id);
+		Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+		cl->state_lock.lock();
+		cl->SetState(STATE::ST_INROOM);
+		cl->state_lock.unlock();
+	}
 }
 
 int Room::GetNumberOfPlayer()

@@ -38,6 +38,8 @@ public:
 	void SetRecvDataEnd(bool val) { isRecvDataEnd = val; };
 	bool GetRecvDataEnd() { return isRecvDataEnd; };
 
+	void SetPlayerReady(int id, bool val) { m_pData.find(id)->second.isReady = val; }
+
 	std::unordered_map<int, PlayerDataInRoom>& GetRoomData() {
 		return m_pData;
 	}

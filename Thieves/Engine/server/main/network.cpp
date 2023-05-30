@@ -112,7 +112,7 @@ void Network::Worker()
 			}
 			else
 			{
-				cout << "Complieted send" << endl;
+				cout << "Completed send" << endl;
 				delete exp_over;
 			}
 			break;

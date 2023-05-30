@@ -483,16 +483,7 @@ void PacketManager::Disconnect(int c_id)
 		cl->GetState() == STATE::ST_INROOMREDDY)
 	{
 		Room* room = m_room_manager->GetRoom(cl->GetRoomID());
-		auto& objs = room->GetObjList();
-
-
-		if (!objs.empty())
-		{
-			if (objs.contains(c_id))
-			{
-				objs.erase(c_id);
-			}
-		}
+		room->LeaveRoom(c_id);
 
 		if (cl->GetState() == STATE::ST_INROOMREDDY) {
 			room->PlayerCancleReady(c_id);
@@ -503,6 +494,8 @@ void PacketManager::Disconnect(int c_id)
 		packet.size = sizeof(packet);
 		packet.type = SC_PACKET_REMOVE_OBJECT;
 		packet.id = c_id;
+
+		auto& objs = room->GetObjList();
 
 		for (int obj : objs)
 		{

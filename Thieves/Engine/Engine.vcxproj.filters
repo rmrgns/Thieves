@@ -267,6 +267,9 @@
     <ClCompile Include="LobbyScript.cpp">
       <Filter>Object\Script</Filter>
     </ClCompile>
+    <ClCompile Include="RoomScript.cpp">
+      <Filter>Object\Script</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -498,6 +501,9 @@
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="LobbyScript.h">
+      <Filter>Object\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomScript.h">
       <Filter>Object\Script</Filter>
     </ClInclude>
   </ItemGroup>

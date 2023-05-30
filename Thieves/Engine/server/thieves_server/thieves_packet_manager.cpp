@@ -151,6 +151,11 @@ void ThievesPacketManager::ProcessRemoveObj(int c_id, unsigned char* p)
 {
 	sc_packet_remove_object* packet = reinterpret_cast<sc_packet_remove_object*>(p);
 
+	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::ROOM) {
+		shared_ptr<RoomScene> rScene = static_pointer_cast<RoomScene>(GET_SINGLE(SceneManager)->GetActiveScene());
+		rScene->RemovePlayerData(c_id);
+	}
+
 	m_obj_map.erase(packet->id);
 
 	auto& objects = GET_SINGLE(SceneManager)->GetActiveScene()->GetGameObjects();
@@ -213,10 +218,13 @@ void ThievesPacketManager::ProcessInRoomData(int c_id, unsigned char* p)
 	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::ROOM) {
 		shared_ptr<RoomScene> rScene = static_pointer_cast<RoomScene>(GET_SINGLE(SceneManager)->GetActiveScene());
 		rScene->InsertPlayerData(packet->userId, packet->userName);
+		rScene->SetPlayerReady(packet->userId, packet->isReady);
+		
 	}
 	else if (GET_SINGLE(SceneManager)->GetCurrentLoadProgressScene() == CURRENT_SCENE::ROOM) {
 		shared_ptr<RoomScene> rScene = static_pointer_cast<RoomScene>(GET_SINGLE(SceneManager)->GetLoadProgressScene());
 		rScene->InsertPlayerData(packet->userId, packet->userName);
+		rScene->SetPlayerReady(packet->userId, packet->isReady);
 	}
 	else {
 		return;
@@ -263,10 +271,12 @@ void ThievesPacketManager::ProcessPlayerJoin(int c_id, unsigned char* p)
 	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::ROOM) {
 		shared_ptr<RoomScene> rScene = static_pointer_cast<RoomScene>(GET_SINGLE(SceneManager)->GetActiveScene());
 		rScene->InsertPlayerData(packet->id, packet->userName);
+		rScene->SetPlayerReady(packet->id, false);
 	}
 	else if (GET_SINGLE(SceneManager)->GetCurrentLoadProgressScene() == CURRENT_SCENE::ROOM) {
 		shared_ptr<RoomScene> rScene = static_pointer_cast<RoomScene>(GET_SINGLE(SceneManager)->GetLoadProgressScene());
 		rScene->InsertPlayerData(packet->id, packet->userName);
+		rScene->SetPlayerReady(packet->id, false);
 	}
 	else {
 		return;
@@ -279,11 +289,11 @@ void ThievesPacketManager::ProcessPlayerReady(int c_id, unsigned char* p)
 
 	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::ROOM) {
 		shared_ptr<RoomScene> rScene = static_pointer_cast<RoomScene>(GET_SINGLE(SceneManager)->GetActiveScene());
-		rScene->GetRoomData().find(packet->id)->second.isReady = true;
+		rScene->SetPlayerReady(packet->id, true);
 	}
 	else if (GET_SINGLE(SceneManager)->GetCurrentLoadProgressScene() == CURRENT_SCENE::ROOM) {
 		shared_ptr<RoomScene> rScene = static_pointer_cast<RoomScene>(GET_SINGLE(SceneManager)->GetLoadProgressScene());
-		rScene->GetRoomData().find(packet->id)->second.isReady = true;
+		rScene->SetPlayerReady(packet->id, true);
 	}
 	else {
 		return;
@@ -296,11 +306,11 @@ void ThievesPacketManager::ProcessPlayerCancleReady(int c_id, unsigned char* p)
 
 	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::ROOM) {
 		shared_ptr<RoomScene> rScene = static_pointer_cast<RoomScene>(GET_SINGLE(SceneManager)->GetActiveScene());
-		rScene->GetRoomData().find(packet->id)->second.isReady = false;
+		rScene->SetPlayerReady(packet->id, false);
 	}
 	else if (GET_SINGLE(SceneManager)->GetCurrentLoadProgressScene() == CURRENT_SCENE::ROOM) {
 		shared_ptr<RoomScene> rScene = static_pointer_cast<RoomScene>(GET_SINGLE(SceneManager)->GetLoadProgressScene());
-		rScene->GetRoomData().find(packet->id)->second.isReady = false;
+		rScene->SetPlayerReady(packet->id, false);
 	}
 	else {
 		return;

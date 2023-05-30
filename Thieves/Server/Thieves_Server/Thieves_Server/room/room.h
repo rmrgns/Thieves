@@ -38,8 +38,8 @@ public:
 
 	bool IsPlayerReady(int c_id) { return m_ready_player_list.contains(c_id); }
 
-	void PlayerReady(int c_id) { m_ready_player_list.insert(c_id); }
-	void PlayerCancleReady(int c_id) { m_ready_player_list.erase(c_id); }
+	void PlayerReady(int c_id);
+	void PlayerCancleReady(int c_id);
 
 	int GetNumberOfPlayer();
 
