@@ -14,7 +14,9 @@ void RoomScript::Update()
 		shared_ptr<RoomScene> rScene =
 			static_pointer_cast<RoomScene>(GET_SINGLE(SceneManager)->GetActiveScene());
 		
-		rScene->SetPlayerReady(playerId, !rScene->GetPlayerReady(playerId));
+		bool isPlayerReady = rScene->GetPlayerReady(playerId);
+
+		rScene->SetPlayerReady(playerId, !isPlayerReady);
 
 		if (rScene->GetPlayerReady(playerId)) {
 			Network::GetInst()->SendReady();

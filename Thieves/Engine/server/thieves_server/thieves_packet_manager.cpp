@@ -30,6 +30,7 @@ void ThievesPacketManager::Init()
 	
 	RegisterRecvFunction(SC_PACKET_MOVE, [this](int c_id, unsigned char* p) {ProcessMove(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_OBJ_INFO, [this](int c_id, unsigned char* p) {ProcessObjInfo(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_OBJ_INFO_END, [this](int c_id, unsigned char* p) {ProcessObjInfoEnd(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_SIGN_IN_OK, [this](int c_id, unsigned char* p) {ProcessSignin(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_REMOVE_OBJECT, [this](int c_id, unsigned char* p) {ProcessRemoveObj(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_ROOMS_DATA_FOR_LOBBY, [this](int c_id, unsigned char* p) {ProcessRoomsData(c_id, p); });
@@ -43,6 +44,7 @@ void ThievesPacketManager::Init()
 	RegisterRecvFunction(SC_PACKET_ENTER_ROOM_OK, [this](int c_id, unsigned char* p) {ProcessEnterRoomOk(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_ERROR, [this](int c_id, unsigned char* p) {ProcessError(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_GAME_START, [this](int c_id, unsigned char* p) {ProcessGameStart(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_ALL_PLAYER_LOAD_END, [this](int c_id, unsigned char* p) {ProcessAllPlayerLoadend(c_id, p); });
 }
 
 void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
@@ -87,7 +89,8 @@ void ThievesPacketManager::ProcessObjInfo(int c_id, unsigned char* p)
 	// 이거 가독성 너무 안좋다. 이런 방식으로 적어주면 좋을듯 -> 김혁동임
 	// 
 	// 패킷 아이디가 게임 정보의 네트워크 아이디와 같다면 오브젝트 타입을 조작 플레이어 타입으로, 아니라면 패킷에서 받은 오브젝트 타입으로 한다.
-	packet->id == m_game_info.GetNetworkID() ? nw_type = NW_OBJ_TYPE::OT_MY_PLAYER : nw_type = NW_OBJ_TYPE::OT_PLAYER;
+	packet->id == m_game_info.GetNetworkID() ?
+		nw_type = NW_OBJ_TYPE::OT_MY_PLAYER : nw_type = NW_OBJ_TYPE::OT_PLAYER;
 	//-> 나중에 NPC 처리를 할 때에는 이 부분을 변경해 주어야 함.
 
 	bool isNewData = true;
@@ -147,6 +150,20 @@ void ThievesPacketManager::ProcessObjInfo(int c_id, unsigned char* p)
 	}
 
 	// 오브젝트 spqwn 및 m_objmap[pakcet->id] 전송하여 id값마다 스폰
+}
+
+void ThievesPacketManager::ProcessObjInfoEnd(int c_id, unsigned char* p)
+{
+	sc_packet_obj_info_end* packet = reinterpret_cast<sc_packet_obj_info_end*>(p);
+	
+	while (true) {
+		if (GET_SINGLE(SceneManager)->GetCurrentLoadProgressScene() == CURRENT_SCENE::GAME) {
+			shared_ptr<InGameScene> gScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetLoadProgressScene());
+			gScene->SetAllObjInfo(true);
+			break;
+		}
+		Sleep(0);
+	}
 }
 
 void ThievesPacketManager::ProcessRemoveObj(int c_id, unsigned char* p)
@@ -356,6 +373,8 @@ void ThievesPacketManager::ProcessError(int c_id, unsigned char* p)
 	case ERROR_GAME_IN_PROGRESS:
 		break;
 	case ERROR_ROOM_IS_FULL:
+		break;
+	case ERROR_PLAYER_NOT_READY:
 		break;
 	default:
 		break;

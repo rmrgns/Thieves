@@ -38,8 +38,12 @@ public:
 	void SetRecvDataEnd(bool val) { isRecvDataEnd = val; };
 	bool GetRecvDataEnd() { return isRecvDataEnd; };
 
-	void SetPlayerReady(int id, bool val) { m_pData.find(id)->second.isReady = val; }
-	bool GetPlayerReady(int id) { return m_pData.find(id)->second.isReady; }
+	void SetPlayerReady(int id, bool val) {
+		m_pData.find(id)->second.isReady = val; 
+	}
+	bool GetPlayerReady(int id) { 
+		return m_pData.find(id)->second.isReady; 
+	}
 
 	void SetRoomMasterId(int id) { m_room_master_id = id; };
 	int GetRoomMasterId() { return m_room_master_id; };

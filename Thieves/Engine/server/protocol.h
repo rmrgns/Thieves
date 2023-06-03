@@ -95,6 +95,7 @@ constexpr char SC_PACKET_ROOMS_DATA_FOR_ROOM = 31; // 플레이어가 룸에 들어 갔을 
 constexpr char SC_PACKET_ROOMS_DATA_FOR_ROOM_END = 32; // LOBBY_END와 비슷하게 끝났음을 알리는 패킷. (이것도 마찬가지로 WSASend가 많이 불리게 되므로 고쳐야 할 수도 잇음)
 constexpr char SC_PACKET_ERROR = 33; // 어떤 식으로든 에러를 보내야 할때
 constexpr char SC_PACKET_GAME_START = 34; // 아니 게임 시작 패킷이 없는게 말이 됨?
+constexpr char SC_PACKET_OBJ_INFO_END = 35; // OBJ_INFO도 시작하기 전에 보내야 하는게 맞는듯.
 //#pragma pack (push, 1)
 
 // 클라이언트 -> 서버로 보내는 패킷은 어떤 키를 얼마나 눌렀는지에 대해서만 보내주면 된다.
@@ -391,6 +392,11 @@ struct sc_packet_error {
 };
 
 struct sc_packet_game_start {
+	unsigned char size;
+	char type;
+};
+
+struct sc_packet_obj_info_end {
 	unsigned char size;
 	char type;
 };

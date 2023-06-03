@@ -35,6 +35,7 @@ public:
 
 	void SendPutObjPakcet(int c_id, int obj_id, OBJ_TYPE obj_type);
 	void SendObjInfo(int c_id, int obj_id);
+	void SendObjInfoEnd(int c_id);
 	void SendTime(int c_id, float round_time);
 	void SendAttackPacket(int c_id, int room_id);
 	void SendGameWin(int c_id);

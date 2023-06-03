@@ -19,6 +19,7 @@ public:
 	void ProcessMove(int c_id, unsigned char* p);
 	void ProcessSignin(int c_id, unsigned char* p);
 	void ProcessObjInfo(int c_id, unsigned char* p);
+	void ProcessObjInfoEnd(int c_id, unsigned char* p);
 	void ProcessRemoveObj(int c_id, unsigned char* p);
 	void ProcessRoomsData(int c_id, unsigned char* p);
 	void ProcessRoomsDataEnd(int c_id, unsigned char* p);

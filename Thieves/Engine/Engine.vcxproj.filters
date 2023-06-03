@@ -270,6 +270,9 @@
     <ClCompile Include="RoomScript.cpp">
       <Filter>Object\Script</Filter>
     </ClCompile>
+    <ClCompile Include="InGameScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -505,6 +508,9 @@
     </ClInclude>
     <ClInclude Include="RoomScript.h">
       <Filter>Object\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="InGameScene.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

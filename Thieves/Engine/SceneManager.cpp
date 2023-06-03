@@ -17,6 +17,7 @@
 // Script
 #include "LoginScript.h"
 #include "LobbyScript.h"
+#include "RoomScript.h"
 #include "PlayerInput.h"
 #include "PlayerCamera.h"
 #include "PlayerParticle.h"
@@ -271,7 +272,10 @@ void SceneManager::LoadGameScene()
 	_LoadText = L"Load Main Camera"; // 3
 	Network::GetInst()->SendLoadProgressPacket((char)200 / 21);
 	shared_ptr<InGameScene> scene = make_shared<InGameScene>();
-	
+
+	_loadProgressScene = scene;
+	_currentLoadProgressScene = CURRENT_SCENE::GAME;
+
 #pragma region Camera
 	{
 		shared_ptr<GameObject> camera = make_shared<GameObject>();
@@ -387,6 +391,11 @@ void SceneManager::LoadGameScene()
 		scene->AddGameObject(obj);
 	}
 #pragma endregion
+
+	while (true) {
+		if (scene->IsGetAllObjInfo()) break;
+		Sleep(0);
+	}
 
 	_LoadText = L"Load Player FBX Data"; // 7
 	Network::GetInst()->SendLoadProgressPacket((char)600 / 21);
@@ -624,14 +633,15 @@ void SceneManager::LoadGameScene()
 	}
 #pragma endregion
 
-	_LoadText = L"Wait Other Players..."; // 21
-	Network::GetInst()->SendLoadEndPacket();
+
 	
 
 	scene->SetSceneLoaded(true);
 
-	_loadProgressScene = scene;
-	_currentLoadProgressScene = CURRENT_SCENE::GAME;
+
+
+	_LoadText = L"Wait Other Players..."; // 21
+	Network::GetInst()->SendLoadEndPacket();
 
 	// 만약 나중에 로딩이 모든 사람들의 로딩이 끝난 뒤 보여야 하는 경우라면 
 	// 이 부분에서 설정해 주어야 한다
@@ -659,6 +669,9 @@ void SceneManager::LoadLoginScene()
 
 	shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
 	shared_ptr<Scene> scene = make_shared<Scene>();
+
+	_loadProgressScene = scene;
+	_currentLoadProgressScene = CURRENT_SCENE::LOGIN;
 
 	_LoadText = L"Load Main Camera";
 #pragma region Camera
@@ -760,8 +773,7 @@ void SceneManager::LoadLoginScene()
 	_LoadText = L"Load End.";
 	scene->SetSceneLoaded(true);
 
-	_loadProgressScene = scene;
-	_currentLoadProgressScene = CURRENT_SCENE::LOGIN;
+
 
 	ChangeToLoadedScene();
 }
@@ -780,6 +792,8 @@ void SceneManager::LoadLobbyScene()
 
 	shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
 	shared_ptr<LobbyScene> scene = make_shared<LobbyScene>();
+	_loadProgressScene = scene;
+	_currentLoadProgressScene = CURRENT_SCENE::LOBBY;
 
 	_LoadText = L"Load Main Camera";
 #pragma region Camera
@@ -812,8 +826,7 @@ void SceneManager::LoadLobbyScene()
 	_LoadText = L"Load Room Datas.";
 	scene->SetSceneLoaded(true);
 
-	_loadProgressScene = scene;
-	_currentLoadProgressScene = CURRENT_SCENE::LOBBY;
+
 
 	scene->GetRoomsDataFromNetwork();
 
@@ -834,7 +847,9 @@ void SceneManager::LoadRoomScene()
 
 	shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
 	shared_ptr<RoomScene> scene = make_shared<RoomScene>();
-
+	
+	_loadProgressScene = scene;
+	_currentLoadProgressScene = CURRENT_SCENE::ROOM;
 	_LoadText = L"Load Main Camera";
 #pragma region Camera
 	{
@@ -850,13 +865,22 @@ void SceneManager::LoadRoomScene()
 	}
 #pragma endregion
 
+#pragma region script
+	{
+		shared_ptr<GameObject> script = make_shared<GameObject>();
+		script->SetName(L"Script");
+		script->AddComponent(make_shared<Transform>());
+		script->AddComponent(make_shared<RoomScript>());
+
+		script->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+
+		scene->AddGameObject(script);
+	}
+#pragma endregion
 
 	_LoadText = L"Load Room Data.";
+
 	scene->SetSceneLoaded(true);
-
-	_loadProgressScene = scene;
-	_currentLoadProgressScene = CURRENT_SCENE::ROOM;
-
 	scene->GetRoomDataFromNetwork();
 
 	_LoadText = L"Load End.";

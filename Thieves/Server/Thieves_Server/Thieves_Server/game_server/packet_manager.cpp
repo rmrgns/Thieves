@@ -73,7 +73,7 @@ void PacketManager::ProcessPacket(int c_id, unsigned char* p)
 		break;
 	}	
 	case CS_PACKET_LOAD_END: {
-		ProcessLoadProgressing(c_id, p);
+		ProcessLoadEnd(c_id, p);
 		break;
 	}
 	case CS_PACKET_ENTER_ROOM: {
@@ -283,6 +283,16 @@ void PacketManager::SendObjInfo(int c_id, int obj_id)
 	cout << "Send OBJ INFO ID : " << c_id << ", x : " << packet.x << ", y : " << packet.y << ", z : " << packet.z << endl;
 	cl->DoSend(sizeof(packet), &packet);
 
+}
+
+void PacketManager::SendObjInfoEnd(int c_id)
+{
+	sc_packet_obj_info_end packet;
+	packet.size = sizeof(packet);
+	packet.type = SC_PACKET_OBJ_INFO_END;
+
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
 }
 
 void PacketManager::SendTime(int c_id, float round_time)
@@ -508,10 +518,6 @@ void PacketManager::Disconnect(int c_id)
 		Room* room = m_room_manager->GetRoom(cl->GetRoomID());
 		room->LeaveRoom(c_id);
 
-		if (cl->GetState() == STATE::ST_INROOMREDDY) {
-			room->PlayerCancleReady(c_id);
-		}
-
 		sc_packet_remove_object packet;
 
 		packet.size = sizeof(packet);
@@ -528,10 +534,8 @@ void PacketManager::Disconnect(int c_id)
 	}
 
 	cl->state_lock.lock();
-	if (cl->GetRoomID() == 0) {
-		cl->SetState(STATE::ST_FREE);
-		cl->ResetPlayer();
-	}
+	cl->SetState(STATE::ST_FREE);
+	cl->ResetPlayer();
 	cl->state_lock.unlock();
 	
 	
@@ -824,8 +828,7 @@ void PacketManager::ProcessLoadEnd(int c_id, unsigned char* p)
 
 		SendAllPlayerLoadEnd(pl);
 	}
-	// 여기 왔다면 모두 로드가 되었다는 것이다
-	// 모두 로드가 되었다면 게임을 시작해주어야 한다.
+
 }
 
 void PacketManager::ProcessEnterRoom(int c_id, unsigned char* p)
@@ -883,7 +886,6 @@ void PacketManager::ProcessLeaveRoom(int c_id, unsigned char* p)
 {
 	cs_packet_leave_room* packet = reinterpret_cast<cs_packet_leave_room*>(p);
 	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
-
 	// 플레이어가 애초에 방에 안들어가 있었다?
 	// 뭔가 오류가 있는 거임
 	if(player->GetRoomID() == -1) return;
@@ -897,7 +899,8 @@ void PacketManager::ProcessLeaveRoom(int c_id, unsigned char* p)
 	if (!room->GetObjList().contains(c_id)) return;
 
 	player->state_lock.lock();
-	player->SetRoomID(c_id);
+	player->SetRoomID(-1);
+	player->SetState(STATE::ST_LOGIN);
 	player->state_lock.unlock();
 
 	room->m_state_lock.lock();
@@ -925,11 +928,16 @@ void PacketManager::ProcessPlayerReady(int c_id, unsigned char* p)
 		room->m_state_lock.lock();
 		room->PlayerReady(c_id);
 		room->m_state_lock.unlock();
+
+		player->state_lock.lock();
+		player->SetState(STATE::ST_INROOMREDDY);
+		player->state_lock.unlock();
 	}
 
 	for (auto pl : room->GetObjList())
 	{
 		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+		if (pl == c_id) continue;
 		SendPlayerReady(pl, c_id);
 	}
 }
@@ -945,11 +953,16 @@ void PacketManager::ProcessPlayerCancleReady(int c_id, unsigned char* p)
 		room->m_state_lock.lock();
 		room->PlayerCancleReady(c_id);
 		room->m_state_lock.unlock();
+
+		player->state_lock.lock();
+		player->SetState(STATE::ST_INROOM);
+		player->state_lock.unlock();
 	}
 
 	for (auto pl : room->GetObjList())
 	{
 		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+		if (pl == c_id) continue;
 		SendPlayerCancleReady(pl, c_id);
 	}
 }
@@ -1020,6 +1033,11 @@ void PacketManager::StartGame(int room_id)
 
 	for (auto c_id : room->GetObjList())
 	{
+		SendGameStart(c_id);
+	}
+
+	for (auto c_id : room->GetObjList())
+	{
 		if (false == MoveObjManager::GetInst()->IsPlayer(c_id))
 			continue;
 
@@ -1032,6 +1050,14 @@ void PacketManager::StartGame(int room_id)
 			if (c_id == other_id)continue;
 			SendObjInfo(c_id, other_id);
 		}
+	}
+
+	for (auto c_id : room->GetObjList())
+	{
+		if (false == MoveObjManager::GetInst()->IsPlayer(c_id))continue;
+
+		pl = MoveObjManager::GetInst()->GetPlayer(c_id);
+		SendObjInfoEnd(c_id);
 	}
 }
 
