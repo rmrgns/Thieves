@@ -113,13 +113,10 @@ void Engine::ShowFps()
 {
 	uint32 fps = GET_SINGLE(Timer)->GetFps();
 
-	RECT rect{};
-	GetWindowRect(GEngine->GetWindow().hwnd, &rect);
-	RECT rect1;
-	GetClientRect(GEngine->GetWindow().hwnd, &rect1);
-	WCHAR text[100] = L"";
-	::wsprintf(text, L"FPS : %d", fps);
-	::SetWindowText(_window.hwnd, text);
+
+	//WCHAR text[100] = L"";
+	//::wsprintf(text, L"FPS : %d", fps);
+	//::SetWindowText(_window.hwnd, text);
 }
 
 void Engine::CreateConstantBuffer(CBV_REGISTER reg, uint32 bufferSize, uint32 count)

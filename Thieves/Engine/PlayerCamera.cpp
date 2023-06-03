@@ -45,17 +45,7 @@ void PlayerCamera::LateUpdate()
 		else
 			_checkCameraRotation = true;
 	}
-	/*if (INPUT->GetButton(KEY_TYPE::W))
-		pos += GetTransform()->GetLook() * _speed * DELTA_TIME;
 
-	if (INPUT->GetButton(KEY_TYPE::S))
-		pos -= GetTransform()->GetLook() * _speed * DELTA_TIME;
-
-	if (INPUT->GetButton(KEY_TYPE::A))
-		pos -= GetTransform()->GetRight() * _speed * DELTA_TIME;
-
-	if (INPUT->GetButton(KEY_TYPE::D))
-		pos += GetTransform()->GetRight() * _speed * DELTA_TIME;*/
 	for (auto& GameObject : GET_SINGLE(SceneManager)->GetActiveScene()->GetGameObjects())
 	{
 		if (GameObject->GetName() == L"Thief")
@@ -64,6 +54,7 @@ void PlayerCamera::LateUpdate()
 		}
 	}
 	pos.y += 125.f;
+
 	GetTransform()->SetLocalPosition(pos);
 }
 
@@ -98,6 +89,6 @@ void PlayerCamera::CameraRotation()
 	// ī�޶� ĳ���� rotation ��ġ -> 1��Ī
 	int myID = Network::GetInst()->GetPacketManager()->GetGameInfo().GetNetworkID();
 	if(myID != -1) Network::GetInst()->GetNetworkObjMap().find(myID)->second->SetRotation(rotation);
-	
+	GET_SINGLE(SceneManager)->SetLookVec(GetTransform()->GetLook());
 	GetTransform()->SetLocalRotation(rotation);
 }

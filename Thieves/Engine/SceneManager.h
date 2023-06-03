@@ -59,7 +59,8 @@ public:
 
 	//void SetBuildPlayer(bool BuildPlayer) { _BuildPlayer = BuildPlayer; }
 	void BuildPlayer();
-
+	Vec3 GetLookVec() { return _lookVec; }
+	void SetLookVec(Vec3 lookVec) { _lookVec = lookVec; }
 private:
 	void LoadGameScene();
 	void LoadLoginScene();
@@ -78,7 +79,7 @@ private:
 	array<wstring, MAX_LAYER> _layerNames;
 	map<wstring, uint8> _layerIndex;
 
-
+	Vec3 _lookVec = { 0.f,0.f,0.f };
 	//Vec3 _playerPosition;	// �÷��̾� ��ǥ
 	//Vec3 _playerRotation;	// �÷��̾� ȸ����
 	//bool _BuildPlayer = false;		// �÷��̾� ����

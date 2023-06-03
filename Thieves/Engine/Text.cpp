@@ -37,8 +37,9 @@ void Text::Update()
 		//wstring test = L"한글 테스트";
 		//SetText(test, 100.f, 500.f, 1.f, 1.f);
 
+
 	}
-	else if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
+	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
 	{
 		/*Vec3 pos = GEngine->GetThievesPacketManager()->GetVec();
 		wstring text2 = L"x:" + to_wstring(int(pos.x)) + L" y:" + to_wstring(int(pos.y)) + L" z:" + to_wstring(int(pos.z));
