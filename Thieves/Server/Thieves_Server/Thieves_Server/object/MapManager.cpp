@@ -5,7 +5,6 @@
 #include "MapManager.h"
 #include "CBox.h"
 
-
 void MapManager::LoadMap()
 {
 	std::ifstream in{ ".\\ColliderData.txt" };
@@ -77,16 +76,17 @@ Vector3 MapManager::checkCollision(CBox& playerBox, Vector3& playerOldPos)
 
 	Vector3 currentPlayerPos(playerBox.center[0], playerBox.center[1], playerBox.center[2]);
 	Vector3 boxVelocity(currentPlayerPos - playerOldPos);
-
+	int collisionDirection = 0;
 
 	// 충돌하는 순간의 맵 데이터
 	for (auto& obj : MapCBox)
 	{
-		if (obj->BoxBoxIntersection(playerBox))
+		if (obj->BoxBoxIntersection(playerBox, collisionDirection))
 		{
 			// 충돌했어.
 			playerOldPos.y -= 75.f;
-			return (playerOldPos + obj->CalculateSliding(playerBox, boxVelocity));
+			//return (playerOldPos + obj->CalculateSliding(playerBox, boxVelocity, collisionDirection));
+			return (playerOldPos + obj->CalculateSlidingVector(playerBox, collisionDirection, boxVelocity));
 		}
 	}
 
