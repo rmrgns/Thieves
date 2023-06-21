@@ -193,26 +193,54 @@ bool CBox::BoxBoxIntersection(const CBox& box0, int& collisionDirection)
 	return true;
 }
 
+//Vector3 CBox::CalculateSlidingVector(const CBox& playerBox, int collisionDirection, Vector3 playerVelocity)
+//{
+//	
+//	Vector3 slidingVector{0.0f, 0.0f, 0.0f};
+//	// 충돌 방향 벡터 계산	
+//	float collisionNormal[3] = { 0.0f, 0.0f, 0.0f };
+//	collisionNormal[collisionDirection - 1] = 1.0f; // 충돌 방향을 나타내는 축을 1로 설정
+//
+//	// 슬라이딩 벡터 계산
+//	float dotProduct = DotProduct(playerBox.center, collisionNormal) - DotProduct(center, collisionNormal);
+//	
+//	//DotProduct(playerVelocity, collisionNormal);
+//	slidingVector.x = collisionNormal[0] * dotProduct/40;
+//	slidingVector.y = 0;//collisionNormal[1] * dotProduct/70;
+//	slidingVector.z = collisionNormal[2] * dotProduct/40;
+//	//slidingVector.x = collisionNormal[0];
+//	//slidingVector.y = collisionNormal[1];
+//	//slidingVector.z = collisionNormal[2];
+//
+//	
+//
+//	return slidingVector;
+//}
+
 Vector3 CBox::CalculateSlidingVector(const CBox& playerBox, int collisionDirection, Vector3 playerVelocity)
 {
-	
-	Vector3 slidingVector{0.0f, 0.0f, 0.0f};
-	// 충돌 방향 벡터 계산	
-	float collisionNormal[3] = { 0.0f, 0.0f, 0.0f };
-	collisionNormal[collisionDirection - 1] = 1.0f; // 충돌 방향을 나타내는 축을 1로 설정
+	Vector3 slidingVector{ 0.0f, 0.0f, 0.0f };
 
-	// 슬라이딩 벡터 계산
-	float dotProduct = DotProduct(playerBox.center, collisionNormal) - DotProduct(center, collisionNormal);
-	
-	//DotProduct(playerVelocity, collisionNormal);
-	slidingVector.x = collisionNormal[0] * dotProduct/40;
-	slidingVector.y = 0;//collisionNormal[1] * dotProduct/70;
-	slidingVector.z = collisionNormal[2] * dotProduct/40;
-	//slidingVector.x = collisionNormal[0];
-	//slidingVector.y = collisionNormal[1];
-	//slidingVector.z = collisionNormal[2];
+	// 충돌 방향에 따라 충돌 법선 벡터를 계산합니다.
+	Vector3 collisionNormal{ 0.0f, 0.0f, 0.0f };
+	if (collisionDirection == 1) {
+		collisionNormal.x = 1.0f;
+	}
+	else if (collisionDirection == 2) {
+		collisionNormal.y = 1.0f;
+	}
+	else if (collisionDirection == 3) {
+		collisionNormal.z = 1.0f;
+	}
 
-	
+	// 플레이어 속도와 충돌 법선의 내적을 계산합니다.
+	//float dotProduct = playerVelocity.Dot(collisionNormal);
+	float dotProduct = playerVelocity.x * collisionNormal.x + playerVelocity.y * collisionNormal.y + playerVelocity.z * collisionNormal.z;
+
+	// 슬라이딩 벡터를 계산합니다.
+	slidingVector.x = playerVelocity.x - 2.0f * dotProduct * collisionNormal.x;
+	slidingVector.y = playerVelocity.y - 2.0f * dotProduct * collisionNormal.y;
+	slidingVector.z = playerVelocity.z - 2.0f * dotProduct * collisionNormal.z;
 
 	return slidingVector;
 }
