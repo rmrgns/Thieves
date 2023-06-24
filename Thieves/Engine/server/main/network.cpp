@@ -8,23 +8,6 @@ using namespace std;
 Network* Network::m_pInst = NULL;
 bool Network::matching_end = false;
 
-//bool Network::Init()
-//{
-//	m_id = 0;
-//	m_move_time = chrono::system_clock::now();
-//	m_packet_manager->Init();
-//	WSADATA WSAData;
-//	if (WSAStartup(MAKEWORD(2, 2), &WSAData) != 0)
-//		return false;
-//	m_s_socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED);
-//	if (INVALID_SOCKET == m_s_socket)
-//	{
-//		Network::error_display(WSAGetLastError());
-//		return false;
-//	}
-//	return true;
-//}
-
 // 윈도우 소켓 초기화, 소켓 생성 및 초기화
 bool Network::Init(client_fw::UPtr<ThievesPacketManager>&& packet_manager, client_fw::UPtr<ThievesSendManager>&& send_manager)
 {
@@ -33,18 +16,22 @@ bool Network::Init(client_fw::UPtr<ThievesPacketManager>&& packet_manager, clien
 	m_packet_manager = move(packet_manager);
 	m_send_manager = move(send_manager);
 	m_packet_manager->Init();
+
 	WSADATA WSAData;
-	if (WSAStartup(MAKEWORD(2, 2), &WSAData) != 0)
+
+	if (WSAStartup(MAKEWORD(2, 2), &WSAData) != 0) {
 		return false;
+	}
 	m_s_socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED);
+	
 	if (INVALID_SOCKET == m_s_socket)
 	{
 		Network::error_display(WSAGetLastError());
 		return false;
 	}
+
     return true;
 }
-
 
 // 서버연결
 bool Network::Connect()
@@ -122,6 +109,7 @@ void Network::Worker()
 	}
 	cout << "Worker End " << endl;
 }
+
 // Recv 패킷 처리
 void Network::OnRecv(int client_id, EXP_OVER* exp_over, DWORD num_byte, SOCKET& socket)
 {
@@ -163,5 +151,3 @@ void Network::SendSignInPacket()
 {
 	m_send_manager->SendSignInPacket(m_s_socket);
 }
-
-// Packet Test

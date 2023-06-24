@@ -1,5 +1,6 @@
 #pragma once
 #include "pch.h"
+
 class CBox
 {
 public:
@@ -12,6 +13,7 @@ public:
 		extent[0] = extentCBox[0];
 		extent[1] = extentCBox[1];
 		extent[2] = extentCBox[2];
+		
 		axis[0][0] = axisCBox[0][0];
 		axis[0][1] = axisCBox[0][1];
 		axis[0][2] = axisCBox[0][2];
@@ -21,14 +23,18 @@ public:
 		axis[2][0] = axisCBox[2][0];
 		axis[2][1] = axisCBox[2][1];
 		axis[2][2] = axisCBox[2][2];
+		
 		translation[0] = translationCBox[0];
 		translation[1] = translationCBox[1];
 		translation[2] = translationCBox[2];
 	}
 	~CBox() {};
 
-	bool BoxBoxIntersection(const CBox& box0);
-	Vector3 CalculateSliding(CBox& playerBox, Vector3 playerVelocity);
+	bool BoxBoxIntersection(const CBox& box0, int& collisionDirection);
+	Vector3 CalculateSlidingVector(const CBox& playerBox, int collisionDirection, Vector3);
+	Vector3 CalculateSliding(CBox& playerBox, Vector3 playerVelocity, int collisionDirection);
+	
+	
 	float center[3];
 	float axis[3][3];		
 	float extent[3];		

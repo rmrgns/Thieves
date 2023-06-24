@@ -89,8 +89,11 @@ void Shader::CreateGraphicsShader(const wstring& path, ShaderInfo info, ShaderAr
 		_graphicsPipelineDesc.NumRenderTargets = 0;
 		break;
 	case SHADER_TYPE::SHADOW:
-		_graphicsPipelineDesc.NumRenderTargets = 1;
-		_graphicsPipelineDesc.RTVFormats[0] = DXGI_FORMAT_R32_FLOAT;
+		/*_graphicsPipelineDesc.NumRenderTargets = 1;
+		_graphicsPipelineDesc.RTVFormats[0] = DXGI_FORMAT_R32_FLOAT;*/
+		_graphicsPipelineDesc.NumRenderTargets = RENDER_TARGET_G_BUFFER_GROUP_MEMBER_COUNT;
+		_graphicsPipelineDesc.RTVFormats[0] = DXGI_FORMAT_R32G32B32A32_FLOAT; // POSITION
+		_graphicsPipelineDesc.RTVFormats[1] = DXGI_FORMAT_R32G32B32A32_FLOAT; // NORMAL
 		break;
 	}
 

@@ -480,7 +480,7 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 		if (!cl->GetJump())
 		{
 			cl->SetJump(true);
-			cl->SetUpVelocity(1000.0f);
+			cl->SetUpVelocity(1250.0f);
 		}
 	}
 
@@ -544,11 +544,6 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 	PlayerBox.translation[2] = cl->GetPosZ() - oldPos.z;
 
 	cl->SetPos(m_map_manager->checkCollision(PlayerBox, oldPos));
-//	if (m_map_manager->checkCollision(PlayerBox, oldPos)) {
-//		// 충돌 했어
-//		
-//		cl->SetPos(oldPos);
-//	}
 
 	cl->state_lock.lock();
 	if (cl->GetState() != STATE::ST_INGAME)
