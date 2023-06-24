@@ -424,7 +424,6 @@ void SceneManager::LoadGameScene()
 				gameObject->GetNetworkSystem()->SetNetworkingType(NetworkType::PLAYER);
 			}
 			gameObject->SetStatic(false);
-			gameObject->SetCheckFrustum(false);
 			int32 index = 2;
 			gameObject->GetAnimator()->Play(index);
 			scene->AddGameObject(gameObject);
@@ -504,27 +503,29 @@ void SceneManager::LoadGameScene()
 	_LoadText = L"Load Map"; // 16
 	Network::GetInst()->SendLoadProgressPacket((char)1500 / 21);
 
-//#pragma region Map
-//	{
-//
-//		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Map.fbx");
-//
-//		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-//
-//		for (auto& gameObject : gameObjects)
-//		{
-//			gameObject->SetName(L"Map");
-//			gameObject->SetCheckFrustum(true);
-//			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
-//			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 3.1415f, 0.f));
-//			gameObject->GetTransform()->SetLocalScale(Vec3(60.f, 100.f, 60.f));
-//			//gameObject->AddComponent(make_shared<TestObjectMove>());
-//			//gameObject->AddComponent(make_shared<PlayerInput>());
-//			scene->AddGameObject(gameObject);
-//			//gameObject->AddComponent(make_shared<TestDragon>());
-//		}
-//	}
-//#pragma endregion
+#pragma region Map
+	{
+
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Map.fbx");
+
+		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+
+		for (auto& gameObject : gameObjects)
+		{
+			gameObject->SetName(L"Map");
+			gameObject->SetCheckFrustum(true);
+			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 3.1415f, 0.f));
+			gameObject->GetTransform()->SetLocalScale(Vec3(60.f, 100.f, 60.f));
+			//gameObject->AddComponent(make_shared<TestObjectMove>());
+			//gameObject->AddComponent(make_shared<PlayerInput>());
+			gameObject->SetStatic(false);
+			scene->AddGameObject(gameObject);
+			//gameObject->AddComponent(make_shared<TestDragon>());
+		}
+	}
+#pragma endregion
+
 //#pragma region Object
 //	{
 //		shared_ptr<GameObject> obj = make_shared<GameObject>();
@@ -559,6 +560,13 @@ void SceneManager::LoadGameScene()
 		light->SetName(L"Dir_Light");
 		light->AddComponent(make_shared<Transform>());
 		light->GetTransform()->SetLocalPosition(Vec3(0, 1000, 0));
+		light->AddComponent(make_shared<Light>());
+		light->GetLight()->SetLightDirection(Vec3(0.f, -1, 0.f));
+		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
+
+		light->GetLight()->SetDiffuse(Vec3(1.0f, 1.0f, 1.0f));
+		light->GetLight()->SetAmbient(Vec3(0.3f, 0.3f, 0.3f));
+		light->GetLight()->SetSpecular(Vec3(0.3f, 0.3f, 0.3f));
 
 		light->AddComponent(make_shared<Light>());
 		light->GetLight()->SetLightDirection(Vec3(0.f, -1, 0.f));

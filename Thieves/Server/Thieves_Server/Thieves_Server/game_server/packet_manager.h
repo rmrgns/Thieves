@@ -1,8 +1,8 @@
 #pragma once
 #include "define.h"
-
 #include<concurrent_queue.h>
 #include <thread>
+#include "CBox.h"
 
 class MoveObjManager;
 class DB;
@@ -17,20 +17,12 @@ public:
 	void Init();
 	void ProcessPacket(int c_id, unsigned char* p);
 	void ProcessAccept(HANDLE, SOCKET&, EXP_OVER*);
-	void ProcessRecv(int, EXP_OVER*, DWORD);
-
-	// Enemy
-	void UpdateObjMove();
-
-	
+	void ProcessRecv(int, EXP_OVER*, DWORD);	
 	void SendMovePacket(int c_id, int mover);
-	void SendMoveTestPacket(int mover);
 	
 	void SendLoginFailPacket(SOCKET&, int reason);
 	void SendSignInOK(int c_id);
 	void SendSignUpOK(int c_id);
-
-	void SendMatchingOK(int c_id);
 
 	void SendPutObjPakcet(int c_id, int obj_id, OBJ_TYPE obj_type);
 	void SendObjInfo(int c_id, int obj_id);
@@ -56,9 +48,6 @@ public:
 	void JoinDBThread();
 
 	void ProcessTimer(HANDLE hiocp);
-//	void ProcessEvent(HANDLE hiocp, timer_event& ev);
-
-	
 
 private:
 	RoomManager* m_room_manager;
@@ -77,13 +66,9 @@ private:
 	void ProcessMatching(int c_id, unsigned char* p);
 	void ProcessHit(int c_id, unsigned char* p);
 	void ProcessGameStart(int c_id, unsigned char* p);
+
 	void ProcessLoadProgressing(int c_id, unsigned char* p);
 	void ProcessLoadEnd(int c_id, unsigned char* p);
 	void ProcessDamageCheat(int c_id, unsigned char* p);
 	void StartGame(int room_id);
-
-	// Test 
-	void TestProcessGameStart(int c_id, unsigned char* p);
-	void TestProcessMove(int c_id, unsigned char* p);
-	void TestStartGame(int room_id);
 };

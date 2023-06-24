@@ -9,11 +9,8 @@
 #include "database/db.h"
 #include "object/moveobj_manager.h"
 #include "object/MapManager.h"
-#include "OBB.h"
-//concurrency::concurrent_priority_queue<timer_event> PacketManager::g_timer_queue = concurrency::concurrent_priority_queue<timer_event>();
 
 using namespace std;
-
 
 PacketManager::PacketManager()
 {
@@ -439,7 +436,7 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 	
 	Vector3 oldPos = cl->GetPos();
-
+	
 	if ((packet->direction & 8) == 8)
 	{
 		// 앞
@@ -483,7 +480,7 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 		if (!cl->GetJump())
 		{
 			cl->SetJump(true);
-			cl->SetUpVelocity(1000.0f);
+			cl->SetUpVelocity(1250.0f);
 		}
 	}
 
@@ -492,20 +489,7 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 
 	cl->SetRotX(packet->vecX);
 	cl->SetRotZ(packet->vecZ);
-	//cl->SetPosY(packet->vecY);
-
-	Vector3 ObbCenter = cl->GetPos();
-	ObbCenter.y += 75.f;
-
-	OBB playerOBB = OBB(ObbCenter,
-		Vector3(25.f, 75.f, 25.f),
-		Vector3(0.f, 1.f, 0.f),
-		Vector3(cl->GetRotX(), 0.f, cl->GetRotZ()).Cross(Vector3(0.0f, 1.0f, 0.0f))
-		, Vector3(cl->GetRotX(), 0.f, cl->GetRotZ()));
-
-
-
-	if (m_map_manager->isCollision(playerOBB)) cl->SetPos(oldPos);
+	
 
 	cl->SetAnimationNumber(packet->action_type);
 
@@ -521,6 +505,46 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 		}
 	}
 
+	//Player
+	// collision
+
+	CBox PlayerBox;
+	
+	Vector3 PlayerRight = Vector3(cl->GetRotX(), 0.f, cl->GetRotZ()).Cross(Vector3(0.0f, 1.0f, 0.0f));
+
+	//center
+	PlayerBox.center[0] = cl->GetPosX();
+	PlayerBox.center[1] = cl->GetPosY() + 75.f;
+	PlayerBox.center[2] = cl->GetPosZ();
+
+	//extent
+	PlayerBox.extent[0] = 25.f;
+	PlayerBox.extent[1] = 75.f;
+	PlayerBox.extent[2] = 25.f;
+
+	//right
+	PlayerBox.axis[0][0] = PlayerRight.x;
+	PlayerBox.axis[0][1] = PlayerRight.y;
+	PlayerBox.axis[0][2] = PlayerRight.z;
+
+
+	//up
+	PlayerBox.axis[1][0] = 0.0f;
+	PlayerBox.axis[1][1] = 0.1f;
+	PlayerBox.axis[1][2] = 0.0f;
+
+	//look
+	PlayerBox.axis[2][0] = cl->GetRotX();
+	PlayerBox.axis[2][1] = 0.f;
+	PlayerBox.axis[2][2] = cl->GetRotZ();
+
+	//translation
+	PlayerBox.translation[0] = cl->GetPosX() - oldPos.x;
+	PlayerBox.translation[1] = cl->GetPosY() - oldPos.y;
+	PlayerBox.translation[2] = cl->GetPosZ() - oldPos.z;
+
+	cl->SetPos(m_map_manager->checkCollision(PlayerBox, oldPos));
+
 	cl->state_lock.lock();
 	if (cl->GetState() != STATE::ST_INGAME)
 	{
@@ -528,17 +552,22 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 		return;
 	}
 	else cl->state_lock.unlock();
+
+
+
 	Room* room = m_room_manager->GetRoom(cl->GetRoomID());
 
-	
+
 	if (isnan(cl->GetPosX()) || isnan(cl->GetPosY()) || isnan(cl->GetPosZ()))return;
 	for (auto other_pl : room->GetObjList())
 	{
 		if (false == MoveObjManager::GetInst()->IsPlayer(other_pl))
 			continue;
 		SendMovePacket(other_pl, c_id);
-	}	
+	}
 }
+
+
 
 void PacketManager::ProcessMatching(int c_id, unsigned char* p)
 {
@@ -575,6 +604,8 @@ void PacketManager::ProcessGameStart(int c_id, unsigned char* p)
 	StartGame(room->GetRoomID());
 }
 
+
+
 void PacketManager::ProcessLoadProgressing(int c_id, unsigned char* p)
 {
 	cs_packet_load_progressing* packet = reinterpret_cast<cs_packet_load_progressing*>(p);
@@ -593,6 +624,7 @@ void PacketManager::ProcessDamageCheat(int c_id, unsigned char* p)
 {
 }
 
+
 void PacketManager::StartGame(int room_id)
 {
 	Room* room = m_room_manager->GetRoom(room_id);
@@ -610,7 +642,7 @@ void PacketManager::StartGame(int room_id)
 		if (i < room->GetMaxUser())
 		{
 			pl = MoveObjManager::GetInst()->GetPlayer(obj_list[i]);
-			pl->SetPos({ 0.0f,0.0f,0.0f});
+			pl->SetPos({ 200.0f,0.0f,200.0f});
 			//pl->SetColorType(COLOR_TYPE(i + 1));
 			continue;
 		}
@@ -637,101 +669,3 @@ void PacketManager::StartGame(int room_id)
 		//SendWaveInfo(c_id, next_round, room->GetMaxUser() * next_round, room->GetMaxUser() * (next_round + 1));
 	}
 }
-
-// TEST
-
-// GameStart Test
-void PacketManager::TestProcessGameStart(int c_id, unsigned char* p)
-{
-	cs_packet_game_start* packet = reinterpret_cast<cs_packet_game_start*>(p);
-	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
-	player->SetMatchUserSize(USER_NUM);
-	player->is_matching = true;
-	Player* other_pl = NULL;
-	vector<int>match_list;
-	match_list.push_back(c_id);
-	Room* room = m_room_manager->GetRoom(0);
-	for (auto id : match_list)
-	{
-		Player* pl = MoveObjManager::GetInst()->GetPlayer(id);
-		pl->is_matching = false;
-		pl->state_lock.lock();
-		pl->SetState(STATE::ST_INGAME);
-		pl->SetRoomID(0);
-		//player->SetIsActive(true);
-		pl->state_lock.unlock();
-		room->EnterRoom(id);//�濡 ���̵� �Ѱ��ֱ�
-		cout << id << endl;
-		//SendMatchingOK(id);
-	}
-
-	room->Init(player->GetMatchUserSize());
-	for (auto obj_id : match_list)
-		room->EnterRoom(obj_id);
-
-
-	if (player->GetRoomID() == -1)return;
-	player->SetIsReady(true);
-	std::cout << "Room ID : " <<  (m_room_manager->GetRoom(player->GetRoomID())) << std::endl;
-	room = m_room_manager->GetRoom(player->GetRoomID());
-
-	TestStartGame(room->GetRoomID());
-}
-
-void PacketManager::TestStartGame(int room_id)
-{
-	Room* room = m_room_manager->GetRoom(room_id);
-
-	const Vector3 base_pos{ 0.0f,0.0f,0.0f };
-
-	Player* pl = NULL;
-
-	vector<int>obj_list{ room->GetObjList().begin(),room->GetObjList().end() };
-
-	for (int i = 0; i < obj_list.size(); ++i)
-	{
-		if (i < room->GetMaxUser())
-		{
-			pl = MoveObjManager::GetInst()->GetPlayer(obj_list[i]);
-			pl->SetPos(base_pos);
-			//pl->SetColorType(COLOR_TYPE(i + 1));
-			continue;
-		}
-	}
-
-
-
-	for (int i = 0; i < obj_list.size(); ++i)
-	{
-		if (i < room->GetMaxUser())
-		{
-			pl = MoveObjManager::GetInst()->GetPlayer(obj_list[i]);
-			pl ->SetPos(base_pos);
-			//pl->SetPos(m_map_manager->PLAYER_SPAWN_POINT[i]);
-			//pl->SetColorType(COLOR_TYPE(i + 1));
-			continue;
-		}
-	}
-
-	for (auto c_id : room->GetObjList())
-	{
-		if (false == MoveObjManager::GetInst()->IsPlayer(c_id))
-			continue;
-
-		pl = MoveObjManager::GetInst()->GetPlayer(c_id);
-		//cout << "SendObj �̸�:" << pl->GetName() << endl;
-		//SendObjInfo(c_id, c_id);//�ڱ��ڽ�
-		for (auto other_id : room->GetObjList())
-		{
-			if (false == MoveObjManager::GetInst()->IsPlayer(other_id))
-				continue;
-			if (c_id == other_id)continue;
-			SendObjInfo(c_id, other_id);
-			//cout << "�ȿ� SendObj �̸�:" << pl->GetName() << endl;
-		}
-		//SendBaseStatus(c_id, room->GetRoomID());
-
-		//SendWaveInfo(c_id, next_round, room->GetMaxUser() * next_round, room->GetMaxUser() * (next_round + 1));
-	}
-}
-
