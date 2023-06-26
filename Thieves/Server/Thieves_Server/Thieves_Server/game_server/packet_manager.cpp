@@ -937,7 +937,6 @@ void PacketManager::ProcessPlayerReady(int c_id, unsigned char* p)
 	for (auto pl : room->GetObjList())
 	{
 		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
-		if (pl == c_id) continue;
 		SendPlayerReady(pl, c_id);
 	}
 }
