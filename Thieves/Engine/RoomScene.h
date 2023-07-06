@@ -48,6 +48,9 @@ public:
 	void SetRoomMasterId(int id) { m_room_master_id = id; };
 	int GetRoomMasterId() { return m_room_master_id; };
 
+	void SetRoomId(int id) { m_room_id = id; };
+	int GetRoomId() { return m_room_id; };
+
 	std::unordered_map<int, PlayerDataInRoom>& GetRoomData() {
 		return m_pData;
 	}

@@ -16,7 +16,7 @@ void RoomScript::Update()
 		
 		bool isPlayerReady = rScene->GetPlayerReady(playerId);
 
-		rScene->SetPlayerReady(playerId, !isPlayerReady);
+		//rScene->SetPlayerReady(playerId, !isPlayerReady);
 
 		if (rScene->GetPlayerReady(playerId)) {
 			Network::GetInst()->SendReady();

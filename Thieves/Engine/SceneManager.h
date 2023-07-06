@@ -47,6 +47,7 @@ public:
 	const wstring& GetLoadText() { return _LoadText; }
 	void SetLoadText(const wstring& wstr) { _LoadText = wstr; }
 	void SetRoomNum(int val) { _room_num = val; }
+	int GetRoomNum() { return _room_num; };
 
 	//Vec3 GetPlayerPosition() { return _playerPosition; }
 	//float GetPlayerPositionX() { return _playerPosition.x; }

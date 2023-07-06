@@ -850,6 +850,9 @@ void SceneManager::LoadRoomScene()
 	
 	_loadProgressScene = scene;
 	_currentLoadProgressScene = CURRENT_SCENE::ROOM;
+
+	auto rScene = std::static_pointer_cast<RoomScene>(_loadProgressScene);
+	rScene->SetRoomId(GET_SINGLE(SceneManager)->GetRoomNum());
 	_LoadText = L"Load Main Camera";
 #pragma region Camera
 	{

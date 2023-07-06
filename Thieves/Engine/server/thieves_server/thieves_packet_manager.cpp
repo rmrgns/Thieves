@@ -238,7 +238,7 @@ void ThievesPacketManager::ProcessInRoomData(int c_id, unsigned char* p)
 		shared_ptr<RoomScene> rScene = static_pointer_cast<RoomScene>(GET_SINGLE(SceneManager)->GetActiveScene());
 		rScene->InsertPlayerData(packet->userId, packet->userName);
 		rScene->SetPlayerReady(packet->userId, packet->isReady);
-		
+
 	}
 	else if (GET_SINGLE(SceneManager)->GetCurrentLoadProgressScene() == CURRENT_SCENE::ROOM) {
 		shared_ptr<RoomScene> rScene = static_pointer_cast<RoomScene>(GET_SINGLE(SceneManager)->GetLoadProgressScene());
