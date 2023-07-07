@@ -107,8 +107,10 @@ void Scene::RenderDeferred()
 	GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->OMSetRenderTargets();
 
 	shared_ptr<Camera> mainCamera = _cameras[0];
-	mainCamera->SortGameObject();
-	mainCamera->Render_Deferred();
+	if (mainCamera) {
+		mainCamera->SortGameObject();
+		mainCamera->Render_Deferred();
+	}
 
 	GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->WaitTargetToResource();
 }
