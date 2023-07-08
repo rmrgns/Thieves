@@ -1,6 +1,13 @@
 #include "pch.h"
 #include "room_manager.h"
 #include "room.h"
+#include "object/MapManager.h"
+
+RoomManager::RoomManager()
+{
+	
+}
+
 void RoomManager::InitRoom()
 {
 	for (int i = 0; i < MAX_ROOM_SIZE; ++i)
@@ -20,7 +27,7 @@ int RoomManager::GetEmptyRoom()
 		r->m_state_lock.lock();
 		if (ROOM_STATE::RT_FREE == r->GetState())
 		{
-			r->SetState(ROOM_STATE::RT_INGAME);
+			r->SetState(ROOM_STATE::RT_USED);
 			r->m_state_lock.unlock();
 			return r->GetRoomID();
 		}

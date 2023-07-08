@@ -99,6 +99,16 @@ void Engine::CheckChangeScene()
 			GET_SINGLE(SceneManager)->LoadScene(L"GameScene");
 			_changeScene = L"";
 		}
+		else if (_changeScene == L"Lobby")
+		{
+			GET_SINGLE(SceneManager)->LoadScene(L"LobbyScene");
+			_changeScene = L"";
+		}
+		else if (_changeScene == L"Room")
+		{
+			GET_SINGLE(SceneManager)->LoadScene(L"RoomScene");
+			_changeScene = L"";
+		}
 		else if (_changeScene == L"Login")
 		{
 			GET_SINGLE(SceneManager)->LoadScene(L"LoginScene");

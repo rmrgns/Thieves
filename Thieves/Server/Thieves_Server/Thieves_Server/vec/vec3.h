@@ -8,7 +8,7 @@ public:
 	Vector3() { x = 0; y = 0; z = 0; }
 	Vector3(float x, float y, float z) :x(x), y(y), z(z) {}
 	float x, y, z;
-#ifndef 연산자오버로딩
+#ifndef operation_overloading
 	friend std::ostream& operator<< (std::ostream& os, const Vector3& a)
 	{
 		return os << "{" << a.x << ", " << a.y << ", " << a.z << "}";

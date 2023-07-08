@@ -40,6 +40,9 @@ bool Network::Connect()
 	ZeroMemory(&server_addr, sizeof(server_addr));
 	server_addr.sin_family = AF_INET;
 	server_addr.sin_port = htons(SERVER_PORT);
+
+	//inet_pton(AF_INET, "110.5.241.37", &server_addr.sin_addr);
+
 	inet_pton(AF_INET, "127.0.0.1", &server_addr.sin_addr);
 	int retval = WSAConnect(m_s_socket, reinterpret_cast<sockaddr*>(&server_addr),
 		sizeof(server_addr), NULL, NULL, NULL, NULL);
@@ -99,7 +102,7 @@ void Network::Worker()
 			}
 			else
 			{
-				cout << "Complieted send" << endl;
+				cout << "Completed send" << endl;
 				delete exp_over;
 			}
 			break;
@@ -136,10 +139,12 @@ void Network::SendMovePacket(char direction,
 
 void Network::SendLoadProgressPacket(char progressed)
 {
+	m_send_manager->SendLoadProgressPacket(m_s_socket, progressed);
 }
 
 void Network::SendLoadEndPacket()
 {
+	m_send_manager->SendLoadEnd(m_s_socket);
 }
 
 void Network::SendStartPacket()
@@ -150,4 +155,43 @@ void Network::SendStartPacket()
 void Network::SendSignInPacket()
 {
 	m_send_manager->SendSignInPacket(m_s_socket);
+
 }
+
+void Network::SendEnterRoom(int room_id)
+{
+	m_send_manager->SendEnterRoom(m_s_socket, room_id);
+}
+
+void Network::SendLeaveRoom()
+{
+	m_send_manager->SendLeaveRoom(m_s_socket);
+}
+
+void Network::SendReady()
+{
+	m_send_manager->SendReady(m_s_socket);
+}
+
+void Network::SendCancleReady()
+{
+	m_send_manager->SendCancleReady(m_s_socket);
+}
+
+void Network::SendLogOut()
+{
+	m_send_manager->SendLogOut(m_s_socket);
+}
+
+void Network::SendRequestRoomsData()
+{
+	m_send_manager->SendRequestRoomsData(m_s_socket);
+}
+
+void Network::SendRequestInRoomData()
+{
+	m_send_manager->SendRequestInRoomData(m_s_socket);
+}
+
+// Packet Test
+

@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "SceneManager.h"
 #include "Scene.h"
+#include "LobbyScene.h"
+#include "RoomScene.h"
+#include "InGameScene.h"
 
 #include "Engine.h"
 #include "Material.h"
@@ -13,6 +16,8 @@
 
 // Script
 #include "LoginScript.h"
+#include "LobbyScript.h"
+#include "RoomScript.h"
 #include "PlayerInput.h"
 #include "PlayerCamera.h"
 #include "PlayerParticle.h"
@@ -72,8 +77,13 @@ void SceneManager::LoadScene(wstring sceneName)
 		_activeScene.reset();
 	}
 
+	LoadSceneLock.lock();
 	_activeScene = LoadLoadingScene();
+	LoadSceneLock.unlock();
 	_currentScene = CURRENT_SCENE::LOADING;
+
+	_activeScene->Awake();
+	_activeScene->Start();
 
 	if (sceneName == L"LoginScene")
 	{
@@ -85,13 +95,22 @@ void SceneManager::LoadScene(wstring sceneName)
 		std::thread th{ &SceneManager::LoadGameScene, this };
 		th.detach();
 	}
+	else if (sceneName == L"LobbyScene")
+	{
+		std::thread th{ &SceneManager::LoadLobbyScene, this };
+		th.detach();
+	}
+	else if (sceneName == L"RoomScene")
+	{
+		std::thread th{ &SceneManager::LoadRoomScene, this };
+		th.detach();
+	}
 	else
 	{
 		return;
 	}
 
-	_activeScene->Awake();
-	_activeScene->Start();
+
 }
 
 
@@ -127,10 +146,6 @@ void SceneManager::SetLayerName(uint8 index, const wstring& name)
 
 
 
-
-
-
-
 uint8 SceneManager::LayerNameToIndex(const wstring& name)
 {
 	auto findIt = _layerIndex.find(name);
@@ -139,13 +154,6 @@ uint8 SceneManager::LayerNameToIndex(const wstring& name)
 
 	return findIt->second;
 }
-
-
-
-
-
-
-
 
 
 
@@ -205,12 +213,6 @@ shared_ptr<GameObject> SceneManager::Pick(int32 screenX, int32 screenY)
 
 
 
-
-
-
-
-
-
 void SceneManager::BuildPlayer()
 {
 	// �ٸ� �÷��̾� ��ǥ
@@ -229,14 +231,6 @@ void SceneManager::BuildPlayer()
 		_activeScene->AddGameObject(gameObject);
 	}
 }
-
-
-
-
-
-
-
-
 
 
 
@@ -279,8 +273,11 @@ void SceneManager::LoadGameScene()
 
 	_LoadText = L"Load Main Camera"; // 3
 	Network::GetInst()->SendLoadProgressPacket((char)200 / 21);
-	shared_ptr<Scene> scene = make_shared<Scene>();
-	
+	shared_ptr<InGameScene> scene = make_shared<InGameScene>();
+
+	_loadProgressScene = scene;
+	_currentLoadProgressScene = CURRENT_SCENE::GAME;
+
 #pragma region Camera
 	{
 		shared_ptr<GameObject> camera = make_shared<GameObject>();
@@ -396,6 +393,11 @@ void SceneManager::LoadGameScene()
 		scene->AddGameObject(obj);
 	}
 #pragma endregion
+
+	while (true) {
+		if (scene->IsGetAllObjInfo()) break;
+		Sleep(0);
+	}
 
 	_LoadText = L"Load Player FBX Data"; // 7
 	Network::GetInst()->SendLoadProgressPacket((char)600 / 21);
@@ -636,22 +638,29 @@ void SceneManager::LoadGameScene()
 	}
 #pragma endregion
 
-	_LoadText = L"Wait Other Players..."; // 21
-	Network::GetInst()->SendLoadEndPacket();
+
 	
 
 	scene->SetSceneLoaded(true);
 
-	_loadProgressScene = scene;
-	_currentLoadProgressScene = CURRENT_SCENE::GAME;
 
+
+	_LoadText = L"Wait Other Players..."; // 21
+	Network::GetInst()->SendLoadEndPacket();
+
+	// 만약 나중에 로딩이 모든 사람들의 로딩이 끝난 뒤 보여야 하는 경우라면 
+	// 이 부분에서 설정해 주어야 한다
+	
+	while (true)
+	{
+		if (scene->IsAllPlayerLoaded()) break;
+		Sleep(0);
+	}
+	
+	LoadSceneLock.lock();
 	ChangeToLoadedScene();
+	LoadSceneLock.unlock();
 }
-
-
-
-
-
 
 
 
@@ -660,7 +669,6 @@ void SceneManager::LoadGameScene()
 void SceneManager::LoadLoginScene()
 {
 	_LoadText = L"Load Start";
-	Network::GetInst()->SendLoadProgressPacket((char)0 / 5);
 #pragma region LayerMask
 	SetLayerName(0, L"Default");
 
@@ -669,8 +677,10 @@ void SceneManager::LoadLoginScene()
 	shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
 	shared_ptr<Scene> scene = make_shared<Scene>();
 
+	_loadProgressScene = scene;
+	_currentLoadProgressScene = CURRENT_SCENE::LOGIN;
+
 	_LoadText = L"Load Main Camera";
-	Network::GetInst()->SendLoadProgressPacket((char)100 / 5);
 #pragma region Camera
 	{
 		shared_ptr<GameObject> camera = make_shared<GameObject>();
@@ -686,16 +696,16 @@ void SceneManager::LoadLoginScene()
 #pragma endregion
 
 	_LoadText = L"Load Login Image";
-	Network::GetInst()->SendLoadProgressPacket((char)200 / 5);
 #pragma region LoginScreen
 	{
 		float width = static_cast<float>(GEngine->GetWindow().width);
 		float height = static_cast<float>(GEngine->GetWindow().height);
+		
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
 		obj->SetName(L"LOGINSCREEN");
 		obj->AddComponent(make_shared<Transform>());
 		obj->AddComponent(make_shared<LoginScript>());
-		obj->GetTransform()->SetLocalScale(Vec3(width / 7.0f, height / 7.0f, 100.f));
+		obj->GetTransform()->SetLocalScale(Vec3(width / 15.0f, height / 15.0f, 100.f));
 		obj->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 100.f));
 		obj->SetStatic(false);
 
@@ -715,7 +725,6 @@ void SceneManager::LoadLoginScene()
 #pragma endregion
 
 	_LoadText = L"Load Icon";
-	Network::GetInst()->SendLoadProgressPacket((char)400 / 5);
 #pragma region ThiefIcon
 	{
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
@@ -741,7 +750,6 @@ void SceneManager::LoadLoginScene()
 #pragma endregion
 
 	_LoadText = L"Load Directional Light";
-	Network::GetInst()->SendLoadProgressPacket((char)400 / 5);
 #pragma region Directional Light
 	{
 		shared_ptr<GameObject> light = make_shared<GameObject>();
@@ -770,16 +778,130 @@ void SceneManager::LoadLoginScene()
 //#pragma endregion
 
 	_LoadText = L"Load End.";
-	Network::GetInst()->SendLoadEndPacket();
 	scene->SetSceneLoaded(true);
 
-	_loadProgressScene = scene;
-	_currentLoadProgressScene = CURRENT_SCENE::LOGIN;
 
+
+	LoadSceneLock.lock();
 	ChangeToLoadedScene();
+	LoadSceneLock.unlock();
 }
 
 
+
+
+void SceneManager::LoadLobbyScene()
+{
+	_LoadText = L"Load Start";
+
+#pragma region LayerMask
+	SetLayerName(0, L"Default");
+
+#pragma endregion
+
+	shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+	shared_ptr<LobbyScene> scene = make_shared<LobbyScene>();
+	_loadProgressScene = scene;
+	_currentLoadProgressScene = CURRENT_SCENE::LOBBY;
+
+	_LoadText = L"Load Main Camera";
+#pragma region Camera
+	{
+		shared_ptr<GameObject> camera = make_shared<GameObject>();
+		camera->SetName(L"Main_Camera");
+		camera->AddComponent(make_shared<Transform>());
+		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45��
+
+		camera->GetCamera()->SetFar(10000.f);
+		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+
+		scene->AddGameObject(camera);
+	}
+#pragma endregion
+
+#pragma region script
+	{
+		shared_ptr<GameObject> script = make_shared<GameObject>();
+		script->SetName(L"Script");
+		script->AddComponent(make_shared<Transform>());
+		script->AddComponent(make_shared<LobbyScript>());
+
+		script->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+
+		scene->AddGameObject(script);
+	}
+#pragma endregion
+
+	_LoadText = L"Load Room Datas.";
+	scene->SetSceneLoaded(true);
+
+
+
+	scene->GetRoomsDataFromNetwork();
+
+	_LoadText = L"Load End.";
+	LoadSceneLock.lock();
+	ChangeToLoadedScene();
+	LoadSceneLock.unlock();
+}
+
+
+
+void SceneManager::LoadRoomScene()
+{
+	_LoadText = L"Load Start";
+#pragma region LayerMask
+	SetLayerName(0, L"Default");
+
+#pragma endregion
+
+	shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+	shared_ptr<RoomScene> scene = make_shared<RoomScene>();
+	
+	_loadProgressScene = scene;
+	_currentLoadProgressScene = CURRENT_SCENE::ROOM;
+
+	auto rScene = std::static_pointer_cast<RoomScene>(_loadProgressScene);
+	rScene->SetRoomId(GET_SINGLE(SceneManager)->GetRoomNum());
+	_LoadText = L"Load Main Camera";
+#pragma region Camera
+	{
+		shared_ptr<GameObject> camera = make_shared<GameObject>();
+		camera->SetName(L"Main_Camera");
+		camera->AddComponent(make_shared<Transform>());
+		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45��
+
+		camera->GetCamera()->SetFar(10000.f);
+		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+
+		scene->AddGameObject(camera);
+	}
+#pragma endregion
+
+#pragma region script
+	{
+		shared_ptr<GameObject> script = make_shared<GameObject>();
+		script->SetName(L"Script");
+		script->AddComponent(make_shared<Transform>());
+		script->AddComponent(make_shared<RoomScript>());
+
+		script->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+
+		scene->AddGameObject(script);
+	}
+#pragma endregion
+
+	_LoadText = L"Load Room Data.";
+
+	scene->SetSceneLoaded(true);
+	scene->GetRoomDataFromNetwork();
+
+	_LoadText = L"Load End.";
+
+	LoadSceneLock.lock();
+	ChangeToLoadedScene();
+	LoadSceneLock.unlock();
+}
 
 
 

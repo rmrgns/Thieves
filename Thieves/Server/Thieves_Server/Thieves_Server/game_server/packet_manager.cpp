@@ -6,6 +6,7 @@
 #include "packet_manager.h"
 #include "room/room_manager.h"
 #include "room/room.h"
+#include "Lobby.h"
 #include "database/db.h"
 #include "object/moveobj_manager.h"
 #include "object/MapManager.h"
@@ -15,6 +16,7 @@ using namespace std;
 PacketManager::PacketManager()
 {
 	MoveObjManager::GetInst();
+	m_Lobby = new Lobby;
 	m_room_manager = new RoomManager;
 	m_map_manager = new MapManager;
 	m_db = new DB;
@@ -24,6 +26,7 @@ PacketManager::PacketManager()
 void PacketManager::Init()
 {
 	MoveObjManager::GetInst()->InitPlayer();
+	m_Lobby->Init();
 	m_room_manager->InitRoom();
 	m_map_manager->LoadMap();
 	m_db->Init();
@@ -67,7 +70,35 @@ void PacketManager::ProcessPacket(int c_id, unsigned char* p)
 		break;
 	}	
 	case CS_PACKET_LOAD_END: {
-		ProcessLoadProgressing(c_id, p);
+		ProcessLoadEnd(c_id, p);
+		break;
+	}
+	case CS_PACKET_ENTER_ROOM: {
+		ProcessEnterRoom(c_id, p);
+		break;
+	}
+	case CS_PACKET_LEAVE_ROOM: {
+		ProcessLeaveRoom(c_id, p);
+		break;
+	}
+	case CS_PACKET_PLAYER_READY: {
+		ProcessPlayerReady(c_id, p);
+		break;
+	}
+	case CS_PACKET_PLAYER_CANCLE_READY: {
+		ProcessPlayerReady(c_id, p);
+		break;
+	}
+	case CS_PACKET_PLAYER_LOG_OUT: {
+		ProcessLogOut(c_id, p);
+		break;
+	}
+	case CS_PACKET_REQUEST_ROOMS_DATA_FOR_LOBBY: {
+		ProcessRoomsDataInLobby(c_id, p);
+		break;
+	}
+	case CS_PACKET_REQUEST_ROOMS_DATA_FOR_ROOM: {
+		ProcessRoomsDataInRoom(c_id, p);
 		break;
 	}
 	case CS_PACKET_TEST: {
@@ -251,6 +282,16 @@ void PacketManager::SendObjInfo(int c_id, int obj_id)
 
 }
 
+void PacketManager::SendObjInfoEnd(int c_id)
+{
+	sc_packet_obj_info_end packet;
+	packet.size = sizeof(packet);
+	packet.type = SC_PACKET_OBJ_INFO_END;
+
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
+}
+
 void PacketManager::SendTime(int c_id, float round_time)
 {
 	
@@ -302,6 +343,157 @@ void PacketManager::SendLoadEnd(int c_id, int p_id)
 	cl->DoSend(sizeof(packet), &packet);
 }
 
+void PacketManager::SendAllPlayerLoadEnd(int c_id)
+{
+	sc_packet_all_player_load_end packet;
+	packet.type = SC_PACKET_ALL_PLAYER_LOAD_END;
+	packet.size = sizeof(packet);
+	
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
+}
+
+void PacketManager::SendEnterRoom(int c_id, int p_id)
+{
+	sc_packet_enter_room packet;
+	packet.type = SC_PACKET_ENTER_ROOM;
+	packet.size = sizeof(packet);
+	packet.id = p_id;
+	char* name = MoveObjManager::GetInst()->GetPlayer(p_id)->GetName();
+
+	for (int i = 0; i < MAX_NAME_SIZE; ++i) {
+		packet.userName[i] = name[i];
+		if (name[i] == '\0') { break; }
+	}
+
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
+}
+
+void PacketManager::SendEnterRoomOk(int c_id, int room_id)
+{
+	sc_packet_enter_room_ok packet;
+	packet.type = SC_PACKET_ENTER_ROOM_OK;
+	packet.size = sizeof(packet);
+	packet.room_id = room_id;
+
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
+}
+
+void PacketManager::SendLeaveRoom(int c_id, int p_id)
+{
+	sc_packet_leave_room packet;
+	packet.type = SC_PACKET_LEAVE_ROOM;
+	packet.size = sizeof(packet);
+	packet.id = p_id;
+
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
+}
+
+void PacketManager::SendPlayerReady(int c_id, int p_id)
+{
+	sc_packet_player_ready packet;
+	packet.type = SC_PACKET_PLAYER_READY;
+	packet.size = sizeof(packet);
+	packet.id = p_id;
+
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
+}
+
+void PacketManager::SendPlayerCancleReady(int c_id, int p_id)
+{
+	sc_packet_player_cancle_ready packet;
+	packet.type = SC_PACKET_PLAYER_CANCLE_READY;
+	packet.size = sizeof(packet);
+	packet.id = p_id;
+
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
+}
+
+void PacketManager::SendRoomsDataForLobby(int c_id, int room_id)
+{
+	sc_packet_rooms_data_for_lobby packet;
+	packet.type = SC_PACKET_ROOMS_DATA_FOR_LOBBY;
+	packet.size = sizeof(packet);
+	packet.roomID = room_id;
+
+	Room* room = m_room_manager->GetRoom(room_id);
+
+	packet.playerNum = room->GetNumberOfPlayer();
+	packet.isInGame = room->GetState() == ROOM_STATE::RT_INGAME ? true : false;
+
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
+}
+
+void PacketManager::SendRoomsDataForLobbyEnd(int c_id)
+{
+	sc_packet_rooms_data_for_lobby_end packet;
+	packet.type = SC_PACKET_ROOMS_DATA_FOR_LOBBY_END;
+	packet.size = sizeof(packet);
+
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
+}
+
+void PacketManager::SendRoomsDataForRoom(int c_id, int p_id)
+{
+	sc_packet_rooms_data_for_room packet;
+	packet.type = SC_PACKET_ROOMS_DATA_FOR_ROOM;
+	packet.size = sizeof(packet);
+	packet.userId = p_id;
+	char* name = MoveObjManager::GetInst()->GetPlayer(p_id)->GetName();
+
+	for (int i = 0; i < MAX_NAME_SIZE; ++i) {
+		packet.userName[i] = name[i];
+		if (name[i] == '\0') { break; }	
+	}
+
+	packet.isReady = m_room_manager->
+		GetRoom(MoveObjManager::GetInst()->GetPlayer(p_id)->GetRoomID())->IsPlayerReady(p_id);
+
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
+}
+
+void PacketManager::SendRoomsDataForRoomEnd(int c_id)
+{
+	sc_packet_rooms_data_for_room_end packet;
+	packet.type = SC_PACKET_ROOMS_DATA_FOR_ROOM_END;
+	packet.size = sizeof(packet);
+	packet.master_id = m_room_manager->
+		GetRoom(MoveObjManager::GetInst()->GetPlayer(c_id)->GetRoomID())->GetRoomMasterId();
+
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
+}
+
+void PacketManager::SendError(int c_id, int err_type, int err_val)
+{
+	sc_packet_error packet;
+	packet.type = SC_PACKET_ERROR;
+	packet.size = sizeof(packet);
+	packet.err_type = err_type;
+	packet.err_val = err_val;
+
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
+}
+
+void PacketManager::SendGameStart(int c_id)
+{
+	sc_packet_game_start packet;
+	packet.type = SC_PACKET_GAME_START;
+	packet.size = sizeof(packet);
+
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
+}
+
 void PacketManager::End()
 {
 	MoveObjManager::GetInst()->DestroyObject();
@@ -316,19 +508,12 @@ void PacketManager::Disconnect(int c_id)
 	MoveObjManager::GetInst()->Disconnect(c_id);
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 
-	if (cl->GetState() == STATE::ST_INGAME)
+	if (cl->GetState() == STATE::ST_INGAME ||
+		cl->GetState() == STATE::ST_INROOM ||
+		cl->GetState() == STATE::ST_INROOMREDDY)
 	{
 		Room* room = m_room_manager->GetRoom(cl->GetRoomID());
-		auto& objs = room->GetObjList();
-
-
-		if (!objs.empty())
-		{
-			if (find(objs.begin(), objs.end(), c_id) != objs.end())
-			{
-				objs.erase(remove(objs.begin(), objs.end(), c_id));
-			}
-		}
+		room->LeaveRoom(c_id);
 
 		sc_packet_remove_object packet;
 
@@ -336,7 +521,9 @@ void PacketManager::Disconnect(int c_id)
 		packet.type = SC_PACKET_REMOVE_OBJECT;
 		packet.id = c_id;
 
-		for (int& obj : objs)
+		auto& objs = room->GetObjList();
+
+		for (int obj : objs)
 		{
 			MoveObjManager::GetInst()->GetPlayer(obj)->DoSend(sizeof(packet), &packet);
 		}
@@ -344,10 +531,8 @@ void PacketManager::Disconnect(int c_id)
 	}
 
 	cl->state_lock.lock();
-	if (cl->GetRoomID() == 0) {
-		cl->SetState(STATE::ST_FREE);
-		cl->ResetPlayer();
-	}
+	cl->SetState(STATE::ST_FREE);
+	cl->ResetPlayer();
 	cl->state_lock.unlock();
 	
 	
@@ -553,12 +738,12 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 	}
 	else cl->state_lock.unlock();
 
-
-
 	Room* room = m_room_manager->GetRoom(cl->GetRoomID());
 
+	if (isnan(cl->GetPosX()) || isnan(cl->GetPosY()) || isnan(cl->GetPosZ())) {
+		return;
+	}
 
-	if (isnan(cl->GetPosX()) || isnan(cl->GetPosY()) || isnan(cl->GetPosZ()))return;
 	for (auto other_pl : room->GetObjList())
 	{
 		if (false == MoveObjManager::GetInst()->IsPlayer(other_pl))
@@ -582,25 +767,31 @@ void PacketManager::ProcessGameStart(int c_id, unsigned char* p)
 	cs_packet_game_start* packet = reinterpret_cast<cs_packet_game_start*>(p);
 	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
 	
-	player->is_matching = false;
-	player->state_lock.lock();
-	player->SetState(STATE::ST_INGAME);
-	player->SetRoomID(0);
-	player->SetIsActive(true);
-	player->state_lock.unlock();
-	
+	if (player->GetRoomID() == -1) return;
 
-	if (player->GetRoomID() == -1)return;
-	player->SetIsReady(true);
+
 	Room* room = m_room_manager->GetRoom(player->GetRoomID());
-	room->EnterRoom(c_id);
 
-	for (auto pl : room->GetObjList())
-	{
-		if (false == MoveObjManager::GetInst()->IsPlayer(pl))continue;
-		if (false == MoveObjManager::GetInst()->GetPlayer(pl)->GetIsReady())return;
+	if (room->IsGameStarted()) return;
 
+	room->SetGameStart();
+
+	if (room->GetNumberOfPlayer() != room->GetNumberOfReadyPlayer()) {
+		SendError(c_id, ERROR_PLAYER_NOT_READY, -1);
+		return;
 	}
+
+	for (int pl : room->GetObjList()) {
+
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+		Player* cpl = MoveObjManager::GetInst()->GetPlayer(pl);
+
+		cpl->state_lock.lock();
+		cpl->SetState(STATE::ST_INGAME);
+		cpl->SetIsActive(true);
+		cpl->state_lock.unlock();
+	}
+
 	StartGame(room->GetRoomID());
 }
 
@@ -609,15 +800,247 @@ void PacketManager::ProcessGameStart(int c_id, unsigned char* p)
 void PacketManager::ProcessLoadProgressing(int c_id, unsigned char* p)
 {
 	cs_packet_load_progressing* packet = reinterpret_cast<cs_packet_load_progressing*>(p);
-	packet->progressed;
+	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
 
-	
+	if (player->GetRoomID() == -1) return;
+	Room* room = m_room_manager->GetRoom(player->GetRoomID());
+
+	player->state_lock.lock();
+	player->SetLoadProgressed(packet->progressed);
+	player->state_lock.unlock();
+
+	for (auto pl : room->GetObjList())
+	{
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+		if (pl == c_id) continue;
+
+
+		SendLoadProgress(pl, c_id, packet->progressed);
+		
+	}
 
 }
 
 void PacketManager::ProcessLoadEnd(int c_id, unsigned char* p)
 {
+	cs_packet_load_end* packet = reinterpret_cast<cs_packet_load_end*>(p);
+	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
 
+	if (player->GetRoomID() == -1) return;
+	Room* room = m_room_manager->GetRoom(player->GetRoomID());
+
+	if (player->GetState() == STATE::ST_INGAME)
+	{
+
+		player->state_lock.lock();
+		player->SetLoadProgressed(100);
+		player->state_lock.unlock();
+
+		for (auto pl : room->GetObjList())
+		{
+			if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+			if (pl == c_id) continue;
+
+			SendLoadEnd(pl, c_id);
+		}
+
+		// 모두 끝났는지 체크해보자
+
+		for (auto pl : room->GetObjList())
+		{
+			if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+
+			MoveObjManager::GetInst()->GetPlayer(pl)->state_lock.lock();
+			if (MoveObjManager::GetInst()->GetPlayer(pl)->GetLoadProgressed() != 100) {
+				MoveObjManager::GetInst()->GetPlayer(pl)->state_lock.unlock();
+				return;
+			}
+			MoveObjManager::GetInst()->GetPlayer(pl)->state_lock.unlock();
+
+		}
+
+	}
+
+	for (auto pl : room->GetObjList())
+	{
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+
+		SendAllPlayerLoadEnd(pl);
+	}
+
+}
+
+void PacketManager::ProcessEnterRoom(int c_id, unsigned char* p)
+{
+	cs_packet_enter_room* packet = reinterpret_cast<cs_packet_enter_room*>(p);
+	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
+
+
+	Room* room;
+	if (packet->room_id == -1)
+	{
+		//GetEmptyRoom 할 때에 상태를 바꿔주는 것을 확인.
+		room = m_room_manager->GetRoom(m_room_manager->GetEmptyRoom());
+	}
+	else
+	{
+		room = m_room_manager->GetRoom(packet->room_id);
+
+		if (room->GetState() == ROOM_STATE::RT_FREE) {
+			SendError(c_id, ERROR_ROOM_NOT_EXIST, -1);
+			return;
+		}
+
+		if (room->GetState() == ROOM_STATE::RT_INGAME) {
+			SendError(c_id, ERROR_GAME_IN_PROGRESS, -1);
+			return;
+		}
+
+		if (room->GetNumberOfPlayer() >= USER_NUM) {
+			SendError(c_id, ERROR_ROOM_IS_FULL, -1);
+			return;
+		}
+	}
+
+	player->state_lock.lock();
+	player->SetRoomID(room->GetRoomID());
+	player->state_lock.unlock();
+	room->m_state_lock.lock();
+	room->EnterRoom(c_id);
+	room->m_state_lock.unlock();
+
+	SendEnterRoomOk(c_id, room->GetRoomID());
+
+	for (auto pl : room->GetObjList())
+	{
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+		if (pl == c_id) continue;
+		
+		SendEnterRoom(pl, c_id);
+	}
+
+}
+
+void PacketManager::ProcessLeaveRoom(int c_id, unsigned char* p)
+{
+	cs_packet_leave_room* packet = reinterpret_cast<cs_packet_leave_room*>(p);
+	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
+	// 플레이어가 애초에 방에 안들어가 있었다?
+	// 뭔가 오류가 있는 거임
+	if(player->GetRoomID() == -1) return;
+
+
+	Room* room = m_room_manager->GetRoom(player->GetRoomID());
+
+	// player가 나가려고 하는데 룸에는 데이터가 없다?? 
+	// 뭔가 오류가 있는거임
+	// 플레이어는 데이터를 바꿨는데 룸에서는 안바뀐거임.
+	if (!room->GetObjList().contains(c_id)) return;
+
+	player->state_lock.lock();
+	player->SetRoomID(-1);
+	player->SetState(STATE::ST_LOGIN);
+	player->state_lock.unlock();
+
+	room->m_state_lock.lock();
+	room->LeaveRoom(c_id);
+	room->m_state_lock.unlock();
+
+	if (room->GetState() != ROOM_STATE::RT_FREE)
+	{
+		for (auto pl : room->GetObjList())
+		{
+			if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+			SendLeaveRoom(pl, c_id);
+		}
+	}
+}
+
+void PacketManager::ProcessPlayerReady(int c_id, unsigned char* p)
+{
+	cs_packet_player_ready* packet = reinterpret_cast<cs_packet_player_ready*>(p);
+	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
+
+	Room* room = m_room_manager->GetRoom(player->GetRoomID());
+
+	if (!room->IsPlayerReady(c_id)) {
+		room->m_state_lock.lock();
+		room->PlayerReady(c_id);
+		room->m_state_lock.unlock();
+
+		player->state_lock.lock();
+		player->SetState(STATE::ST_INROOMREDDY);
+		player->state_lock.unlock();
+	}
+
+	for (auto pl : room->GetObjList())
+	{
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+		SendPlayerReady(pl, c_id);
+	}
+}
+
+void PacketManager::ProcessPlayerCancleReady(int c_id, unsigned char* p)
+{
+	cs_packet_player_ready* packet = reinterpret_cast<cs_packet_player_ready*>(p);
+	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
+
+	Room* room = m_room_manager->GetRoom(player->GetRoomID());
+
+	if (room->IsPlayerReady(c_id)) {
+		room->m_state_lock.lock();
+		room->PlayerCancleReady(c_id);
+		room->m_state_lock.unlock();
+
+		player->state_lock.lock();
+		player->SetState(STATE::ST_INROOM);
+		player->state_lock.unlock();
+	}
+
+	for (auto pl : room->GetObjList())
+	{
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+		if (pl == c_id) continue;
+		SendPlayerCancleReady(pl, c_id);
+	}
+}
+
+void PacketManager::ProcessLogOut(int c_id, unsigned char* p)
+{
+	cs_packet_player_ready* packet = reinterpret_cast<cs_packet_player_ready*>(p);
+	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
+
+	player->state_lock.lock();
+	player->SetState(STATE::ST_ACCEPT);
+	player->state_lock.unlock();
+}
+
+void PacketManager::ProcessRoomsDataInLobby(int c_id, unsigned char* p)
+{
+	for (Room* room : m_room_manager->GetRooms())
+	{
+		if (room->GetState() == ROOM_STATE::RT_FREE) continue;
+		
+		SendRoomsDataForLobby(c_id, room->GetRoomID());
+	}
+
+	SendRoomsDataForLobbyEnd(c_id);
+}
+
+void PacketManager::ProcessRoomsDataInRoom(int c_id, unsigned char* p)
+{
+	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
+
+	Room* room = m_room_manager->GetRoom(player->GetRoomID());
+
+	for (int pl : room->GetObjList())
+	{
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+
+		SendRoomsDataForRoom(c_id, pl);
+	}
+
+	SendRoomsDataForRoomEnd(c_id);
 }
 
 void PacketManager::ProcessDamageCheat(int c_id, unsigned char* p)
@@ -642,10 +1065,16 @@ void PacketManager::StartGame(int room_id)
 		if (i < room->GetMaxUser())
 		{
 			pl = MoveObjManager::GetInst()->GetPlayer(obj_list[i]);
-			pl->SetPos({ 200.0f,0.0f,200.0f});
-			//pl->SetColorType(COLOR_TYPE(i + 1));
+
+			pl->SetPos({ 1500.f , 0.0f , -1500.f + i * 200.f});
+
 			continue;
 		}
+	}
+
+	for (auto c_id : room->GetObjList())
+	{
+		SendGameStart(c_id);
 	}
 
 	for (auto c_id : room->GetObjList())
@@ -654,7 +1083,6 @@ void PacketManager::StartGame(int room_id)
 			continue;
 
 		pl = MoveObjManager::GetInst()->GetPlayer(c_id);
-		//cout << "SendObj �̸�:" << pl->GetName() << endl;
 		SendObjInfo(c_id, c_id);//�ڱ��ڽ�
 		for (auto other_id : room->GetObjList())
 		{
@@ -662,10 +1090,14 @@ void PacketManager::StartGame(int room_id)
 				continue;
 			if (c_id == other_id)continue;
 			SendObjInfo(c_id, other_id);
-			//cout << "�ȿ� SendObj �̸�:" << pl->GetName() << endl;
 		}
-		//SendBaseStatus(c_id, room->GetRoomID());
+	}
 
-		//SendWaveInfo(c_id, next_round, room->GetMaxUser() * next_round, room->GetMaxUser() * (next_round + 1));
+	for (auto c_id : room->GetObjList())
+	{
+		if (false == MoveObjManager::GetInst()->IsPlayer(c_id))continue;
+
+		pl = MoveObjManager::GetInst()->GetPlayer(c_id);
+		SendObjInfoEnd(c_id);
 	}
 }

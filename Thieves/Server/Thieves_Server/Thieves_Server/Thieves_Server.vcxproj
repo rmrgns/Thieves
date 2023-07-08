@@ -114,7 +114,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>%(SolutionDir)Thieves_Server</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
@@ -158,6 +158,7 @@
     <ClCompile Include="object\move_object\enemy.cpp" />
     <ClCompile Include="object\move_object\player.cpp" />
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="Lobby.cpp" />
     <ClCompile Include="room\room.cpp" />
     <ClCompile Include="room\room_manager.cpp" />
   </ItemGroup>
@@ -179,6 +180,7 @@
     <ClInclude Include="object\move_object\player.h" />
     <ClInclude Include="object\object.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Lobby.h" />
     <ClInclude Include="room\room.h" />
     <ClInclude Include="room\room_manager.h" />
     <ClInclude Include="state.h" />

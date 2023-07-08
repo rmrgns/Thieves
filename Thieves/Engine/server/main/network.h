@@ -91,6 +91,13 @@ public:
 	void SendLoadEndPacket();
 	void SendStartPacket();
 	void SendSignInPacket();
+	void SendEnterRoom(int room_id);
+	void SendLeaveRoom();
+	void SendReady();
+	void SendCancleReady();
+	void SendLogOut();
+	void SendRequestRoomsData();
+	void SendRequestInRoomData();
 
 
 	void SendPacket();

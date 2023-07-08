@@ -43,8 +43,7 @@ void ThievesSendManager::SendMovePacket(const SOCKET& s_socket, char direction,
 	SendPacket(s_socket, sizeof(packet), &packet);
 }
 
-void ThievesSendManager::SendLoadProgressPacket(const SOCKET& s_socket, char direction,
-	char progressed)
+void ThievesSendManager::SendLoadProgressPacket(const SOCKET& s_socket,	char progressed)
 {
 	cs_packet_load_progressing packet;
 	packet.size = sizeof(packet);
@@ -56,17 +55,91 @@ void ThievesSendManager::SendLoadProgressPacket(const SOCKET& s_socket, char dir
 	SendPacket(s_socket, sizeof(packet), &packet);
 }
 
+void ThievesSendManager::SendLoadEnd(const SOCKET& s_socket)
+{
+	cs_packet_load_end packet;
+	packet.size = sizeof(packet);
+	packet.type = CS_PACKET_LOAD_END;
+
+	SendPacket(s_socket, sizeof(packet), &packet);
+	
+}
+
 void ThievesSendManager::SendAttackPacket(const SOCKET& s_socket, const Vec3& forward_vec
 	, char action_type)
 {
 	cs_packet_attack packet;
 	packet.size = sizeof(packet);
 	packet.type = CS_PACKET_ATTACK;
-
+	// 이건 대체 뭐냐?
 	packet.type = (char)action_type;
 	//packet.f_x = forward_vec.x;
 	//packet.f_y = forward_vec.y;
 	//packet.f_z = forward_vec.z;
+	SendPacket(s_socket, sizeof(packet), &packet);
+}
+
+void ThievesSendManager::SendEnterRoom(const SOCKET& s_socket, int room_id)
+{
+	cs_packet_enter_room packet;
+	packet.type = CS_PACKET_ENTER_ROOM;
+	packet.size = sizeof(packet);
+
+	packet.room_id = room_id;
+	SendPacket(s_socket, sizeof(packet), &packet);
+}
+
+void ThievesSendManager::SendLeaveRoom(const SOCKET& s_socket)
+{
+	cs_packet_leave_room packet;
+	packet.type = CS_PACKET_LEAVE_ROOM;
+	packet.size = sizeof(packet);
+
+	SendPacket(s_socket, sizeof(packet), &packet);
+}
+
+void ThievesSendManager::SendReady(const SOCKET& s_socket)
+{
+	cs_packet_player_ready packet;
+	packet.type = CS_PACKET_PLAYER_READY;
+	packet.size = sizeof(packet);
+
+	SendPacket(s_socket, sizeof(packet), &packet);
+}
+
+void ThievesSendManager::SendCancleReady(const SOCKET& s_socket)
+{
+	cs_packet_player_cancle_ready packet;
+	packet.type = CS_PACKET_PLAYER_CANCLE_READY;
+	packet.size = sizeof(packet);
+
+	SendPacket(s_socket, sizeof(packet), &packet);
+}
+
+void ThievesSendManager::SendLogOut(const SOCKET& s_socket)
+{
+	cs_packet_player_log_out packet;
+	packet.type = CS_PACKET_PLAYER_LOG_OUT;
+	packet.size = sizeof(packet);
+
+	SendPacket(s_socket, sizeof(packet), &packet);
+}
+
+void ThievesSendManager::SendRequestRoomsData(const SOCKET& s_socket)
+{
+	cs_packet_request_rooms_data_for_lobby packet;
+	packet.type = CS_PACKET_REQUEST_ROOMS_DATA_FOR_LOBBY;
+	packet.size = sizeof(packet);
+
+	SendPacket(s_socket, sizeof(packet), &packet);
+}
+
+void ThievesSendManager::SendRequestInRoomData(const SOCKET& s_socket)
+{
+	cs_packet_request_rooms_data_for_room packet;
+	packet.type = CS_PACKET_REQUEST_ROOMS_DATA_FOR_ROOM;
+	packet.size = sizeof(packet);
+
 	SendPacket(s_socket, sizeof(packet), &packet);
 }
 
