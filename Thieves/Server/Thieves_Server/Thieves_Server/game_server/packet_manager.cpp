@@ -177,10 +177,6 @@ void PacketManager::SendMovePacket(int c_id, int mover)
 
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 
-	//cout << "ID : " << c_id << " mover " << mover << " x " << packet.posX << "z " << packet.posZ << endl;
-	//cout << "ID : " << c_id << " x " << packet.posX  << "z " << packet.posZ << endl;
-
-
 	cl->DoSend(sizeof(packet), &packet);
 }
 
@@ -244,7 +240,8 @@ void PacketManager::SendObjInfo(int c_id, int obj_id)
 
 	packet.x = obj->GetPosX();
 	packet.y = obj->GetPosY();
-	packet.z = obj->GetPosZ();
+	packet.z = obj->GetPosZ() + 500;
+	obj->SetPosZ(packet.z);
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 	cout << "Send OBJ INFO ID : " << c_id << ", x : " << packet.x << ", y : " << packet.y << ", z : " << packet.z << endl;
 	cl->DoSend(sizeof(packet), &packet);
@@ -431,7 +428,6 @@ void PacketManager::ProcessAttack(int c_id, unsigned char* p)
 
 void PacketManager::ProcessMove(int c_id, unsigned char* p)
 {
-	//std::cout << "MOVE " << std::endl;
 	cs_packet_move* packet = reinterpret_cast<cs_packet_move*>(p);
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 	
@@ -483,9 +479,6 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 			cl->SetUpVelocity(1250.0f);
 		}
 	}
-
-	
-
 
 	cl->SetRotX(packet->vecX);
 	cl->SetRotZ(packet->vecZ);

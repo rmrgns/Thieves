@@ -36,9 +36,9 @@ void MapManager::LoadMap()
 		//extent
 		reader++;	
 		
-		extentCBox[0] = std::stof((*reader)) * 1000.0f; reader++;
-		extentCBox[1] = std::stof((*reader)) * 1000.0f; reader++;
-		extentCBox[2] = std::stof((*reader)) * 1000.0f; reader++;
+		extentCBox[0] = std::stof((*reader)) * 100.0f; reader++;
+		extentCBox[1] = std::stof((*reader)) * 100.0f; reader++;
+		extentCBox[2] = std::stof((*reader)) * 100.0f; reader++;
 		//up
 		reader++;
 
@@ -76,17 +76,40 @@ Vector3 MapManager::checkCollision(CBox& playerBox, Vector3& playerOldPos)
 
 	Vector3 currentPlayerPos(playerBox.center[0], playerBox.center[1], playerBox.center[2]);
 	Vector3 boxVelocity(currentPlayerPos - playerOldPos);
-	int collisionDirection = 0;
 
 	// 충돌하는 순간의 맵 데이터
 	for (auto& obj : MapCBox)
 	{
-		if (obj->BoxBoxIntersection(playerBox, collisionDirection))
+		int collisionDirection = 0;
+		Vector3 collisionSlidingVector = { 0,0,0 };
+		//if (obj->BoxBoxIntersection(playerBox, collisionDirection))
+		//if (obj->BoxBoxIntersectionNormal(playerBox, collisionN, collisionDirection))
+		if ( (obj ->Intersection2(playerBox, collisionDirection, collisionSlidingVector)))
 		{
 			// 충돌했어.
-			playerOldPos.y -= 75.f;
+			playerOldPos.y -= 75.f; 
+			currentPlayerPos.y -= 75.f;
+			if (collisionDirection == 0)
+			{
+				currentPlayerPos.x = playerOldPos.x;
+				currentPlayerPos.y;
+				 currentPlayerPos.z ;
+			}
+			else if (collisionDirection == 1)
+			{
+				currentPlayerPos.x ;
+				currentPlayerPos.y;
+				currentPlayerPos.z = playerOldPos.z;
+
+
+			}
+
+			return currentPlayerPos;
+			//return (playerOldPos + obj->CalculateSliding(playerBox , boxVelocity ,collisionDirection));
+			//return (playerOldPos + obj->CalculateSlidingVector(playerBox, collisionDirection, boxVelocity));
+			//return (playerOldPos + obj->CalculateSlidingVector2(playerBox, collisionDirection, boxVelocity));
 			//return (playerOldPos + obj->CalculateSliding(playerBox, boxVelocity, collisionDirection));
-			return (playerOldPos + obj->CalculateSlidingVector(playerBox, collisionDirection, boxVelocity));
+			          
 		}
 	}
 

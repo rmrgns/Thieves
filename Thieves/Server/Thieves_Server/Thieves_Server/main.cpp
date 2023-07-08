@@ -7,7 +7,7 @@ const int MAX_THREAD = 8;
 
 int main() {
 	setlocale(LC_ALL, "korean");
-	wcout.imbue(locale("korean"));
+	wcout.imbue(locale("korean")); 
 	InGameServer server;
 	server.Init(MAX_THREAD);
 	cout << "초기화 완료" << endl;
