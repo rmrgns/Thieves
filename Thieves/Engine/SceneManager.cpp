@@ -77,7 +77,9 @@ void SceneManager::LoadScene(wstring sceneName)
 		_activeScene.reset();
 	}
 
+	LoadSceneLock.lock();
 	_activeScene = LoadLoadingScene();
+	LoadSceneLock.unlock();
 	_currentScene = CURRENT_SCENE::LOADING;
 
 	_activeScene->Awake();
@@ -652,7 +654,9 @@ void SceneManager::LoadGameScene()
 		Sleep(0);
 	}
 	
+	LoadSceneLock.lock();
 	ChangeToLoadedScene();
+	LoadSceneLock.unlock();
 }
 
 
@@ -775,7 +779,9 @@ void SceneManager::LoadLoginScene()
 
 
 
+	LoadSceneLock.lock();
 	ChangeToLoadedScene();
+	LoadSceneLock.unlock();
 }
 
 
@@ -831,8 +837,9 @@ void SceneManager::LoadLobbyScene()
 	scene->GetRoomsDataFromNetwork();
 
 	_LoadText = L"Load End.";
-
+	LoadSceneLock.lock();
 	ChangeToLoadedScene();
+	LoadSceneLock.unlock();
 }
 
 
@@ -888,7 +895,9 @@ void SceneManager::LoadRoomScene()
 
 	_LoadText = L"Load End.";
 
+	LoadSceneLock.lock();
 	ChangeToLoadedScene();
+	LoadSceneLock.unlock();
 }
 
 

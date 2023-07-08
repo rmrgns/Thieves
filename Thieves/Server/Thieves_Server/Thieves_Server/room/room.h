@@ -43,6 +43,8 @@ public:
 
 	int GetRoomMasterId() { return m_room_master_id; }
 
+	int IsGameStarted() { return isGameStarted; }
+
 	int GetNumberOfPlayer();
 	int GetNumberOfReadyPlayer();
 
@@ -51,8 +53,16 @@ public:
 		return m_obj_list;
 	}
 
+	void SetGameStart() { isGameStarted = true; }
+	void SetGameEnd() { isGameStarted = false; }
+
 	std::mutex m_state_lock;
+
+
 private:
+
+	bool isGameStarted = false;
+
 	int m_room_id;
 	int max_user;
 	ROOM_STATE m_room_state;

@@ -71,6 +71,8 @@ private:
 	void LoadLobbyScene();
 	void LoadRoomScene();
 	shared_ptr<Scene> LoadLoadingScene();
+	
+
 
 private:
 	shared_ptr<Scene> _activeScene;
@@ -79,6 +81,7 @@ private:
 	wstring _changeSceneName = L"";
 	CURRENT_SCENE _currentScene = CURRENT_SCENE::NONE;
 	CURRENT_SCENE _currentLoadProgressScene = CURRENT_SCENE::NONE;
+	std::mutex LoadSceneLock;
 
 	wstring _LoadText = L"";
 

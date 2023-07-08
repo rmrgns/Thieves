@@ -713,10 +713,13 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 		return;
 	}
 	else cl->state_lock.unlock();
+
 	Room* room = m_room_manager->GetRoom(cl->GetRoomID());
 
-	
-	if (isnan(cl->GetPosX()) || isnan(cl->GetPosY()) || isnan(cl->GetPosZ()))return;
+	if (isnan(cl->GetPosX()) || isnan(cl->GetPosY()) || isnan(cl->GetPosZ())) {
+		return;
+	}
+
 	for (auto other_pl : room->GetObjList())
 	{
 		if (false == MoveObjManager::GetInst()->IsPlayer(other_pl))
@@ -738,21 +741,29 @@ void PacketManager::ProcessGameStart(int c_id, unsigned char* p)
 	cs_packet_game_start* packet = reinterpret_cast<cs_packet_game_start*>(p);
 	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
 	
-	if (player->GetRoomID() == -1)return;
+	if (player->GetRoomID() == -1) return;
+
 
 	Room* room = m_room_manager->GetRoom(player->GetRoomID());
+
+	if (room->IsGameStarted()) return;
+
+	room->SetGameStart();
+
 	if (room->GetNumberOfPlayer() != room->GetNumberOfReadyPlayer()) {
 		SendError(c_id, ERROR_PLAYER_NOT_READY, -1);
 		return;
 	}
 
 	for (int pl : room->GetObjList()) {
-		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
 
-		player->state_lock.lock();
-		player->SetState(STATE::ST_INGAME);
-		player->SetIsActive(true);
-		player->state_lock.unlock();
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+		Player* cpl = MoveObjManager::GetInst()->GetPlayer(pl);
+
+		cpl->state_lock.lock();
+		cpl->SetState(STATE::ST_INGAME);
+		cpl->SetIsActive(true);
+		cpl->state_lock.unlock();
 	}
 
 	StartGame(room->GetRoomID());
