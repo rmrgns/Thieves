@@ -76,36 +76,46 @@ Vector3 MapManager::checkCollision(CBox& playerBox, Vector3& playerOldPos)
 
 	Vector3 currentPlayerPos(playerBox.center[0], playerBox.center[1], playerBox.center[2]);
 	Vector3 boxVelocity(currentPlayerPos - playerOldPos);
-
+	bool collideRet = FALSE;
+	int collisionDirection = 0;
 	// 충돌하는 순간의 맵 데이터
 	for (auto& obj : MapCBox)
 	{
-		int collisionDirection = 0;
+		
 		Vector3 collisionSlidingVector = { 0,0,0 };
-		if ((obj->Intersection2(playerBox, collisionDirection, collisionSlidingVector)))
+		if ((obj->Intersection2(playerBox, collisionDirection)))
 		{
-			//if (obj->BoxBoxIntersection2(playerBox)) {
-				playerOldPos.y -= 75.f;
-				currentPlayerPos.y -= 75.f;
-				if (collisionDirection == 0)
-				{
-					currentPlayerPos.x = playerOldPos.x;
-					currentPlayerPos.y;
-					currentPlayerPos.z;
-				}
-				else if (collisionDirection == 1)
-				{
-					currentPlayerPos.x;
-					currentPlayerPos.y;
-					currentPlayerPos.z = playerOldPos.z;
-				}
-
-				return currentPlayerPos;
-			//}
+			collideRet = TRUE;
 		}
 	}
+	if (collideRet)
+	{
+		//if (obj->BoxBoxIntersection2(playerBox)) {
+		playerOldPos.y -= 75.f;
+		currentPlayerPos.y -= 75.f;
+		if (collisionDirection == 0)
+		{
+			currentPlayerPos.x = playerOldPos.x;
+			currentPlayerPos.y;
+			currentPlayerPos.z;
+		}
+		else if (collisionDirection == 1)
+		{
+			currentPlayerPos.x;
+			currentPlayerPos.y;
+			currentPlayerPos.z = playerOldPos.z;
+		}
+		collisionDirection = 0;
+		collideRet = FALSE;
+		return currentPlayerPos;
+
+		//}
+	}
+
 
 	currentPlayerPos.y -= 75.f;
 	playerOldPos.y -= 75.f;
+	collisionDirection = 0;
+	collideRet = FALSE;
 	return currentPlayerPos;
 }

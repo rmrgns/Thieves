@@ -186,7 +186,7 @@ bool CBox::BoxBoxIntersection2(const CBox& box0)
 	return true;
 }
 
-bool CBox::Intersection2(const CBox& playerbox, int& collisionDirection, Vector3& collisionSlidingVector)
+bool CBox::Intersection2(const CBox& playerbox, int& collisionDirection)
 {
 	float dx = fabsf(center[0] - playerbox.center[0]);
 	float sumX = extent[0] + playerbox.extent[0];
@@ -208,14 +208,11 @@ bool CBox::Intersection2(const CBox& playerbox, int& collisionDirection, Vector3
 			// 충돌 면의 깊이를 이용하여 충돌 방향과 이동 벡터를 설정합니다.
 			if (collisionDepthX < collisionDepthZ) {
 				// x 축에서 충돌한 경우
-				
 				collisionDirection = 0; // 충돌 방향 설정 (적절한 값으로 변경)
-				collisionSlidingVector = Vector3(collisionDepthX, 0.0f, 0.0f); // 이동 벡터 설정
 			}
 			else {
 				// z 축에서 충돌한 경우
 				collisionDirection = 1; // 충돌 방향 설정 (적절한 값으로 변경)
-				collisionSlidingVector = Vector3(0.0f, 0.0f, collisionDepthZ); // 이동 벡터 설정
 			}
 
 			return true;

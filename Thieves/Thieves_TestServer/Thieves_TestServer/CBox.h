@@ -39,7 +39,7 @@ public:
 	~CBox() {};
 
 	bool BoxBoxIntersection2(const CBox& box0);
-	bool Intersection2(const CBox& box0, int& collisionDirection, Vector3&);
+	bool Intersection2(const CBox& box0, int& collisionDirection );
 
 
 
