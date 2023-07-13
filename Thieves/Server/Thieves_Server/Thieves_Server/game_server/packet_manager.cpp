@@ -612,6 +612,32 @@ void PacketManager::ProcessSignUp(int c_id, unsigned char* p)
 
 void PacketManager::ProcessAttack(int c_id, unsigned char* p)
 {
+	cs_packet_attack* packet = reinterpret_cast<cs_packet_attack*>(p);
+	
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+
+	Vector3 AttackPos = cl->GetPos();
+	AttackPos.x += cl->GetRotX() * 100.f;
+	AttackPos.z += cl->GetRotZ() * 100.f;
+
+	Room* clRoom = m_room_manager->GetRoom(cl->GetRoomID());
+
+	for (int pl : clRoom->GetObjList()) {
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+
+		Player* cpl = MoveObjManager::GetInst()->GetPlayer(pl);
+
+		if (cpl->GetPos().Dist(cl->GetPos()) > 300.f) {
+			Hit(c_id, pl);
+		}
+
+	}
+
+
+}
+
+void PacketManager::Hit(int c_id, int p_id) { //c_id가 p_id를 공격하여 맞추었음.
+	
 }
 
 void PacketManager::ProcessMove(int c_id, unsigned char* p)
@@ -785,6 +811,13 @@ void PacketManager::ProcessGameStart(int c_id, unsigned char* p)
 
 		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
 		Player* cpl = MoveObjManager::GetInst()->GetPlayer(pl);
+
+		/*
+		player->state_lock.lock();
+		player->SetState(STATE::ST_INGAME);
+		player->SetIsActive(true);
+		player->state_lock.unlock();
+		*/
 
 		cpl->state_lock.lock();
 		cpl->SetState(STATE::ST_INGAME);

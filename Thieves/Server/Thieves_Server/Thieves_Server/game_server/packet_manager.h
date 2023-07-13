@@ -80,6 +80,7 @@ private:
 	void ProcessSignIn(int c_id, unsigned char* p);
 	void ProcessSignUp(int c_id, unsigned char* p);
 	void ProcessAttack(int c_id, unsigned char* p);
+	void Hit(int c_id, int p_id);
 	void ProcessMove(int c_id, unsigned char* p);
 	void ProcessMatching(int c_id, unsigned char* p);
 	void ProcessHit(int c_id, unsigned char* p);
