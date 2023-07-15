@@ -13,7 +13,7 @@ void RoomScript::Update()
 
 		shared_ptr<RoomScene> rScene =
 			static_pointer_cast<RoomScene>(GET_SINGLE(SceneManager)->GetActiveScene());
-		
+
 		bool isPlayerReady = rScene->GetPlayerReady(playerId);
 
 		//rScene->SetPlayerReady(playerId, !isPlayerReady);
@@ -44,6 +44,61 @@ void RoomScript::Update()
 		if (rScene->GetRoomMasterId() == Network::GetInst()->GetPacketManager()->GetID())
 		{
 			Network::GetInst()->SendStartPacket();
+		}
+	}
+
+	if (INPUT->GetButtonDown(KEY_TYPE::LBUTTON))
+	{
+		ClickRoomButton();
+	}
+}
+
+void RoomScript::ClickRoomButton()
+{
+	POINT point = {};
+	GetCursorPos(&point);
+	ScreenToClient(GEngine->GetWindow().hwnd, &point);
+
+	if (point.x > 248 && point.x < 410)
+	{
+		if (point.y > 378 && point.y < 480)
+		{
+			int playerId = Network::GetInst()->GetPacketManager()->GetID();
+
+			shared_ptr<RoomScene> rScene =
+				static_pointer_cast<RoomScene>(GET_SINGLE(SceneManager)->GetActiveScene());
+
+			Network::GetInst()->SendLeaveRoom();
+
+			GET_SINGLE(SceneManager)->SetCheckChangeScene(true);
+			GEngine->SetChangeScene(L"Lobby");
+			//Network::GetInst()->SendSignInPacket();
+		}
+		else if (point.y > 492 && point.y < 575)
+		{
+			int playerId = Network::GetInst()->GetPacketManager()->GetID();
+
+			shared_ptr<RoomScene> rScene =
+				static_pointer_cast<RoomScene>(GET_SINGLE(SceneManager)->GetActiveScene());
+
+			bool isPlayerReady = rScene->GetPlayerReady(playerId);
+
+			//rScene->SetPlayerReady(playerId, !isPlayerReady);
+
+			if (rScene->GetPlayerReady(playerId)) {
+				Network::GetInst()->SendReady();
+			}
+			else {
+				Network::GetInst()->SendCancleReady();
+			}
+		}
+		else if (point.y > 595 && point.y < 595 + 83)
+		{
+			shared_ptr<RoomScene> rScene = static_pointer_cast<RoomScene>(GET_SINGLE(SceneManager)->GetActiveScene());
+			if (rScene->GetRoomMasterId() == Network::GetInst()->GetPacketManager()->GetID())
+			{
+				Network::GetInst()->SendStartPacket();
+			}
 		}
 	}
 }

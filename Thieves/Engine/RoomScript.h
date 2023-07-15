@@ -5,5 +5,8 @@ class RoomScript : public MonoBehaviour
 {
 public:
 	virtual void Update() override;
+
+public:
+	void ClickRoomButton();
 };
 
