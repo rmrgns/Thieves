@@ -66,6 +66,241 @@ void MapManager::LoadMap()
 		words.erase(words.begin(), next);
 	}
 
+	std::ifstream in{ ".\\ESCAPE_AREA.txt" };
+
+	std::vector<std::string> words{ std::istream_iterator<std::string>{in}, {} };
+
+	while (!words.empty())
+	{
+		auto next = std::find(words.begin(), words.end(), "end");
+		next++;
+
+		auto reader = words.begin();
+
+		//start 人 end
+		reader++;
+		reader++;
+
+		float centerCBox[3]{};
+		float extentCBox[3]{};
+		float axisCBox[3][3]{};
+
+
+
+		//center		
+		centerCBox[0] = std::stof((*reader)) * -100.0f; reader++;
+		centerCBox[1] = std::stof((*reader)) * 100.0f; reader++;
+		centerCBox[2] = std::stof((*reader)) * -100.0f; reader++;
+
+		//extent
+		reader++;
+
+		extentCBox[0] = std::stof((*reader)) * 100.0f; reader++;
+		extentCBox[1] = std::stof((*reader)) * 100.0f; reader++;
+		extentCBox[2] = std::stof((*reader)) * 100.0f; reader++;
+		//up
+		reader++;
+
+		axisCBox[1][0] = std::stof((*reader)); reader++;
+		axisCBox[1][1] = std::stof((*reader)); reader++;
+		axisCBox[1][2] = std::stof((*reader)); reader++;
+		//right
+		reader++;
+
+
+		//		float rightCBox[3];
+		axisCBox[0][0] = std::stof((*reader)); reader++;
+		axisCBox[0][1] = std::stof((*reader)); reader++;
+		axisCBox[0][2] = std::stof((*reader)); reader++;
+
+		//look
+		reader++;
+
+		axisCBox[2][0] = std::stof((*reader)); reader++;
+		axisCBox[2][1] = std::stof((*reader)); reader++;
+		axisCBox[2][2] = std::stof((*reader)); reader++;
+
+		float translation[3] = { 0.0f, 0.0f, 0.0f };
+		EscpaeArea.push_back(std::make_shared<Escape_area>(centerCBox, extentCBox, axisCBox, translation));
+		words.erase(words.begin(), next);
+	}
+
+	std::ifstream in{ ".\\ItemBoxData.txt" };
+
+	std::vector<std::string> words{ std::istream_iterator<std::string>{in}, {} };
+
+	while (!words.empty())
+	{
+		auto next = std::find(words.begin(), words.end(), "end");
+		next++;
+
+		auto reader = words.begin();
+
+		//start 人 end
+		reader++;
+		reader++;
+
+		float centerCBox[3]{};
+		float extentCBox[3]{};
+		float axisCBox[3][3]{};
+
+
+
+		//center		
+		centerCBox[0] = std::stof((*reader)) * -100.0f; reader++;
+		centerCBox[1] = std::stof((*reader)) * 100.0f; reader++;
+		centerCBox[2] = std::stof((*reader)) * -100.0f; reader++;
+
+		//extent
+		reader++;
+
+		extentCBox[0] = std::stof((*reader)) * 100.0f; reader++;
+		extentCBox[1] = std::stof((*reader)) * 100.0f; reader++;
+		extentCBox[2] = std::stof((*reader)) * 100.0f; reader++;
+		//up
+		reader++;
+
+		axisCBox[1][0] = std::stof((*reader)); reader++;
+		axisCBox[1][1] = std::stof((*reader)); reader++;
+		axisCBox[1][2] = std::stof((*reader)); reader++;
+		//right
+		reader++;
+
+
+		//		float rightCBox[3];
+		axisCBox[0][0] = std::stof((*reader)); reader++;
+		axisCBox[0][1] = std::stof((*reader)); reader++;
+		axisCBox[0][2] = std::stof((*reader)); reader++;
+
+		//look
+		reader++;
+
+		axisCBox[2][0] = std::stof((*reader)); reader++;
+		axisCBox[2][1] = std::stof((*reader)); reader++;
+		axisCBox[2][2] = std::stof((*reader)); reader++;
+
+		float translation[3] = { 0.0f, 0.0f, 0.0f };
+		ItemArea.push_back(std::make_shared<Item_area>(centerCBox, extentCBox, axisCBox, translation));
+		words.erase(words.begin(), next);
+	}
+
+	std::ifstream in{ ".\\SPAWN_AREA.txt" };
+
+	std::vector<std::string> words{ std::istream_iterator<std::string>{in}, {} };
+
+	while (!words.empty())
+	{
+		auto next = std::find(words.begin(), words.end(), "end");
+		next++;
+
+		auto reader = words.begin();
+
+		//start 人 end
+		reader++;
+		reader++;
+
+		float centerCBox[3]{};
+		float extentCBox[3]{};
+		float axisCBox[3][3]{};
+
+
+
+		//center		
+		centerCBox[0] = std::stof((*reader)) * -100.0f; reader++;
+		centerCBox[1] = std::stof((*reader)) * 100.0f; reader++;
+		centerCBox[2] = std::stof((*reader)) * -100.0f; reader++;
+
+		//extent
+		reader++;
+
+		extentCBox[0] = std::stof((*reader)) * 100.0f; reader++;
+		extentCBox[1] = std::stof((*reader)) * 100.0f; reader++;
+		extentCBox[2] = std::stof((*reader)) * 100.0f; reader++;
+		//up
+		reader++;
+
+		axisCBox[1][0] = std::stof((*reader)); reader++;
+		axisCBox[1][1] = std::stof((*reader)); reader++;
+		axisCBox[1][2] = std::stof((*reader)); reader++;
+		//right
+		reader++;
+
+
+		//		float rightCBox[3];
+		axisCBox[0][0] = std::stof((*reader)); reader++;
+		axisCBox[0][1] = std::stof((*reader)); reader++;
+		axisCBox[0][2] = std::stof((*reader)); reader++;
+
+		//look
+		reader++;
+
+		axisCBox[2][0] = std::stof((*reader)); reader++;
+		axisCBox[2][1] = std::stof((*reader)); reader++;
+		axisCBox[2][2] = std::stof((*reader)); reader++;
+
+		float translation[3] = { 0.0f, 0.0f, 0.0f };
+		SpawnArea.push_back(std::make_shared<Spawn_area>(centerCBox, extentCBox, axisCBox, translation));
+		words.erase(words.begin(), next);
+	}
+
+	std::ifstream in{ ".\\SPECIAL_ESCAPE_AREA.txt" };
+
+	std::vector<std::string> words{ std::istream_iterator<std::string>{in}, {} };
+
+	while (!words.empty())
+	{
+		auto next = std::find(words.begin(), words.end(), "end");
+		next++;
+
+		auto reader = words.begin();
+
+		//start 人 end
+		reader++;
+		reader++;
+
+		float centerCBox[3]{};
+		float extentCBox[3]{};
+		float axisCBox[3][3]{};
+
+
+
+		//center		
+		centerCBox[0] = std::stof((*reader)) * -100.0f; reader++;
+		centerCBox[1] = std::stof((*reader)) * 100.0f; reader++;
+		centerCBox[2] = std::stof((*reader)) * -100.0f; reader++;
+
+		//extent
+		reader++;
+
+		extentCBox[0] = std::stof((*reader)) * 100.0f; reader++;
+		extentCBox[1] = std::stof((*reader)) * 100.0f; reader++;
+		extentCBox[2] = std::stof((*reader)) * 100.0f; reader++;
+		//up
+		reader++;
+
+		axisCBox[1][0] = std::stof((*reader)); reader++;
+		axisCBox[1][1] = std::stof((*reader)); reader++;
+		axisCBox[1][2] = std::stof((*reader)); reader++;
+		//right
+		reader++;
+
+
+		//		float rightCBox[3];
+		axisCBox[0][0] = std::stof((*reader)); reader++;
+		axisCBox[0][1] = std::stof((*reader)); reader++;
+		axisCBox[0][2] = std::stof((*reader)); reader++;
+
+		//look
+		reader++;
+
+		axisCBox[2][0] = std::stof((*reader)); reader++;
+		axisCBox[2][1] = std::stof((*reader)); reader++;
+		axisCBox[2][2] = std::stof((*reader)); reader++;
+
+		float translation[3] = { 0.0f, 0.0f, 0.0f };
+		SSpawnArea.push_back(std::make_shared<SSpawn_area>(centerCBox, extentCBox, axisCBox, translation));
+		words.erase(words.begin(), next);
+	}
 }
 
 

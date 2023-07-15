@@ -1,11 +1,6 @@
 #pragma once
 #include "pch.h"
-#include <D3d12.h>
-#include <DirectXmath.h>
-#include <directXmath.h>
-#include <d3d12.h>
 
-//#include "DirectXTex.h"
 class CBox
 {
 public:
@@ -49,10 +44,6 @@ public:
 	float axis[3][3];		
 	float extent[3];		
 	float translation[3];	
-
-	float VecDotProduct2(const Vector3& a, const Vector3& b) {
-		return a.x * b.x + a.y * b.y + a.z * b.z;
-	}
 };
 
 inline float DotProduct(const float v0[3], const float v1[3])
