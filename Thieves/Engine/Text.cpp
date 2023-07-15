@@ -26,7 +26,7 @@ void Text::Update()
 		wstring text2 = L"Thieves Login Screen";
 		SetText(text2, 0.f, 10.f, 1.f, 1.f);
 
-		SetTextInfo(TEXT_FORMAT::LOGIN);
+		/*SetTextInfo(TEXT_FORMAT::LOGIN);
 		wstring text = L"Thieves ID";
 		SetText(text, 500.f, 400.f, 1.f, 1.f);
 		wstring ID = INPUT->GetUserID();
@@ -35,7 +35,7 @@ void Text::Update()
 		wstring text1 = L"Thieves Password";
 		SetText(text1, 500.f, 500.f, 1.f, 1.f);
 		wstring Password = INPUT->GetUserPassword();
-		SetText(Password, 500.f, 550.f, 1.f, 1.f);
+		SetText(Password, 500.f, 550.f, 1.f, 1.f);*/
 		//wstring test = L"한글 테스트";
 		//SetText(test, 100.f, 500.f, 1.f, 1.f);
 
@@ -66,25 +66,36 @@ void Text::Update()
 		shared_ptr<LobbyScene> lScene = static_pointer_cast<LobbyScene>(GET_SINGLE(SceneManager)->GetActiveScene());
 
 		SetTextInfo(TEXT_FORMAT::INROOM);
-		float count = 0.f;
+		int count = 0;
 
-		if (lScene->GetRoomsData().empty()) {
+		/*if (lScene->GetRoomsData().empty()) {
 			wstring text8 = L"Room Empty";
 			SetText(text8, 200.f, 100.f, 1.f, 1.f);
-		}
+		}*/
 
 		for (auto& data : lScene->GetRoomsData())
 		{
+
 			wstring tempText = L"";
-			tempText.append(to_wstring(data.second.id));
+			tempText.append(to_wstring(data.second.id + 1));
 			tempText.append(L" ");
-			tempText.append(to_wstring(data.second.nPlayer));
-			tempText.append(L"/8 ");
+
+			wstring tempText2 = L"";
+			tempText2.append(to_wstring(data.second.nPlayer));
+			tempText2.append(L"/8 ");
 			if (data.second.isInGame) tempText.append(L"Game Playing!");
 
-			SetText(tempText, 200.f, 100.f + 50.f * count, 1.f, 1.f);
-
-			count += 1.0f;
+			if (count % 2 == 0)
+			{
+				SetText(tempText, 500.f, 200.f + 70.f * count, 1.f, 1.f);
+				SetText(tempText2, 800.f, 240.f + 70.f * count, 1.f, 1.f);
+			}
+			else
+			{
+				SetText(tempText, 940.f, 200.f + 70.f * (count - 1), 1.f, 1.f);
+				SetText(tempText2, 1240.f, 240.f + 70.f * (count - 1), 1.f, 1.f);
+			}
+			count += 1;
 		}
 		
 	}
@@ -98,26 +109,46 @@ void Text::Update()
 
 
 		SetTextInfo(TEXT_FORMAT::INROOM);
-		float count = 0.f;
+		int count = 0;
 		for (auto& data : rScene->GetRoomData())
 		{
-			if (data.second.id == rScene->GetRoomMasterId())
+			if (count % 2 == 0)
 			{
-				wstring masterText = L"Master";
-				SetText(masterText, 100.f, 100.f + 50.f * count, 1.f, 1.f);
+				if (data.second.id == rScene->GetRoomMasterId())
+				{
+					wstring masterText = L"Master";
+					SetText(masterText, 500.f, 200.f + 70.f * count, 1.f, 1.f);
+				}
+				wstring tempText = L"";
+				tempText.append(data.second.name);
+				SetText(tempText, 500.f, 200.f + 70.f * count, 1.f, 1.f);
+
+				wstring tempText2 = L"";
+
+				if (data.second.isReady) {
+					tempText2.append(L"Ready!");
+					SetText(tempText2, 750.f, 240.f + 70.f * count, 1.f, 1.f);
+				}
 			}
-			wstring tempText = L"";
-			tempText.append(data.second.name);
-			SetText(tempText, 200.f, 100.f + 50.f * count, 1.f, 1.f);
+			else
+			{
+				if (data.second.id == rScene->GetRoomMasterId())
+				{
+					wstring masterText = L"Master";
+					SetText(masterText, 500.f, 200.f + 70.f * (count - 1), 1.f, 1.f);
+				}
+				wstring tempText = L"";
+				tempText.append(data.second.name);
+				SetText(tempText, 500.f, 200.f + 70.f * (count - 1), 1.f, 1.f);
 
-			wstring tempText2 = L"";
+				wstring tempText2 = L"";
 
-			if (data.second.isReady) {
-				tempText2.append(L"Ready!");
-				SetText(tempText2, 250.f, 100.f + 50.f * count, 1.f, 1.f);
+				if (data.second.isReady) {
+					tempText2.append(L"Ready!");
+					SetText(tempText2, 750.f, 240.f + 70.f * (count - 1), 1.f, 1.f);
+				}
 			}
-
-			count += 1.0f;
+			count += 1;
 		}
 	}
 	else if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOADING)

@@ -127,8 +127,11 @@ void Engine::ShowFps()
 	GetWindowRect(GEngine->GetWindow().hwnd, &rect);
 	RECT rect1;
 	GetClientRect(GEngine->GetWindow().hwnd, &rect1);
+	POINT mousePos = {};
+	GetCursorPos(&mousePos);
+	ScreenToClient(GEngine->GetWindow().hwnd, &mousePos);
 	WCHAR text[100] = L"";
-	::wsprintf(text, L"FPS : %d", fps);
+	::wsprintf(text, L"FPS : %d, x = %d, y = %d", fps, mousePos.x, mousePos.y);
 	::SetWindowText(_window.hwnd, text);
 }
 

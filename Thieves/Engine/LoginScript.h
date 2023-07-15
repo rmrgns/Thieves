@@ -9,8 +9,11 @@ public:
 
 	virtual void LateUpdate() override;
 
+public:
+	void ClickLoginButton();
+
 private:
-	float		_speed = 20.f;
+	
 
 };
 
