@@ -71,11 +71,8 @@ void ThievesSendManager::SendAttackPacket(const SOCKET& s_socket, const Vec3& fo
 	cs_packet_attack packet;
 	packet.size = sizeof(packet);
 	packet.type = CS_PACKET_ATTACK;
-	// ÀÌ°Ç ´ëÃ¼ ¹¹³Ä?
+	// ï¿½Ì°ï¿½ ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½?
 	packet.type = (char)action_type;
-	//packet.f_x = forward_vec.x;
-	//packet.f_y = forward_vec.y;
-	//packet.f_z = forward_vec.z;
 	SendPacket(s_socket, sizeof(packet), &packet);
 }
 

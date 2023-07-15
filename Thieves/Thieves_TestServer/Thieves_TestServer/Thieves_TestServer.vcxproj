@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{f4a79d81-a6ca-43fb-80d4-d13289dea2fa}</ProjectGuid>
-    <RootNamespace>ThievesServer</RootNamespace>
+    <ProjectGuid>{f7a71e16-bb50-4cd5-84be-b9990f7fb229}</ProjectGuid>
+    <RootNamespace>ThievesTestServer</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -71,12 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)Thieves_Server;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)lib\;$(LibraryPath)</LibraryPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)Thieves_Server\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)lib\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Thieves_TestServer;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\;$(DXSDK_DIR)\Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -112,15 +108,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>%(SolutionDir)Thieves_Server</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>%(SolutionDir)Thieves_TestServer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\doyou\Desktop\Thieves\Thieves\Thieves_Server\Thieves_Server\include</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -131,17 +124,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)Thieves_Server\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\doyou\Desktop\Thieves\Thieves\Thieves_Server\Thieves_Server\include</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -158,19 +146,29 @@
     <ClCompile Include="object\move_object\enemy.cpp" />
     <ClCompile Include="object\move_object\player.cpp" />
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="Lobby.cpp" />
+    <ClCompile Include="ray_casting.cpp" />
     <ClCompile Include="room\room.cpp" />
     <ClCompile Include="room\room_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="area\Item_box.h" />
+    <ClInclude Include="area\spawn_area.h" />
+    <ClInclude Include="area\special_escape_area.h" />
     <ClInclude Include="Astar.h" />
     <ClInclude Include="CAstar.h" />
     <ClInclude Include="CBox.h" />
     <ClInclude Include="CNode.h" />
     <ClInclude Include="database\db.h" />
     <ClInclude Include="define.h" />
+    <ClInclude Include="escape_area.h" />
     <ClInclude Include="game_server\ingame_server.h" />
     <ClInclude Include="game_server\packet_manager.h" />
+    <ClInclude Include="header.h" />
+    <ClInclude Include="include\lauxlib.h" />
+    <ClInclude Include="include\lua.h" />
+    <ClInclude Include="include\lua.hpp" />
+    <ClInclude Include="include\luaconf.h" />
+    <ClInclude Include="include\lualib.h" />
     <ClInclude Include="iocp_server\iocp_server.h" />
     <ClInclude Include="map_object.h" />
     <ClInclude Include="object\MapManager.h" />
@@ -180,12 +178,14 @@
     <ClInclude Include="object\move_object\player.h" />
     <ClInclude Include="object\object.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Lobby.h" />
+    <ClInclude Include="protocol.h" />
+    <ClInclude Include="ray_casting.h" />
     <ClInclude Include="room\room.h" />
     <ClInclude Include="room\room_manager.h" />
     <ClInclude Include="state.h" />
-    <ClInclude Include="header.h" />
-    <ClInclude Include="protocol.h" />
+    <ClInclude Include="vec\vec2.h" />
+    <ClInclude Include="vec\vec3.h" />
+    <ClInclude Include="vec\vec4.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
