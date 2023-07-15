@@ -57,7 +57,9 @@ constexpr char CS_PACKET_PLAYER_CANCLE_READY = 17;
 constexpr char CS_PACKET_PLAYER_LOG_OUT = 18;	// 로그아웃
 constexpr char CS_PACKET_REQUEST_ROOMS_DATA_FOR_LOBBY = 19; // 로비에서 보여줄 데이터를 받기
 constexpr char CS_PACKET_REQUEST_ROOMS_DATA_FOR_ROOM = 20; // 룸에서 보여줄 데이터를 받기
-
+constexpr char CS_PACKET_STEEL_DIAMOND = 21; // 다이아를 훔쳤음
+constexpr char CS_PACKET_GET_ITEM = 22; // 아이템 획득
+constexpr char CS_PACKET_USE_ITEM = 23; // 아이템 사용
 
 
 // SC
@@ -96,6 +98,10 @@ constexpr char SC_PACKET_ROOMS_DATA_FOR_ROOM_END = 32; // LOBBY_END와 비슷하게 �
 constexpr char SC_PACKET_ERROR = 33; // 어떤 식으로든 에러를 보내야 할때
 constexpr char SC_PACKET_GAME_START = 34; // 아니 게임 시작 패킷이 없는게 말이 됨?
 constexpr char SC_PACKET_OBJ_INFO_END = 35; // OBJ_INFO도 시작하기 전에 보내야 하는게 맞는듯.
+//constexpr char SC_PACKET_PHASE_CHANGE = 36; // 페이즈가 바뀌었다는 걸 모두에게도 알려야 함 --> 페이즈 패킷으로 어떻게 하면 될듯
+constexpr char SC_PACKET_ITEM_USE = 36; // 아이템이 사용 되었다는 걸 모두에게도 알려야 함. 물론, 이건 아이템에 맞았다 같은 것은 HIT로 같이 보내주면 될듯
+constexpr char SC_PACKET_STUN_END = 37; // 스턴이 끝나는 것도 알려 줘야지 이것아
+
 //#pragma pack (push, 1)
 
 // 클라이언트 -> 서버로 보내는 패킷은 어떤 키를 얼마나 눌렀는지에 대해서만 보내주면 된다.
@@ -198,6 +204,23 @@ struct cs_packet_request_rooms_data_for_room {
 	char type;
 };
 
+struct cs_packet_steel_diamond {
+	unsigned char size;
+	char type;
+};
+
+struct cs_packet_get_item {
+	unsigned char size;
+	char type;
+	char itemNum;
+};
+
+struct cs_packet_use_item {
+	unsigned char size;
+	char type;
+	char itemNum;
+};
+
 //------------------------------------------------------------------
 
 
@@ -282,6 +305,11 @@ struct sc_packet_stun {
 	int	obj_id;
 };
 struct sc_packet_interaction {
+};
+
+struct sc_packet_phase_change {
+	unsigned char size;
+	char type;
 };
 
 struct sc_packet_test {
@@ -397,6 +425,16 @@ struct sc_packet_game_start {
 };
 
 struct sc_packet_obj_info_end {
+	unsigned char size;
+	char type;
+};
+
+struct sc_packet_item_use {
+	unsigned char size;
+	char type;
+};
+
+struct sc_packet_stun_end {
 	unsigned char size;
 	char type;
 };

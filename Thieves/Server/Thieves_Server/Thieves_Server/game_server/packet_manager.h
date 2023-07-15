@@ -33,7 +33,7 @@ public:
 	void SendGameWin(int c_id);
 	void SendGameDefeat(int c_id);
 	void SendStun(int c_id, int obj_id);
-	void SendPhasePacket(int c_id, int curr_phase);
+	void SendPhasePacket(int c_id);
 
 	void SendLoadProgress(int c_id, int p_id, int progressed);
 
@@ -85,6 +85,9 @@ private:
 	void ProcessMatching(int c_id, unsigned char* p);
 	void ProcessHit(int c_id, unsigned char* p);
 	void ProcessGameStart(int c_id, unsigned char* p);
+	void ProcessChangePhase(int c_id, unsigned char* p);
+	void ProcessGetItem(int c_id, unsigned char* p);
+	void ProcessUseItem(int c_id, unsigned char* p);
 
 	void ProcessLoadProgressing(int c_id, unsigned char* p);
 	void ProcessLoadEnd(int c_id, unsigned char* p);

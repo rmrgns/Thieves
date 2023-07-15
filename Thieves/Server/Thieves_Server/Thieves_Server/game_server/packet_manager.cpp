@@ -101,6 +101,18 @@ void PacketManager::ProcessPacket(int c_id, unsigned char* p)
 		ProcessRoomsDataInRoom(c_id, p);
 		break;
 	}
+	case CS_PACKET_STEEL_DIAMOND: {
+		ProcessChangePhase(c_id, p);
+		break;
+	}
+	case CS_PACKET_GET_ITEM: {
+		ProcessGetItem(c_id, p);
+		break;
+	}
+	case CS_PACKET_USE_ITEM: {
+		ProcessUseItem(c_id, p);
+		break;
+	}
 	case CS_PACKET_TEST: {
 		//ProcessTest(c_id, p);
 		break;
@@ -299,7 +311,12 @@ void PacketManager::SendTime(int c_id, float round_time)
 
 void PacketManager::SendAttackPacket(int c_id, int room_id)
 {
+	cs_packet_attack packet;
+	packet.type = CS_PACKET_ATTACK;
+	packet.size = sizeof(packet);
 
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
 }
 
 void PacketManager::SendGameWin(int c_id)
@@ -312,11 +329,22 @@ void PacketManager::SendGameDefeat(int c_id)
 
 void PacketManager::SendStun(int c_id, int obj_id)
 {
+	sc_packet_stun packet;
+	packet.type = SC_PACKET_STUN;
+	packet.size = sizeof(packet);
 
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
 }
 
-void PacketManager::SendPhasePacket(int c_id, int curr_phase)
+void PacketManager::SendPhasePacket(int c_id)
 {
+	sc_packet_phase_change packet;
+	packet.type = SC_PACKET_PHASE;
+	packet.size = sizeof(packet);
+
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
 }
 
 void PacketManager::SendLoadProgress(int c_id, int p_id, int progressed)
@@ -637,7 +665,7 @@ void PacketManager::ProcessAttack(int c_id, unsigned char* p)
 }
 
 void PacketManager::Hit(int c_id, int p_id) { //c_id가 p_id를 공격하여 맞추었음.
-	
+	//타이머 이벤트로 스턴 시간을 등록하여야 함.
 }
 
 void PacketManager::ProcessMove(int c_id, unsigned char* p)
@@ -826,6 +854,32 @@ void PacketManager::ProcessGameStart(int c_id, unsigned char* p)
 	}
 
 	StartGame(room->GetRoomID());
+}
+
+void PacketManager::ProcessChangePhase(int c_id, unsigned char* p)
+{
+	cs_packet_steel_diamond* packet = reinterpret_cast<cs_packet_steel_diamond*>(p);
+	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
+
+	if (player->GetRoomID() == -1) return;
+	Room* room = m_room_manager->GetRoom(player->GetRoomID());
+
+	for (int pl : room->GetObjList()) {
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+		Player* cpl = MoveObjManager::GetInst()->GetPlayer(pl);
+		
+		SendPhasePacket(pl);
+	}
+}
+
+void PacketManager::ProcessGetItem(int c_id, unsigned char* p)
+{
+
+}
+
+void PacketManager::ProcessUseItem(int c_id, unsigned char* p)
+{
+
 }
 
 
