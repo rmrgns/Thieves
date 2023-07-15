@@ -3,8 +3,10 @@
 
 bool RayCasting::Shoot()
 {
+	Vector3 temp;
 	for (;;)//충알 방향에 따라 xz축 +++
 	{
+		
 		if (true)//플레이어 충돌 검사
 		{
 
