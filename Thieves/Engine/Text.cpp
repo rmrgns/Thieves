@@ -119,10 +119,11 @@ void Text::Update()
 					wstring masterText = L"Master";
 					SetText(masterText, 500.f, 200.f + 70.f * count, 1.f, 1.f);
 				}
-				wstring tempText = L"";
-				tempText.append(data.second.name);
-				SetText(tempText, 500.f, 200.f + 70.f * count, 1.f, 1.f);
-
+				else {
+					wstring tempText = L"";
+					tempText.append(data.second.name);
+					SetText(tempText, 500.f, 200.f + 70.f * count, 1.f, 1.f);
+				}
 				wstring tempText2 = L"";
 
 				if (data.second.isReady) {
