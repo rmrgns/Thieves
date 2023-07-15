@@ -146,6 +146,7 @@
     <ClCompile Include="object\move_object\enemy.cpp" />
     <ClCompile Include="object\move_object\player.cpp" />
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="ray_casting.cpp" />
     <ClCompile Include="room\room.cpp" />
     <ClCompile Include="room\room_manager.cpp" />
   </ItemGroup>
@@ -157,7 +158,6 @@
     <ClInclude Include="CAstar.h" />
     <ClInclude Include="CBox.h" />
     <ClInclude Include="CNode.h" />
-    <ClInclude Include="CollisionDetection.hpp" />
     <ClInclude Include="database\db.h" />
     <ClInclude Include="define.h" />
     <ClInclude Include="escape_area.h" />

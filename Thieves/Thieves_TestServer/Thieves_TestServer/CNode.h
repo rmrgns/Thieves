@@ -1,4 +1,4 @@
-//#pragma once
+/#pragma once
 //struct Node {
 //    int x, y;          // 노드의 좌표
 //    bool obstacle;     // 장애물 여부

@@ -15,6 +15,7 @@ public:
 	
 	
 	Vector3 checkCollision(CBox& playerBox, Vector3& playerOldPos);
+	Vector3 checkCollisionRay(CBox& playerBox);
 private:
 	std::vector<std::shared_ptr<CBox>> MapCBox;
 	std::vector<std::shared_ptr<Escape_area>> EscpaeArea;

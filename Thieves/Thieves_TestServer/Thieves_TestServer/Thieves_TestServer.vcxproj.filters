@@ -16,6 +16,9 @@
     <Filter Include="소스 파일\area">
       <UniqueIdentifier>{5ad4ce95-d4c1-420e-a64a-07ed4966b84e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\ray">
+      <UniqueIdentifier>{9abc490b-f1bc-452b-abb6-105373c0d365}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="database\db.cpp">
@@ -62,6 +65,9 @@
     </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ray_casting.cpp">
+      <Filter>소스 파일\ray</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -122,9 +128,6 @@
     <ClInclude Include="CNode.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionDetection.hpp">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
     <ClInclude Include="define.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
@@ -171,7 +174,7 @@
       <Filter>소스 파일\area</Filter>
     </ClInclude>
     <ClInclude Include="ray_casting.h">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\ray</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
