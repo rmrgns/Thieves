@@ -71,7 +71,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)Thieves_TestServer;$(DXSDK_DIR)\Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Thieves_TestServer;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)lib\;$(DXSDK_DIR)\Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -150,6 +150,9 @@
     <ClCompile Include="room\room_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="area\Item_box.h" />
+    <ClInclude Include="area\spawn_area.h" />
+    <ClInclude Include="area\special_escape_area.h" />
     <ClInclude Include="Astar.h" />
     <ClInclude Include="CAstar.h" />
     <ClInclude Include="CBox.h" />
@@ -157,6 +160,7 @@
     <ClInclude Include="CollisionDetection.hpp" />
     <ClInclude Include="database\db.h" />
     <ClInclude Include="define.h" />
+    <ClInclude Include="escape_area.h" />
     <ClInclude Include="game_server\ingame_server.h" />
     <ClInclude Include="game_server\packet_manager.h" />
     <ClInclude Include="header.h" />
@@ -175,6 +179,7 @@
     <ClInclude Include="object\object.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="protocol.h" />
+    <ClInclude Include="ray_casting.h" />
     <ClInclude Include="room\room.h" />
     <ClInclude Include="room\room_manager.h" />
     <ClInclude Include="state.h" />

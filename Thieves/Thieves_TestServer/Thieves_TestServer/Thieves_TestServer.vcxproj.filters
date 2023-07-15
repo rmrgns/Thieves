@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\area">
+      <UniqueIdentifier>{5ad4ce95-d4c1-420e-a64a-07ed4966b84e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="database\db.cpp">
@@ -153,6 +156,21 @@
       <Filter>소스 파일</Filter>
     </ClInclude>
     <ClInclude Include="include\lualib.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="escape_area.h">
+      <Filter>소스 파일\area</Filter>
+    </ClInclude>
+    <ClInclude Include="area\Item_box.h">
+      <Filter>소스 파일\area</Filter>
+    </ClInclude>
+    <ClInclude Include="area\spawn_area.h">
+      <Filter>소스 파일\area</Filter>
+    </ClInclude>
+    <ClInclude Include="area\special_escape_area.h">
+      <Filter>소스 파일\area</Filter>
+    </ClInclude>
+    <ClInclude Include="ray_casting.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>
