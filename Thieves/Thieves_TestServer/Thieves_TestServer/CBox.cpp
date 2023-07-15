@@ -91,7 +91,7 @@ bool CBox::BoxBoxIntersection2(const CBox& box0)
 
 	// B2
 	R = (float)fabsf(DotProduct(axis[2], D));
-	R0 = box0.extent[0] * 10 * absC[0][2] + box0.extent[1] * 10 * absC[1][2] + box0.extent[2] * 10 * absC[2][2];
+	R0 = box0.extent[0]  * absC[0][2] + box0.extent[1] * absC[1][2] + box0.extent[2]  * absC[2][2];
 	R01 = R0 + extent[2] * 10;
 	if (R > R01) {
 
@@ -101,7 +101,7 @@ bool CBox::BoxBoxIntersection2(const CBox& box0)
 	// axis 벡터들 간의 외적과 내적을 사용하여 충돌 체크
 	// A0xB0
 	R = (float)fabsf(AD[2] * C[1][0] - AD[1] * C[2][0]);
-	R0 = box0.extent[1] * 10 * absC[2][0] + box0.extent[2] * 10 * absC[1][0];
+	R0 = box0.extent[1]  * absC[2][0] + box0.extent[2]  * absC[1][0];
 	R1 = extent[1] * 10 * absC[0][2] + extent[2] * 10 * absC[0][1];
 	R01 = R0 + R1;
 	if (R > R01) {
@@ -111,7 +111,7 @@ bool CBox::BoxBoxIntersection2(const CBox& box0)
 
 	// A0xB1
 	R = (float)fabsf(AD[2] * C[1][1] - AD[1] * C[2][1]);
-	R0 = box0.extent[1] * 10 * absC[2][1] + box0.extent[2] * 10 * absC[1][1];
+	R0 = box0.extent[1]  * absC[2][1] + box0.extent[2]  * absC[1][1];
 	R1 = extent[0] * 10 * absC[0][2] + extent[2] * 10 * absC[0][0];
 	R01 = R0 + R1;
 	if (R > R01) {
@@ -121,7 +121,7 @@ bool CBox::BoxBoxIntersection2(const CBox& box0)
 
 	// A0xB2
 	R = (float)fabsf(AD[2] * C[1][2] - AD[1] * C[2][2]);
-	R0 = box0.extent[1] * 10 * absC[2][2] + box0.extent[2] * 10 * absC[1][2];
+	R0 = box0.extent[1]  * absC[2][2] + box0.extent[2]  * absC[1][2];
 	R1 = extent[0] * 10 * absC[0][1] + extent[1] * 10 * absC[0][0];
 	R01 = R0 + R1;
 	if (R > R01) {
@@ -130,7 +130,7 @@ bool CBox::BoxBoxIntersection2(const CBox& box0)
 
 	// A1xB0
 	R = (float)fabsf(AD[0] * C[2][0] - AD[2] * C[0][0]);
-	R0 = box0.extent[0] * 10 * absC[2][0] + box0.extent[2] * 10 * absC[0][0];
+	R0 = box0.extent[0]  * absC[2][0] + box0.extent[2]  * absC[0][0];
 	R1 = extent[1] * 10 * absC[1][2] + extent[2] * 10 * absC[1][1];
 	R01 = R0 + R1;
 	if (R > R01) {
@@ -139,7 +139,7 @@ bool CBox::BoxBoxIntersection2(const CBox& box0)
 
 	// A1xB1
 	R = (float)fabsf(AD[0] * C[2][1] - AD[2] * C[0][1]);
-	R0 = box0.extent[0] * 10 * absC[2][1] + box0.extent[2] * 10 * absC[0][1];
+	R0 = box0.extent[0]  * absC[2][1] + box0.extent[2]  * absC[0][1];
 	R1 = extent[0] * 10 * absC[1][2] + extent[2] * 10 * absC[1][0];
 	R01 = R0 + R1;
 	if (R > R01) {
@@ -148,7 +148,7 @@ bool CBox::BoxBoxIntersection2(const CBox& box0)
 
 	// A1xB2
 	R = (float)fabsf(AD[0] * C[2][2] - AD[2] * C[0][2]);
-	R0 = box0.extent[0] * 10 * absC[2][2] + box0.extent[2] * 10 * absC[0][2];
+	R0 = box0.extent[0]  * absC[2][2] + box0.extent[2]  * absC[0][2];
 	R1 = extent[0] * 10 * absC[1][1] + extent[1] * 10 * absC[1][0];
 	R01 = R0 + R1;
 	if (R > R01) {
@@ -157,7 +157,7 @@ bool CBox::BoxBoxIntersection2(const CBox& box0)
 
 	// A2xB0
 	R = (float)fabsf(AD[1] * C[0][0] - AD[0] * C[1][0]);
-	R0 = box0.extent[0] * 10 * absC[1][0] + box0.extent[1] * 10 * absC[0][0];
+	R0 = box0.extent[0]  * absC[1][0] + box0.extent[1]  * absC[0][0];
 	R1 = extent[1] * 10 * absC[2][2] + extent[2] * 10 * absC[2][1];
 	R01 = R0 + R1;
 	if (R > R01) {
@@ -166,7 +166,7 @@ bool CBox::BoxBoxIntersection2(const CBox& box0)
 
 	// A2xB1
 	R = (float)fabsf(AD[1] * C[0][1] - AD[0] * C[1][1]);
-	R0 = box0.extent[0] * 10 * absC[1][1] + box0.extent[1] * 10 * absC[0][1];
+	R0 = box0.extent[0]  * absC[1][1] + box0.extent[1]  * absC[0][1];
 	R1 = extent[0] * 10 * absC[2][2] + extent[2] * 10 * absC[2][0];
 	R01 = R0 + R1;
 	if (R > R01) {
@@ -175,7 +175,7 @@ bool CBox::BoxBoxIntersection2(const CBox& box0)
 
 	// A2xB2
 	R = (float)fabsf(AD[1] * C[0][2] - AD[0] * C[1][2]);
-	R0 = box0.extent[0] * 10 * absC[1][2] + box0.extent[1] * 10 * absC[0][2];
+	R0 = box0.extent[0]  * absC[1][2] + box0.extent[1]  * absC[0][2];
 	R1 = extent[0] * 10 * absC[2][1] + extent[1] * 10 * absC[2][0];
 	R01 = R0 + R1;
 	if (R > R01) {
@@ -216,6 +216,36 @@ bool CBox::Intersection2(const CBox& playerbox, int& collisionDirection)
 			}
 
 			return true;
+		}
+	}
+}
+
+
+bool CBox::IntersectionRay(const CBox& playerbox)
+{
+	float dx = fabsf(center[0] - playerbox.center[0]);
+	float sumX = extent[0] + playerbox.extent[0];
+
+	if (dx > sumX) {
+		return false;
+	}
+	else {
+		float dy = fabsf(center[1] - playerbox.center[1]);
+		float sumY = extent[1] + playerbox.extent[1];
+
+		if (dy > sumY) {
+			return false;
+		}
+		else {
+			float dz = fabsf(center[2] - playerbox.center[2]);
+			float sumZ = extent[2] + playerbox.extent[2];
+
+			if (dz > sumZ) {
+				return false;
+			}
+			else {
+				return true;
+			}
 		}
 	}
 }
