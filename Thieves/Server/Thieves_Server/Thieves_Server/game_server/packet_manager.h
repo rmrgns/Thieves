@@ -88,6 +88,7 @@ private:
 	void ProcessChangePhase(int c_id, unsigned char* p);
 	void ProcessGetItem(int c_id, unsigned char* p);
 	void ProcessUseItem(int c_id, unsigned char* p);
+	void ChangePhase(int c_id);
 
 	void ProcessLoadProgressing(int c_id, unsigned char* p);
 	void ProcessLoadEnd(int c_id, unsigned char* p);

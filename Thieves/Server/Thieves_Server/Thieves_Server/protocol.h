@@ -35,7 +35,12 @@ constexpr int ERROR_PLAYER_NOT_READY = 4;
 
 //---------
 
+constexpr int ITEM_NUM_DIAMOND = 0;
+constexpr int ITEM_NUM_GUN = 1;
+constexpr int ITEM_NUM_TRAP = 2;
+constexpr int ITEM_NUM_MAP = 3;
 
+//---------
 // CS
 constexpr char CS_PACKET_SIGN_IN = 1;			// 로그인
 constexpr char CS_PACKET_SIGN_UP = 2;			// 가입

@@ -864,6 +864,8 @@ void PacketManager::ProcessChangePhase(int c_id, unsigned char* p)
 	if (player->GetRoomID() == -1) return;
 	Room* room = m_room_manager->GetRoom(player->GetRoomID());
 
+	if (room->GetRound() != 0) return;
+
 	for (int pl : room->GetObjList()) {
 		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
 		Player* cpl = MoveObjManager::GetInst()->GetPlayer(pl);
@@ -874,12 +876,83 @@ void PacketManager::ProcessChangePhase(int c_id, unsigned char* p)
 
 void PacketManager::ProcessGetItem(int c_id, unsigned char* p)
 {
+	cs_packet_get_item* packet = reinterpret_cast<cs_packet_get_item*>(p);
+	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
 
+
+
+	Room* room = m_room_manager->GetRoom(player->GetRoomID());
+
+	switch (packet->itemNum) {
+	case ITEM_NUM_DIAMOND:
+		if (room->GetRound() == 0) {
+			// 페이즈 변경
+			ChangePhase(c_id);
+			player->SetHasDiamond(true);
+		}
+		break;
+	case ITEM_NUM_GUN:
+		if (player->GetItem() == -1) {
+			player->SetItem(ITEM_NUM_GUN);
+		}
+		break;
+	case ITEM_NUM_TRAP:
+		if (player->GetItem() == -1) {
+			player->SetItem(ITEM_NUM_TRAP);
+		}
+		break;
+	case ITEM_NUM_MAP:
+		if (player->GetItem() == -1) {
+			player->SetItem(ITEM_NUM_MAP);
+		}
+		break;
+	default:
+		break;
+	}
 }
 
 void PacketManager::ProcessUseItem(int c_id, unsigned char* p)
 {
+	cs_packet_use_item* packet = reinterpret_cast<cs_packet_use_item*>(p);
+	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
 
+	Room* room = m_room_manager->GetRoom(player->GetRoomID());
+
+	switch (packet->itemNum) {
+	case ITEM_NUM_GUN:
+		if (player->GetItem() == ITEM_NUM_GUN) {
+			player->SetItem(-1);
+			// 총 쓴 처리를 해줘야 함
+		}
+		break;
+	case ITEM_NUM_TRAP:
+		if (player->GetItem() == ITEM_NUM_TRAP) {
+			player->SetItem(-1);
+			// 덫을 쓴 처리를 해줘야 함
+		}
+		break;
+	case ITEM_NUM_MAP:
+		break;
+	default:
+		break;
+	}
+}
+
+void PacketManager::ChangePhase(int c_id)
+{
+	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
+
+	if (player->GetRoomID() == -1) return;
+	Room* room = m_room_manager->GetRoom(player->GetRoomID());
+
+	if (room->GetRound() != 0) return;
+
+	for (int pl : room->GetObjList()) {
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+		Player* cpl = MoveObjManager::GetInst()->GetPlayer(pl);
+
+		SendPhasePacket(pl);
+	}
 }
 
 
