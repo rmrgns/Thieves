@@ -12,7 +12,10 @@ public:
 	~MapManager() {};
 
 	void LoadMap();
-	
+	void LoadItem();
+	void LoadEscapeArea();
+	void LoadSpecialEscapeArea();
+	void LoadSpawnArea();
 	
 	Vector3 checkCollision(CBox& playerBox, Vector3& playerOldPos);
 	Vector3 checkCollisionRay(CBox& playerBox);

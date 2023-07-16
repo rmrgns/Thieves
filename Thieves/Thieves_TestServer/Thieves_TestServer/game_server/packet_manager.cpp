@@ -26,6 +26,10 @@ void PacketManager::Init()
 	MoveObjManager::GetInst()->InitPlayer();
 	m_room_manager->InitRoom();
 	m_map_manager->LoadMap();
+	m_map_manager->LoadEscapeArea();
+	m_map_manager->LoadSpecialEscapeArea();
+	m_map_manager->LoadItem();
+	m_map_manager->LoadSpawnArea();
 	m_db->Init();
 }
 
