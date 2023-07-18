@@ -193,5 +193,10 @@ void Network::SendRequestInRoomData()
 	m_send_manager->SendRequestInRoomData(m_s_socket);
 }
 
+void Network::SendBullet(Vec3 start_pos, Vec3 dir_pos)
+{
+	m_send_manager->SendBullet(m_s_socket, start_pos, dir_pos);
+}
+
 // Packet Test
 
