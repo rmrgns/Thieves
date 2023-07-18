@@ -21,12 +21,15 @@ enum class STATE {
 	ST_FREE,
 	ST_ACCEPT,
 	ST_LOGIN,
+	ST_INROOM,
+	ST_INROOMREDDY,
 	ST_INGAME
 };
 
 enum class ROOM_STATE
 {
 	RT_FREE,
+	RT_USED,
 	RT_INGAME,
 	RT_RESET
 };
@@ -34,6 +37,7 @@ enum class ROOM_STATE
 // Room state
 enum class ROOM_TYPE {
 	RT_FREE,
+	RT_USED,
 	RE_INGAME,
 	RT_RESET
 };

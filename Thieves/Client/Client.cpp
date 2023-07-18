@@ -54,8 +54,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     MSG msg;
     
-    GWindowInfo.width = 800;
-    GWindowInfo.height = 600;
+    // GWindowInfo.width = GetSystemMetrics(SM_CXSCREEN);
+    // GWindowInfo.height = GetSystemMetrics(SM_CYSCREEN);
+    GWindowInfo.width = 1600;
+    GWindowInfo.height = 900;
     GWindowInfo.windowed = true;
 
     unique_ptr<Game> game = make_unique<Game>();
@@ -100,12 +102,12 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.cbClsExtra = 0;
     wcex.cbWndExtra = 0;
     wcex.hInstance = hInstance;
-    wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_CLIENT));
+    wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
     wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
     wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
     wcex.lpszMenuName = nullptr;
     wcex.lpszClassName = szWindowClass;
-    wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
+    wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_ICON1));
 
     return RegisterClassExW(&wcex);
 }
@@ -127,6 +129,11 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
 
+    /*LONG_PTR style = GetWindowLongPtr(hWnd, GWL_STYLE);
+    style &= ~(WS_CAPTION | WS_THICKFRAME);
+    style |= WS_POPUP;
+    SetWindowLongPtr(hWnd, GWL_STYLE, style);*/
+
     if (!hWnd)
     {
         return FALSE;
@@ -134,7 +141,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
     ShowWindow(hWnd, nCmdShow);
     UpdateWindow(hWnd);
-    ShowCursor(FALSE);
+    ShowCursor(TRUE);
     GWindowInfo.hwnd = hWnd;
 
     return TRUE;

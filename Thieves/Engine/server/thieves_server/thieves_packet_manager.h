@@ -19,8 +19,20 @@ public:
 	void ProcessMove(int c_id, unsigned char* p);
 	void ProcessSignin(int c_id, unsigned char* p);
 	void ProcessObjInfo(int c_id, unsigned char* p);
+	void ProcessObjInfoEnd(int c_id, unsigned char* p);
 	void ProcessRemoveObj(int c_id, unsigned char* p);
-
+	void ProcessRoomsData(int c_id, unsigned char* p);
+	void ProcessRoomsDataEnd(int c_id, unsigned char* p);
+	void ProcessInRoomData(int c_id, unsigned char* p);
+	void ProcessInRoomDataEnd(int c_id, unsigned char* p);
+	void ProcessPlayerLeft(int c_id, unsigned char* p);
+	void ProcessPlayerJoin(int c_id, unsigned char* p);
+	void ProcessPlayerReady(int c_id, unsigned char* p);
+	void ProcessPlayerCancleReady(int c_id, unsigned char* p);
+	void ProcessEnterRoomOk(int c_id, unsigned char* p);
+	void ProcessAllPlayerLoadend(int c_id, unsigned char* p);
+	void ProcessError(int c_id, unsigned char* p);
+	void ProcessGameStart(int c_id, unsigned char* p);
 
 	// 추가필요
 	void Reset();

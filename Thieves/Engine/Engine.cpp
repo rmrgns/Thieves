@@ -85,7 +85,8 @@ void Engine::ResizeWindow(int32 width, int32 height)
 
 	RECT rect = { 0, 0, width, height };
 	::AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, false);
-	::SetWindowPos(_window.hwnd, 0, 500, 100, width, height, 0);
+	::SetWindowPos(_window.hwnd, 0, 0, 0, width, height, 0);
+	//::SetWindowPos(_window.hwnd, HWND_TOP, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), 0);
 }
 
 void Engine::CheckChangeScene()
@@ -97,6 +98,16 @@ void Engine::CheckChangeScene()
 		{	
 			SetCursorPos(_windowCenter.x, _windowCenter.y);
 			GET_SINGLE(SceneManager)->LoadScene(L"GameScene");
+			_changeScene = L"";
+		}
+		else if (_changeScene == L"Lobby")
+		{
+			GET_SINGLE(SceneManager)->LoadScene(L"LobbyScene");
+			_changeScene = L"";
+		}
+		else if (_changeScene == L"Room")
+		{
+			GET_SINGLE(SceneManager)->LoadScene(L"RoomScene");
 			_changeScene = L"";
 		}
 		else if (_changeScene == L"Login")
@@ -117,8 +128,11 @@ void Engine::ShowFps()
 	GetWindowRect(GEngine->GetWindow().hwnd, &rect);
 	RECT rect1;
 	GetClientRect(GEngine->GetWindow().hwnd, &rect1);
+	POINT mousePos = {};
+	GetCursorPos(&mousePos);
+	ScreenToClient(GEngine->GetWindow().hwnd, &mousePos);
 	WCHAR text[100] = L"";
-	::wsprintf(text, L"FPS : %d", fps);
+	::wsprintf(text, L"FPS : %d, x = %d, y = %d", fps, mousePos.x, mousePos.y);
 	::SetWindowText(_window.hwnd, text);
 }
 

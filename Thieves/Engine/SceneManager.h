@@ -7,6 +7,7 @@ enum class CURRENT_SCENE
 	NONE,
 	LOGIN,
 	LOBBY,
+	ROOM,
 	GAME,
 	LOADING,
 	// ...
@@ -37,13 +38,19 @@ public:
 
 public:
 	shared_ptr<Scene> GetActiveScene() { return _activeScene; }
+	shared_ptr<Scene> GetLoadProgressScene() { return _loadProgressScene; }
 	bool GetCheckChangeScene() { return _checkChangeScene; }
 	void SetCheckChangeScene(bool check) { _checkChangeScene = check; }
 	CURRENT_SCENE GetCurrentScene() { return _currentScene; }
+	CURRENT_SCENE GetCurrentLoadProgressScene() { return _currentLoadProgressScene; }
 
 	const wstring& GetLoadText() { return _LoadText; }
 	void SetLoadText(const wstring& wstr) { _LoadText = wstr; }
+	void SetRoomNum(int val) { _room_num = val; }
+	int GetRoomNum() { return _room_num; };
 
+	Vec3 GetLookVec() { return _lookVec; }
+	void SetLookVec(Vec3 lookVec) { _lookVec = lookVec; }
 	//Vec3 GetPlayerPosition() { return _playerPosition; }
 	//float GetPlayerPositionX() { return _playerPosition.x; }
 	//float GetPlayerPositionY() { return _playerPosition.y; }
@@ -63,7 +70,11 @@ public:
 private:
 	void LoadGameScene();
 	void LoadLoginScene();
+	void LoadLobbyScene();
+	void LoadRoomScene();
 	shared_ptr<Scene> LoadLoadingScene();
+	
+
 
 private:
 	shared_ptr<Scene> _activeScene;
@@ -72,13 +83,16 @@ private:
 	wstring _changeSceneName = L"";
 	CURRENT_SCENE _currentScene = CURRENT_SCENE::NONE;
 	CURRENT_SCENE _currentLoadProgressScene = CURRENT_SCENE::NONE;
+	std::mutex LoadSceneLock;
 
 	wstring _LoadText = L"";
 
 	array<wstring, MAX_LAYER> _layerNames;
 	map<wstring, uint8> _layerIndex;
 
+	int _room_num = -1;
 
+	Vec3 _lookVec = { 0.f,0.f,0.f };
 	//Vec3 _playerPosition;	// �÷��̾� ��ǥ
 	//Vec3 _playerRotation;	// �÷��̾� ȸ����
 	//bool _BuildPlayer = false;		// �÷��̾� ����

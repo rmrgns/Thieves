@@ -2,6 +2,8 @@
 #include "Text.h"
 #include "Engine.h"
 #include "Scene.h"
+#include "LobbyScene.h"
+#include "RoomScene.h"
 #include "SceneManager.h"
 #include "Input.h"
 
@@ -24,7 +26,7 @@ void Text::Update()
 		wstring text2 = L"Thieves Login Screen";
 		SetText(text2, 0.f, 10.f, 1.f, 1.f);
 
-		SetTextInfo(TEXT_FORMAT::LOGIN);
+		/*SetTextInfo(TEXT_FORMAT::LOGIN);
 		wstring text = L"Thieves ID";
 		SetText(text, 500.f, 400.f, 1.f, 1.f);
 		wstring ID = INPUT->GetUserID();
@@ -33,7 +35,7 @@ void Text::Update()
 		wstring text1 = L"Thieves Password";
 		SetText(text1, 500.f, 500.f, 1.f, 1.f);
 		wstring Password = INPUT->GetUserPassword();
-		SetText(Password, 500.f, 550.f, 1.f, 1.f);
+		SetText(Password, 500.f, 550.f, 1.f, 1.f);*/
 		//wstring test = L"한글 테스트";
 		//SetText(test, 100.f, 500.f, 1.f, 1.f);
 
@@ -53,6 +55,101 @@ void Text::Update()
 			SetTextInfo(TEXT_FORMAT::DEFALUT);
 			wstring text6 = L"FALSE";
 			SetText(text6, 0.f, 0.f, 1.f, 1.f);
+		}
+	}
+	else if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOBBY)
+	{
+		SetTextInfo(TEXT_FORMAT::DEFALUT);
+		wstring text7 = L"This Is LOBBY!";
+		SetText(text7, 0.f, 10.f, 1.f, 1.f);
+		
+		shared_ptr<LobbyScene> lScene = static_pointer_cast<LobbyScene>(GET_SINGLE(SceneManager)->GetActiveScene());
+
+		SetTextInfo(TEXT_FORMAT::INROOM);
+		int count = 0;
+
+		/*if (lScene->GetRoomsData().empty()) {
+			wstring text8 = L"Room Empty";
+			SetText(text8, 200.f, 100.f, 1.f, 1.f);
+		}*/
+
+		for (auto& data : lScene->GetRoomsData())
+		{
+
+			wstring tempText = L"";
+			tempText.append(to_wstring(data.second.id + 1));
+			tempText.append(L" ");
+
+			wstring tempText2 = L"";
+			tempText2.append(to_wstring(data.second.nPlayer));
+			tempText2.append(L"/8 ");
+			if (data.second.isInGame) tempText.append(L"Game Playing!");
+
+			if (count % 2 == 0)
+			{
+				SetText(tempText, 500.f, 200.f + 70.f * count, 1.f, 1.f);
+				SetText(tempText2, 800.f, 240.f + 70.f * count, 1.f, 1.f);
+			}
+			else
+			{
+				SetText(tempText, 940.f, 200.f + 70.f * (count - 1), 1.f, 1.f);
+				SetText(tempText2, 1240.f, 240.f + 70.f * (count - 1), 1.f, 1.f);
+			}
+			count += 1;
+		}
+		
+	}
+	else if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::ROOM)
+	{
+		SetTextInfo(TEXT_FORMAT::DEFALUT);
+		wstring text = L"This Is ROOM!";
+		SetText(text, 0.f, 0.f, 1.f, 1.f);
+
+		shared_ptr<RoomScene> rScene = static_pointer_cast<RoomScene>(GET_SINGLE(SceneManager)->GetActiveScene());
+
+
+		SetTextInfo(TEXT_FORMAT::INROOM);
+		int count = 0;
+		for (auto& data : rScene->GetRoomData())
+		{
+			if (count % 2 == 0)
+			{
+				if (data.second.id == rScene->GetRoomMasterId())
+				{
+					wstring masterText = L"Master";
+					SetText(masterText, 500.f, 200.f + 70.f * count, 1.f, 1.f);
+				}
+				else {
+					wstring tempText = L"";
+					tempText.append(data.second.name);
+					SetText(tempText, 500.f, 200.f + 70.f * count, 1.f, 1.f);
+				}
+				wstring tempText2 = L"";
+
+				if (data.second.isReady) {
+					tempText2.append(L"Ready!");
+					SetText(tempText2, 750.f, 240.f + 70.f * count, 1.f, 1.f);
+				}
+			}
+			else
+			{
+				if (data.second.id == rScene->GetRoomMasterId())
+				{
+					wstring masterText = L"Master";
+					SetText(masterText, 500.f, 200.f + 70.f * (count - 1), 1.f, 1.f);
+				}
+				wstring tempText = L"";
+				tempText.append(data.second.name);
+				SetText(tempText, 500.f, 200.f + 70.f * (count - 1), 1.f, 1.f);
+
+				wstring tempText2 = L"";
+
+				if (data.second.isReady) {
+					tempText2.append(L"Ready!");
+					SetText(tempText2, 750.f, 240.f + 70.f * (count - 1), 1.f, 1.f);
+				}
+			}
+			count += 1;
 		}
 	}
 	else if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOADING)
@@ -180,6 +277,15 @@ void Text::SetTextInfo(TEXT_FORMAT infoNumber)
 
 		break;
 	case TEXT_FORMAT::LOADING:
+		// 텍스트 색깔
+		ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), _solidColorBrush.GetAddressOf()));
+
+		// 텍스트 폰트 등
+		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"Verdana", nullptr,
+			DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_ITALIC, DWRITE_FONT_STRETCH_NORMAL,
+			25, L"en-us", _writeTextFormat.GetAddressOf()));
+		break;
+	case TEXT_FORMAT::INROOM:
 		// 텍스트 색깔
 		ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), _solidColorBrush.GetAddressOf()));
 

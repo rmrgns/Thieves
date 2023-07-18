@@ -103,31 +103,35 @@ void Scene::RenderShadow()
 
 void Scene::RenderDeferred()
 {
-	// Deferred OMSet
-	GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->OMSetRenderTargets();
+	if (!_cameras.empty()) {
+		// Deferred OMSet
+		GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->OMSetRenderTargets();
 
-	shared_ptr<Camera> mainCamera = _cameras[0];
-	mainCamera->SortGameObject();
-	mainCamera->Render_Deferred();
+		shared_ptr<Camera> mainCamera = _cameras[0];
+		mainCamera->SortGameObject();
+		mainCamera->Render_Deferred();
 
-	GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->WaitTargetToResource();
+		GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->WaitTargetToResource();
+	}
 }
 
 void Scene::RenderLights()
 {
-	shared_ptr<Camera> mainCamera = _cameras[0];
-	Camera::S_MatView = mainCamera->GetViewMatrix();
-	Camera::S_MatProjection = mainCamera->GetProjectionMatrix();
+	if (!_cameras.empty()) {
+		shared_ptr<Camera> mainCamera = _cameras[0];
+		Camera::S_MatView = mainCamera->GetViewMatrix();
+		Camera::S_MatProjection = mainCamera->GetProjectionMatrix();
 
-	GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::LIGHTING)->OMSetRenderTargets();
+		GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::LIGHTING)->OMSetRenderTargets();
 
-	// 광원을 그린다.
-	for (auto& light : _lights)
-	{
-		light->Render();
+		// 광원을 그린다.
+		for (auto& light : _lights)
+		{
+			light->Render();
+		}
+
+		GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::LIGHTING)->WaitTargetToResource();
 	}
-
-	GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::LIGHTING)->WaitTargetToResource();
 }
 
 void Scene::RenderFinal()
@@ -142,34 +146,38 @@ void Scene::RenderFinal()
 
 void Scene::RenderForward()
 {
-	shared_ptr<Camera> mainCamera = _cameras[0];
-	mainCamera->Render_Forward();
+	if (!_cameras.empty()) {
+		shared_ptr<Camera> mainCamera = _cameras[0];
+		mainCamera->Render_Forward();
 
-	for (auto& camera : _cameras)
-	{
-		if (camera == mainCamera)
-			continue;
+		for (auto& camera : _cameras)
+		{
+			if (camera == mainCamera)
+				continue;
 
-		camera->SortGameObject();
-		camera->Render_Forward();
+			camera->SortGameObject();
+			camera->Render_Forward();
+		}
 	}
 }
 
 void Scene::PushLightData()
 {
-	LightParams lightParams = {};
+	if (!_lights.empty()) {
+		LightParams lightParams = {};
 
-	for (auto& light : _lights)
-	{
-		const LightInfo& lightInfo = light->GetLightInfo();
+		for (auto& light : _lights)
+		{
+			const LightInfo& lightInfo = light->GetLightInfo();
 
-		light->SetLightIndex(lightParams.lightCount);
+			light->SetLightIndex(lightParams.lightCount);
 
-		lightParams.lights[lightParams.lightCount] = lightInfo;
-		lightParams.lightCount++;
+			lightParams.lights[lightParams.lightCount] = lightInfo;
+			lightParams.lightCount++;
+		}
+
+		CONST_BUFFER(CONSTANT_BUFFER_TYPE::GLOBAL)->SetGraphicsGlobalData(&lightParams, sizeof(lightParams));
 	}
-
-	CONST_BUFFER(CONSTANT_BUFFER_TYPE::GLOBAL)->SetGraphicsGlobalData(&lightParams, sizeof(lightParams));
 }
 
 void Scene::AddGameObject(shared_ptr<GameObject> gameObject)

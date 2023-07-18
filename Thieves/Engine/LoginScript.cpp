@@ -24,13 +24,7 @@ void LoginScript::LateUpdate()
 	{
 		if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOGIN)
 		{
-
-			GET_SINGLE(SceneManager)->SetCheckChangeScene(true);
-			GEngine->SetChangeScene(L"Game");
-
 			Network::GetInst()->SendSignInPacket();
-			Network::GetInst()->SendStartPacket();
-
 		}
 	}
 
@@ -63,4 +57,27 @@ void LoginScript::LateUpdate()
 
 	}
 
+	if (INPUT->GetButtonDown(KEY_TYPE::LBUTTON))
+	{
+		ClickLoginButton();
+	}
+}
+
+void LoginScript::ClickLoginButton()
+{
+	POINT point = {};
+	GetCursorPos(&point);
+	ScreenToClient(GEngine->GetWindow().hwnd, &point);
+
+	if (point.x > 795 && point.x < 1215)
+	{
+		if (point.y > 540 && point.y < 630)
+		{
+			if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOGIN)
+			{
+				Network::GetInst()->SendSignInPacket();
+			}
+		}
+	}
+	
 }

@@ -45,6 +45,8 @@
     </Filter>
     <Filter Include="소스 파일\Astar">
       <UniqueIdentifier>{2042cac2-37a2-4f1c-9114-0df6e6fed20a}</UniqueIdentifier>
+    <Filter Include="소스 파일\Robby">
+      <UniqueIdentifier>{b8831e67-0b64-4c44-ad0e-5c20bd84512f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -84,14 +86,20 @@
     <ClCompile Include="map_object.cpp">
       <Filter>소스 파일\object\map_object</Filter>
     </ClCompile>
-    <ClCompile Include="object\MapManager.cpp">
-      <Filter>소스 파일\object\move_object</Filter>
-    </ClCompile>
     <ClCompile Include="Astar.cpp">
       <Filter>소스 파일\Astar</Filter>
     </ClCompile>
     <ClCompile Include="CBox.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="OBB.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="object\MapManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Lobby.cpp">
+      <Filter>소스 파일\Robby</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -146,9 +154,6 @@
     <ClInclude Include="map_object.h">
       <Filter>소스 파일\object\map_object</Filter>
     </ClInclude>
-    <ClInclude Include="object\MapManager.h">
-      <Filter>소스 파일\object\move_object</Filter>
-    </ClInclude>
     <ClInclude Include="Astar.h">
       <Filter>소스 파일\Astar</Filter>
     </ClInclude>
@@ -160,6 +165,14 @@
     </ClInclude>
     <ClInclude Include="CBox.h">
       <Filter>소스 파일</Filter>
+    <ClInclude Include="OBB.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="object\MapManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Lobby.h">
+      <Filter>소스 파일\Robby</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

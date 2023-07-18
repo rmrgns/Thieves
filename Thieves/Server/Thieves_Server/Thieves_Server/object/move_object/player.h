@@ -30,6 +30,9 @@ private:
     char m_password[MAX_PASSWORD_SIZE + 1];
     short m_mach_user_size = 0;
     
+    // 인게임 로딩 중 활용할 데이터
+    int m_loadProgressed = 0;
+
 
 public:
 
@@ -44,6 +47,10 @@ public:
     virtual void Reset()override;
     void SetIsReady(bool val) { m_is_ready = val; }
     bool GetIsReady() { return m_is_ready; }
+
+    void SetLoadProgressed(int val) { m_loadProgressed = val; }
+
+    int GetLoadProgressed() { return m_loadProgressed; }
  
     char* GetPassword() { return m_password; }
     short GetMatchUserSize() { return m_mach_user_size; }

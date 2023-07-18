@@ -7,7 +7,7 @@ public:
 	Vector4() { x = 0; y = 0; z = 0; w = 0; }
 	Vector4(float x, float y, float z, float w) :x(x), y(y), z(z), w(w) {}
 	float x, y, z, w;
-#ifndef 연산자오버로딩
+#ifndef operation_overloading
 
 	friend Vector4 operator +(const Vector4& a, const Vector4& b)
 	{

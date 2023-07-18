@@ -9,6 +9,7 @@ class MoveObjManager;
 class DB;
 class RoomManager;
 class MapManager;
+class Lobby;
 
 class PacketManager {
 public:
@@ -27,6 +28,7 @@ public:
 
 	void SendPutObjPakcet(int c_id, int obj_id, OBJ_TYPE obj_type);
 	void SendObjInfo(int c_id, int obj_id);
+	void SendObjInfoEnd(int c_id);
 	void SendTime(int c_id, float round_time);
 	void SendAttackPacket(int c_id, int room_id);
 	void SendGameWin(int c_id);
@@ -38,7 +40,24 @@ public:
 
 	void SendLoadEnd(int c_id, int p_id);
 
+
 	void SendBullet(int c_id, Vector3);
+
+	void SendAllPlayerLoadEnd(int c_id);
+
+	void SendEnterRoom(int c_id, int p_id);
+	void SendEnterRoomOk(int c_id, int room_id);
+	void SendLeaveRoom(int c_id, int p_id);
+	void SendPlayerReady(int c_id, int p_id);
+	void SendPlayerCancleReady(int c_id, int p_id);
+
+	void SendRoomsDataForLobby(int c_id, int room_id);
+	void SendRoomsDataForLobbyEnd(int c_id);
+	void SendRoomsDataForRoom(int c_id, int p_id);
+	void SendRoomsDataForRoomEnd(int c_id);
+	void SendError(int c_id, int err_type, int err_val);
+	void SendGameStart(int c_id);
+
 
 	void End();
 	void Disconnect(int c_id);
@@ -53,6 +72,7 @@ public:
 	void ProcessTimer(HANDLE hiocp);
 
 private:
+	Lobby* m_Lobby;
 	RoomManager* m_room_manager;
 	DB* m_db;
 	MapManager* m_map_manager;
@@ -74,6 +94,13 @@ private:
 
 	void ProcessLoadProgressing(int c_id, unsigned char* p);
 	void ProcessLoadEnd(int c_id, unsigned char* p);
+	void ProcessEnterRoom(int c_id, unsigned char* p);
+	void ProcessLeaveRoom(int c_id, unsigned char* p);
+	void ProcessPlayerReady(int c_id, unsigned char* p);
+	void ProcessPlayerCancleReady(int c_id, unsigned char* p);
+	void ProcessLogOut(int c_id, unsigned char* p);
+	void ProcessRoomsDataInLobby(int c_id, unsigned char* p);
+	void ProcessRoomsDataInRoom(int c_id, unsigned char* p);
 	void ProcessDamageCheat(int c_id, unsigned char* p);
 
 	//bullet
