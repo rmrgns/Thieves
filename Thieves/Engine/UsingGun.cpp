@@ -37,9 +37,15 @@ void UsingGun::LateUpdate()
 	pos.z += GetTransform()->GetLook().z * 100.f;
 	pos.y += 100.f;
 
+	
+
 	if (INPUT->GetButtonDown(KEY_TYPE::LBUTTON) && _bulletcheck == false)
 	{
 		// 서버에 플레이어 위치와 벡터 보내는 곳
+		Network::Network::GetInst()->SendBullet(pos, rotation);
+
+
+
 
 		// 총알 궤적 그리기
 		shared_ptr<Scene> scene = GET_SINGLE(SceneManager)->GetLoadProgressScene();
@@ -53,6 +59,8 @@ void UsingGun::LateUpdate()
 			obj->GetTransform()->SetLocalPosition(pos);
 			obj->GetTransform()->SetLocalRotation(rotation);
 			obj->SetStatic(true);
+
+
 			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
 			{
 				shared_ptr<Mesh> sphereMesh = GET_SINGLE(Resources)->LoadCubeMesh();
