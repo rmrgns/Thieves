@@ -10,5 +10,7 @@ public:
 	virtual void LateUpdate() override;
 
 private:
+	float _count = 0;
+	bool _bulletcheck = false;
 };
 

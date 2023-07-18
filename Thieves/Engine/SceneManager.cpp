@@ -22,6 +22,7 @@
 #include "PlayerCamera.h"
 #include "PlayerParticle.h"
 #include "LightEffect.h"
+#include "UsingGun.h"
 
 #include "Resources.h"
 #include "ParticleSystem.h"
@@ -407,7 +408,7 @@ void SceneManager::LoadGameScene()
 		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Thief.fbx");
 
 		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-
+		
 		for (auto& gameObject : gameObjects)
 		{
 			gameObject->SetName(L"Thief");
@@ -416,7 +417,7 @@ void SceneManager::LoadGameScene()
 			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 			gameObject->AddComponent(make_shared<PlayerInput>());
 			gameObject->AddComponent(make_shared<NetworkSystem>());
-				
+			gameObject->AddComponent(make_shared<UsingGun>());
 			// 자신의 NetworkID에 해당하는 데이터를 NetworkSystem에서 사용하도록 함.
 			int myID = Network::GetInst()->GetPacketManager()->GetGameInfo().GetNetworkID();
 
