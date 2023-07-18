@@ -36,12 +36,11 @@ constexpr char CS_PACKET_HIT = 6;				// 피격
 constexpr char CS_PACKET_GAME_START = 7;		// 게임 시작
 constexpr char CS_PACKET_MATCHING = 8;
 constexpr char CS_PACKET_TEST = 9;
-constexpr char CS_PACKET_START_JUMP = 10;				// 점프 시작 패킷
-constexpr char CS_PACKET_COMPLETE_JUMP = 11;				// 점프 완료 패킷
-constexpr char CS_PACKET_LOAD_PROGRESSING = 12;
+constexpr char CS_PACKET_START_JUMP = 10;		// 점프 시작 패킷
+constexpr char CS_PACKET_COMPLETE_JUMP = 11;	// 점프 완료 패킷
+constexpr char CS_PACKET_LOAD_PROGRESSING = 12;		//
 constexpr char CS_PACKET_LOAD_END = 13;
-
-
+constexpr char CS_PACKET_BULLET = 14;
 
 // SC
 constexpr char SC_PACKET_SIGN_IN_OK = 1;		// 로그인 OK
@@ -65,6 +64,7 @@ constexpr char SC_PACKET_START_JUMP = 18;			// 점프 시작 패킷
 constexpr char SC_PACKET_COMPLETE_JUMP = 19;			// 점프 완료 패킷
 constexpr char SC_PACKET_LOAD_PROGRESS_PERCENT = 20;
 constexpr char SC_PACKET_LOAD_END = 21;
+constexpr char SC_PACKET_BULLET = 22;
 //#pragma pack (push, 1)
 
 // 클라이언트 -> 서버로 보내는 패킷은 어떤 키를 얼마나 눌렀는지에 대해서만 보내주면 된다.
@@ -103,17 +103,20 @@ struct cs_packet_attack {
 	char	type;
 	//float f_x, f_y, f_z; 
 };
+
 struct cs_packet_chat {
 	unsigned char size;
 	char	type;
 	char	message[MAX_CHAT_SIZE];
 };
+
 struct cs_packet_hit {
 	unsigned char size;
 	char	type;
 	int victim_id;
 	int attacker_id;
 };
+
 struct cs_packet_game_start {
 	unsigned char size;
 	char	type;
@@ -134,8 +137,8 @@ struct cs_packet_load_end {
 struct cs_packet_bullet {
 	unsigned char size;
 	char type;
-	float x, y, z;
-	float d_x, d_y, x_z;
+	float pos_x, pos_y, pos_z;
+	float dir_x, dir_y, dir_z;
 };
 
 
@@ -257,7 +260,7 @@ struct sc_packet_load_end {
 struct sc_packet_bullet {
 	unsigned char size;
 	char type;
-	
+
 	float x, y, z;
 	int id;
 };

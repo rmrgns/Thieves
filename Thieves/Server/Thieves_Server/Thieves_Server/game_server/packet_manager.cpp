@@ -276,8 +276,17 @@ void PacketManager::SendLoadEnd(int c_id, int p_id)
 	cl->DoSend(sizeof(packet), &packet);
 }
 
-void PacketManager::SendBullet(int c_id, Vector3)
+void PacketManager::SendBullet(int c_id, Vector3 collision_point)
 {
+	sc_packet_bullet packet;
+	packet.type = SC_PACKET_BULLET;
+	packet.size = sizeof(packet);
+	packet.c_x = collision_point.x;
+	packet.c_y = collision_point.y;
+	packet.c_z = collision_point.z;
+
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
 }
 
 void PacketManager::End()
