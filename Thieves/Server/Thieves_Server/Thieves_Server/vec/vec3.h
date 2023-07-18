@@ -10,7 +10,7 @@ class Vector3
 public:
 	float x, y, z;
 
-#ifndef operation_overloading
+//#ifndef operation_overloading
 	friend std::ostream& operator<< (std::ostream& os, const Vector3& a)
 
 	{
