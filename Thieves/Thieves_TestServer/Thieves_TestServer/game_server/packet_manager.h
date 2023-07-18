@@ -3,6 +3,7 @@
 #include<concurrent_queue.h>
 #include <thread>
 #include "CBox.h"
+#include "ray_casting.h"
 
 class MoveObjManager;
 class DB;
@@ -37,6 +38,8 @@ public:
 
 	void SendLoadEnd(int c_id, int p_id);
 
+	void SendBullet(int c_id, Vector3);
+
 	void End();
 	void Disconnect(int c_id);
 	bool IsRoomInGame(int room_id);
@@ -53,6 +56,8 @@ private:
 	RoomManager* m_room_manager;
 	DB* m_db;
 	MapManager* m_map_manager;
+	RayCasting* m_ray_casting;
+
 	concurrency::concurrent_queue<db_task>m_db_queue;
 	std::thread db_thread;
 	
@@ -70,5 +75,9 @@ private:
 	void ProcessLoadProgressing(int c_id, unsigned char* p);
 	void ProcessLoadEnd(int c_id, unsigned char* p);
 	void ProcessDamageCheat(int c_id, unsigned char* p);
+
+	//bullet
+	void ProcessBullet (int c_id, unsigned char* p);
+
 	void StartGame(int room_id);
 };

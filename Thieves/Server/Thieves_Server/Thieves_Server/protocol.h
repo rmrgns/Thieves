@@ -131,6 +131,13 @@ struct cs_packet_load_end {
 	char type;
 };
 
+struct cs_packet_bullet {
+	unsigned char size;
+	char type;
+	float x, y, z;
+	float d_x, d_y, x_z;
+};
+
 
 //------------------------------------------------------------------
 
@@ -244,5 +251,13 @@ struct sc_packet_load_progress_percent {
 struct sc_packet_load_end {
 	unsigned char size;
 	char type;
+	int id;
+};
+
+struct sc_packet_bullet {
+	unsigned char size;
+	char type;
+	
+	float x, y, z;
 	int id;
 };

@@ -9,6 +9,7 @@
 #include "database/db.h"
 #include "object/moveobj_manager.h"
 #include "object/MapManager.h"
+#include "ray_casting.h"
 
 using namespace std;
 
@@ -26,6 +27,10 @@ void PacketManager::Init()
 	MoveObjManager::GetInst()->InitPlayer();
 	m_room_manager->InitRoom();
 	m_map_manager->LoadMap();
+	m_map_manager->LoadEscapeArea();
+	m_map_manager->LoadSpecialEscapeArea();
+	m_map_manager->LoadItem();
+	m_map_manager->LoadSpawnArea();
 	m_db->Init();
 }
 
@@ -130,32 +135,6 @@ void PacketManager::ProcessRecv(int c_id , EXP_OVER* exp_over, DWORD num_bytes)
 	cl->DoRecv();
 }
 
-//void PacketManager::UpdateObjMove()
-//{
-//	for (int i = 0; i < MAX_USER; ++i)
-//	{
-//		for (int j = 0; j <= NPC_ID_END; ++j) {
-//			//���Ŀ� ���� �߰�
-//			if (i != j)
-//				SendMovePacket(i, j);
-//		}
-//	}
-//	SetTimerEvent(0, 0, EVENT_TYPE::EVENT_PLAYER_MOVE, 10);
-//}
-
-//void PacketManager::UpdateObjMove()//�ϴ� ����
-//{
-//	for (int i = 0; i < MAX_USER; ++i)
-//	{
-//		for (int j = 0; j <= NPC_ID_END; ++j) {
-//			//���Ŀ� ���� �߰�
-//			if (i != j)
-//				SendMovePacket(i, j);
-//		}
-//	}
-//	SetTimerEvent(0, 0, EVENT_TYPE::EVENT_PLAYER_MOVE, 10);
-//}
-
 void PacketManager::SendMovePacket(int c_id, int mover)
 {
 	sc_packet_move packet;
@@ -179,8 +158,6 @@ void PacketManager::SendMovePacket(int c_id, int mover)
 
 	cl->DoSend(sizeof(packet), &packet);
 }
-
-
 
 void PacketManager::SendLoginFailPacket(SOCKET& c_socket, int reason)
 {
@@ -297,6 +274,10 @@ void PacketManager::SendLoadEnd(int c_id, int p_id)
 
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 	cl->DoSend(sizeof(packet), &packet);
+}
+
+void PacketManager::SendBullet(int c_id, Vector3)
+{
 }
 
 void PacketManager::End()
@@ -560,7 +541,16 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 	}
 }
 
+void PacketManager::ProcessBullet(int c_id, unsigned char* p)
+{
+	cs_packet_bullet* packet = reinterpret_cast<cs_packet_bullet*>(p);
 
+	//m_ray_casting->Shoot(bullet  시작 pos, bullet  방향벡터 );
+	// -> Vector 총알과 충돌하거나 마지막 bulletpoint 좌표 리턴
+	// 
+	//SendBullet(int, Vector3);
+	
+}
 
 void PacketManager::ProcessMatching(int c_id, unsigned char* p)
 {
@@ -597,8 +587,6 @@ void PacketManager::ProcessGameStart(int c_id, unsigned char* p)
 	StartGame(room->GetRoomID());
 }
 
-
-
 void PacketManager::ProcessLoadProgressing(int c_id, unsigned char* p)
 {
 	cs_packet_load_progressing* packet = reinterpret_cast<cs_packet_load_progressing*>(p);
@@ -612,11 +600,6 @@ void PacketManager::ProcessLoadEnd(int c_id, unsigned char* p)
 {
 
 }
-
-void PacketManager::ProcessDamageCheat(int c_id, unsigned char* p)
-{
-}
-
 
 void PacketManager::StartGame(int room_id)
 {

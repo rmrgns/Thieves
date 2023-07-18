@@ -221,24 +221,24 @@ bool CBox::Intersection2(const CBox& playerbox, int& collisionDirection)
 }
 
 
-bool CBox::IntersectionRay(const CBox& playerbox)
+bool CBox::IntersectionRay(const CBox& RayBox)
 {
-	float dx = fabsf(center[0] - playerbox.center[0]);
-	float sumX = extent[0] + playerbox.extent[0];
+	float dx = fabsf(center[0] - RayBox.center[0]);
+	float sumX = extent[0] + RayBox.extent[0];
 
 	if (dx > sumX) {
 		return false;
 	}
 	else {
-		float dy = fabsf(center[1] - playerbox.center[1]);
-		float sumY = extent[1] + playerbox.extent[1];
+		float dy = fabsf(center[1] - RayBox.center[1]);
+		float sumY = extent[1] + RayBox.extent[1];
 
 		if (dy > sumY) {
 			return false;
 		}
 		else {
-			float dz = fabsf(center[2] - playerbox.center[2]);
-			float sumZ = extent[2] + playerbox.extent[2];
+			float dz = fabsf(center[2] - RayBox.center[2]);
+			float sumZ = extent[2] + RayBox.extent[2];
 
 			if (dz > sumZ) {
 				return false;

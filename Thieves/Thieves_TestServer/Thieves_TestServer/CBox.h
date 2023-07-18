@@ -36,9 +36,6 @@ public:
 	bool BoxBoxIntersection2(const CBox& box0);
 	bool Intersection2(const CBox& box0, int& collisionDirection );
 	bool IntersectionRay(const CBox& box0);
-
-
-
 	
 	float center[3];
 	float axis[3][3];		

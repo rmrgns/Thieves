@@ -354,15 +354,32 @@ Vector3 MapManager::checkCollision(CBox& playerBox, Vector3& playerOldPos)
 		}
 		collisionDirection = 0;
 		collideRet = FALSE;
-		return currentPlayerPos;
-
-		
+		return currentPlayerPos;	
 	}
-
 
 	currentPlayerPos.y -= 75.f;
 	playerOldPos.y -= 75.f;
 	collisionDirection = 0;
 	collideRet = FALSE;
 	return currentPlayerPos;
+}
+
+bool MapManager::checkCollisionRay(CBox& RayBox)
+{
+	Vector3 MaxBulletPos(RayBox.center[0], RayBox.center[1], RayBox.center[2]);
+	bool collideRet = FALSE;
+
+	// 충돌하는 순간의 맵 데이터
+	for (auto& obj : MapCBox)
+	{
+
+		Vector3 collisionSlidingVector = { 0,0,0 };
+		if ((obj->IntersectionRay(RayBox)))
+		{
+			//충돌했어
+			return TRUE;
+		}
+	}
+	// 충돌 안했어
+	return FALSE;
 }
