@@ -417,7 +417,7 @@ void SceneManager::LoadGameScene()
 			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 			gameObject->AddComponent(make_shared<PlayerInput>());
 			gameObject->AddComponent(make_shared<NetworkSystem>());
-			gameObject->AddComponent(make_shared<UsingGun>());
+			
 			// 자신의 NetworkID에 해당하는 데이터를 NetworkSystem에서 사용하도록 함.
 			int myID = Network::GetInst()->GetPacketManager()->GetGameInfo().GetNetworkID();
 
@@ -528,14 +528,40 @@ void SceneManager::LoadGameScene()
 	}
 #pragma endregion
 
+//#pragma region Object
+//	{
+//		shared_ptr<GameObject> obj = make_shared<GameObject>();
+//		obj->SetName(L"OBJ");
+//		obj->AddComponent(make_shared<Transform>());
+//		//obj->AddComponent(make_shared<SphereCollider>());
+//		obj->GetTransform()->SetLocalScale(Vec3(100.f, 1.f, 1.f));
+//		obj->GetTransform()->SetLocalPosition(Vec3(0, 50.f, 0.f));
+//		obj->SetStatic(true);
+//		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+//		{
+//			shared_ptr<Mesh> sphereMesh = GET_SINGLE(Resources)->LoadCubeMesh();
+//			meshRenderer->SetMesh(sphereMesh);
+//		}
+//		{
+//			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
+//			meshRenderer->SetMaterial(material->Clone());
+//		}
+//		//dynamic_pointer_cast<SphereCollider>(obj->GetCollider())->SetRadius(0.5f);
+//		//dynamic_pointer_cast<SphereCollider>(obj->GetCollider())->SetCenter(Vec3(0.f, 0.f, 0.f));
+//		obj->AddComponent(meshRenderer);
+//		scene->AddGameObject(obj);
+//	}
+//#pragma endregion
+
 #pragma region Object
 	{
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
-		obj->SetName(L"OBJ");
+		obj->SetName(L"BulletLine");
 		obj->AddComponent(make_shared<Transform>());
-		//obj->AddComponent(make_shared<SphereCollider>());
-		obj->GetTransform()->SetLocalScale(Vec3(100.f, 1.f, 1.f));
-		obj->GetTransform()->SetLocalPosition(Vec3(0, 50.f, 0.f));
+
+		obj->GetTransform()->SetLocalScale(Vec3(2.f, 2.f, 1000.f));
+		obj->GetTransform()->SetLocalPosition(Vec3(-100.f, -100.f, -100.f));
+		
 		obj->SetStatic(true);
 		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
 		{
@@ -546,8 +572,7 @@ void SceneManager::LoadGameScene()
 			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
 			meshRenderer->SetMaterial(material->Clone());
 		}
-		//dynamic_pointer_cast<SphereCollider>(obj->GetCollider())->SetRadius(0.5f);
-		//dynamic_pointer_cast<SphereCollider>(obj->GetCollider())->SetCenter(Vec3(0.f, 0.f, 0.f));
+		obj->AddComponent(make_shared<UsingGun>());
 		obj->AddComponent(meshRenderer);
 		scene->AddGameObject(obj);
 	}
