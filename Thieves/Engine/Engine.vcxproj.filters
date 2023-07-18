@@ -273,6 +273,9 @@
     <ClCompile Include="InGameScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="UsingGun.cpp">
+      <Filter>Object\Script</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -511,6 +514,9 @@
     </ClInclude>
     <ClInclude Include="InGameScene.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="UsingGun.h">
+      <Filter>Object\Script</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
