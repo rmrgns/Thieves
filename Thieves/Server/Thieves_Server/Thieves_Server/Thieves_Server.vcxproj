@@ -159,6 +159,7 @@
     <ClCompile Include="object\move_object\player.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Lobby.cpp" />
+    <ClCompile Include="ray\ray_casting.cpp" />
     <ClCompile Include="room\room.cpp" />
     <ClCompile Include="room\room_manager.cpp" />
   </ItemGroup>
@@ -181,6 +182,7 @@
     <ClInclude Include="object\object.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Lobby.h" />
+    <ClInclude Include="ray\ray_casting.h" />
     <ClInclude Include="room\room.h" />
     <ClInclude Include="room\room_manager.h" />
     <ClInclude Include="state.h" />

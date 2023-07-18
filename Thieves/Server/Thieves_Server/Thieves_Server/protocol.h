@@ -57,7 +57,7 @@ constexpr char CS_PACKET_PLAYER_CANCLE_READY = 17;
 constexpr char CS_PACKET_PLAYER_LOG_OUT = 18;	// 로그아웃
 constexpr char CS_PACKET_REQUEST_ROOMS_DATA_FOR_LOBBY = 19; // 로비에서 보여줄 데이터를 받기
 constexpr char CS_PACKET_REQUEST_ROOMS_DATA_FOR_ROOM = 20; // 룸에서 보여줄 데이터를 받기
-
+constexpr char CS_PACKET_BULLET = 21;	// 총알
 
 
 // SC
@@ -96,6 +96,7 @@ constexpr char SC_PACKET_ROOMS_DATA_FOR_ROOM_END = 32; // LOBBY_END와 비슷하게 �
 constexpr char SC_PACKET_ERROR = 33; // 어떤 식으로든 에러를 보내야 할때
 constexpr char SC_PACKET_GAME_START = 34; // 아니 게임 시작 패킷이 없는게 말이 됨?
 constexpr char SC_PACKET_OBJ_INFO_END = 35; // OBJ_INFO도 시작하기 전에 보내야 하는게 맞는듯.
+constexpr char SC_PACKET_BULLET = 36;		// 총알
 //#pragma pack (push, 1)
 
 // 클라이언트 -> 서버로 보내는 패킷은 어떤 키를 얼마나 눌렀는지에 대해서만 보내주면 된다.
@@ -196,6 +197,13 @@ struct cs_packet_request_rooms_data_for_lobby {
 struct cs_packet_request_rooms_data_for_room {
 	unsigned char size;
 	char type;
+};
+
+struct cs_packet_bullet {
+	unsigned char size;
+	char type;
+	float p_x, p_y, p_z;	// 시작 좌표
+	float d_x, d_y, d_z;	// 방향 벡터
 };
 
 //------------------------------------------------------------------
@@ -399,4 +407,11 @@ struct sc_packet_game_start {
 struct sc_packet_obj_info_end {
 	unsigned char size;
 	char type;
+};
+
+struct sc_packet_bullet {
+	unsigned char size;
+	char type;
+	float p_x, p_y, p_z;	// 충돌 좌표
+//	float d_x, d_y, d_z;	
 };

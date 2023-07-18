@@ -45,6 +45,7 @@ void ThievesPacketManager::Init()
 	RegisterRecvFunction(SC_PACKET_ERROR, [this](int c_id, unsigned char* p) {ProcessError(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_GAME_START, [this](int c_id, unsigned char* p) {ProcessGameStart(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_ALL_PLAYER_LOAD_END, [this](int c_id, unsigned char* p) {ProcessAllPlayerLoadend(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_BULLET, [this](int c_id, unsigned char* p) {ProcessBullet(c_id, p); });
 }
 
 void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
@@ -388,6 +389,15 @@ void ThievesPacketManager::ProcessGameStart(int c_id, unsigned char* p)
 
 	GET_SINGLE(SceneManager)->SetCheckChangeScene(true);
 	GEngine->SetChangeScene(L"Game");
+}
+
+void ThievesPacketManager::ProcessBullet(int c_id, unsigned char* p)
+{
+	sc_packet_bullet* packet = reinterpret_cast<sc_packet_bullet*>(p);
+
+	// 코드 추가
+	// 충돌한 좌표를 받아서 보내준다.
+
 }
 
 

@@ -119,3 +119,24 @@ Vector3 MapManager::checkCollision(CBox& playerBox, Vector3& playerOldPos)
 	collideRet = FALSE;
 	return currentPlayerPos;
 }
+
+bool MapManager::checkCollisionRay(CBox& ray_temp)
+{
+	Vector3 currentPlayerPos(ray_temp.center[0], ray_temp.center[1], ray_temp.center[2]);
+	
+	bool collideRet = FALSE;
+	int collisionDirection = 0;
+	// 충돌하는 순간의 맵 데이터
+	for (auto& obj : MapCBox)
+	{
+
+		Vector3 collisionSlidingVector = { 0,0,0 };
+		if ((obj->Intersection2(ray_temp, collisionDirection)))
+		{
+			return TRUE;
+		}
+	}
+
+	return TRUE;
+}
+

@@ -22,6 +22,7 @@ public:
     void SendLogOut(const SOCKET& s_socket);
     void SendRequestRoomsData(const SOCKET& s_socket);
     void SendRequestInRoomData(const SOCKET& s_socket);
+    void SendBullet(const SOCKET& s_socket, Vec3 , Vec3);
 
     //void SendSignInPacket(const SOCKET& s_socket, char*, char*);
     //void SendSignUPPacket(const SOCKET& s_socket, char*, char*);

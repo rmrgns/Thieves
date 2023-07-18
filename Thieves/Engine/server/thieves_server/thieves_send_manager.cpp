@@ -140,6 +140,22 @@ void ThievesSendManager::SendRequestInRoomData(const SOCKET& s_socket)
 	SendPacket(s_socket, sizeof(packet), &packet);
 }
 
+void ThievesSendManager::SendBullet(const SOCKET& s_socket, Vec3 start_pos, Vec3 dir_pos)
+{
+	cs_packet_bullet packet;
+
+	packet.type = CS_PACKET_BULLET;
+	packet.p_x = start_pos.x;
+	packet.p_y = start_pos.y;
+	packet.p_z = start_pos.z;
+
+	packet.d_x = dir_pos.x;
+	packet.d_y = dir_pos.y;
+	packet.d_z = dir_pos.z;
+	packet.size = sizeof(packet);
+	SendPacket(s_socket, sizeof(packet), &packet);
+}
+
 //void ThievesSendManager::ProcessSend(const SOCKET& s_socket, const client_fw::SPtr<MessageEventInfo>& message)
 //{
 //	switch (message->GetEventID())

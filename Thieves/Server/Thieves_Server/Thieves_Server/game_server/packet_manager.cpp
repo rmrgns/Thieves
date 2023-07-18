@@ -101,6 +101,10 @@ void PacketManager::ProcessPacket(int c_id, unsigned char* p)
 		ProcessRoomsDataInRoom(c_id, p);
 		break;
 	}
+	case CS_PACKET_BULLET: {
+		ProcessBullet(c_id, p);
+		break;
+	}
 	case CS_PACKET_TEST: {
 		//ProcessTest(c_id, p);
 		break;
@@ -491,6 +495,20 @@ void PacketManager::SendGameStart(int c_id)
 	cl->DoSend(sizeof(packet), &packet);
 }
 
+void PacketManager::SendBullet(int c_id, Vector3 collision_point)
+{
+	sc_packet_bullet packet;
+	packet.type = SC_PACKET_BULLET;
+	packet.size = sizeof(packet);
+	packet.p_x = collision_point.x;
+	packet.p_y = collision_point.y;
+	packet.p_z = collision_point.z;
+
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
+}
+
+
 void PacketManager::End()
 {
 	MoveObjManager::GetInst()->DestroyObject();
@@ -745,8 +763,6 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 	}
 }
 
-
-
 void PacketManager::ProcessMatching(int c_id, unsigned char* p)
 {
 }
@@ -787,8 +803,6 @@ void PacketManager::ProcessGameStart(int c_id, unsigned char* p)
 
 	StartGame(room->GetRoomID());
 }
-
-
 
 void PacketManager::ProcessLoadProgressing(int c_id, unsigned char* p)
 {
@@ -1040,6 +1054,23 @@ void PacketManager::ProcessDamageCheat(int c_id, unsigned char* p)
 {
 }
 
+void PacketManager::ProcessBullet(int c_id, unsigned char* p)
+{
+	cs_packet_bullet* packet = reinterpret_cast<cs_packet_bullet*>(p);
+
+	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
+
+	Vector3 start_pos{ packet->p_x, packet->p_y, packet->p_z};
+	Vector3 dir_pos{ packet->d_x, packet->d_y, packet->d_z};
+	
+	//m_ray_casting->Shoot(bullet  시작 pos, bullet  방향벡터 );
+// -> Vector 총알과 충돌하거나 마지막 bulletpoint 좌표 리턴
+	Vector3 col_pos = m_ray_casting->Shoot(start_pos, dir_pos);
+
+	
+	SendBullet(c_id, col_pos);
+
+}
 
 void PacketManager::StartGame(int room_id)
 {
