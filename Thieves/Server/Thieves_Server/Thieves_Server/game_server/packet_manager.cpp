@@ -1067,9 +1067,7 @@ void PacketManager::ProcessBullet(int c_id, unsigned char* p)
 // -> Vector 총알과 충돌하거나 마지막 bulletpoint 좌표 리턴
 	Vector3 col_pos = m_ray_casting->Shoot(start_pos, dir_pos);
 
-	
 	SendBullet(c_id, col_pos);
-
 }
 
 void PacketManager::StartGame(int room_id)

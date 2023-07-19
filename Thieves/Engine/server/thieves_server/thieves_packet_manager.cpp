@@ -79,7 +79,6 @@ void ThievesPacketManager::ProcessSignin(int c_id, unsigned char* p)
 	// 클라로
 }
 
-
 void ThievesPacketManager::ProcessObjInfo(int c_id, unsigned char* p)
 {
 	sc_packet_obj_info* packet = reinterpret_cast<sc_packet_obj_info*>(p);
@@ -396,8 +395,8 @@ void ThievesPacketManager::ProcessBullet(int c_id, unsigned char* p)
 	sc_packet_bullet* packet = reinterpret_cast<sc_packet_bullet*>(p);
 
 	// 코드 추가
-	// 충돌한 좌표를 받아서 보내준다.
-
+	// 충돌한 좌표를 받아서 UsingGun으로 보내준다.
+	// 
 }
 
 

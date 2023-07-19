@@ -2,6 +2,7 @@
 #include "pch.h"
 #include "define.h"
 #include "object/MapManager.h"
+
 class RayCasting
 {
 	RayCasting();
@@ -29,7 +30,9 @@ private:
 	//충돌 전까지 방향 벡터그대로 쭉 직진
 
 public:
-	MapManager* _map_manager;
+	//MapManager* _map_manager;
+	
+	
 	Vector3 Shoot(Vector3 RayPos, Vector3 RayDir);
 
 public:

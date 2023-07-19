@@ -5,12 +5,13 @@
 Vector3 RayCasting::Shoot(Vector3 RayPos, Vector3 RayDir)
 {
 	CBox Raytemp;
+	MapManager _map_manager;
 	Vector3 collisionPoint;
 	int MAXRANGE = 100;
 	
 	//center
 	Raytemp.center[0] = RayPos.x;
-	Raytemp.center[1] = RayPos.y;
+	Raytemp.center[1] = 80.f;
 	Raytemp.center[2] = RayPos.z;
 
 	//extent
@@ -38,10 +39,10 @@ Vector3 RayCasting::Shoot(Vector3 RayPos, Vector3 RayDir)
 	Raytemp.translation[1] = RayDir.y;
 	Raytemp.translation[2] = RayDir.z;
 
-	for (int i = 0 ; i < MAXRANGE ; i++)//충알 방향에 따라 xz축 +++
+ 	for (int i = 0 ; i < MAXRANGE ; i++)//충알 방향에 따라 xz축 +++
 	{
 		
-		if (_map_manager->checkCollisionRay(Raytemp))
+		if (_map_manager.checkCollisionRay(Raytemp))
 		{
 			break;
 		}
