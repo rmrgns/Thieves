@@ -17,10 +17,12 @@ constexpr int USER_NUM = 8;
 // 수정
 constexpr float FOV_RANGE = 0.f;
 
-constexpr int MAX_NPC = 7;
+constexpr int MAX_NPC = MAX_ROOM_SIZE * 8;
 
 // 경찰 NPC의 갯수
-// 도둑 AI의 갯수
+constexpr int NPC_ID_START = MAX_USER;
+constexpr int NPC_ID_END = MAX_USER + MAX_NPC - 1;
+
 constexpr int PLAYER_HP = 5;		// 플레이어 HP
 constexpr int PLAYER_DAMAGE = 1;	// 플레이어 DMG
 // 플레이어 이동거리
@@ -97,6 +99,9 @@ constexpr char SC_PACKET_ERROR = 33; // 어떤 식으로든 에러를 보내야 할때
 constexpr char SC_PACKET_GAME_START = 34; // 아니 게임 시작 패킷이 없는게 말이 됨?
 constexpr char SC_PACKET_OBJ_INFO_END = 35; // OBJ_INFO도 시작하기 전에 보내야 하는게 맞는듯.
 constexpr char SC_PACKET_BULLET = 36;		// 총알
+
+constexpr char SC_PACKET_NPC_ATTACK = 100;
+
 //#pragma pack (push, 1)
 
 // 클라이언트 -> 서버로 보내는 패킷은 어떤 키를 얼마나 눌렀는지에 대해서만 보내주면 된다.
@@ -414,4 +419,12 @@ struct sc_packet_bullet {
 	char type;
 	float p_x, p_y, p_z;	// 충돌 좌표
 //	float d_x, d_y, d_z;	
+};
+
+
+struct sc_packet_npc_attack {
+	unsigned char size;
+	char type;
+	int obj_id;
+	int target_id;
 };
