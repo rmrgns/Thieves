@@ -20,6 +20,60 @@
     <ClCompile Include="ray\ray_casting.cpp">
       <Filter>ray</Filter>
     </ClCompile>
+    <ClCompile Include="Recast\Source\Recast.cpp">
+      <Filter>recast\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Recast\Source\RecastAlloc.cpp">
+      <Filter>recast\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Recast\Source\RecastArea.cpp">
+      <Filter>recast\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Recast\Source\RecastAssert.cpp">
+      <Filter>recast\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Recast\Source\RecastContour.cpp">
+      <Filter>recast\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Recast\Source\RecastFilter.cpp">
+      <Filter>recast\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Recast\Source\RecastLayers.cpp">
+      <Filter>recast\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Recast\Source\RecastMesh.cpp">
+      <Filter>recast\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Recast\Source\RecastMeshDetail.cpp">
+      <Filter>recast\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Recast\Source\RecastRasterization.cpp">
+      <Filter>recast\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Recast\Source\RecastRegion.cpp">
+      <Filter>recast\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Detour\Source\DetourAlloc.cpp">
+      <Filter>detuor\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Detour\Source\DetourAssert.cpp">
+      <Filter>detuor\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Detour\Source\DetourCommon.cpp">
+      <Filter>detuor\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Detour\Source\DetourNavMesh.cpp">
+      <Filter>detuor\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Detour\Source\DetourNavMeshBuilder.cpp">
+      <Filter>detuor\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Detour\Source\DetourNavMeshQuery.cpp">
+      <Filter>detuor\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Detour\Source\DetourNode.cpp">
+      <Filter>detuor\source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Astar.h" />
@@ -54,6 +108,42 @@
     <ClInclude Include="protocol.h">
       <Filter>header</Filter>
     </ClInclude>
+    <ClInclude Include="Recast\Include\Recast.h">
+      <Filter>recast\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Recast\Include\RecastAlloc.h">
+      <Filter>recast\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Recast\Include\RecastAssert.h">
+      <Filter>recast\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Detour\Include\DetourAlloc.h">
+      <Filter>detuor\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Detour\Include\DetourAssert.h">
+      <Filter>detuor\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Detour\Include\DetourCommon.h">
+      <Filter>detuor\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Detour\Include\DetourMath.h">
+      <Filter>detuor\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Detour\Include\DetourNavMesh.h">
+      <Filter>detuor\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Detour\Include\DetourNavMeshBuilder.h">
+      <Filter>detuor\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Detour\Include\DetourNavMeshQuery.h">
+      <Filter>detuor\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Detour\Include\DetourNode.h">
+      <Filter>detuor\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Detour\Include\DetourStatus.h">
+      <Filter>detuor\include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ray">
@@ -61,6 +151,24 @@
     </Filter>
     <Filter Include="header">
       <UniqueIdentifier>{1a6fa1ad-ad55-4328-a4c8-ec007da62ffd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="recast">
+      <UniqueIdentifier>{fe23dc0e-6de8-4ef4-be8a-d0b2a0bc776b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="detuor">
+      <UniqueIdentifier>{995a64d3-1a5f-4dde-935b-8bb2f1609cd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="detuor\source">
+      <UniqueIdentifier>{9fe94061-d75f-4a56-8fae-1a66d5391b0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="recast\source">
+      <UniqueIdentifier>{a9c3a326-9757-4d43-a575-df852de2a7eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="detuor\include">
+      <UniqueIdentifier>{51807241-0df5-428d-8128-90cc602e6730}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="recast\include">
+      <UniqueIdentifier>{b0a50ee9-b903-448d-8134-af60e9a3dd3d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

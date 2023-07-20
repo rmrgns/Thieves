@@ -16,7 +16,7 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#include "RecastAssert.h"
+#include "recast/Include/RecastAssert.h"
 
 #ifndef NDEBUG
 

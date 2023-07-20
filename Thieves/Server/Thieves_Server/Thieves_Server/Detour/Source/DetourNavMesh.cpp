@@ -19,12 +19,12 @@
 #include <float.h>
 #include <string.h>
 #include <stdio.h>
-#include "DetourNavMesh.h"
-#include "DetourNode.h"
-#include "DetourCommon.h"
-#include "DetourMath.h"
-#include "DetourAlloc.h"
-#include "DetourAssert.h"
+#include "detour/Include/DetourNavMesh.h"
+#include "detour/Include/DetourNode.h"
+#include "detour/Include/DetourCommon.h"
+#include "detour/Include/DetourMath.h"
+#include "detour/Include/DetourAlloc.h"
+#include "detour/Include/DetourAssert.h"
 #include <new>
 
 
@@ -183,6 +183,38 @@ Notes:
   always contain either a success or failure flag.
 
 @see dtNavMeshQuery, dtCreateNavMeshData, dtNavMeshCreateParams, #dtAllocNavMesh, #dtFreeNavMesh
+dtNavMesh 클래스는 탐색 메시(mesh)를 나타내는 클래스로, 주로 경로 탐색(pathfinding)에 사용됩니다. 탐색 메시는 세 가지 기본 유형의 구조적 데이터로 구성됩니다:
+
+폴리곤 메시(Polygon Mesh): 대부분의 탐색 그래프(navigation graph)를 정의하는데 사용되는 메시 구조입니다. 폴리곤 메시의 구조는 rcPolyMesh 클래스를 참조하시기 바랍니다.
+
+디테일 메시(Detail Mesh): 폴리곤 메시 위에서 표면 높이를 결정하는데 사용되는 메시 구조입니다. 디테일 메시의 구조는 rcPolyMeshDetail 클래스를 참조하시기 바랍니다.
+
+오프-메시 연결(Off-mesh connections): 탐색 그래프 내에서 사용자 정의 지점 간 간격을 정의하는데 사용되는 연결입니다.
+
+일반적인 빌드 프로세스는 다음과 같습니다:
+
+Recast 빌드 파이프라인을 사용하여 rcPolyMesh와 rcPolyMeshDetail 데이터를 생성합니다.
+
+필요에 따라 오프-메시 연결 데이터를 생성합니다.
+
+소스 데이터를 dtNavMeshCreateParams 구조체로 결합합니다.
+
+dtCreateNavMeshData()를 사용하여 타일 데이터 배열을 생성합니다.
+
+dtNavMesh 객체를 할당하고 초기화합니다. (단일 타일 탐색 메시의 경우, 타일 데이터는 이 단계에서 로드됩니다.)
+
+다중 타일 탐색 메시의 경우, dtNavMesh::addTile()을 사용하여 타일 데이터를 로드합니다.
+
+주의사항:
+
+이 클래스는 일반적으로 dtNavMeshQuery 클래스와 함께 경로 탐색에 사용됩니다.
+
+기술적으로 모든 탐색 메시는 타일로 구성됩니다. '솔로(solo)' 메시는 단지 하나의 타일을 가지도록 초기화된 탐색 메시를 의미합니다.
+
+이 클래스는 비동기 메서드를 구현하지 않습니다. 따라서 모든 메서드의 dtStatus 결과에는 항상 성공 또는 실패 플래그가 포함됩니다.
+
+추가 정보는 dtNavMeshQuery, dtCreateNavMeshData, dtNavMeshCreateParams를 참조하시기 바랍니다. 또한 #dtAllocNavMesh 및 #dtFreeNavMesh를 통해 메모리 할당 및 해제를 수행할 수 있습니다.
+
 */
 
 dtNavMesh::dtNavMesh() :

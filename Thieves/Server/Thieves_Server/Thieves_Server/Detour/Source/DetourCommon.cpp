@@ -16,8 +16,8 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#include "DetourCommon.h"
-#include "DetourMath.h"
+#include "detour/Include/DetourCommon.h"
+#include "detour/Include/DetourMath.h"
 
 //////////////////////////////////////////////////////////////////////////////////////////
 

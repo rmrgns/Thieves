@@ -16,7 +16,7 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#include "RecastAlloc.h"
+#include "recast/Include/RecastAlloc.h"
 
 static void* rcAllocDefault(size_t size, rcAllocHint)
 {

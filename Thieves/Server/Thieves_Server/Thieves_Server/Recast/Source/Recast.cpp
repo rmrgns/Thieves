@@ -16,9 +16,9 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#include "Recast.h"
-#include "RecastAlloc.h"
-#include "RecastAssert.h"
+#include "recast/Include/Recast.h"
+#include "recast/Include/RecastAlloc.h"
+#include "recast/Include/RecastAssert.h"
 
 #include <math.h>
 #include <string.h>

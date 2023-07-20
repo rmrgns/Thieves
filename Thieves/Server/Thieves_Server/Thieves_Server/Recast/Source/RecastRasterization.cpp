@@ -18,9 +18,9 @@
 
 #include <math.h>
 #include <stdio.h>
-#include "Recast.h"
-#include "RecastAlloc.h"
-#include "RecastAssert.h"
+#include "recast/Include/Recast.h"
+#include "recast/Include/RecastAlloc.h"
+#include "recast/Include/RecastAssert.h"
 
 /// Check whether two bounding boxes overlap
 ///

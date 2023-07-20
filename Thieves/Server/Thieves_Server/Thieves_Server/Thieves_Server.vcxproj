@@ -148,6 +148,13 @@
     <ClCompile Include="Astar.cpp" />
     <ClCompile Include="CBox.cpp" />
     <ClCompile Include="database\db.cpp" />
+    <ClCompile Include="Detour\Source\DetourAlloc.cpp" />
+    <ClCompile Include="Detour\Source\DetourAssert.cpp" />
+    <ClCompile Include="Detour\Source\DetourCommon.cpp" />
+    <ClCompile Include="Detour\Source\DetourNavMesh.cpp" />
+    <ClCompile Include="Detour\Source\DetourNavMeshBuilder.cpp" />
+    <ClCompile Include="Detour\Source\DetourNavMeshQuery.cpp" />
+    <ClCompile Include="Detour\Source\DetourNode.cpp" />
     <ClCompile Include="game_server\ingame_server.cpp" />
     <ClCompile Include="game_server\packet_manager.cpp" />
     <ClCompile Include="iocp_server\iocp_server.cpp" />
@@ -160,6 +167,17 @@
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Lobby.cpp" />
     <ClCompile Include="ray\ray_casting.cpp" />
+    <ClCompile Include="Recast\Source\Recast.cpp" />
+    <ClCompile Include="Recast\Source\RecastAlloc.cpp" />
+    <ClCompile Include="Recast\Source\RecastArea.cpp" />
+    <ClCompile Include="Recast\Source\RecastAssert.cpp" />
+    <ClCompile Include="Recast\Source\RecastContour.cpp" />
+    <ClCompile Include="Recast\Source\RecastFilter.cpp" />
+    <ClCompile Include="Recast\Source\RecastLayers.cpp" />
+    <ClCompile Include="Recast\Source\RecastMesh.cpp" />
+    <ClCompile Include="Recast\Source\RecastMeshDetail.cpp" />
+    <ClCompile Include="Recast\Source\RecastRasterization.cpp" />
+    <ClCompile Include="Recast\Source\RecastRegion.cpp" />
     <ClCompile Include="room\room.cpp" />
     <ClCompile Include="room\room_manager.cpp" />
   </ItemGroup>
@@ -170,6 +188,15 @@
     <ClInclude Include="CNode.h" />
     <ClInclude Include="database\db.h" />
     <ClInclude Include="define.h" />
+    <ClInclude Include="Detour\Include\DetourAlloc.h" />
+    <ClInclude Include="Detour\Include\DetourAssert.h" />
+    <ClInclude Include="Detour\Include\DetourCommon.h" />
+    <ClInclude Include="Detour\Include\DetourMath.h" />
+    <ClInclude Include="Detour\Include\DetourNavMesh.h" />
+    <ClInclude Include="Detour\Include\DetourNavMeshBuilder.h" />
+    <ClInclude Include="Detour\Include\DetourNavMeshQuery.h" />
+    <ClInclude Include="Detour\Include\DetourNode.h" />
+    <ClInclude Include="Detour\Include\DetourStatus.h" />
     <ClInclude Include="game_server\ingame_server.h" />
     <ClInclude Include="game_server\packet_manager.h" />
     <ClInclude Include="iocp_server\iocp_server.h" />
@@ -183,6 +210,9 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Lobby.h" />
     <ClInclude Include="ray\ray_casting.h" />
+    <ClInclude Include="Recast\Include\Recast.h" />
+    <ClInclude Include="Recast\Include\RecastAlloc.h" />
+    <ClInclude Include="Recast\Include\RecastAssert.h" />
     <ClInclude Include="room\room.h" />
     <ClInclude Include="room\room_manager.h" />
     <ClInclude Include="state.h" />
