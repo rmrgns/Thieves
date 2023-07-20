@@ -1,17 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Astar.cpp" />
     <ClCompile Include="CBox.cpp" />
     <ClCompile Include="database\db.cpp" />
     <ClCompile Include="game_server\ingame_server.cpp" />
-    <ClCompile Include="game_server\packet_manager.cpp" />
     <ClCompile Include="iocp_server\iocp_server.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="map_object.cpp" />
     <ClCompile Include="object\MapManager.cpp" />
     <ClCompile Include="object\moveobj_manager.cpp" />
-    <ClCompile Include="object\move_object\enemy.cpp" />
     <ClCompile Include="object\move_object\player.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Lobby.cpp" />
@@ -74,20 +71,26 @@
     <ClCompile Include="Detour\Source\DetourNode.cpp">
       <Filter>detuor\source</Filter>
     </ClCompile>
+    <ClCompile Include="object\move_object\enemy.cpp">
+      <Filter>NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="Astar.cpp">
+      <Filter>astar</Filter>
+    </ClCompile>
+    <ClCompile Include="game_server\packet_manager.cpp">
+      <Filter>packet_manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Astar.h" />
     <ClInclude Include="CAstar.h" />
     <ClInclude Include="CBox.h" />
     <ClInclude Include="CNode.h" />
     <ClInclude Include="database\db.h" />
     <ClInclude Include="game_server\ingame_server.h" />
-    <ClInclude Include="game_server\packet_manager.h" />
     <ClInclude Include="iocp_server\iocp_server.h" />
     <ClInclude Include="map_object.h" />
     <ClInclude Include="object\MapManager.h" />
     <ClInclude Include="object\moveobj_manager.h" />
-    <ClInclude Include="object\move_object\enemy.h" />
     <ClInclude Include="object\move_object\move_object.h" />
     <ClInclude Include="object\move_object\player.h" />
     <ClInclude Include="object\object.h" />
@@ -144,6 +147,15 @@
     <ClInclude Include="Detour\Include\DetourStatus.h">
       <Filter>detuor\include</Filter>
     </ClInclude>
+    <ClInclude Include="object\move_object\enemy.h">
+      <Filter>NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="Astar.h">
+      <Filter>astar</Filter>
+    </ClInclude>
+    <ClInclude Include="game_server\packet_manager.h">
+      <Filter>packet_manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ray">
@@ -169,6 +181,15 @@
     </Filter>
     <Filter Include="recast\include">
       <UniqueIdentifier>{b0a50ee9-b903-448d-8134-af60e9a3dd3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NPC">
+      <UniqueIdentifier>{e94ff246-26df-476e-a352-38134454b265}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="astar">
+      <UniqueIdentifier>{edc370c0-d3b3-4787-85b6-f3731a890de4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="packet_manager">
+      <UniqueIdentifier>{bf0076f0-1bc3-460c-976d-e79b247972e3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -1225,13 +1225,14 @@ void PacketManager::SpawnNPC(int room_id)
 		}
 	}
 
-	if (enemy_list.size() < static_cast<INT64>(NPC_num))
-		cout << "NPC가 모자랍니다" << endl;
-	vector<MapObj>spawn_area;
+	//if (enemy_list.size() < static_cast<INT64>(NPC_num)) {
+	//	cout << "NPC가 모자랍니다" << endl;
+	//}
+	//vector<MapObj>spawn_area;
 	random_device rd;
 	mt19937 gen(rd());
 	uniform_int_distribution<int> random_point(0, 1);
-	spawn_area.reserve(10);
+	//spawn_area.reserve(10);
 
 
 	int i = 0;
