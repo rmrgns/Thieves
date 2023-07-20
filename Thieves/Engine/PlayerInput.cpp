@@ -71,7 +71,6 @@ void PlayerInput::LateUpdate()
 		 GetAnimator()->Play(_index);
 	 }
 
-
 	// ĳ���� ����
 	if (INPUT->GetButtonDown(KEY_TYPE::SPACE))
 	{
@@ -86,12 +85,25 @@ void PlayerInput::LateUpdate()
 	// ĳ���� ����
 	Jump(pos);
 
+	if (INPUT->GetButton(KEY_TYPE::KEY_1)) {
+		_mode = 1;
+	}
+	if (INPUT->GetButton(KEY_TYPE::KEY_2))
+	{
+		_mode = 2;
+	}
+
 	// Attack
 	if (INPUT->GetButtonDown(KEY_TYPE::LBUTTON))
 	{
-		if(_attackState == 0)
-			_action_type = (char)PL_ACTION_TYPE::ATTACK;
+		if (_mode == 1) {
+			if (_attackState == 0)
+				_action_type = (char)PL_ACTION_TYPE::ATTACK;
 			_attackState = 1;
+		}
+		else if (_mode == 2) {
+
+		}
 	}
 
 	//GET_SINGLE(SceneManager)->SetPlayerPosition(pos);

@@ -156,6 +156,8 @@ void ThievesSendManager::SendBullet(const SOCKET& s_socket, Vec3 start_pos, Vec3
 	SendPacket(s_socket, sizeof(packet), &packet);
 }
 
+
+
 //void ThievesSendManager::ProcessSend(const SOCKET& s_socket, const client_fw::SPtr<MessageEventInfo>& message)
 //{
 //	switch (message->GetEventID())

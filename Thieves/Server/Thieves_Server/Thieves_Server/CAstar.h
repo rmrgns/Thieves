@@ -1,8 +1,10 @@
-//#pragma once
-//#include <iostream>
-//#include <vector>
-//#include <queue>
-//#include "CNode.h"
+#pragma once
+#include <iostream>
+#include <vector>
+#include <queue>
+#include "CNode.h"
+
+class MapObj;
 //class AStar {
 //public:
 //    AStar(std::vector<std::vector<Node>>& grid) : grid(grid) {}

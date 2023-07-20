@@ -34,6 +34,8 @@ private:
 	float		_attackCount = 0.f;
 	int32		_attackState = 0;	// 0=공격안함, 1=공격버튼 눌림, 2=공격 중
 
+	char		_mode = 1;
+
 	// Send Data to Server
 	char		direction = 0;
 

@@ -61,7 +61,7 @@ constexpr char CS_PACKET_REQUEST_ROOMS_DATA_FOR_LOBBY = 19; // 로비에서 보여줄 �
 constexpr char CS_PACKET_REQUEST_ROOMS_DATA_FOR_ROOM = 20; // 룸에서 보여줄 데이터를 받기
 constexpr char CS_PACKET_BULLET = 21;	// 총알
 
-
+constexpr char CS_PACKET_ATTACKMODE = 99;		// 공격 모드 변경 1. 주먹 2. 총 모드
 // SC
 constexpr char SC_PACKET_SIGN_IN_OK = 1;		// 로그인 OK
 constexpr char SC_PACKET_SIGN_UP_OK = 2;		// 가입 OK
@@ -100,7 +100,10 @@ constexpr char SC_PACKET_GAME_START = 34; // 아니 게임 시작 패킷이 없는게 말이 �
 constexpr char SC_PACKET_OBJ_INFO_END = 35; // OBJ_INFO도 시작하기 전에 보내야 하는게 맞는듯.
 constexpr char SC_PACKET_BULLET = 36;		// 총알
 
+constexpr char SC_PACKET_ATTACKMODE = 99;		// 공격 모드 변경 1. 주먹 2. 총 모드
 constexpr char SC_PACKET_NPC_ATTACK = 100;
+
+
 
 //#pragma pack (push, 1)
 
@@ -210,6 +213,8 @@ struct cs_packet_bullet {
 	float p_x, p_y, p_z;	// 시작 좌표
 	float d_x, d_y, d_z;	// 방향 벡터
 };
+
+
 
 //------------------------------------------------------------------
 
@@ -421,6 +426,11 @@ struct sc_packet_bullet {
 //	float d_x, d_y, d_z;	
 };
 
+struct sc_packet_attackmode {
+	unsigned char size;
+	char type;
+	char mode;
+};
 
 struct sc_packet_npc_attack {
 	unsigned char size;
@@ -428,3 +438,4 @@ struct sc_packet_npc_attack {
 	int obj_id;
 	int target_id;
 };
+

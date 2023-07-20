@@ -69,6 +69,8 @@ public:
 
 	void ProcessTimer(HANDLE hiocp);
 
+	void SpawnNPCTime(int en_id, int room_id);
+
 private:
 	Lobby* m_Lobby;
 	RoomManager* m_room_manager;
@@ -103,4 +105,6 @@ private:
 	void ProcessBullet(int c_id, unsigned char* p);
 
 	void StartGame(int room_id);
+
+	void SpawnNPC(int room_id);
 };
