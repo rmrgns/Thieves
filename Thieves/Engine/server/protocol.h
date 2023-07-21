@@ -429,7 +429,7 @@ struct sc_packet_bullet {
 struct sc_packet_attackmode {
 	unsigned char size;
 	char type;
-	char mode;			// 1 ¡÷∏‘ 2 √— 3 ∆Æ∑¶
+	char mode;
 };
 
 struct sc_packet_npc_attack {

@@ -12,6 +12,7 @@
 
 #include "server/main/network.h"
 #include "server/thieves_server/thieves_packet_manager.h"
+#include "server/thieves_server/thieves_send_manager.h"
 #include "server/main/network_move_object.h"
 #include "server/thieves_server/game_info.h"
 UsingGun::UsingGun()
@@ -21,9 +22,9 @@ UsingGun::UsingGun()
 UsingGun::~UsingGun()
 {
 }
-
 void UsingGun::LateUpdate()
 {
+
 	if (_bulletcheck)
 	{
 		_count += DELTA_TIME;
@@ -41,40 +42,38 @@ void UsingGun::LateUpdate()
 	{
 		// 플레이어 위치 좌표
 		int myID = Network::GetInst()->GetPacketManager()->GetGameInfo().GetNetworkID();
-		Vec3 pos(0.0f, 0.0f, 0.0f);
-		Vec3 rotation(0.0f, 0.0f, 0.0f);
-		Vec3 dir();
+
 		if (myID != -1)
 		{
-			pos = Network::GetInst()->GetNetworkObjMap().find(myID)->second->GetPosition();
-			rotation = Network::GetInst()->GetNetworkObjMap().find(myID)->second->GetRotation();
+			bullet_pos = Network::GetInst()->GetNetworkObjMap().find(myID)->second->GetPosition();
+			bullet_rotation = Network::GetInst()->GetNetworkObjMap().find(myID)->second->GetRotation();
 		}
-		
-		pos.x += GET_SINGLE(SceneManager)->GetLookVec().x * 100.f;
-		//pos.y += GET_SINGLE(SceneManager)->GetLookVec().y * 100.f;
-		pos.z += GET_SINGLE(SceneManager)->GetLookVec().z * 100.f;
-		pos.y += 120.f;
 
-		// 서버에서 플레이어 위치와 벡터 받는 곳
-		//dir.x = GET_SINGLE(SceneManager)->GetLookVec().x * 100.f;
-		//dir.z = GET_SINGLE(SceneManager)->GetLookVec().z * 100.f;
-		//dir.y = GET_SINGLE(SceneManager)->GetLookVec().y * 100.f;
+		bullet_pos.x += GET_SINGLE(SceneManager)->GetLookVec().x * 100.f;
+		bullet_pos.z += GET_SINGLE(SceneManager)->GetLookVec().z * 100.f;
+		bullet_pos.y += 100.f;
 
-		//총알 시작 위치
-		//Network::GetInst()->SendBullet(pos, dir);
-
-		// 플레이어 위치와 벡터는 playerInput 스크립트에서 전송
-		// pos 공식 = (내 위치 + 상대 위치) / 2 -> x,z만 해당
-		
-		
-		// 총알 궤적 그리기
-		GetTransform()->SetLocalPosition(pos);
-		GetTransform()->SetLocalRotation(rotation);
-
-		// 시간 체크 시작
-		_bulletcheck = true;
-
+		// 서버로 전송
+		Network::GetInst()->SendBullet(bullet_pos, bullet_rotation);
 	}
-	
 
 }
+
+
+void UsingGun::DrawBullet()
+{
+	// 총알 궤적 그리기
+	GetTransform()->SetLocalPosition(GetBulletPos());
+	GetTransform()->SetLocalRotation(GetBulletRot());
+
+	// 시간 체크 시작
+	_bulletcheck = true;
+}
+
+void UsingGun::RecvBullet(Vec3 pos, Vec3 Rot)
+{
+	SetBulletPos(pos);
+	SetBulletRot(Rot);
+	DrawBullet();
+}
+
