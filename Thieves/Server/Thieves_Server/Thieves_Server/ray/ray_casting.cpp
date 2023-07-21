@@ -11,7 +11,7 @@ Vector3 RayCasting::Shoot(Vector3 RayPos, Vector3 RayDir)
 	
 	//center
 	Raytemp.center[0] = RayPos.x;
-	Raytemp.center[1] = 80.f;
+	Raytemp.center[1] = 100.f;
 	Raytemp.center[2] = RayPos.z;
 
 	//extent
@@ -47,7 +47,7 @@ Vector3 RayCasting::Shoot(Vector3 RayPos, Vector3 RayDir)
 			break;
 		}
 		Raytemp.center[0] = Raytemp.center[0] + RayDir.x;
-		Raytemp.center[1] = Raytemp.center[1] + 0;
+		Raytemp.center[1] = Raytemp.center[1] + RayDir.y;
 		Raytemp.center[2] = Raytemp.center[2] + RayDir.z;
 	}	
 
