@@ -53,6 +53,8 @@ void UsingGun::LateUpdate()
 		bullet_pos.z += GET_SINGLE(SceneManager)->GetLookVec().z * 100.f;
 		bullet_pos.y += 100.f;
 
+		Vec3 lookVec = GET_SINGLE(SceneManager)->GetLookVec();
+
 		// 서버로 전송
 		Network::GetInst()->SendBullet(bullet_pos, bullet_rotation);
 	}
