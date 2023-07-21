@@ -29,6 +29,7 @@ void PacketManager::Init()
 	m_Lobby->Init();
 	m_room_manager->InitRoom();
 	m_map_manager->LoadMap();
+	m_map_manager->LoadSpawnArea();
 	m_db->Init();
 }
 

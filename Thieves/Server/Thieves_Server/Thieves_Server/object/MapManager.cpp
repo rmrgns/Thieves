@@ -68,6 +68,88 @@ void MapManager::LoadMap()
 
 }
 
+void MapManager::LoadSpawnArea()
+{
+	std::ifstream in{ ".\\PoliceSpawn.txt" };
+
+	std::vector<std::string> words{ std::istream_iterator<std::string>{in}, {} };
+
+	while (!words.empty())
+	{
+		auto next = std::find(words.begin(), words.end(), "end");
+		next++;
+
+		auto reader = words.begin();
+
+		//start 와 end
+		reader++;
+
+		float centerCBox[3]{};
+
+		//center		
+		centerCBox[0] = std::stof((*reader)) * -100.0f; reader++;
+		centerCBox[1] = std::stof((*reader)) * 100.0f; reader++;
+		centerCBox[2] = std::stof((*reader)) * -100.0f; reader++;
+
+		PoliceSpawnCBox.push_back(std::make_shared<CBox>(centerCBox));
+		words.erase(words.begin(), next);
+	}
+
+}
+
+void MapManager::LoadPoliceDir()
+{
+	std::ifstream in{ ".\\PoliceDirPos.txt" };
+
+	std::vector<std::string> words{ std::istream_iterator<std::string>{in}, {} };
+
+	while (!words.empty())
+	{
+		auto next = std::find(words.begin(), words.end(), "end");
+		next++;
+
+		auto reader = words.begin();
+
+		//start 와 end
+		reader++;
+
+		float centerCBox1[3]{};
+		float centerCBox2[3]{};
+		float centerCBox3[3]{};
+		float centerCBox4[3]{};
+
+		//center		
+		centerCBox1[0] = std::stof((*reader)) * -100.0f; reader++;
+		centerCBox1[1] = std::stof((*reader)) * 100.0f; reader++;
+		centerCBox1[2] = std::stof((*reader)) * -100.0f; reader++;
+		reader++;
+		reader++;
+
+		//center		
+		centerCBox2[0] = std::stof((*reader)) * -100.0f; reader++;
+		centerCBox2[1] = std::stof((*reader)) * 100.0f; reader++;
+		centerCBox2[2] = std::stof((*reader)) * -100.0f; reader++;
+		reader++;
+		reader++;
+
+		//center		
+		centerCBox3[0] = std::stof((*reader)) * -100.0f; reader++;
+		centerCBox3[1] = std::stof((*reader)) * 100.0f; reader++;
+		centerCBox3[2] = std::stof((*reader)) * -100.0f; reader++;
+		reader++;
+		reader++;
+
+		//center		
+		centerCBox4[0] = std::stof((*reader)) * -100.0f; reader++;
+		centerCBox4[1] = std::stof((*reader)) * 100.0f; reader++;
+		centerCBox4[2] = std::stof((*reader)) * -100.0f; reader++;
+		
+
+		PoliceDirCBox.push_back(std::make_shared<CBox>(centerCBox1, centerCBox2, centerCBox3, centerCBox4));
+		words.erase(words.begin(), next);
+	}
+
+}
 
 // true이면 충돌 
 Vector3 MapManager::checkCollision(CBox& playerBox, Vector3& playerOldPos)
