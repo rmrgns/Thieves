@@ -20,6 +20,7 @@ PacketManager::PacketManager()
 	m_room_manager = new RoomManager;
 	m_map_manager = new MapManager;
 	m_db = new DB;
+	m_db2 = new DB;
 
 }
 
@@ -31,6 +32,7 @@ void PacketManager::Init()
 	m_map_manager->LoadMap();
 	m_map_manager->LoadSpawnArea();
 	m_db->Init();
+	m_db2->Init();
 }
 
 void PacketManager::ProcessPacket(int c_id, unsigned char* p)
@@ -166,7 +168,6 @@ void PacketManager::ProcessRecv(int c_id , EXP_OVER* exp_over, DWORD num_bytes)
 	cl->DoRecv();
 }
 
-
 void PacketManager::SendMovePacket(int c_id, int mover)
 {
 	sc_packet_move packet;
@@ -191,8 +192,6 @@ void PacketManager::SendMovePacket(int c_id, int mover)
 	cl->DoSend(sizeof(packet), &packet);
 }
 
-
-
 void PacketManager::SendLoginFailPacket(SOCKET& c_socket, int reason)
 {
 	sc_packet_login_fail packet;
@@ -207,6 +206,7 @@ void PacketManager::SendLoginFailPacket(SOCKET& c_socket, int reason)
 			std::cout << "Send" << error_num << std::endl;
 	}
 }
+
 void PacketManager::SendSignInOK(int c_id)
 {
 	sc_packet_sign_in_ok packet;
@@ -294,6 +294,7 @@ void PacketManager::SendStun(int c_id, int obj_id)
 
 void PacketManager::SendPhasePacket(int c_id, int curr_phase)
 {
+
 }
 
 void PacketManager::SendLoadProgress(int c_id, int p_id, int progressed)
@@ -306,7 +307,6 @@ void PacketManager::SendLoadProgress(int c_id, int p_id, int progressed)
 
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 	cl->DoSend(sizeof(packet), &packet);
-	
 }
 
 void PacketManager::SendLoadEnd(int c_id, int p_id)
@@ -558,6 +558,17 @@ void PacketManager::CreateDBThread()
 	db_thread = std::thread([this]() {DBThread(); });
 }
 
+void PacketManager::SendLoginFailPacket(int c_id, int reason)
+{
+	sc_packet_login_fail packet;
+	Player* pl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	packet.size = sizeof(packet);
+	packet.type = SC_PACKET_LOGIN_FAIL;
+	packet.reason = reason;
+	pl->DoSend(sizeof(packet), &packet);
+
+}
+
 // �񵿱�� DB�۾��� �����ϴ� Thread
 void PacketManager::DBThread()
 {
@@ -595,7 +606,7 @@ void PacketManager::ProcessDBTask(db_task& dt)
 			if (strcmp(other_pl->GetName(), dt.user_id) == 0)
 			{
 				ret = LOGINFAIL_TYPE::AREADY_SIGHN_IN;
-				//SendLoginFailPacket(dt.obj_id, (int)ret);
+				SendLoginFailPacket(dt.obj_id, (int)ret);
 				return;
 			}
 		}
@@ -621,7 +632,7 @@ void PacketManager::ProcessDBTask(db_task& dt)
 		else
 		{
 			//로그인 실패 패킷보내기
-			//SendLoginFailPacket(dt.obj_id, static_cast<int>(ret));
+			SendLoginFailPacket(dt.obj_id, static_cast<int>(ret));
 		}
 		break;
 	}
@@ -636,7 +647,7 @@ void PacketManager::ProcessDBTask(db_task& dt)
 		}
 		else
 			// 아이디가 있어 회원가입 불가능 패킷 보내기
-			//SendLoginFailPacket(dt.obj_id, 6);
+			SendLoginFailPacket(dt.obj_id, 6);
 		break;
 	}
 	}
@@ -650,10 +661,6 @@ void PacketManager::JoinDBThread()
 void PacketManager::ProcessTimer(HANDLE hiocp)
 {
 }
-
-
-
-
 
 void PacketManager::ProcessSignIn(int c_id, unsigned char* p)
 {

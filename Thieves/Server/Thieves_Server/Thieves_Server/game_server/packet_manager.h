@@ -10,7 +10,7 @@ class DB;
 class RoomManager;
 class MapManager;
 class Lobby;
-
+class RayCasting;
 class PacketManager {
 public:
 	PacketManager();
@@ -56,7 +56,7 @@ public:
 	void SendGameStart(int c_id);
 
 	void SendBullet(int c_id, Vector3);
-
+	void SendLoginFailPacket(int c_id, int reason);
 	void End();
 	void Disconnect(int c_id);
 	bool IsRoomInGame(int room_id);
@@ -75,11 +75,13 @@ private:
 	Lobby* m_Lobby;
 	RoomManager* m_room_manager;
 	DB* m_db;
+	DB* m_db2;
 	MapManager* m_map_manager;
+	RayCasting* m_ray_casting;
 	concurrency::concurrent_queue<db_task>m_db_queue;
 	std::thread db_thread;
 	
-	RayCasting* m_ray_casting;
+
 
 	float	_speed = 700.f;
 
