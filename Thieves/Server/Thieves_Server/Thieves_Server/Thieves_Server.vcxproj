@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClCompile Include="Astar.cpp" />
     <ClCompile Include="CBox.cpp" />
+    <ClCompile Include="collision_checker.cpp" />
     <ClCompile Include="database\db.cpp" />
     <ClCompile Include="Detour\Source\DetourAlloc.cpp" />
     <ClCompile Include="Detour\Source\DetourAssert.cpp" />
@@ -183,9 +184,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Astar.h" />
-    <ClInclude Include="CAstar.h" />
     <ClInclude Include="CBox.h" />
-    <ClInclude Include="CNode.h" />
+    <ClInclude Include="collision_checker.h" />
     <ClInclude Include="database\db.h" />
     <ClInclude Include="define.h" />
     <ClInclude Include="Detour\Include\DetourAlloc.h" />
