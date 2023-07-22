@@ -11,8 +11,10 @@
 #include "object/moveobj_manager.h"
 #include "object/MapManager.h"
 #include "Astar.h"
-using namespace std;
+#include "recast_astar.h"
 
+using namespace std;
+//concurrency::concurrent_priority_queue<timer_event> PacketManager::g_timer_queue = concurrency::concurrent_priority_queue<timer_event>();
 PacketManager::PacketManager()
 {
 	MoveObjManager::GetInst();
@@ -1121,7 +1123,7 @@ void PacketManager::ProcessBullet(int c_id, unsigned char* p)
 	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
 
 	Vector3 start_pos{ packet->p_x, packet->p_y, packet->p_z};
-	Vector3 dir_pos{ packet->d_x, packet->d_y, packet->d_z};
+	Vector3 dir_pos{ packet->d_x*100, packet->d_y*100, packet->d_z*100};
 	
 	//m_ray_casting->Shoot(bullet  시작 pos, bullet  방향벡터 );
 // -> Vector 총알과 충돌하거나 마지막 bulletpoint 좌표 리턴

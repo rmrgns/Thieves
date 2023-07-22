@@ -80,11 +80,13 @@
     <ClCompile Include="game_server\packet_manager.cpp">
       <Filter>packet_manager</Filter>
     </ClCompile>
+    <ClCompile Include="collision_checker.cpp" />
+    <ClCompile Include="recast_astar.cpp">
+      <Filter>astar</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CAstar.h" />
     <ClInclude Include="CBox.h" />
-    <ClInclude Include="CNode.h" />
     <ClInclude Include="database\db.h" />
     <ClInclude Include="game_server\ingame_server.h" />
     <ClInclude Include="iocp_server\iocp_server.h" />
@@ -155,6 +157,10 @@
     </ClInclude>
     <ClInclude Include="game_server\packet_manager.h">
       <Filter>packet_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="collision_checker.h" />
+    <ClInclude Include="recast_astar.h">
+      <Filter>astar</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -51,7 +51,6 @@ Vector3 RayCasting::Shoot(Vector3 RayPos, Vector3 RayDir)
 		Raytemp.center[2] = Raytemp.center[2] + RayDir.z;
 	}	
 
-
 	collisionPoint.x = Raytemp.center[0];
 	collisionPoint.y = Raytemp.center[1];
 	collisionPoint.z = Raytemp.center[2];

@@ -179,6 +179,7 @@
     <ClCompile Include="Recast\Source\RecastMeshDetail.cpp" />
     <ClCompile Include="Recast\Source\RecastRasterization.cpp" />
     <ClCompile Include="Recast\Source\RecastRegion.cpp" />
+    <ClCompile Include="recast_astar.cpp" />
     <ClCompile Include="room\room.cpp" />
     <ClCompile Include="room\room_manager.cpp" />
   </ItemGroup>
@@ -213,6 +214,7 @@
     <ClInclude Include="Recast\Include\Recast.h" />
     <ClInclude Include="Recast\Include\RecastAlloc.h" />
     <ClInclude Include="Recast\Include\RecastAssert.h" />
+    <ClInclude Include="recast_astar.h" />
     <ClInclude Include="room\room.h" />
     <ClInclude Include="room\room_manager.h" />
     <ClInclude Include="state.h" />
