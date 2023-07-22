@@ -45,6 +45,10 @@ void ThievesPacketManager::Init()
 	RegisterRecvFunction(SC_PACKET_ERROR, [this](int c_id, unsigned char* p) {ProcessError(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_GAME_START, [this](int c_id, unsigned char* p) {ProcessGameStart(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_ALL_PLAYER_LOAD_END, [this](int c_id, unsigned char* p) {ProcessAllPlayerLoadend(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_PHASE, [this](int c_id, unsigned char* p) {ProcessPhaseChange(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_ATTACK, [this](int c_id, unsigned char* p) {ProcessAttack(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_STUN, [this](int c_id, unsigned char* p) {ProcessHit(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_GET_ITEM, [this](int c_id, unsigned char* p) {ProcessGetItem(c_id, p); });
 }
 
 void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
@@ -388,6 +392,29 @@ void ThievesPacketManager::ProcessGameStart(int c_id, unsigned char* p)
 
 	GET_SINGLE(SceneManager)->SetCheckChangeScene(true);
 	GEngine->SetChangeScene(L"Game");
+}
+
+void ThievesPacketManager::ProcessPhaseChange(int c_id, unsigned char* p)
+{
+	sc_packet_phase_change* packet = reinterpret_cast<sc_packet_phase_change*>(p);
+
+	//페이즈 변경 시 여러가지 해야함.
+}
+
+void ThievesPacketManager::ProcessAttack(int c_id, unsigned char* p)
+{
+	sc_packet_attack* packet = reinterpret_cast<sc_packet_attack*>(p);
+}
+
+void ThievesPacketManager::ProcessHit(int c_id, unsigned char* p)
+{
+	sc_packet_stun* packet = reinterpret_cast<sc_packet_stun*>(p);
+}
+
+void ThievesPacketManager::ProcessGetItem(int c_id, unsigned char* p)
+{
+	sc_packet_get_item* packet = reinterpret_cast<sc_packet_get_item*>(p);
+
 }
 
 

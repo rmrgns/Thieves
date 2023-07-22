@@ -35,7 +35,12 @@ constexpr int ERROR_PLAYER_NOT_READY = 4;
 
 //---------
 
+constexpr int ITEM_NUM_DIAMOND = 0;
+constexpr int ITEM_NUM_GUN = 1;
+constexpr int ITEM_NUM_TRAP = 2;
+constexpr int ITEM_NUM_MAP = 3;
 
+//---------
 // CS
 constexpr char CS_PACKET_SIGN_IN = 1;			// ·Î±×ÀÎ
 constexpr char CS_PACKET_SIGN_UP = 2;			// °¡ÀÔ
@@ -101,6 +106,8 @@ constexpr char SC_PACKET_OBJ_INFO_END = 35; // OBJ_INFOµµ ½ÃÀÛÇÏ±â Àü¿¡ º¸³»¾ß Ç
 //constexpr char SC_PACKET_PHASE_CHANGE = 36; // ÆäÀÌÁî°¡ ¹Ù²î¾ú´Ù´Â °É ¸ğµÎ¿¡°Ôµµ ¾Ë·Á¾ß ÇÔ --> ÆäÀÌÁî ÆĞÅ¶À¸·Î ¾î¶»°Ô ÇÏ¸é µÉµí
 constexpr char SC_PACKET_ITEM_USE = 36; // ¾ÆÀÌÅÛÀÌ »ç¿ë µÇ¾ú´Ù´Â °É ¸ğµÎ¿¡°Ôµµ ¾Ë·Á¾ß ÇÔ. ¹°·Ğ, ÀÌ°Ç ¾ÆÀÌÅÛ¿¡ ¸Â¾Ò´Ù °°Àº °ÍÀº HIT·Î °°ÀÌ º¸³»ÁÖ¸é µÉµí
 constexpr char SC_PACKET_STUN_END = 37; // ½ºÅÏÀÌ ³¡³ª´Â °Íµµ ¾Ë·Á Áà¾ßÁö ÀÌ°Í¾Æ
+constexpr char SC_PACKET_ATTACK = 38; // ¾Æ´Ï °ø°İÇß´Ù´Â°É ¾Ë·ÁÁà¾ß ÇÏ´Ï±î ´ç¿¬È÷ ÀÖ¾î¾ßÁö
+constexpr char SC_PACKET_GET_ITEM = 39;
 
 //#pragma pack (push, 1)
 
@@ -437,4 +444,16 @@ struct sc_packet_item_use {
 struct sc_packet_stun_end {
 	unsigned char size;
 	char type;
+};
+
+struct sc_packet_attack {
+	unsigned char size;
+	char type;
+	int player;
+};
+
+struct sc_packet_get_item {
+	unsigned char size;
+	char type;
+	int itemNum;
 };

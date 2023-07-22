@@ -894,6 +894,7 @@ void PacketManager::ProcessGetItem(int c_id, unsigned char* p)
 	case ITEM_NUM_GUN:
 		if (player->GetItem() == -1) {
 			player->SetItem(ITEM_NUM_GUN);
+			// send 처리
 		}
 		break;
 	case ITEM_NUM_TRAP:

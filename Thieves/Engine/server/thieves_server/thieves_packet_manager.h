@@ -33,6 +33,11 @@ public:
 	void ProcessAllPlayerLoadend(int c_id, unsigned char* p);
 	void ProcessError(int c_id, unsigned char* p);
 	void ProcessGameStart(int c_id, unsigned char* p);
+	void ProcessPhaseChange(int c_id, unsigned char* p);
+	void ProcessAttack(int c_id, unsigned char* p);
+	void ProcessHit(int c_id, unsigned char* p);
+	void ProcessGetItem(int c_id, unsigned char* p);
+
 
 	// 추가필요
 	void Reset();
