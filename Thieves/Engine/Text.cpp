@@ -18,21 +18,12 @@ void Text::Init()
 
 void Text::Update()
 {
+	float width = static_cast<float>(GEngine->GetWindow().width);
+	float height = static_cast<float>(GEngine->GetWindow().height);
 
 	// 텍스트 출력
 	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOGIN)
 	{
-		SetTextInfo(TEXT_FORMAT::DEFALUT);
-		wstring text2 = L"Thieves Login Screen";
-		SetText(text2, 0.f, 10.f, 1.f, 1.f);
-
-		SetTextInfo(TEXT_FORMAT::LOGIN);
-		wstring text3 = L"Thieves Login Screen2";
-		SetText(text3, 0.f, 100.f, 1.f, 1.f);
-
-		SetTextInfo(TEXT_FORMAT::LOGIN);
-		wstring text4 = L"PassWord";
-		SetText(text4, 100.f, 200.f, 1.f, 1.f);
 		/*SetTextInfo(TEXT_FORMAT::LOGIN);
 		wstring text = L"Thieves ID";
 		SetText(text, 500.f, 400.f, 1.f, 1.f);
@@ -53,7 +44,7 @@ void Text::Update()
 		wstring text2 = L"x:" + to_wstring(int(pos.x)) + L" y:" + to_wstring(int(pos.y)) + L" z:" + to_wstring(int(pos.z));
 		SetText(text2, 0.f, 0.f, 1.f, 1.f);*/
 
-		if (GEngine->GetThievesPacketManager()->GetRecv()) {
+		/*if (GEngine->GetThievesPacketManager()->GetRecv()) {
 			SetTextInfo(TEXT_FORMAT::DEFALUT);
 			wstring text5 = L"TRUE";
 			SetText(text5, 0.f, 0.f, 1.f, 1.f);
@@ -62,14 +53,14 @@ void Text::Update()
 			SetTextInfo(TEXT_FORMAT::DEFALUT);
 			wstring text6 = L"FALSE";
 			SetText(text6, 0.f, 0.f, 1.f, 1.f);
-		}
+		}*/
 	}
 	else if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOBBY)
 	{
-		SetTextInfo(TEXT_FORMAT::DEFALUT);
+		/*SetTextInfo(TEXT_FORMAT::DEFALUT);
 		wstring text7 = L"This Is LOBBY!";
 		SetText(text7, 0.f, 10.f, 1.f, 1.f);
-		
+		*/
 		shared_ptr<LobbyScene> lScene = static_pointer_cast<LobbyScene>(GET_SINGLE(SceneManager)->GetActiveScene());
 
 		SetTextInfo(TEXT_FORMAT::INROOM);
@@ -94,13 +85,13 @@ void Text::Update()
 
 			if (count % 2 == 0)
 			{
-				SetText(tempText, 500.f, 200.f + 70.f * count, 1.f, 1.f);
-				SetText(tempText2, 800.f, 240.f + 70.f * count, 1.f, 1.f);
+				SetText(tempText, width * 360.f / 1600.f, height * (145.f + 90.f * count) / 900.f, 1.f, 1.f);
+				SetText(tempText2, width * 790.f / 1600.f, height * (190.f + 90.f * count) / 900.f, 1.f, 1.f);
 			}
 			else
 			{
-				SetText(tempText, 940.f, 200.f + 70.f * (count - 1), 1.f, 1.f);
-				SetText(tempText2, 1240.f, 240.f + 70.f * (count - 1), 1.f, 1.f);
+				SetText(tempText, width * 995.f / 1600.f, height * (145.f + 90.f * (count - 1)) / 900.f, 1.f, 1.f);
+				SetText(tempText2, width * 1425.f / 1600.f, height * (190.f + 90.f * (count - 1)) / 900.f , 1.f, 1.f);
 			}
 			count += 1;
 		}
@@ -124,18 +115,18 @@ void Text::Update()
 				if (data.second.id == rScene->GetRoomMasterId())
 				{
 					wstring masterText = L"Master";
-					SetText(masterText, 500.f, 200.f + 70.f * count, 1.f, 1.f);
+					SetText(masterText, width * 360.f / 1600.f, height* (145.f + 90.f * count) / 900.f, 1.f, 1.f);
 				}
 				else {
 					wstring tempText = L"";
 					tempText.append(data.second.name);
-					SetText(tempText, 500.f, 200.f + 70.f * count, 1.f, 1.f);
+					SetText(tempText, width * 360.f / 1600.f, height * (145.f + 90.f * count) / 900.f, 1.f, 1.f);
 				}
 				wstring tempText2 = L"";
 
 				if (data.second.isReady) {
 					tempText2.append(L"Ready!");
-					SetText(tempText2, 750.f, 240.f + 70.f * count, 1.f, 1.f);
+					SetText(tempText2, width * 740.f / 1600.f, height* (190.f + 90.f * count) / 900.f, 1.f, 1.f);
 				}
 			}
 			else
@@ -143,17 +134,17 @@ void Text::Update()
 				if (data.second.id == rScene->GetRoomMasterId())
 				{
 					wstring masterText = L"Master";
-					SetText(masterText, 500.f, 200.f + 70.f * (count - 1), 1.f, 1.f);
+					SetText(masterText, width * 995.f / 1600.f, height* (145.f + 90.f * (count - 1)) / 900.f, 1.f, 1.f);
 				}
 				wstring tempText = L"";
 				tempText.append(data.second.name);
-				SetText(tempText, 500.f, 200.f + 70.f * (count - 1), 1.f, 1.f);
-
+				SetText(tempText, width * 995.f / 1600.f, height * (145.f + 90.f * (count - 1)) / 900.f, 1.f, 1.f);
+				
 				wstring tempText2 = L"";
 
 				if (data.second.isReady) {
 					tempText2.append(L"Ready!");
-					SetText(tempText2, 750.f, 240.f + 70.f * (count - 1), 1.f, 1.f);
+					SetText(tempText2, width * 1375.f / 1600.f, height* (190.f + 90.f * (count - 1)) / 900.f, 1.f, 1.f);
 				}
 			}
 			count += 1;
@@ -162,7 +153,7 @@ void Text::Update()
 	else if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOADING)
 	{
 		SetTextInfo(TEXT_FORMAT::LOADING);
-		SetText(GET_SINGLE(SceneManager)->GetLoadText(), 0.f, 0.f, 1.f, 1.f);
+		SetText(GET_SINGLE(SceneManager)->GetLoadText(), width / 2.f, height / 2.f, 1.f, 1.f);
 	}
 } 
 
@@ -259,6 +250,8 @@ void Text::Render2D()
 
 void Text::SetTextInfo(TEXT_FORMAT infoNumber)
 {
+	float width = static_cast<float>(GEngine->GetWindow().width);
+
 	switch (infoNumber)
 	{
 	case TEXT_FORMAT::LOGIN:
@@ -268,7 +261,7 @@ void Text::SetTextInfo(TEXT_FORMAT infoNumber)
 		// 텍스트 폰트 등
 		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"상주경천섬체", nullptr,
 			DWRITE_FONT_WEIGHT_SEMI_BOLD, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL,
-			50, L"en-us", _writeTextFormat.GetAddressOf()));
+			width * 25.f / 1600.f, L"en-us", _writeTextFormat.GetAddressOf()));
 
 		//_writeTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 		//_writeTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
@@ -280,7 +273,7 @@ void Text::SetTextInfo(TEXT_FORMAT infoNumber)
 		// 텍스트 폰트 등
 		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"상주경천섬체", nullptr,
 			DWRITE_FONT_WEIGHT_SEMI_BOLD, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL,
-			50, L"en-us", _writeTextFormat.GetAddressOf()));
+			width * 25.f / 1600.f, L"en-us", _writeTextFormat.GetAddressOf()));
 
 		break;
 	case TEXT_FORMAT::LOADING:
@@ -290,7 +283,7 @@ void Text::SetTextInfo(TEXT_FORMAT infoNumber)
 		// 텍스트 폰트 등
 		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"상주경천섬체", nullptr,
 			DWRITE_FONT_WEIGHT_SEMI_BOLD, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL,
-			25, L"en-us", _writeTextFormat.GetAddressOf()));
+			width * 25.f / 1600.f, L"en-us", _writeTextFormat.GetAddressOf()));
 		break;
 	case TEXT_FORMAT::INROOM:
 		// 텍스트 색깔
@@ -299,7 +292,7 @@ void Text::SetTextInfo(TEXT_FORMAT infoNumber)
 		// 텍스트 폰트 등
 		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"상주경천섬체", nullptr,
 			DWRITE_FONT_WEIGHT_SEMI_BOLD, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL,
-			25, L"en-us", _writeTextFormat.GetAddressOf()));
+			width * 25.f / 1600.f, L"en-us", _writeTextFormat.GetAddressOf()));
 		break;
 	default:
 		break;
