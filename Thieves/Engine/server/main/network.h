@@ -98,7 +98,9 @@ public:
 	void SendLogOut();
 	void SendRequestRoomsData();
 	void SendRequestInRoomData();
+
 	void SendBullet(Vec3, Vec3);
+	void SendAttackPacket();
 
 	void SendPacket();
 	
@@ -116,7 +118,7 @@ private:
 
 	client_fw::UPtr<ThievesPacketManager>m_packet_manager;
 	client_fw::UPtr<ThievesSendManager>m_send_manager;
-	// ÀÌÀü ÀÌµ¿ ÆÐÅ¶ÀÌ Àü¼ÛµÈ ½ÃÁ¡À» ÀúÀåÇÏ´Â º¯¼ö
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½ï¿½Å¶ï¿½ï¿½ ï¿½ï¿½ï¿½Ûµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½
 	std::chrono::system_clock::time_point m_move_time;
 
 };

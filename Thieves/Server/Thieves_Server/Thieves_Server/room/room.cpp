@@ -52,11 +52,11 @@ void Room::LeaveRoom(int c_id)
 	
 	if (m_obj_list.contains(c_id))
 	{
-		m_obj_list.erase(c_id);	
 		Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 		if (cl->GetState() == STATE::ST_INROOMREDDY) {
 			PlayerCancleReady(c_id);
 		}
+		m_obj_list.erase(c_id);	
 	}
 
 

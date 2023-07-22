@@ -12,6 +12,9 @@
 #include "object/MapManager.h"
 #include "Astar.h"
 #include "recast_astar.h"
+#include "EVENT.h"
+#include "Timer.h"
+
 
 using namespace std;
 //concurrency::concurrent_priority_queue<timer_event> PacketManager::g_timer_queue = concurrency::concurrent_priority_queue<timer_event>();
@@ -23,6 +26,7 @@ PacketManager::PacketManager()
 	m_map_manager = new MapManager;
 	m_db = new DB;
 	m_db2 = new DB;
+	m_Timer = new Timer;
 
 }
 
@@ -106,8 +110,22 @@ void PacketManager::ProcessPacket(int c_id, unsigned char* p)
 		ProcessRoomsDataInRoom(c_id, p);
 		break;
 	}
+
 	case CS_PACKET_BULLET: {
 		ProcessBullet(c_id, p);
+		break;
+	}
+
+	case CS_PACKET_STEEL_DIAMOND: {
+		ProcessChangePhase(c_id, p);
+		break;
+	}
+	case CS_PACKET_GET_ITEM: {
+		ProcessGetItem(c_id, p);
+		break;
+	}
+	case CS_PACKET_USE_ITEM: {
+		ProcessUseItem(c_id, p);
 		break;
 	}
 	case CS_PACKET_TEST: {
@@ -169,6 +187,38 @@ void PacketManager::ProcessRecv(int c_id , EXP_OVER* exp_over, DWORD num_bytes)
 	if (remain_data == 0)cl->m_prev_size = 0;
 	cl->DoRecv();
 }
+
+void PacketManager::ProcessStunEnd(int c_id)
+{
+	Player* pl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	pl->SetAttacked(false);
+}
+
+//void PacketManager::UpdateObjMove()
+//{
+//	for (int i = 0; i < MAX_USER; ++i)
+//	{
+//		for (int j = 0; j <= NPC_ID_END; ++j) {
+//			//���Ŀ� ���� �߰�
+//			if (i != j)
+//				SendMovePacket(i, j);
+//		}
+//	}
+//	SetTimerEvent(0, 0, EVENT_TYPE::EVENT_PLAYER_MOVE, 10);
+//}
+
+//void PacketManager::UpdateObjMove()//�ϴ� ����
+//{
+//	for (int i = 0; i < MAX_USER; ++i)
+//	{
+//		for (int j = 0; j <= NPC_ID_END; ++j) {
+//			//���Ŀ� ���� �߰�
+//			if (i != j)
+//				SendMovePacket(i, j);
+//		}
+//	}
+//	SetTimerEvent(0, 0, EVENT_TYPE::EVENT_PLAYER_MOVE, 10);
+//}
 
 void PacketManager::SendMovePacket(int c_id, int mover)
 {
@@ -278,7 +328,12 @@ void PacketManager::SendTime(int c_id, float round_time)
 
 void PacketManager::SendAttackPacket(int c_id, int room_id)
 {
+	cs_packet_attack packet;
+	packet.type = CS_PACKET_ATTACK;
+	packet.size = sizeof(packet);
 
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
 }
 
 void PacketManager::SendGameWin(int c_id)
@@ -291,11 +346,23 @@ void PacketManager::SendGameDefeat(int c_id)
 
 void PacketManager::SendStun(int c_id, int obj_id)
 {
+	sc_packet_stun packet;
+	packet.type = SC_PACKET_STUN;
+	packet.size = sizeof(packet);
 
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
 }
 
-void PacketManager::SendPhasePacket(int c_id, int curr_phase)
+void PacketManager::SendPhasePacket(int c_id)
 {
+
+	sc_packet_phase_change packet;
+	packet.type = SC_PACKET_PHASE;
+	packet.size = sizeof(packet);
+
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
 
 }
 
@@ -662,6 +729,41 @@ void PacketManager::JoinDBThread()
 
 void PacketManager::ProcessTimer(HANDLE hiocp)
 {
+	while (true) {
+		m_Timer->timerLock.lock();
+
+		if (m_Timer->timerQ.empty()) {
+			m_Timer->timerLock.unlock();
+			this_thread::sleep_for(10ms);
+			continue;
+		}
+
+		auto tEvent = m_Timer->timerQ.top();
+
+		if (tEvent.GetExecTime() > chrono::system_clock::now()) {
+			m_Timer->timerLock.unlock();
+			this_thread::sleep_for(10ms);
+			continue;
+		}
+
+		m_Timer->timerQ.pop();
+
+		m_Timer->timerLock.unlock();
+
+		EXP_OVER* exover = new EXP_OVER;
+
+		if (tEvent.GetEventType() == EV_MOVE) {
+			exover->_comp_op = COMP_OP::OP_NPC_MOVE;
+		}
+		else if (tEvent.GetEventType() == EV_STUN_END) {
+			exover->_comp_op = COMP_OP::OP_STUN_END;
+		}
+
+		Player* pl = MoveObjManager::GetInst()->GetPlayer(tEvent.GetObjId());
+		exover->room_id = pl->GetRoomID();
+		PostQueuedCompletionStatus(hiocp, 1, tEvent.GetObjId(), &exover->_wsa_over);
+
+	}
 }
 
 void PacketManager::ProcessSignIn(int c_id, unsigned char* p)
@@ -689,6 +791,35 @@ void PacketManager::ProcessSignUp(int c_id, unsigned char* p)
 
 void PacketManager::ProcessAttack(int c_id, unsigned char* p)
 {
+	cs_packet_attack* packet = reinterpret_cast<cs_packet_attack*>(p);
+	
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+
+	Vector3 AttackPos = cl->GetPos();
+	AttackPos.x += cl->GetRotX() * 100.f;
+	AttackPos.z += cl->GetRotZ() * 100.f;
+
+	Room* clRoom = m_room_manager->GetRoom(cl->GetRoomID());
+
+	for (int pl : clRoom->GetObjList()) {
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+
+		Player* cpl = MoveObjManager::GetInst()->GetPlayer(pl);
+
+		if (cpl->GetPos().Dist(cl->GetPos()) > 300.f) {
+			Hit(c_id, pl);
+		}
+
+	}
+
+
+}
+
+void PacketManager::Hit(int c_id, int p_id) { //c_id가 p_id를 공격하여 맞추었음.
+	Player* pl = MoveObjManager::GetInst()->GetPlayer(p_id);
+	pl->SetAttacked(true);
+	
+	m_Timer->AddTimer(p_id, std::chrono::system_clock::now() + 3s, EV_STUN_END);
 }
 
 void PacketManager::ProcessMove(int c_id, unsigned char* p)
@@ -696,6 +827,10 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 	cs_packet_move* packet = reinterpret_cast<cs_packet_move*>(p);
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 	
+	if (cl->GetAttacked()) {
+		return;
+	}
+
 	Vector3 oldPos = cl->GetPos();
 	
 	if ((packet->direction & 8) == 8)
@@ -857,6 +992,13 @@ void PacketManager::ProcessGameStart(int c_id, unsigned char* p)
 		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
 		Player* cpl = MoveObjManager::GetInst()->GetPlayer(pl);
 
+		/*
+		player->state_lock.lock();
+		player->SetState(STATE::ST_INGAME);
+		player->SetIsActive(true);
+		player->state_lock.unlock();
+		*/
+
 		cpl->state_lock.lock();
 		cpl->SetState(STATE::ST_INGAME);
 		cpl->SetIsActive(true);
@@ -865,6 +1007,108 @@ void PacketManager::ProcessGameStart(int c_id, unsigned char* p)
 
 	StartGame(room->GetRoomID());
 }
+
+
+void PacketManager::ProcessChangePhase(int c_id, unsigned char* p)
+{
+	cs_packet_steel_diamond* packet = reinterpret_cast<cs_packet_steel_diamond*>(p);
+	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
+
+	if (player->GetRoomID() == -1) return;
+	Room* room = m_room_manager->GetRoom(player->GetRoomID());
+
+	if (room->GetRound() != 0) return;
+
+	for (int pl : room->GetObjList()) {
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+		Player* cpl = MoveObjManager::GetInst()->GetPlayer(pl);
+		
+		SendPhasePacket(pl);
+	}
+}
+
+void PacketManager::ProcessGetItem(int c_id, unsigned char* p)
+{
+	cs_packet_get_item* packet = reinterpret_cast<cs_packet_get_item*>(p);
+	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
+
+
+
+	Room* room = m_room_manager->GetRoom(player->GetRoomID());
+
+	switch (packet->itemNum) {
+	case ITEM_NUM_DIAMOND:
+		if (room->GetRound() == 0) {
+			// 페이즈 변경
+			ChangePhase(c_id);
+			player->SetHasDiamond(true);
+		}
+		break;
+	case ITEM_NUM_GUN:
+		if (player->GetItem() == -1) {
+			player->SetItem(ITEM_NUM_GUN);
+			// send 처리
+		}
+		break;
+	case ITEM_NUM_TRAP:
+		if (player->GetItem() == -1) {
+			player->SetItem(ITEM_NUM_TRAP);
+		}
+		break;
+	case ITEM_NUM_MAP:
+		if (player->GetItem() == -1) {
+			player->SetItem(ITEM_NUM_MAP);
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+void PacketManager::ProcessUseItem(int c_id, unsigned char* p)
+{
+	cs_packet_use_item* packet = reinterpret_cast<cs_packet_use_item*>(p);
+	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
+
+	Room* room = m_room_manager->GetRoom(player->GetRoomID());
+
+	switch (packet->itemNum) {
+	case ITEM_NUM_GUN:
+		if (player->GetItem() == ITEM_NUM_GUN) {
+			player->SetItem(-1);
+			// 총 쓴 처리를 해줘야 함
+		}
+		break;
+	case ITEM_NUM_TRAP:
+		if (player->GetItem() == ITEM_NUM_TRAP) {
+			player->SetItem(-1);
+			// 덫을 쓴 처리를 해줘야 함
+		}
+		break;
+	case ITEM_NUM_MAP:
+		break;
+	default:
+		break;
+	}
+}
+
+void PacketManager::ChangePhase(int c_id)
+{
+	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
+
+	if (player->GetRoomID() == -1) return;
+	Room* room = m_room_manager->GetRoom(player->GetRoomID());
+
+	if (room->GetRound() != 0) return;
+
+	for (int pl : room->GetObjList()) {
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+		Player* cpl = MoveObjManager::GetInst()->GetPlayer(pl);
+
+		SendPhasePacket(pl);
+	}
+}
+
 
 void PacketManager::ProcessLoadProgressing(int c_id, unsigned char* p)
 {

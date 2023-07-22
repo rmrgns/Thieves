@@ -7,16 +7,17 @@ const int MAX_THREAD = 8;
 
 int main() {
 	setlocale(LC_ALL, "korean");
-	wcout.imbue(locale("korean")); 
+
+	wcout.imbue(locale("korean"));
 	InGameServer server;
 	server.Init(MAX_THREAD);
-	cout << "ÃÊ±âÈ­ ¿Ï·á" << endl;
+	cout << "ï¿½Ê±ï¿½È­ ï¿½Ï·ï¿½" << endl;
 
 	server.BindListen(SERVER_PORT);
-	cout << "¹ÙÀÎµå ¸®½¼ Áß" << endl;
+	cout << "ï¿½ï¿½ï¿½Îµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½" << endl;
 
 	server.Run();
-	cout << "µ¿ÀÛ ³¡" << endl;
+	cout << "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½" << endl;
 	server.End();
 
 	return 0;

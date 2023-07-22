@@ -4,11 +4,17 @@
     <ClCompile Include="CBox.cpp" />
     <ClCompile Include="database\db.cpp" />
     <ClCompile Include="game_server\ingame_server.cpp" />
+    <ClCompile Include="Astar.cpp" />
+    <ClCompile Include="CBox.cpp" />
+    <ClCompile Include="database\db.cpp" />
+    <ClCompile Include="game_server\ingame_server.cpp" />
+    <ClCompile Include="game_server\packet_manager.cpp" />
     <ClCompile Include="iocp_server\iocp_server.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="map_object.cpp" />
     <ClCompile Include="object\MapManager.cpp" />
     <ClCompile Include="object\moveobj_manager.cpp" />
+    <ClCompile Include="object\move_object\enemy.cpp" />
     <ClCompile Include="object\move_object\player.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Lobby.cpp" />
@@ -89,10 +95,23 @@
     <ClInclude Include="CBox.h" />
     <ClInclude Include="database\db.h" />
     <ClInclude Include="game_server\ingame_server.h" />
+    <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="EVENT.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Astar.h" />
+    <ClInclude Include="CAstar.h" />
+    <ClInclude Include="CBox.h" />
+    <ClInclude Include="CNode.h" />
+    <ClInclude Include="database\db.h" />
+    <ClInclude Include="define.h" />
+    <ClInclude Include="game_server\ingame_server.h" />
+    <ClInclude Include="game_server\packet_manager.h" />
     <ClInclude Include="iocp_server\iocp_server.h" />
     <ClInclude Include="map_object.h" />
     <ClInclude Include="object\MapManager.h" />
     <ClInclude Include="object\moveobj_manager.h" />
+    <ClInclude Include="object\move_object\enemy.h" />
     <ClInclude Include="object\move_object\move_object.h" />
     <ClInclude Include="object\move_object\player.h" />
     <ClInclude Include="object\object.h" />
@@ -162,6 +181,10 @@
     <ClInclude Include="recast_astar.h">
       <Filter>astar</Filter>
     </ClInclude>
+    <ClInclude Include="header.h" />
+    <ClInclude Include="protocol.h" />
+    <ClInclude Include="Timer.h" />
+    <ClInclude Include="EVENT.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ray">

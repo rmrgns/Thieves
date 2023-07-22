@@ -1,9 +1,11 @@
 #pragma once
 #include "define.h"
-#include<concurrent_queue.h>
+#include <concurrent_queue.h>
 #include <thread>
 #include "CBox.h"
 #include "ray/ray_casting.h"
+#include "Timer.h"
+
 
 class MoveObjManager;
 class DB;
@@ -20,6 +22,7 @@ public:
 	void ProcessPacket(int c_id, unsigned char* p);
 	void ProcessAccept(HANDLE, SOCKET&, EXP_OVER*);
 	void ProcessRecv(int, EXP_OVER*, DWORD);	
+	void ProcessStunEnd(int c_id);
 	void SendMovePacket(int c_id, int mover);
 	
 	void SendLoginFailPacket(SOCKET&, int reason);
@@ -34,7 +37,7 @@ public:
 	void SendGameWin(int c_id);
 	void SendGameDefeat(int c_id);
 	void SendStun(int c_id, int obj_id);
-	void SendPhasePacket(int c_id, int curr_phase);
+	void SendPhasePacket(int c_id);
 
 	void SendLoadProgress(int c_id, int p_id, int progressed);
 
@@ -82,19 +85,22 @@ private:
 	RayCasting* m_ray_casting;
 	concurrency::concurrent_queue<db_task>m_db_queue;
 	std::thread db_thread;
-	
-
-
+	Timer* m_Timer;
 	float	_speed = 700.f;
 
 
 	void ProcessSignIn(int c_id, unsigned char* p);
 	void ProcessSignUp(int c_id, unsigned char* p);
 	void ProcessAttack(int c_id, unsigned char* p);
+	void Hit(int c_id, int p_id);
 	void ProcessMove(int c_id, unsigned char* p);
 	void ProcessMatching(int c_id, unsigned char* p);
 	void ProcessHit(int c_id, unsigned char* p);
 	void ProcessGameStart(int c_id, unsigned char* p);
+	void ProcessChangePhase(int c_id, unsigned char* p);
+	void ProcessGetItem(int c_id, unsigned char* p);
+	void ProcessUseItem(int c_id, unsigned char* p);
+	void ChangePhase(int c_id);
 
 	void ProcessLoadProgressing(int c_id, unsigned char* p);
 	void ProcessLoadEnd(int c_id, unsigned char* p);

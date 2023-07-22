@@ -33,6 +33,10 @@ private:
     // 인게임 로딩 중 활용할 데이터
     int m_loadProgressed = 0;
 
+    // 인게임에서 한대 맞았을 때
+    std::atomic_bool m_is_attacked = false;
+    std::atomic_int m_Item = -1;
+    std::atomic_bool m_has_diamond = false;
 
 public:
 
@@ -52,7 +56,19 @@ public:
 
     int GetLoadProgressed() { return m_loadProgressed; }
  
+    void SetAttacked(bool val) { m_is_attacked = val; }
+
+    int GetAttacked() { return m_is_attacked; }
+     
     char* GetPassword() { return m_password; }
     short GetMatchUserSize() { return m_mach_user_size; }
     void SetMatchUserSize(short val) { m_mach_user_size = val; }
+
+    void SetItem(int val) { m_Item = val; }
+    int GetItem() { return m_Item; };
+    void DropItem() { m_Item = -1; }
+
+    void SetHasDiamond(bool val) { m_has_diamond = val; };
+    bool GetHasDiamond() { return m_has_diamond; };
+
 };
