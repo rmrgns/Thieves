@@ -1,8 +1,9 @@
 #pragma once
 #include "define.h"
-#include<concurrent_queue.h>
+#include <concurrent_queue.h>
 #include <thread>
 #include "CBox.h"
+#include "Timer.h"
 
 class MoveObjManager;
 class DB;
@@ -19,6 +20,7 @@ public:
 	void ProcessPacket(int c_id, unsigned char* p);
 	void ProcessAccept(HANDLE, SOCKET&, EXP_OVER*);
 	void ProcessRecv(int, EXP_OVER*, DWORD);	
+	void ProcessStunEnd(int c_id);
 	void SendMovePacket(int c_id, int mover);
 	
 	void SendLoginFailPacket(SOCKET&, int reason);
@@ -73,7 +75,7 @@ private:
 	MapManager* m_map_manager;
 	concurrency::concurrent_queue<db_task>m_db_queue;
 	std::thread db_thread;
-	
+	Timer* m_Timer;
 	float	_speed = 700.f;
 
 

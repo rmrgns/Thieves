@@ -42,7 +42,13 @@ void InGameServer::OnEvent(int c_id, EXP_OVER* exp_over)
 
 	switch (exp_over->_comp_op)
 	{
-		//case COMP_OP::OP
+	case COMP_OP::OP_NPC_MOVE:
+		break;
+	case COMP_OP::OP_STUN_END:
+		m_PacketManager->ProcessStunEnd(c_id);
+		break;
+	defalut:
+		break;
 	}
 	
 }

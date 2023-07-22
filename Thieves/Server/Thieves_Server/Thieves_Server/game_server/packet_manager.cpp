@@ -10,6 +10,8 @@
 #include "database/db.h"
 #include "object/moveobj_manager.h"
 #include "object/MapManager.h"
+#include "EVENT.h"
+#include "Timer.h"
 
 using namespace std;
 
@@ -20,6 +22,7 @@ PacketManager::PacketManager()
 	m_room_manager = new RoomManager;
 	m_map_manager = new MapManager;
 	m_db = new DB;
+	m_Timer = new Timer;
 
 }
 
@@ -171,6 +174,12 @@ void PacketManager::ProcessRecv(int c_id , EXP_OVER* exp_over, DWORD num_bytes)
 	}
 	if (remain_data == 0)cl->m_prev_size = 0;
 	cl->DoRecv();
+}
+
+void PacketManager::ProcessStunEnd(int c_id)
+{
+	Player* pl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	pl->SetAttacked(false);
 }
 
 //void PacketManager::UpdateObjMove()
@@ -609,6 +618,39 @@ void PacketManager::JoinDBThread()
 
 void PacketManager::ProcessTimer(HANDLE hiocp)
 {
+	while (true) {
+		m_Timer->timerLock.lock();
+
+		if (m_Timer->timerQ.empty()) {
+			m_Timer->timerLock.unlock();
+			this_thread::sleep_for(10ms);
+			continue;
+		}
+
+		auto tEvent = m_Timer->timerQ.top();
+
+		if (tEvent.GetExecTime() > chrono::system_clock::now()) {
+			m_Timer->timerLock.unlock();
+			this_thread::sleep_for(10ms);
+			continue;
+		}
+
+		m_Timer->timerQ.pop();
+
+		m_Timer->timerLock.unlock();
+
+		EXP_OVER* exover = new EXP_OVER;
+
+		if (tEvent.GetEventType() == EV_MOVE) {
+			exover->_comp_op = COMP_OP::OP_NPC_MOVE;
+		}
+		else if (tEvent.GetEventType() == EV_STUN_END) {
+			exover->_comp_op = COMP_OP::OP_STUN_END;
+		}
+
+		PostQueuedCompletionStatus(hiocp, 1, tEvent.GetObjId(), &exover->_wsa_over);
+
+	}
 }
 
 
@@ -665,7 +707,10 @@ void PacketManager::ProcessAttack(int c_id, unsigned char* p)
 }
 
 void PacketManager::Hit(int c_id, int p_id) { //c_id가 p_id를 공격하여 맞추었음.
-	//타이머 이벤트로 스턴 시간을 등록하여야 함.
+	Player* pl = MoveObjManager::GetInst()->GetPlayer(p_id);
+	pl->SetAttacked(true);
+	
+	m_Timer->AddTimer(p_id, std::chrono::system_clock::now() + 3s, EV_STUN_END);
 }
 
 void PacketManager::ProcessMove(int c_id, unsigned char* p)
@@ -674,6 +719,10 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 	cs_packet_move* packet = reinterpret_cast<cs_packet_move*>(p);
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 	
+	if (cl->GetAttacked()) {
+		return;
+	}
+
 	Vector3 oldPos = cl->GetPos();
 	
 	if ((packet->direction & 8) == 8)

@@ -8,11 +8,8 @@ enum class COMP_OP {
 	OP_RECV,
 	OP_SEND,
 	OP_ACCEPT,
-//	OP_POLICE_SPAWN,
-//	OP_POLICE_MOVE,
-//	OP_POLICE_ATTACK,
-//	OP_PLAYER_MOVE,
-//	OP_PLAYER_ATTACK
+	OP_STUN_END,
+	OP_NPC_MOVE,
 	
 };
 
@@ -85,4 +82,9 @@ enum class PL_ACTION_TYPE {
 	MOVE,
 	JUMP,
 	ATTACK
+};
+
+enum EVENT_TYPE {
+	EV_STUN_END,
+	EV_MOVE
 };
