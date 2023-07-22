@@ -682,6 +682,16 @@ void Resources::CreateDefaultMaterial()
 		Add<Material>(L"LoginScreenButton", material);
 	}
 
+	// Back Button Image
+	{
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Forward");
+		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"BackButton", L"..\\Resources\\Texture\\Thieves_UI\\BackButton.png");
+		shared_ptr<Material> material = make_shared<Material>();
+		material->SetShader(shader);
+		material->SetTexture(0, texture);
+		Add<Material>(L"BackButton", material);
+	}
+
 	// LobbyScreen
 	{
 		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Forward");

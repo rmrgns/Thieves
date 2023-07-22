@@ -69,9 +69,12 @@ void LoginScript::ClickLoginButton()
 	GetCursorPos(&point);
 	ScreenToClient(GEngine->GetWindow().hwnd, &point);
 
-	if (point.x > 795 && point.x < 1215)
+	float width = static_cast<float>(GEngine->GetWindow().width);
+	float height = static_cast<float>(GEngine->GetWindow().height);
+	
+	if (point.x > width * 39 / 80 && point.x < width * 59 / 80)
 	{
-		if (point.y > 540 && point.y < 630)
+		if (point.y > height * 405 / 640 && point.y < height * 465 / 640)
 		{
 			if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOGIN)
 			{
