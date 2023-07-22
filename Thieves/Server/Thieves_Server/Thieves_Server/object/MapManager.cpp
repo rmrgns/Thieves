@@ -212,13 +212,12 @@ bool MapManager::checkCollisionRay(CBox& ray_temp)
 	for (auto& obj : MapCBox)
 	{
 
-		Vector3 collisionSlidingVector = { 0,0,0 };
 		if ((obj->Intersection2(ray_temp, collisionDirection)))
 		{
 			return TRUE;
 		}
 	}
 
-	return TRUE;
+	return FALSE;
 }
 

@@ -824,7 +824,70 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 		SendMovePacket(other_pl, c_id);
 	}
 }
+void PacketManager::ProcessBullet(int c_id, unsigned char* p)
+{
+	cs_packet_bullet* packet = reinterpret_cast<cs_packet_bullet*>(p);
 
+	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
+
+	Vector3 start_pos{ packet->p_x, packet->p_y, packet->p_z };
+	Vector3 dir_pos{ packet->d_x * 100, packet->d_y * 100, packet->d_z * 100 };
+
+	CBox Raytemp;
+	Vector3 collisionPoint;
+	int MAXRANGE = 100;
+
+	//center
+	Raytemp.center[0] = packet->p_x;
+	Raytemp.center[1] = 100.f;
+	Raytemp.center[2] = packet->p_z;
+
+	//extent
+	Raytemp.extent[0] = 1.f;
+	Raytemp.extent[1] = 1.f;
+	Raytemp.extent[2] = 1.f;
+
+	//right
+	Raytemp.axis[0][0] = 1.f;
+	Raytemp.axis[0][1] = 0.f;
+	Raytemp.axis[0][2] = 0.f;
+
+	//up
+	Raytemp.axis[1][0] = 0.f;
+	Raytemp.axis[1][1] = 1.f;
+	Raytemp.axis[1][2] = 0.f;
+
+	//look
+	Raytemp.axis[2][0] = 0.f;
+	Raytemp.axis[2][1] = 0.f;
+	Raytemp.axis[2][2] = 1.f;
+
+	//translation
+	Raytemp.translation[0] = packet->d_x * 100;
+	Raytemp.translation[1] = packet->d_y * 100;
+	Raytemp.translation[2] = packet->d_z * 100;
+
+	for (int i = 0; i < MAXRANGE; i++)//충알 방향에 따라 xz축 +++
+	{
+
+		if (m_map_manager->checkCollisionRay(Raytemp))
+		{
+			break;
+		}
+		Raytemp.center[0] = Raytemp.center[0] + Raytemp.translation[0];
+		Raytemp.center[1] = Raytemp.center[1] + Raytemp.translation[1];
+		Raytemp.center[2] = Raytemp.center[2] + Raytemp.translation[2];
+	}
+	Vector3 col_pos;
+	col_pos.x = Raytemp.center[0];
+	col_pos.y = Raytemp.center[1];
+	col_pos.z = Raytemp.center[2];
+	//m_ray_casting->Shoot(bullet  시작 pos, bullet  방향벡터 );
+// -> Vector 총알과 충돌하거나 마지막 bulletpoint 좌표 리턴
+//	Vector3 col_pos = m_ray_casting->Shoot(start_pos, dir_pos);
+
+	SendBullet(c_id, col_pos);
+}
 void PacketManager::ProcessMatching(int c_id, unsigned char* p)
 {
 }
@@ -1114,22 +1177,6 @@ void PacketManager::ProcessRoomsDataInRoom(int c_id, unsigned char* p)
 
 void PacketManager::ProcessDamageCheat(int c_id, unsigned char* p)
 {
-}
-
-void PacketManager::ProcessBullet(int c_id, unsigned char* p)
-{
-	cs_packet_bullet* packet = reinterpret_cast<cs_packet_bullet*>(p);
-
-	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
-
-	Vector3 start_pos{ packet->p_x, packet->p_y, packet->p_z};
-	Vector3 dir_pos{ packet->d_x*100, packet->d_y*100, packet->d_z*100};
-	
-	//m_ray_casting->Shoot(bullet  시작 pos, bullet  방향벡터 );
-// -> Vector 총알과 충돌하거나 마지막 bulletpoint 좌표 리턴
-	Vector3 col_pos = m_ray_casting->Shoot(start_pos, dir_pos);
-
-	SendBullet(c_id, col_pos);
 }
 
 void PacketManager::StartGame(int room_id)
