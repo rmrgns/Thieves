@@ -47,7 +47,7 @@ struct timer_event {
 	int obj_id;
 	int room_id;
 	std::chrono::system_clock::time_point	start_time;
-//	EVENT_TYPE ev;
+	//EVENT_TYPE ev;
 	int target_id;
 //구조체에 대한 연산자 오버로딩
 	// start_time 이벤트 발생해야할 시간 저장

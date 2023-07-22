@@ -1,178 +1,201 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="리소스 파일">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="소스 파일\iocp_server">
-      <UniqueIdentifier>{9d5895af-0027-4044-9577-7bfe03456fab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\lua_fucntion">
-      <UniqueIdentifier>{e48cfdc6-5939-4d52-8368-c9eb08740edd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\db">
-      <UniqueIdentifier>{4abb6732-5d64-4c2f-ab70-cd9e26f4bf38}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\packet_manager">
-      <UniqueIdentifier>{3b22e8ac-8753-4a61-b600-89ce72c3b991}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\ingame_server">
-      <UniqueIdentifier>{42b7af90-58bf-448d-ac5c-ac2080bdd7a3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\room">
-      <UniqueIdentifier>{a47666b3-c574-4b26-a91f-46316cb6b242}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\object">
-      <UniqueIdentifier>{d9124090-5e3e-49f5-8dd6-75fdf0e1c043}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\object\move_object">
-      <UniqueIdentifier>{ee5e4619-29b4-4553-a57a-75bbb345c36b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="헤더 파일\utill">
-      <UniqueIdentifier>{ae2ccd3e-3990-4453-b5f7-811863e4ed46}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\object\map_object">
-      <UniqueIdentifier>{da17359a-e99a-4556-a2db-219cc24d9e86}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\Astar">
-      <UniqueIdentifier>{2042cac2-37a2-4f1c-9114-0df6e6fed20a}</UniqueIdentifier>
-    <Filter Include="소스 파일\Robby">
-      <UniqueIdentifier>{b8831e67-0b64-4c44-ad0e-5c20bd84512f}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="CBox.cpp" />
+    <ClCompile Include="database\db.cpp" />
+    <ClCompile Include="game_server\ingame_server.cpp" />
+    <ClCompile Include="iocp_server\iocp_server.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="map_object.cpp" />
+    <ClCompile Include="object\MapManager.cpp" />
+    <ClCompile Include="object\moveobj_manager.cpp" />
+    <ClCompile Include="object\move_object\player.cpp" />
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="Lobby.cpp" />
+    <ClCompile Include="room\room.cpp" />
+    <ClCompile Include="room\room_manager.cpp" />
+    <ClCompile Include="ray\ray_casting.cpp">
+      <Filter>ray</Filter>
     </ClCompile>
-    <ClCompile Include="game_server\packet_manager.cpp">
-      <Filter>소스 파일\packet_manager</Filter>
+    <ClCompile Include="Recast\Source\Recast.cpp">
+      <Filter>recast\source</Filter>
     </ClCompile>
-    <ClCompile Include="iocp_server\iocp_server.cpp">
-      <Filter>소스 파일\iocp_server</Filter>
+    <ClCompile Include="Recast\Source\RecastAlloc.cpp">
+      <Filter>recast\source</Filter>
     </ClCompile>
-    <ClCompile Include="game_server\ingame_server.cpp">
-      <Filter>소스 파일\ingame_server</Filter>
+    <ClCompile Include="Recast\Source\RecastArea.cpp">
+      <Filter>recast\source</Filter>
     </ClCompile>
-    <ClCompile Include="database\db.cpp">
-      <Filter>소스 파일\db</Filter>
+    <ClCompile Include="Recast\Source\RecastAssert.cpp">
+      <Filter>recast\source</Filter>
     </ClCompile>
-    <ClCompile Include="pch.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="Recast\Source\RecastContour.cpp">
+      <Filter>recast\source</Filter>
     </ClCompile>
-    <ClCompile Include="object\moveobj_manager.cpp">
-      <Filter>소스 파일\object</Filter>
+    <ClCompile Include="Recast\Source\RecastFilter.cpp">
+      <Filter>recast\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Recast\Source\RecastLayers.cpp">
+      <Filter>recast\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Recast\Source\RecastMesh.cpp">
+      <Filter>recast\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Recast\Source\RecastMeshDetail.cpp">
+      <Filter>recast\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Recast\Source\RecastRasterization.cpp">
+      <Filter>recast\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Recast\Source\RecastRegion.cpp">
+      <Filter>recast\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Detour\Source\DetourAlloc.cpp">
+      <Filter>detuor\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Detour\Source\DetourAssert.cpp">
+      <Filter>detuor\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Detour\Source\DetourCommon.cpp">
+      <Filter>detuor\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Detour\Source\DetourNavMesh.cpp">
+      <Filter>detuor\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Detour\Source\DetourNavMeshBuilder.cpp">
+      <Filter>detuor\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Detour\Source\DetourNavMeshQuery.cpp">
+      <Filter>detuor\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Detour\Source\DetourNode.cpp">
+      <Filter>detuor\source</Filter>
     </ClCompile>
     <ClCompile Include="object\move_object\enemy.cpp">
-      <Filter>소스 파일\object\move_object</Filter>
-    </ClCompile>
-    <ClCompile Include="object\move_object\player.cpp">
-      <Filter>소스 파일\object\move_object</Filter>
-    </ClCompile>
-    <ClCompile Include="room\room.cpp">
-      <Filter>소스 파일\room</Filter>
-    </ClCompile>
-    <ClCompile Include="room\room_manager.cpp">
-      <Filter>소스 파일\room</Filter>
-    </ClCompile>
-    <ClCompile Include="map_object.cpp">
-      <Filter>소스 파일\object\map_object</Filter>
+      <Filter>NPC</Filter>
     </ClCompile>
     <ClCompile Include="Astar.cpp">
-      <Filter>소스 파일\Astar</Filter>
+      <Filter>astar</Filter>
     </ClCompile>
-    <ClCompile Include="CBox.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="game_server\packet_manager.cpp">
+      <Filter>packet_manager</Filter>
     </ClCompile>
-    <ClCompile Include="OBB.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="object\MapManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Lobby.cpp">
-      <Filter>소스 파일\Robby</Filter>
+    <ClCompile Include="collision_checker.cpp" />
+    <ClCompile Include="recast_astar.cpp">
+      <Filter>astar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="header.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="state.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="CBox.h" />
+    <ClInclude Include="database\db.h" />
+    <ClInclude Include="game_server\ingame_server.h" />
+    <ClInclude Include="iocp_server\iocp_server.h" />
+    <ClInclude Include="map_object.h" />
+    <ClInclude Include="object\MapManager.h" />
+    <ClInclude Include="object\moveobj_manager.h" />
+    <ClInclude Include="object\move_object\move_object.h" />
+    <ClInclude Include="object\move_object\player.h" />
+    <ClInclude Include="object\object.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="Lobby.h" />
+    <ClInclude Include="room\room.h" />
+    <ClInclude Include="room\room_manager.h" />
+    <ClInclude Include="state.h" />
+    <ClInclude Include="ray\ray_casting.h">
+      <Filter>ray</Filter>
     </ClInclude>
     <ClInclude Include="define.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>header</Filter>
     </ClInclude>
-    <ClInclude Include="game_server\packet_manager.h">
-      <Filter>소스 파일\packet_manager</Filter>
-    </ClInclude>
-    <ClInclude Include="iocp_server\iocp_server.h">
-      <Filter>소스 파일\iocp_server</Filter>
-    </ClInclude>
-    <ClInclude Include="game_server\ingame_server.h">
-      <Filter>소스 파일\ingame_server</Filter>
-    </ClInclude>
-    <ClInclude Include="database\db.h">
-      <Filter>소스 파일\db</Filter>
-    </ClInclude>
-    <ClInclude Include="pch.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="object\moveobj_manager.h">
-      <Filter>소스 파일\object</Filter>
-    </ClInclude>
-    <ClInclude Include="object\object.h">
-      <Filter>소스 파일\object</Filter>
-    </ClInclude>
-    <ClInclude Include="object\move_object\enemy.h">
-      <Filter>소스 파일\object\move_object</Filter>
-    </ClInclude>
-    <ClInclude Include="object\move_object\move_object.h">
-      <Filter>소스 파일\object\move_object</Filter>
-    </ClInclude>
-    <ClInclude Include="object\move_object\player.h">
-      <Filter>소스 파일\object\move_object</Filter>
-    </ClInclude>
-    <ClInclude Include="room\room.h">
-      <Filter>소스 파일\room</Filter>
-    </ClInclude>
-    <ClInclude Include="room\room_manager.h">
-      <Filter>소스 파일\room</Filter>
+    <ClInclude Include="header.h">
+      <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="protocol.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>header</Filter>
     </ClInclude>
-    <ClInclude Include="map_object.h">
-      <Filter>소스 파일\object\map_object</Filter>
+    <ClInclude Include="Recast\Include\Recast.h">
+      <Filter>recast\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Recast\Include\RecastAlloc.h">
+      <Filter>recast\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Recast\Include\RecastAssert.h">
+      <Filter>recast\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Detour\Include\DetourAlloc.h">
+      <Filter>detuor\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Detour\Include\DetourAssert.h">
+      <Filter>detuor\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Detour\Include\DetourCommon.h">
+      <Filter>detuor\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Detour\Include\DetourMath.h">
+      <Filter>detuor\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Detour\Include\DetourNavMesh.h">
+      <Filter>detuor\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Detour\Include\DetourNavMeshBuilder.h">
+      <Filter>detuor\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Detour\Include\DetourNavMeshQuery.h">
+      <Filter>detuor\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Detour\Include\DetourNode.h">
+      <Filter>detuor\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Detour\Include\DetourStatus.h">
+      <Filter>detuor\include</Filter>
+    </ClInclude>
+    <ClInclude Include="object\move_object\enemy.h">
+      <Filter>NPC</Filter>
     </ClInclude>
     <ClInclude Include="Astar.h">
-      <Filter>소스 파일\Astar</Filter>
+      <Filter>astar</Filter>
     </ClInclude>
-    <ClInclude Include="CNode.h">
-      <Filter>소스 파일\Astar</Filter>
+    <ClInclude Include="game_server\packet_manager.h">
+      <Filter>packet_manager</Filter>
     </ClInclude>
-    <ClInclude Include="CAstar.h">
-      <Filter>소스 파일\Astar</Filter>
+    <ClInclude Include="collision_checker.h" />
+    <ClInclude Include="recast_astar.h">
+      <Filter>astar</Filter>
     </ClInclude>
-    <ClInclude Include="CBox.h">
-      <Filter>소스 파일</Filter>
-    <ClInclude Include="OBB.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="object\MapManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Lobby.h">
-      <Filter>소스 파일\Robby</Filter>
-    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="ray">
+      <UniqueIdentifier>{6f76e82d-a321-4f09-b15d-41c6c53eeffa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header">
+      <UniqueIdentifier>{1a6fa1ad-ad55-4328-a4c8-ec007da62ffd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="recast">
+      <UniqueIdentifier>{fe23dc0e-6de8-4ef4-be8a-d0b2a0bc776b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="detuor">
+      <UniqueIdentifier>{995a64d3-1a5f-4dde-935b-8bb2f1609cd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="detuor\source">
+      <UniqueIdentifier>{9fe94061-d75f-4a56-8fae-1a66d5391b0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="recast\source">
+      <UniqueIdentifier>{a9c3a326-9757-4d43-a575-df852de2a7eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="detuor\include">
+      <UniqueIdentifier>{51807241-0df5-428d-8128-90cc602e6730}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="recast\include">
+      <UniqueIdentifier>{b0a50ee9-b903-448d-8134-af60e9a3dd3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NPC">
+      <UniqueIdentifier>{e94ff246-26df-476e-a352-38134454b265}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="astar">
+      <UniqueIdentifier>{edc370c0-d3b3-4787-85b6-f3731a890de4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="packet_manager">
+      <UniqueIdentifier>{bf0076f0-1bc3-460c-976d-e79b247972e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

@@ -45,7 +45,7 @@ void PlayerCamera::LateUpdate()
 	}
 
 	
-
+	GET_SINGLE(SceneManager)->SetLookVec(GetTransform()->GetLook());
 	GetTransform()->SetLocalPosition(pos);
 }
 

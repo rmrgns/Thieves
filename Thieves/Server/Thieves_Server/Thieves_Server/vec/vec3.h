@@ -59,6 +59,8 @@ public:
 		return Vector3(a.x / b, a.y / b, a.z / b);
 	}
 
+#endif
+
 	float VectorScale() const
 	{
 		float temp_x = x * x;
@@ -107,3 +109,4 @@ public:
 		return projection;
 	}
 };
+

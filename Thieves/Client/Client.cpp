@@ -54,6 +54,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     MSG msg;
     
+    // GWindowInfo.width = GetSystemMetrics(SM_CXSCREEN);
+    // GWindowInfo.height = GetSystemMetrics(SM_CYSCREEN);
     GWindowInfo.width = 1600;
     GWindowInfo.height = 900;
     GWindowInfo.windowed = true;
@@ -126,6 +128,11 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
     HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+
+    /*LONG_PTR style = GetWindowLongPtr(hWnd, GWL_STYLE);
+    style &= ~(WS_CAPTION | WS_THICKFRAME);
+    style |= WS_POPUP;
+    SetWindowLongPtr(hWnd, GWL_STYLE, style);*/
 
     if (!hWnd)
     {

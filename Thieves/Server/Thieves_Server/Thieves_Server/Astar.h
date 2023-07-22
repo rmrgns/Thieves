@@ -68,29 +68,29 @@ public:
 	};
 	~Astar() {};
 
-	bool SearchAllPath(const std::vector<MapObj>& map_objects, const Vector3& src, const Vector3& dst,const BoxCollision& collision);
-	//bool SearchMapTileLoad(MapTile tile_map[36][16], int s_x,int s_z, int d_x,int d_z);
-	bool IsBlocked(const std::vector<MapObj>& map_objects,const Vec2& dst, const BoxCollision& collision);
-	//bool IsBlocked(MapTile tile_map[36][16], const Vec2& pos);
-	bool IsInRange(const Vec2& pos);
-	
-	int GethValue(int row, int col, Vec2 dst) {
-		return std::sqrt(std::pow(row - dst.first, 2) + std::pow(col - dst.second, 2));
-	}
-	
-	void TracePath(Node& now, Vec2 src, Vec2 dst);
-	//void TracePath(MapTile tile_map[36][16], Node& now, Vec2 src, Vec2 dst);
-	Vec2 GetDestination(const Vec2& astar_src, const Vector3& src, const Vector3& dst);
-	std::vector<Vector3>m_enemy_load;
-private:
-	std::priority_queue<Node, std::vector<Node>, std::greater<Node>>open_pq;
-	Node testing_map[COL][ROW];
-	std::set<Vec2>close_set;
-	//char test_map[ROW][COL];
-	Vector3 m_zero_position;
-	
-	
-	short dirX[8] = { -1,0,1,0,-1,1,1,-1 };
-	short dirY[8] = { 0,-1,0,1,-1,-1,1,1 };
-	short cost[8] = { 10,10,10,10,14,14,14,14 };
+//	bool SearchAllPath(const std::vector<MapObj>& map_objects, const Vector3& src, const Vector3& dst,const BoxCollision& collision);
+//	bool SearchMapTileLoad(MapTile tile_map[36][16], int s_x,int s_z, int d_x,int d_z);
+//	bool IsBlocked(const std::vector<MapObj>& map_objects,const Vec2& dst, const BoxCollision& collision);
+//	bool IsBlocked(MapTile tile_map[36][16], const Vec2& pos);
+//	bool IsInRange(const Vec2& pos);
+//	
+//	int GethValue(int row, int col, Vec2 dst) {
+//		return std::sqrt(std::pow(row - dst.first, 2) + std::pow(col - dst.second, 2));
+//	}
+//	
+//	void TracePath(Node& now, Vec2 src, Vec2 dst);
+//	void TracePath(MapTile tile_map[36][16], Node& now, Vec2 src, Vec2 dst);
+//	Vec2 GetDestination(const Vec2& astar_src, const Vector3& src, const Vector3& dst);
+//	std::vector<Vector3>m_enemy_load;
+//private:
+//	std::priority_queue<Node, std::vector<Node>, std::greater<Node>>open_pq;
+//	Node testing_map[COL][ROW];
+//	std::set<Vec2>close_set;
+//	char test_map[ROW][COL];
+//	Vector3 m_zero_position;
+//	
+//	
+//	short dirX[8] = { -1,0,1,0,-1,1,1,-1 };
+//	short dirY[8] = { 0,-1,0,1,-1,-1,1,1 };
+//	short cost[8] = { 10,10,10,10,14,14,14,14 };
 };

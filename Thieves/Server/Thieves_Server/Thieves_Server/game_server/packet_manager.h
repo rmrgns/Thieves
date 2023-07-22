@@ -3,13 +3,14 @@
 #include<concurrent_queue.h>
 #include <thread>
 #include "CBox.h"
+#include "ray/ray_casting.h"
 
 class MoveObjManager;
 class DB;
 class RoomManager;
 class MapManager;
 class Lobby;
-
+class RayCasting;
 class PacketManager {
 public:
 	PacketManager();
@@ -54,6 +55,8 @@ public:
 	void SendError(int c_id, int err_type, int err_val);
 	void SendGameStart(int c_id);
 
+	void SendBullet(int c_id, Vector3);
+	void SendLoginFailPacket(int c_id, int reason);
 	void End();
 	void Disconnect(int c_id);
 	bool IsRoomInGame(int room_id);
@@ -66,14 +69,22 @@ public:
 
 	void ProcessTimer(HANDLE hiocp);
 
+	void SpawnNPCTime(int en_id, int room_id);
+	static concurrency::concurrent_priority_queue <timer_event> g_timer_queue;
+
+
 private:
 	Lobby* m_Lobby;
 	RoomManager* m_room_manager;
 	DB* m_db;
+	DB* m_db2;
 	MapManager* m_map_manager;
+	RayCasting* m_ray_casting;
 	concurrency::concurrent_queue<db_task>m_db_queue;
 	std::thread db_thread;
 	
+
+
 	float	_speed = 700.f;
 
 
@@ -95,5 +106,9 @@ private:
 	void ProcessRoomsDataInLobby(int c_id, unsigned char* p);
 	void ProcessRoomsDataInRoom(int c_id, unsigned char* p);
 	void ProcessDamageCheat(int c_id, unsigned char* p);
+	void ProcessBullet(int c_id, unsigned char* p);
+
 	void StartGame(int room_id);
+
+	void SpawnNPC(int room_id);
 };

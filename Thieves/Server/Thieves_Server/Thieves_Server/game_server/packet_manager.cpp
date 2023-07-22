@@ -10,9 +10,11 @@
 #include "database/db.h"
 #include "object/moveobj_manager.h"
 #include "object/MapManager.h"
+#include "Astar.h"
+#include "recast_astar.h"
 
 using namespace std;
-
+//concurrency::concurrent_priority_queue<timer_event> PacketManager::g_timer_queue = concurrency::concurrent_priority_queue<timer_event>();
 PacketManager::PacketManager()
 {
 	MoveObjManager::GetInst();
@@ -20,6 +22,7 @@ PacketManager::PacketManager()
 	m_room_manager = new RoomManager;
 	m_map_manager = new MapManager;
 	m_db = new DB;
+	m_db2 = new DB;
 
 }
 
@@ -29,7 +32,9 @@ void PacketManager::Init()
 	m_Lobby->Init();
 	m_room_manager->InitRoom();
 	m_map_manager->LoadMap();
+	m_map_manager->LoadSpawnArea();
 	m_db->Init();
+	m_db2->Init();
 }
 
 void PacketManager::ProcessPacket(int c_id, unsigned char* p)
@@ -101,6 +106,10 @@ void PacketManager::ProcessPacket(int c_id, unsigned char* p)
 		ProcessRoomsDataInRoom(c_id, p);
 		break;
 	}
+	case CS_PACKET_BULLET: {
+		ProcessBullet(c_id, p);
+		break;
+	}
 	case CS_PACKET_TEST: {
 		//ProcessTest(c_id, p);
 		break;
@@ -161,32 +170,6 @@ void PacketManager::ProcessRecv(int c_id , EXP_OVER* exp_over, DWORD num_bytes)
 	cl->DoRecv();
 }
 
-//void PacketManager::UpdateObjMove()
-//{
-//	for (int i = 0; i < MAX_USER; ++i)
-//	{
-//		for (int j = 0; j <= NPC_ID_END; ++j) {
-//			//���Ŀ� ���� �߰�
-//			if (i != j)
-//				SendMovePacket(i, j);
-//		}
-//	}
-//	SetTimerEvent(0, 0, EVENT_TYPE::EVENT_PLAYER_MOVE, 10);
-//}
-
-//void PacketManager::UpdateObjMove()//�ϴ� ����
-//{
-//	for (int i = 0; i < MAX_USER; ++i)
-//	{
-//		for (int j = 0; j <= NPC_ID_END; ++j) {
-//			//���Ŀ� ���� �߰�
-//			if (i != j)
-//				SendMovePacket(i, j);
-//		}
-//	}
-//	SetTimerEvent(0, 0, EVENT_TYPE::EVENT_PLAYER_MOVE, 10);
-//}
-
 void PacketManager::SendMovePacket(int c_id, int mover)
 {
 	sc_packet_move packet;
@@ -211,8 +194,6 @@ void PacketManager::SendMovePacket(int c_id, int mover)
 	cl->DoSend(sizeof(packet), &packet);
 }
 
-
-
 void PacketManager::SendLoginFailPacket(SOCKET& c_socket, int reason)
 {
 	sc_packet_login_fail packet;
@@ -227,6 +208,7 @@ void PacketManager::SendLoginFailPacket(SOCKET& c_socket, int reason)
 			std::cout << "Send" << error_num << std::endl;
 	}
 }
+
 void PacketManager::SendSignInOK(int c_id)
 {
 	sc_packet_sign_in_ok packet;
@@ -314,6 +296,7 @@ void PacketManager::SendStun(int c_id, int obj_id)
 
 void PacketManager::SendPhasePacket(int c_id, int curr_phase)
 {
+
 }
 
 void PacketManager::SendLoadProgress(int c_id, int p_id, int progressed)
@@ -326,7 +309,6 @@ void PacketManager::SendLoadProgress(int c_id, int p_id, int progressed)
 
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 	cl->DoSend(sizeof(packet), &packet);
-	
 }
 
 void PacketManager::SendLoadEnd(int c_id, int p_id)
@@ -491,6 +473,20 @@ void PacketManager::SendGameStart(int c_id)
 	cl->DoSend(sizeof(packet), &packet);
 }
 
+void PacketManager::SendBullet(int c_id, Vector3 collision_point)
+{
+	sc_packet_bullet packet;
+	packet.type = SC_PACKET_BULLET;
+	packet.size = sizeof(packet);
+	packet.p_x = collision_point.x;
+	packet.p_y = collision_point.y;
+	packet.p_z = collision_point.z;
+
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
+}
+
+
 void PacketManager::End()
 {
 	MoveObjManager::GetInst()->DestroyObject();
@@ -558,31 +554,115 @@ void PacketManager::EndGame(int room_id)
 	}
 }
 
+//=====================DB
 void PacketManager::CreateDBThread()
 {
+	db_thread = std::thread([this]() {DBThread(); });
+}
+
+void PacketManager::SendLoginFailPacket(int c_id, int reason)
+{
+	sc_packet_login_fail packet;
+	Player* pl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	packet.size = sizeof(packet);
+	packet.type = SC_PACKET_LOGIN_FAIL;
+	packet.reason = reason;
+	pl->DoSend(sizeof(packet), &packet);
+
 }
 
 // �񵿱�� DB�۾��� �����ϴ� Thread
 void PacketManager::DBThread()
 {
+	while (true)
+	{
+		db_task dt;
+		if (!m_db_queue.try_pop(dt))
+		{
+			this_thread::sleep_for(10ms);
+			continue;
+		}
+		ProcessDBTask(dt);
+	}
 }
 
 // case�� ���� DB �α��� ������ �Ǵ��ϴ� �Լ�
 void PacketManager::ProcessDBTask(db_task& dt)
 {
+	LOGINFAIL_TYPE ret;//m_db->CheckLoginData(dt.user_id, dt.user_password);
+	Player* pl = MoveObjManager::GetInst()->GetPlayer(dt.obj_id);
+	switch (dt.dt)
+	{
+	case DB_TASK_TYPE::SIGN_IN:
+	{
+		for (int i = 0; i < MAX_USER; ++i)
+		{
+			Player* other_pl = MoveObjManager::GetInst()->GetPlayer(i);
+			other_pl->state_lock.lock();
+			if (other_pl->GetState() == STATE::ST_FREE)
+			{
+				other_pl->state_lock.unlock();
+				continue;
+			}
+			other_pl->state_lock.unlock();
+			if (strcmp(other_pl->GetName(), dt.user_id) == 0)
+			{
+				ret = LOGINFAIL_TYPE::AREADY_SIGHN_IN;
+				SendLoginFailPacket(dt.obj_id, (int)ret);
+				return;
+			}
+		}
+		ret = m_db->CheckLoginData(dt.user_id, dt.user_password);
+		if (ret == LOGINFAIL_TYPE::OK)
+		{
+
+			//접속꽉찬거는 accept 쪽에서 보내기주기
+			pl->state_lock.lock();
+			if (STATE::ST_FREE == pl->GetState() || STATE::ST_ACCEPT == pl->GetState())
+			{
+				pl->SetState(STATE::ST_LOGIN);
+				pl->state_lock.unlock();
+			}
+			else
+				pl->state_lock.unlock();
+			strcpy_s(pl->GetName(), MAX_NAME_SIZE, dt.user_id);
+			strcpy_s(pl->GetPassword(), MAX_NAME_SIZE, dt.user_password);
+			//cout << "이름 : " << pl->GetName() << "비번 : " << pl->GetPassword();
+			//여기오면 성공패킷 보내주기
+			SendSignInOK(pl->GetID());
+		}
+		else
+		{
+			//로그인 실패 패킷보내기
+			SendLoginFailPacket(dt.obj_id, static_cast<int>(ret));
+		}
+		break;
+	}
+	case DB_TASK_TYPE::SIGN_UP:
+	{
+		ret = m_db->CheckLoginData(dt.user_id, dt.user_password);
+		if (ret == LOGINFAIL_TYPE::NO_ID || ret == LOGINFAIL_TYPE::WRONG_PASSWORD)
+		{
+			//m_db2->SaveData(dt.user_id, dt.user_password);
+			//cout << "들어옴" << endl;
+			SendSignUpOK(dt.obj_id);
+		}
+		else
+			// 아이디가 있어 회원가입 불가능 패킷 보내기
+			SendLoginFailPacket(dt.obj_id, 6);
+		break;
+	}
+	}
 }
 
 void PacketManager::JoinDBThread()
 {
+	db_thread.join();
 }
 
 void PacketManager::ProcessTimer(HANDLE hiocp)
 {
 }
-
-
-
-
 
 void PacketManager::ProcessSignIn(int c_id, unsigned char* p)
 {
@@ -745,8 +825,6 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 	}
 }
 
-
-
 void PacketManager::ProcessMatching(int c_id, unsigned char* p)
 {
 }
@@ -787,8 +865,6 @@ void PacketManager::ProcessGameStart(int c_id, unsigned char* p)
 
 	StartGame(room->GetRoomID());
 }
-
-
 
 void PacketManager::ProcessLoadProgressing(int c_id, unsigned char* p)
 {
@@ -1040,6 +1116,21 @@ void PacketManager::ProcessDamageCheat(int c_id, unsigned char* p)
 {
 }
 
+void PacketManager::ProcessBullet(int c_id, unsigned char* p)
+{
+	cs_packet_bullet* packet = reinterpret_cast<cs_packet_bullet*>(p);
+
+	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
+
+	Vector3 start_pos{ packet->p_x, packet->p_y, packet->p_z};
+	Vector3 dir_pos{ packet->d_x*100, packet->d_y*100, packet->d_z*100};
+	
+	//m_ray_casting->Shoot(bullet  시작 pos, bullet  방향벡터 );
+// -> Vector 총알과 충돌하거나 마지막 bulletpoint 좌표 리턴
+	Vector3 col_pos = m_ray_casting->Shoot(start_pos, dir_pos);
+
+	SendBullet(c_id, col_pos);
+}
 
 void PacketManager::StartGame(int room_id)
 {
@@ -1093,4 +1184,88 @@ void PacketManager::StartGame(int room_id)
 		pl = MoveObjManager::GetInst()->GetPlayer(c_id);
 		SendObjInfoEnd(c_id);
 	}
+}
+
+////------NPC
+
+//void PacketManager::UpdateObjMove()
+//{
+//	for (int i = 0; i < MAX_USER; ++i)
+//	{
+//		for (int j = 0; j <= NPC_ID_END; ++j) {
+//			//���Ŀ� ���� �߰�
+//			if (i != j)
+//				SendMovePacket(i, j);
+//		}
+//	}
+//	SetTimerEvent(0, 0, EVENT_TYPE::EVENT_PLAYER_MOVE, 10);
+//}
+
+void PacketManager::SpawnNPC(int room_id)
+{
+	Room* room = m_room_manager->GetRoom(room_id);
+	int curr_round = room->GetRound();
+	int NPC_num = room->GetMaxUser() * 2;
+
+	if (curr_round == 2) {
+		for (auto c_id : room->GetObjList())
+		{
+			if (false == MoveObjManager::GetInst()->IsPlayer(c_id))
+				continue;
+			//SendWaveInfo(c_id, curr_round + 1, room->GetMaxUser() * (curr_round + 1), room->GetMaxUser() * (curr_round + 2));
+		}
+	}
+	Enemy* enemy = NULL;
+	unordered_set<int>enemy_list;
+	for (auto e_id : room->GetObjList())
+	{
+		if (enemy_list.size() == static_cast<INT64>(NPC_num))
+			break;
+		if (true == MoveObjManager::GetInst()->IsPlayer(e_id))
+			continue;
+		Enemy* enemy = MoveObjManager::GetInst()->GetEnemy(e_id);
+
+		if (true == enemy->in_game)
+			continue;
+		if (enemy->GetType() == OBJ_TYPE::OT_POLICE )
+		{
+			enemy->in_game = true;
+			enemy->SetIsActive(true);
+			enemy_list.insert(e_id);
+		}
+	}
+
+	//if (enemy_list.size() < static_cast<INT64>(NPC_num)) {
+	//	cout << "NPC가 모자랍니다" << endl;
+	//}
+	//vector<MapObj>spawn_area;
+	random_device rd;
+	mt19937 gen(rd());
+	uniform_int_distribution<int> random_point(0, 1);
+	//spawn_area.reserve(10);
+
+
+	int i = 0;
+	for (auto& en : enemy_list)
+	{
+
+		//for (auto pl : room->GetObjList())
+		//{
+		//	if (false == MoveObjManager::GetInst()->IsPlayer(pl))continue;
+		//	SendObjInfo(pl, en);
+	//	g_timer_queue.push(SetTimerEvent(en, en, room_id, EVENT_TYPE::EVENT_NPC_TIMER_SPAWN, (1500 * i)));
+	//	++i;
+		//}
+		//g_timer_queue.push(SetTimerEvent(en, en, room_id, EVENT_TYPE::EVENT_NPC_MOVE, 30+en*100));
+	}
+
+
+	//enemy->SetMoveTime(300);
+
+
+}
+
+void PacketManager::SpawnNPCTime(int en_id, int room_id)
+{
+
 }
