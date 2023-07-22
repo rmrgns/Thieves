@@ -705,7 +705,7 @@ void SceneManager::LoadLoginScene()
 		obj->SetName(L"LOGINSCREEN");
 		obj->AddComponent(make_shared<Transform>());
 		obj->AddComponent(make_shared<LoginScript>());
-		obj->GetTransform()->SetLocalScale(Vec3(width / 15.0f, height / 15.0f, 100.f));
+		obj->GetTransform()->SetLocalScale(Vec3(width / 10.7f, height / 10.7f, 1.f));
 		obj->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 2.f));
 		obj->SetStatic(false);
 

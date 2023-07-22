@@ -26,6 +26,13 @@ void Text::Update()
 		wstring text2 = L"Thieves Login Screen";
 		SetText(text2, 0.f, 10.f, 1.f, 1.f);
 
+		SetTextInfo(TEXT_FORMAT::LOGIN);
+		wstring text3 = L"Thieves Login Screen2";
+		SetText(text3, 0.f, 100.f, 1.f, 1.f);
+
+		SetTextInfo(TEXT_FORMAT::LOGIN);
+		wstring text4 = L"PassWord";
+		SetText(text4, 100.f, 200.f, 1.f, 1.f);
 		/*SetTextInfo(TEXT_FORMAT::LOGIN);
 		wstring text = L"Thieves ID";
 		SetText(text, 500.f, 400.f, 1.f, 1.f);
@@ -256,12 +263,12 @@ void Text::SetTextInfo(TEXT_FORMAT infoNumber)
 	{
 	case TEXT_FORMAT::LOGIN:
 		// 텍스트 색깔
-		ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Crimson), _solidColorBrush.GetAddressOf()));
+		ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), _solidColorBrush.GetAddressOf()));
 
 		// 텍스트 폰트 등
-		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"Verdana", nullptr,
-			DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_ITALIC, DWRITE_FONT_STRETCH_NORMAL,
-			25, L"en-us", _writeTextFormat.GetAddressOf()));
+		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"상주경천섬체", nullptr,
+			DWRITE_FONT_WEIGHT_SEMI_BOLD, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL,
+			50, L"en-us", _writeTextFormat.GetAddressOf()));
 
 		//_writeTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 		//_writeTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
@@ -271,8 +278,8 @@ void Text::SetTextInfo(TEXT_FORMAT infoNumber)
 		ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), _solidColorBrush.GetAddressOf()));
 
 		// 텍스트 폰트 등
-		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"Verdana", nullptr,
-			DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_ITALIC, DWRITE_FONT_STRETCH_NORMAL,
+		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"상주경천섬체", nullptr,
+			DWRITE_FONT_WEIGHT_SEMI_BOLD, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL,
 			50, L"en-us", _writeTextFormat.GetAddressOf()));
 
 		break;
@@ -281,8 +288,8 @@ void Text::SetTextInfo(TEXT_FORMAT infoNumber)
 		ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), _solidColorBrush.GetAddressOf()));
 
 		// 텍스트 폰트 등
-		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"Verdana", nullptr,
-			DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_ITALIC, DWRITE_FONT_STRETCH_NORMAL,
+		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"상주경천섬체", nullptr,
+			DWRITE_FONT_WEIGHT_SEMI_BOLD, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL,
 			25, L"en-us", _writeTextFormat.GetAddressOf()));
 		break;
 	case TEXT_FORMAT::INROOM:
@@ -290,8 +297,8 @@ void Text::SetTextInfo(TEXT_FORMAT infoNumber)
 		ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), _solidColorBrush.GetAddressOf()));
 
 		// 텍스트 폰트 등
-		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"Verdana", nullptr,
-			DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_ITALIC, DWRITE_FONT_STRETCH_NORMAL,
+		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"상주경천섬체", nullptr,
+			DWRITE_FONT_WEIGHT_SEMI_BOLD, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL,
 			25, L"en-us", _writeTextFormat.GetAddressOf()));
 		break;
 	default:
