@@ -22,7 +22,7 @@ public:
     void SendLogOut(const SOCKET& s_socket);
     void SendRequestRoomsData(const SOCKET& s_socket);
     void SendRequestInRoomData(const SOCKET& s_socket);
-    void SendBullet(const SOCKET& s_socket, Vec3 , Vec3);
+    void SendBullet(const SOCKET& s_socket, Vec3 , Vec3, Vec3);
 
     void SendAattackMode(const SOCKET& s_socket, char mode );
 

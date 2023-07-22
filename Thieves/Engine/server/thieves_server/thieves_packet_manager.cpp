@@ -21,6 +21,7 @@
 #include "GameObject.h"
 #include "NetworkSystem.h"
 
+
 using namespace std;
 using namespace client_fw;
 
@@ -397,6 +398,24 @@ void ThievesPacketManager::ProcessBullet(int c_id, unsigned char* p)
 	// 코드 추가
 	// 충돌한 좌표를 받아서 총알 궤적 그리는 함수 호출
 	// 
+	Vec3 start_pos, end_pos, rot_pos;
+
+	start_pos.x = packet->s_x;
+	start_pos.y = packet->s_y;
+	start_pos.z = packet->s_z;
+	
+	end_pos.x = packet->e_x;
+	end_pos.y = packet->e_y;
+	end_pos.z = packet->e_z;
+	
+	rot_pos.x = packet->r_x;
+	rot_pos.y = packet->r_y;
+	rot_pos.z = packet->r_z;
+	
+	// 총알 그리기
+	shared_ptr<UsingGun> m_using_gun;
+
+
 }
 
 

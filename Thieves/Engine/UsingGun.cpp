@@ -56,23 +56,34 @@ void UsingGun::LateUpdate()
 		Vec3 lookVec = GET_SINGLE(SceneManager)->GetLookVec();
 
 		// 서버로 전송
-		Network::GetInst()->SendBullet(bullet_pos, lookVec);
+		Network::GetInst()->SendBullet(bullet_pos, lookVec, bullet_rotation);
+		_bulletcheck = true;
+		
+	}
+	
+
+	if (_recv_bullet_pos == TRUE)
+	{
+		GetTransform()->SetLocalPosition(GetBulletPos());
+		GetTransform()->SetLocalRotation(GetBulletRot());
+		_recv_bullet_pos = FALSE;
 	}
 	//int myID = Network::GetInst()->GetPacketManager()->GetGameInfo().GetNetworkID();
-
+	//
 	//if (myID != -1)
 	//{
 	//	bullet_pos = Network::GetInst()->GetNetworkObjMap().find(myID)->second->GetPosition();
 	//	bullet_rotation = Network::GetInst()->GetNetworkObjMap().find(myID)->second->GetRotation();
 	//}
-
+	//
 	//Vec3 temp;
-
+	//
 	//GetTransform()->SetLocalPosition(Vec3((bullet_pos.x + temp.x) / 2.0f, (bullet_pos.y + 125.f + temp.y) / 2.0f, (bullet_pos.z + temp.z) / 2.0f));
-	
+	//
 	//GetTransform()->SetLocalPosition(Vec3(bullet_pos.x, bullet_pos.y, bullet_pos.z));
 	//transform->SetLocalRotation(GET_SINGLE(SceneManager)->GetLookVec());
 	//GetTransform()->SetLocalRotation(bullet_rotation);
+
 }
 
 
@@ -86,10 +97,18 @@ void UsingGun::DrawBullet()
 	_bulletcheck = true;
 }
 
-void UsingGun::RecvBullet(Vec3 pos, Vec3 Rot)
+void UsingGun::RecvBullet(Vec3 bullet_start_pos, Vec3 bullet_end_pos, Vec3 bullet_rot_pos)
 {
-	SetBulletPos(pos);
-	SetBulletRot(Rot);
-	DrawBullet();
+	Vec3 b_point = { (bullet_start_pos.x + bullet_end_pos.x) / 2.0f, (bullet_start_pos.y + 125.f + bullet_end_pos.y) / 2.0f, (bullet_start_pos.z + bullet_end_pos.z) / 2.0f };
+	
+	SetBulletPos(b_point);
+	SetBulletRot(bullet_rot_pos);
+
+	//GetTransform()->SetLocalPosition(b_point);
+	//GetTransform()->SetLocalRotation(GET_SINGLE(SceneManager)->GetLookVec());
+	//_bulletcheck = true;
+	//
+	//SetBulletRot(GET_SINGLE(SceneManager)->GetLookVec());
+	//DrawBullet();
 }
 

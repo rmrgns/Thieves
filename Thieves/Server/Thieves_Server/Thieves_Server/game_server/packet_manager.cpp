@@ -473,14 +473,22 @@ void PacketManager::SendGameStart(int c_id)
 	cl->DoSend(sizeof(packet), &packet);
 }
 
-void PacketManager::SendBullet(int c_id, Vector3 collision_point)
+void PacketManager::SendBullet(int c_id, Vector3 start_point, Vector3 collision_point, Vector3 rot_point)
 {
 	sc_packet_bullet packet;
 	packet.type = SC_PACKET_BULLET;
 	packet.size = sizeof(packet);
-	packet.p_x = collision_point.x;
-	packet.p_y = collision_point.y;
-	packet.p_z = collision_point.z;
+	packet.s_x = start_point.x;
+	packet.s_y = start_point.y;
+	packet.s_z = start_point.z;
+
+	packet.e_x = collision_point.x;
+	packet.e_y = collision_point.y;
+	packet.e_z = collision_point.z;
+
+	packet.r_x = rot_point.x;
+	packet.r_y = rot_point.y;
+	packet.r_z = rot_point.z;
 
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 	cl->DoSend(sizeof(packet), &packet);
@@ -832,9 +840,11 @@ void PacketManager::ProcessBullet(int c_id, unsigned char* p)
 
 	Vector3 start_pos{ packet->p_x, packet->p_y, packet->p_z };
 	Vector3 dir_pos{ packet->d_x * 100, packet->d_y * 100, packet->d_z * 100 };
+	Vector3 rot_pos{ packet->r_x, packet->r_y, packet->r_z };
 
 	CBox Raytemp;
 	Vector3 collisionPoint;
+	
 	int MAXRANGE = 100;
 
 	//center
@@ -886,7 +896,7 @@ void PacketManager::ProcessBullet(int c_id, unsigned char* p)
 // -> Vector 총알과 충돌하거나 마지막 bulletpoint 좌표 리턴
 //	Vector3 col_pos = m_ray_casting->Shoot(start_pos, dir_pos);
 
-	SendBullet(c_id, col_pos);
+	SendBullet(c_id, start_pos, col_pos, rot_pos);
 }
 void PacketManager::ProcessMatching(int c_id, unsigned char* p)
 {

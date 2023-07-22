@@ -212,6 +212,7 @@ struct cs_packet_bullet {
 	char type;
 	float p_x, p_y, p_z;	// ½ÃÀÛ ÁÂÇ¥
 	float d_x, d_y, d_z;	// ¹æÇâ º¤ÅÍ
+	float r_x, r_y, r_z;	// rot
 };
 
 
@@ -422,8 +423,9 @@ struct sc_packet_obj_info_end {
 struct sc_packet_bullet {
 	unsigned char size;
 	char type;
-	float p_x, p_y, p_z;	// Ãæµ¹ ÁÂÇ¥
-	//	float d_x, d_y, d_z;	
+	float s_x, s_y, s_z;	// ½ÃÀÛ ÁÂÇ¥
+	float e_x, e_y, e_z;	// Ãæµ¹ ÁÂÇ¥
+	float r_x, r_y, r_z;
 };
 
 struct sc_packet_attackmode {

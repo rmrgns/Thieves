@@ -98,7 +98,7 @@ public:
 	void SendLogOut();
 	void SendRequestRoomsData();
 	void SendRequestInRoomData();
-	void SendBullet(Vec3, Vec3);
+	void SendBullet(Vec3, Vec3, Vec3);
 
 	void SendPacket();
 	
