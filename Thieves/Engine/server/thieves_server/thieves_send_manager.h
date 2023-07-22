@@ -14,7 +14,7 @@ public:
         Vec3 pos, Vec3 vec, float deltatime, char );
     void SendLoadProgressPacket(const SOCKET& s_socket, char progressed);
     void SendLoadEnd(const SOCKET& s_socket);
-    void SendAttackPacket(const SOCKET& s_socket, const Vec3& forward_vec, char action_type);
+    void SendAttackPacket(const SOCKET& s_socket);
     void SendEnterRoom(const SOCKET& s_socket, int room_id);
     void SendLeaveRoom(const SOCKET& s_socket);
     void SendReady(const SOCKET& s_socket);

@@ -65,17 +65,11 @@ void ThievesSendManager::SendLoadEnd(const SOCKET& s_socket)
 	
 }
 
-void ThievesSendManager::SendAttackPacket(const SOCKET& s_socket, const Vec3& forward_vec
-	, char action_type)
+void ThievesSendManager::SendAttackPacket(const SOCKET& s_socket)
 {
 	cs_packet_attack packet;
 	packet.size = sizeof(packet);
 	packet.type = CS_PACKET_ATTACK;
-	// 이건 대체 뭐냐?
-	packet.type = (char)action_type;
-	//packet.f_x = forward_vec.x;
-	//packet.f_y = forward_vec.y;
-	//packet.f_z = forward_vec.z;
 	SendPacket(s_socket, sizeof(packet), &packet);
 }
 

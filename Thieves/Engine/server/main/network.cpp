@@ -193,5 +193,10 @@ void Network::SendRequestInRoomData()
 	m_send_manager->SendRequestInRoomData(m_s_socket);
 }
 
+void Network::SendAttackPacket()
+{
+	m_send_manager->SendAttackPacket();
+}
+
 // Packet Test
 

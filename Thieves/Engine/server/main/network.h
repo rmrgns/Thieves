@@ -98,6 +98,7 @@ public:
 	void SendLogOut();
 	void SendRequestRoomsData();
 	void SendRequestInRoomData();
+	void SendAttackPacket();
 
 
 	void SendPacket();

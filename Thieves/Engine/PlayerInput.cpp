@@ -199,6 +199,7 @@ void PlayerInput::PlayerAttack()
 		_attackCount += DELTA_TIME;
 		if (_attackCount > 0.7f)
 		{
+			Network::GetInst()->SendAttackPacket();
 			_index = 2;
 			GetAnimator()->Play(_index);
 			_attackCount = 0.f;
