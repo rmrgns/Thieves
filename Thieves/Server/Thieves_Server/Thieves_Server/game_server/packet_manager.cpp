@@ -648,6 +648,8 @@ void PacketManager::ProcessTimer(HANDLE hiocp)
 			exover->_comp_op = COMP_OP::OP_STUN_END;
 		}
 
+		Player* pl = MoveObjManager::GetInst()->GetPlayer(tEvent.GetObjId());
+		exover->room_id = pl->GetRoomID();
 		PostQueuedCompletionStatus(hiocp, 1, tEvent.GetObjId(), &exover->_wsa_over);
 
 	}
