@@ -367,7 +367,7 @@ void Resources::CreateDefaultShader()
 	{
 		ShaderInfo info =
 		{
-			SHADER_TYPE::FORWARD,
+			SHADER_TYPE::FORWARD,	
 		};
 
 		shared_ptr<Shader> shader = make_shared<Shader>();
@@ -499,6 +499,21 @@ void Resources::CreateDefaultShader()
 		shared_ptr<Shader> shader = make_shared<Shader>();
 		shader->CreateGraphicsShader(L"..\\Resources\\Shader\\particle.fx", info, arg);
 		Add<Shader>(L"Particle", shader);
+	}
+
+	// UI
+	{
+		ShaderInfo info =
+		{
+			SHADER_TYPE::FORWARD,
+			RASTERIZER_TYPE::CULL_BACK,
+			DEPTH_STENCIL_TYPE::LESS,
+			BLEND_TYPE::ALPHA_BLEND,
+		};
+
+		shared_ptr<Shader> shader = make_shared<Shader>();
+		shader->CreateGraphicsShader(L"..\\Resources\\Shader\\forward.fx", info);
+		Add<Shader>(L"UI", shader);
 	}
 
 	// ComputeParticle
@@ -664,7 +679,7 @@ void Resources::CreateDefaultMaterial()
 
 	// LoginScreen
 	{
-		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Forward");
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"UI");
 		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"Login", L"..\\Resources\\Texture\\Thieves_UI\\Title.png");
 		shared_ptr<Material> material = make_shared<Material>();
 		material->SetShader(shader);
@@ -674,7 +689,7 @@ void Resources::CreateDefaultMaterial()
 
 	// Temp LoginScreen Enter
 	{
-		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Forward");
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"UI");
 		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"LoginButton", L"..\\Resources\\Texture\\Thieves_UI\\Button_Base.png");
 		shared_ptr<Material> material = make_shared<Material>();
 		material->SetShader(shader);
@@ -684,7 +699,7 @@ void Resources::CreateDefaultMaterial()
 
 	// Back Button Image
 	{
-		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Forward");
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"UI");
 		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"BackButton", L"..\\Resources\\Texture\\Thieves_UI\\BackButton.png");
 		shared_ptr<Material> material = make_shared<Material>();
 		material->SetShader(shader);
@@ -694,7 +709,7 @@ void Resources::CreateDefaultMaterial()
 
 	// LobbyScreen
 	{
-		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Forward");
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"UI");
 		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"Robby", L"..\\Resources\\Texture\\Thieves_UI\\RoomBase.png");
 		shared_ptr<Material> material = make_shared<Material>();
 		material->SetShader(shader);
@@ -704,7 +719,7 @@ void Resources::CreateDefaultMaterial()
 
 	// Temp Robby Room Button
 	{
-		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Forward");
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"UI");
 		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"LobbyRoomButton", L"..\\Resources\\Texture\\Thieves_UI\\Button_Base.png");
 		shared_ptr<Material> material = make_shared<Material>();
 		material->SetShader(shader);
@@ -712,9 +727,19 @@ void Resources::CreateDefaultMaterial()
 		Add<Material>(L"LobbyRoomButton", material);
 	}
 
+	// Room Button
+	{
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"UI");
+		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"RoomButton", L"..\\Resources\\Texture\\Thieves_UI\\RoomButton.png");
+		shared_ptr<Material> material = make_shared<Material>();
+		material->SetShader(shader);
+		material->SetTexture(0, texture);
+		Add<Material>(L"RoomButton", material);
+	}
+
 	// RoomScreen
 	{
-		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Forward");
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"UI");
 		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"Room", L"..\\Resources\\Texture\\Thieves_UI\\InRoom.png");
 		shared_ptr<Material> material = make_shared<Material>();
 		material->SetShader(shader);
@@ -724,7 +749,7 @@ void Resources::CreateDefaultMaterial()
 
 	// LoadingScreen
 	{
-		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Forward");
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"UI");
 		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"Loading", L"..\\Resources\\Texture\\Thieves_UI\\Load.png");
 		shared_ptr<Material> material = make_shared<Material>();
 		material->SetShader(shader);
@@ -734,7 +759,7 @@ void Resources::CreateDefaultMaterial()
 
 	// GameStartButton
 	{
-		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Forward");
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"UI");
 		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"GameStartBtn", L"..\\Resources\\Texture\\Thieves_UI\\Button_GameStart_Base.png");
 		shared_ptr<Material> material = make_shared<Material>();
 		material->SetShader(shader);
@@ -744,7 +769,7 @@ void Resources::CreateDefaultMaterial()
 
 	// GameStartButtonClicked
 	{
-		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Forward");
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"UI");
 		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"GameStartBtnClk", L"..\\Resources\\Texture\\Thieves_UI\\Button_GameStart_Clicked.png");
 		shared_ptr<Material> material = make_shared<Material>();
 		material->SetShader(shader);
@@ -754,7 +779,7 @@ void Resources::CreateDefaultMaterial()
 
 	// GameStartButtonUp
 	{
-		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Forward");
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"UI");
 		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"GameStartBtnUp", L"..\\Resources\\Texture\\Thieves_UI\\Button_GameStart_MouseUp.png");
 		shared_ptr<Material> material = make_shared<Material>();
 		material->SetShader(shader);
@@ -764,7 +789,7 @@ void Resources::CreateDefaultMaterial()
 
 	// ReadyButton
 	{
-		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Forward");
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"UI");
 		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"ReadyBtn", L"..\\Resources\\Texture\\Thieves_UI\\ReadyButton.png");
 		shared_ptr<Material> material = make_shared<Material>();
 		material->SetShader(shader);
@@ -774,7 +799,7 @@ void Resources::CreateDefaultMaterial()
 
 	// ReadyButtonClicked
 	{
-		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Forward");
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"UI");
 		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"ReadyBtnClk", L"..\\Resources\\Texture\\Thieves_UI\\ReadyButton_Clicked.png");
 		shared_ptr<Material> material = make_shared<Material>();
 		material->SetShader(shader);
@@ -784,7 +809,7 @@ void Resources::CreateDefaultMaterial()
 
 	// ReadyButtonUp
 	{
-		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Forward");
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"UI");
 		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"ReadyBtnUp", L"..\\Resources\\Texture\\Thieves_UI\\ReadyButton_MouseUp.png");
 		shared_ptr<Material> material = make_shared<Material>();
 		material->SetShader(shader);

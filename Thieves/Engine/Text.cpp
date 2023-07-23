@@ -24,13 +24,13 @@ void Text::Update()
 	// 텍스트 출력
 	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOGIN)
 	{
-		/*SetTextInfo(TEXT_FORMAT::LOGIN);
-		wstring text = L"Thieves ID";
-		SetText(text, 500.f, 400.f, 1.f, 1.f);
-		wstring ID = INPUT->GetUserID();
-		SetText(ID, 500.f, 450.f, 1.f, 1.f);
+		SetTextInfo(TEXT_FORMAT::LOGIN);
+		wstring text = L"LOGIN";
+		SetText(text, 875.f, 620.f, 1.f, 1.f);
+		//wstring ID = INPUT->GetUserID();
+		//SetText(ID, 500.f, 450.f, 1.f, 1.f);
 
-		wstring text1 = L"Thieves Password";
+		/*wstring text1 = L"Thieves Password";
 		SetText(text1, 500.f, 500.f, 1.f, 1.f);
 		wstring Password = INPUT->GetUserPassword();
 		SetText(Password, 500.f, 550.f, 1.f, 1.f);*/
@@ -261,7 +261,7 @@ void Text::SetTextInfo(TEXT_FORMAT infoNumber)
 		// 텍스트 폰트 등
 		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"상주경천섬체", nullptr,
 			DWRITE_FONT_WEIGHT_SEMI_BOLD, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL,
-			width * 25.f / 1600.f, L"en-us", _writeTextFormat.GetAddressOf()));
+			width * 75.f / 1600.f, L"en-us", _writeTextFormat.GetAddressOf()));
 
 		//_writeTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 		//_writeTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
