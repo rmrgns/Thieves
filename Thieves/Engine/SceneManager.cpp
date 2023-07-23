@@ -613,7 +613,7 @@ void SceneManager::LoadGameScene()
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
 
 		light->GetLight()->SetDiffuse(Vec3(1.0f, 1.0f, 1.0f));
-		light->GetLight()->SetAmbient(Vec3(0.3f, 0.3f, 0.3f));
+		light->GetLight()->SetAmbient(Vec3(1.0f, 1.0f, 1.0f));
 		light->GetLight()->SetSpecular(Vec3(0.3f, 0.3f, 0.3f));
 
 
