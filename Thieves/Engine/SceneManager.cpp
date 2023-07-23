@@ -361,7 +361,7 @@ void SceneManager::LoadGameScene()
 	Network::GetInst()->SendLoadProgressPacket((char)500 / 21);
 	
 #pragma region UI_Test
-	for (int32 i = 0; i < 1; i++)
+	for (int32 i = 0; i < 0; i++)
 	{
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
 		obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
@@ -482,24 +482,26 @@ void SceneManager::LoadGameScene()
 //	}
 //#pragma endregion
 
-//#pragma region PoliceFBX
-//	{
-//		for (int i = 0; i < 1; i++)
-//		{
-//			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\PoliceMan.fbx");
-//			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-//			for (auto& gameObject : gameObjects)
-//			{
-//				gameObject->SetName(L"Police");
-//				gameObject->SetCheckFrustum(false);
-//				gameObject->GetTransform()->SetLocalPosition(Vec3(200.f * i, 0.f, 0.f));
-//				gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-//				scene->AddGameObject(gameObject);
-//
-//			}
-//		}
-//	}
-//#pragma endregion
+#pragma region PoliceFBX
+	{
+		for (int i = 0; i < 1; i++)
+		{
+			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\PoliceMan.fbx");
+			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+			for (auto& gameObject : gameObjects)
+			{
+				gameObject->SetName(L"Police");
+				gameObject->SetCheckFrustum(false);
+				gameObject->SetStatic(true);
+				gameObject->GetTransform()->SetLocalPosition(Vec3(500.f * i, 10.f, 800.f));
+				gameObject->GetTransform()->SetLocalRotation(Vec3(2.f * i, 2.f, 0.f));
+				gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+				scene->AddGameObject(gameObject);
+
+			}
+		}
+	}
+#pragma endregion
 
 	_LoadText = L"Load Map"; // 16
 	Network::GetInst()->SendLoadProgressPacket((char)1500 / 21);
@@ -514,7 +516,7 @@ void SceneManager::LoadGameScene()
 		for (auto& gameObject : gameObjects)
 		{
 			gameObject->SetName(L"Map");
-			gameObject->SetCheckFrustum(true);
+			gameObject->SetCheckFrustum(false);
 			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
 			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 3.1415f, 0.f));
 			gameObject->GetTransform()->SetLocalScale(Vec3(60.f, 100.f, 60.f));
@@ -527,28 +529,29 @@ void SceneManager::LoadGameScene()
 	}
 #pragma endregion
 
-#pragma region Object
+#/*pragma region Object
 	{
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
 		obj->SetName(L"OBJ");
 		obj->AddComponent(make_shared<Transform>());
+		
+		obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
+		obj->GetTransform()->SetLocalPosition(Vec3(0.f, 100.f,1000.f));
 
-		obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 1.f));
-		obj->GetTransform()->SetLocalPosition(Vec3(0.f, 100.f, 0.f));
-		obj->SetStatic(true);
 		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
 		{
 			shared_ptr<Mesh> sphereMesh = GET_SINGLE(Resources)->LoadCubeMesh();
 			meshRenderer->SetMesh(sphereMesh);
 		}
 		{
-			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"RoomButton");
+			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
 			meshRenderer->SetMaterial(material->Clone());
 		}
+		obj->SetCheckFrustum(true);
 		obj->AddComponent(meshRenderer);
 		scene->AddGameObject(obj);
 	}
-#pragma endregion
+#pragma endregion*/
 
 	_LoadText = L"Load Directinal Light"; // 17
 	Network::GetInst()->SendLoadProgressPacket((char)1500 / 21);
@@ -564,60 +567,60 @@ void SceneManager::LoadGameScene()
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
 
 		light->GetLight()->SetDiffuse(Vec3(1.0f, 1.0f, 1.0f));
-		light->GetLight()->SetAmbient(Vec3(0.3f, 0.3f, 0.3f));
-		light->GetLight()->SetSpecular(Vec3(0.3f, 0.3f, 0.3f));
+		light->GetLight()->SetAmbient(Vec3(0.5f, 0.5f, 0.5f));
+		light->GetLight()->SetSpecular(Vec3(0.1f, 0.1f, 0.1f));
 
 
 		scene->AddGameObject(light);
 	}
 #pragma endregion
 	
-	_LoadText = L"Load Point Light"; // 18
-	Network::GetInst()->SendLoadProgressPacket((char)1700 / 21);
-
-#pragma region Point Light
-	{
-		shared_ptr<GameObject> light = make_shared<GameObject>();
-		light->SetName(L"Pnt_Light");
-		light->AddComponent(make_shared<Transform>());
-		light->GetTransform()->SetLocalPosition(Vec3(0.f, 100.f, 150.f));
-		light->AddComponent(make_shared<Light>());
-		//light->GetLight()->SetLightDirection(Vec3(-1.f, -1.f, 0));
-		light->GetLight()->SetLightType(LIGHT_TYPE::POINT_LIGHT);
-		light->GetLight()->SetDiffuse(Vec3(0.0f, 0.5f, 0.0f));
-		light->GetLight()->SetAmbient(Vec3(0.0f, 0.3f, 0.0f));
-		light->GetLight()->SetSpecular(Vec3(0.0f, 0.3f, 0.0f));
-		light->GetLight()->SetLightRange(200.f);
-		light->AddComponent(make_shared<LightEffect>());
-
-		//light->GetLight()->SetLightState(false);
-		scene->AddGameObject(light);
-	}
-#pragma endregion
-
-	_LoadText = L"Load Spot Light"; // 19
-	Network::GetInst()->SendLoadProgressPacket((char)1800 / 21);
-
-#pragma region Spot Light
-	{
-		shared_ptr<GameObject> light = make_shared<GameObject>();
-		light->SetName(L"Spt_Light");
-		light->AddComponent(make_shared<Transform>());
-		light->GetTransform()->SetLocalPosition(Vec3(75.f, 500.f, 150.f));
-		light->AddComponent(make_shared<Light>());
-		light->GetLight()->SetLightDirection(Vec3(0.f, -1.f, 0));
-		light->GetLight()->SetLightType(LIGHT_TYPE::SPOT_LIGHT);
-		light->GetLight()->SetDiffuse(Vec3(0.5f, 0.5f, 0.5f));
-		light->GetLight()->SetAmbient(Vec3(0.1f, 0.1f, 0.1f));
-		light->GetLight()->SetSpecular(Vec3(0.1f, 0.1f, 0.1f));
-		light->GetLight()->SetLightRange(1000.f);
-		light->GetLight()->SetLightAngle(3.14f / 2);
-		light->AddComponent(make_shared<LightEffect>());
-
-		//light->GetLight()->SetLightState(false);
-		scene->AddGameObject(light);
-	}
-#pragma endregion
+//	_LoadText = L"Load Point Light"; // 18
+//	Network::GetInst()->SendLoadProgressPacket((char)1700 / 21);
+//
+//#pragma region Point Light
+//	{
+//		shared_ptr<GameObject> light = make_shared<GameObject>();
+//		light->SetName(L"Pnt_Light");
+//		light->AddComponent(make_shared<Transform>());
+//		light->GetTransform()->SetLocalPosition(Vec3(0.f, 100.f, 150.f));
+//		light->AddComponent(make_shared<Light>());
+//		//light->GetLight()->SetLightDirection(Vec3(-1.f, -1.f, 0));
+//		light->GetLight()->SetLightType(LIGHT_TYPE::POINT_LIGHT);
+//		light->GetLight()->SetDiffuse(Vec3(0.0f, 0.5f, 0.0f));
+//		light->GetLight()->SetAmbient(Vec3(0.0f, 0.3f, 0.0f));
+//		light->GetLight()->SetSpecular(Vec3(0.0f, 0.3f, 0.0f));
+//		light->GetLight()->SetLightRange(200.f);
+//		light->AddComponent(make_shared<LightEffect>());
+//
+//		//light->GetLight()->SetLightState(false);
+//		scene->AddGameObject(light);
+//	}
+//#pragma endregion
+//
+//	_LoadText = L"Load Spot Light"; // 19
+//	Network::GetInst()->SendLoadProgressPacket((char)1800 / 21);
+//
+//#pragma region Spot Light
+//	{
+//		shared_ptr<GameObject> light = make_shared<GameObject>();
+//		light->SetName(L"Spt_Light");
+//		light->AddComponent(make_shared<Transform>());
+//		light->GetTransform()->SetLocalPosition(Vec3(75.f, 500.f, 150.f));
+//		light->AddComponent(make_shared<Light>());
+//		light->GetLight()->SetLightDirection(Vec3(0.f, -1.f, 0));
+//		light->GetLight()->SetLightType(LIGHT_TYPE::SPOT_LIGHT);
+//		light->GetLight()->SetDiffuse(Vec3(0.5f, 0.5f, 0.5f));
+//		light->GetLight()->SetAmbient(Vec3(0.1f, 0.1f, 0.1f));
+//		light->GetLight()->SetSpecular(Vec3(0.1f, 0.1f, 0.1f));
+//		light->GetLight()->SetLightRange(1000.f);
+//		light->GetLight()->SetLightAngle(3.14f / 2);
+//		light->AddComponent(make_shared<LightEffect>());
+//
+//		//light->GetLight()->SetLightState(false);
+//		scene->AddGameObject(light);
+//	}
+//#pragma endregion
 
 	_LoadText = L"Load Particle"; // 20
 	Network::GetInst()->SendLoadProgressPacket((char)1900 / 21);
@@ -736,7 +739,7 @@ void SceneManager::LoadLoginScene()
 		obj->SetName(L"LOGINSCREENBUTTON");
 		obj->AddComponent(make_shared<Transform>());
 		obj->GetTransform()->SetLocalScale(Vec3(width / 4.f, height / 10.f, 1.f));
-		obj->GetTransform()->SetLocalPosition(Vec3((width / 2) * 0.25, (height / 2) * -1 * 0.45, 0.f));
+		obj->GetTransform()->SetLocalPosition(Vec3((width / 2) * 0.475, (height / 2) * -1 * 0.45, 0.f));
 		obj->SetStatic(false);
 
 		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
@@ -964,7 +967,7 @@ void SceneManager::LoadLobbyScene()
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
 		obj->SetName(L"LOBBYBACKBUTTON");
 		obj->AddComponent(make_shared<Transform>());
-		obj->GetTransform()->SetLocalScale(Vec3(width / 7.f, height / 11.f, 1.f));
+		obj->GetTransform()->SetLocalScale(Vec3(width / 7.f, height / 17.5f, 1.f));
 		obj->GetTransform()->SetLocalPosition(Vec3((width / 2) * -1 * 0.825, (height / 2) * 0.2, 0.f));
 		obj->SetStatic(false);
 
@@ -992,7 +995,7 @@ void SceneManager::LoadLobbyScene()
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
 		obj->SetName(L"MKROOMBUTTON");
 		obj->AddComponent(make_shared<Transform>());
-		obj->GetTransform()->SetLocalScale(Vec3(width / 7.f, height / 11.f, 1.f));
+		obj->GetTransform()->SetLocalScale(Vec3(width / 7.f, height / 17.5f, 1.f));
 		obj->GetTransform()->SetLocalPosition(Vec3((width / 2) * -1 * 0.825, (height / 2) * -1.f * 0.05f, 0.f));
 		obj->SetStatic(false);
 
@@ -1002,7 +1005,7 @@ void SceneManager::LoadLobbyScene()
 			meshRenderer->SetMesh(ScreenMesh);
 		}
 		{
-			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"LoginScreenButton");
+			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"EnterBtn");
 			meshRenderer->SetMaterial(material->Clone());
 		}
 		obj->AddComponent(meshRenderer);
@@ -1010,7 +1013,6 @@ void SceneManager::LoadLobbyScene()
 
 	}
 #pragma endregion
-
 
 	_LoadText = L"Load Directional Light";
 #pragma region Directional Light
@@ -1110,7 +1112,7 @@ void SceneManager::LoadRoomScene()
 			meshRenderer->SetMesh(ScreenMesh);
 		}
 		{
-			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"LobbyScreen");
+			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"InRoom");
 			meshRenderer->SetMaterial(material->Clone());
 		}
 		obj->AddComponent(meshRenderer);
@@ -1129,7 +1131,7 @@ void SceneManager::LoadRoomScene()
 		obj->SetName(L"ROOMBACKBUTTON");
 		obj->AddComponent(make_shared<Transform>());
 		obj->AddComponent(make_shared<LoginScript>());
-		obj->GetTransform()->SetLocalScale(Vec3(width / 7.f, height / 11.f, 1.f));
+		obj->GetTransform()->SetLocalScale(Vec3(width / 7.f, height / 17.5f, 1.f));
 		obj->GetTransform()->SetLocalPosition(Vec3((width / 2) * -1 * 0.825, (height / 2) * 0.2, 0.f));
 		obj->SetStatic(false);
 
@@ -1157,7 +1159,7 @@ void SceneManager::LoadRoomScene()
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
 		obj->SetName(L"ROOMREADYBUTTON");
 		obj->AddComponent(make_shared<Transform>());
-		obj->GetTransform()->SetLocalScale(Vec3(width / 7.f, height / 11.f, 1.f));
+		obj->GetTransform()->SetLocalScale(Vec3(width / 7.f, height / 17.5f, 1.f));
 		obj->GetTransform()->SetLocalPosition(Vec3((width / 2) * -1 * 0.825, (height / 2) * -1.f * 0.05f, 0.f));
 		obj->SetStatic(false);
 
@@ -1186,7 +1188,7 @@ void SceneManager::LoadRoomScene()
 		obj->SetName(L"ROOMGAMESTARTBUTTON");
 		obj->AddComponent(make_shared<Transform>());
 		obj->AddComponent(make_shared<LoginScript>());
-		obj->GetTransform()->SetLocalScale(Vec3(width / 7.f, height / 11.f, 1.f));
+		obj->GetTransform()->SetLocalScale(Vec3(width / 7.f, height / 17.5f, 1.f));
 		obj->GetTransform()->SetLocalPosition(Vec3((width / 2) * -1 * 0.825, (height / 2) * -1.f * 0.3f, 0.f));
 		obj->SetStatic(false);
 
@@ -1205,38 +1207,35 @@ void SceneManager::LoadRoomScene()
 	}
 #pragma endregion
 
-	for (int i = 0; i < 4; i++)
+	/*for (int i = 0; i < 8; i++)
 	{
-		for (int j = 0; j < 2; j++)
+
+		float width = static_cast<float>(GEngine->GetWindow().width);
+		float height = static_cast<float>(GEngine->GetWindow().height);
+
+		shared_ptr<GameObject> obj = make_shared<GameObject>();
+		wstring text = L"LobbyScreen";
+		text.append(to_wstring(i + 1));
+		obj->SetName(text);
+		obj->AddComponent(make_shared<Transform>());
+		obj->GetTransform()->SetLocalScale(Vec3(width / 3.f, height / 12.f, 1.f));
+
+			obj->GetTransform()->SetLocalPosition(Vec3((width / 2) * 0.475f, (height / 2) * (0.7f - (i * 0.2f)), 0.f));
+		obj->SetStatic(false);
+
+		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
 		{
-			float width = static_cast<float>(GEngine->GetWindow().width);
-			float height = static_cast<float>(GEngine->GetWindow().height);
-
-			shared_ptr<GameObject> obj = make_shared<GameObject>();
-			wstring text = L"LobbyScreen";
-			text.append(to_wstring(i * 2 + j + 1));
-			obj->SetName(text);
-			obj->AddComponent(make_shared<Transform>());
-			obj->GetTransform()->SetLocalScale(Vec3(width / 3.f, height / 7.5f, 1.f));
-			if (j == 0)
-				obj->GetTransform()->SetLocalPosition(Vec3((width / 2) * -1.f * 0.25f, (height / 2) * (0.6f - (i * 0.4f)), 0.f));
-			else
-				obj->GetTransform()->SetLocalPosition(Vec3((width / 2) * 0.55f, (height / 2) * (0.6f - (i * 0.4f)), 0.f));
-			obj->SetStatic(false);
-
-			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
-			{
-				shared_ptr<Mesh> ScreenMesh = GET_SINGLE(Resources)->LoadRectangleMesh();
-				meshRenderer->SetMesh(ScreenMesh);
-			}
-			{
-				shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"LobbyRoomButton");
-				meshRenderer->SetMaterial(material->Clone());
-			}
-			obj->AddComponent(meshRenderer);
-			scene->AddGameObject(obj);
+			shared_ptr<Mesh> ScreenMesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+			meshRenderer->SetMesh(ScreenMesh);
 		}
-	}
+		{
+			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"LobbyRoomButton");
+			meshRenderer->SetMaterial(material->Clone());
+		}
+		obj->AddComponent(meshRenderer);
+		scene->AddGameObject(obj);
+	}*/
+	
 
 
 	_LoadText = L"Load Directional Light";

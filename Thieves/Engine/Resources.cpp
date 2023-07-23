@@ -740,11 +740,11 @@ void Resources::CreateDefaultMaterial()
 	// RoomScreen
 	{
 		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"UI");
-		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"Room", L"..\\Resources\\Texture\\Thieves_UI\\InRoom.png");
+		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"InRoom", L"..\\Resources\\Texture\\Thieves_UI\\InRoom.png");
 		shared_ptr<Material> material = make_shared<Material>();
 		material->SetShader(shader);
 		material->SetTexture(0, texture);
-		Add<Material>(L"RoomScreen", material);
+		Add<Material>(L"InRoom", material);
 	}
 
 	// LoadingScreen
@@ -815,6 +815,16 @@ void Resources::CreateDefaultMaterial()
 		material->SetShader(shader);
 		material->SetTexture(0, texture);
 		Add<Material>(L"ReadyBtnUp", material);
+	}
+
+	// EnterButtonUp
+	{
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"UI");
+		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"EnterBtn", L"..\\Resources\\Texture\\Thieves_UI\\EnterRoomButton.png");
+		shared_ptr<Material> material = make_shared<Material>();
+		material->SetShader(shader);
+		material->SetTexture(0, texture);
+		Add<Material>(L"EnterBtn", material);
 	}
 
 	// ThiefIcon

@@ -34,7 +34,10 @@ void Camera::FinalUpdate()
 		_matProjection = ::XMMatrixPerspectiveFovLH(_fov, _width / _height, _near, _far);
 	else
 		_matProjection = ::XMMatrixOrthographicLH(_width * _scale, _height * _scale, _near, _far);
-
+	
+	S_MatView = _matView;
+	S_MatProjection = _matProjection;
+	
 	_frustum.FinalUpdate();
 }
 
@@ -54,7 +57,7 @@ void Camera::SortGameObject()
 
 		if (IsCulled(gameObject->GetLayerIndex()))
 			continue;
-
+		
 		if (gameObject->GetCheckFrustum())
 		{
 			if (_frustum.ContainsSphere(
