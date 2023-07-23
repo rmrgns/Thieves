@@ -796,8 +796,8 @@ void PacketManager::ProcessAttack(int c_id, unsigned char* p)
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 
 	Vector3 AttackPos = cl->GetPos();
-	AttackPos.x += cl->GetRotX() * 100.f;
-	AttackPos.z += cl->GetRotZ() * 100.f;
+	AttackPos.x += cl->GetRotX() * 10.f;
+	AttackPos.z += cl->GetRotZ() * 10.f;
 
 	Room* clRoom = m_room_manager->GetRoom(cl->GetRoomID());
 
@@ -806,7 +806,7 @@ void PacketManager::ProcessAttack(int c_id, unsigned char* p)
 
 		Player* cpl = MoveObjManager::GetInst()->GetPlayer(pl);
 
-		if (cpl->GetPos().Dist(cl->GetPos()) > 300.f) {
+		if (cpl->GetPos().Dist(cl->GetPos()) > 30.f) {
 			Hit(c_id, pl);
 		}
 
