@@ -631,7 +631,7 @@ void SceneManager::LoadGameScene()
 		particle->SetCheckFrustum(false);
 		particle->AddComponent(make_shared<PlayerParticle>());
 		particle->GetParticleSystem()->UseParticle(true);
-		particle->GetParticleSystem()->MakeParticle(L"blood", L"..\\Resources\\Texture\\Particle\\pngwing.com.png");
+		particle->GetParticleSystem()->MakeParticle(L"blood", L"..\\Resources\\Texture\\Particle\\bubble.png");
 		particle->GetTransform()->SetLocalPosition(Vec3(0.f, 100.f, 0.f));
 		scene->AddGameObject(particle);
 	}

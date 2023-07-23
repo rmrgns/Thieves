@@ -48,7 +48,7 @@ private:
 	shared_ptr<Material>		_material;
 	shared_ptr<Mesh>			_mesh;
 
-	float				_createInterval = 0.005f;
+	float				_createInterval = 0.0005f;
 	float				_accTime = 0.f;
 
 	float				_minLifeTime = 0.5f;
