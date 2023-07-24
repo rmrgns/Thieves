@@ -473,11 +473,12 @@ void PacketManager::SendGameStart(int c_id)
 	cl->DoSend(sizeof(packet), &packet);
 }
 
-void PacketManager::SendBullet(int c_id, Vector3 start_point, Vector3 collision_point, Vector3 rot_point)
+void PacketManager::SendBullet(int c_id, int mover, Vector3 start_point, Vector3 collision_point, Vector3 rot_point)
 {
 	sc_packet_bullet packet;
 	packet.type = SC_PACKET_BULLET;
 	packet.size = sizeof(packet);
+	packet.id = mover;
 	packet.s_x = start_point.x;
 	packet.s_y = start_point.y;
 	packet.s_z = start_point.z;
@@ -896,7 +897,18 @@ void PacketManager::ProcessBullet(int c_id, unsigned char* p)
 // -> Vector 총알과 충돌하거나 마지막 bulletpoint 좌표 리턴
 //	Vector3 col_pos = m_ray_casting->Shoot(start_pos, dir_pos);
 
-	SendBullet(c_id, start_pos, col_pos, rot_pos);
+	Room* room = m_room_manager->GetRoom(player->GetRoomID());
+
+	if (isnan(player->GetPosX()) || isnan(player->GetPosY()) || isnan(player->GetPosZ())) {
+		return;
+	}
+
+	for (auto other_pl : room->GetObjList())
+	{
+		if (false == MoveObjManager::GetInst()->IsPlayer(other_pl))
+			continue;
+		SendBullet(other_pl, c_id, start_pos, col_pos, rot_pos);
+	}
 }
 void PacketManager::ProcessMatching(int c_id, unsigned char* p)
 {

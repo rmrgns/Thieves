@@ -40,12 +40,18 @@ public:
 	void SetName(const std::string& val) { m_name = val; }
 
 	void SetActionType(const int);
+	void SetBulletPosition(const Vec3& val) { m_position = val; }
+	void SetBulletRotation(const Vec3& val) { m_rotation = val; }
 
 	std::chrono::system_clock::time_point m_move_time;
 protected:
 	std::string m_name;
 	Vec3 m_position;
 	Vec3 m_rotation;
+
+	Vec3 m_bullet_position;
+	Vec3 m_bullet_rotation;
+
 	int m_actionType;
 	int m_id;
 	//client_fw::Quaternion m_rotation;

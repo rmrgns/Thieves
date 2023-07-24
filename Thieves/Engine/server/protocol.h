@@ -423,6 +423,7 @@ struct sc_packet_obj_info_end {
 struct sc_packet_bullet {
 	unsigned char size;
 	char type;
+	int id;
 	float s_x, s_y, s_z;	// ½ÃÀÛ ÁÂÇ¥
 	float e_x, e_y, e_z;	// Ãæµ¹ ÁÂÇ¥
 	float r_x, r_y, r_z;

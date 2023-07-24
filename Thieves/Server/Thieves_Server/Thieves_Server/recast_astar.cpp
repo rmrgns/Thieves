@@ -87,15 +87,11 @@ Vector3 NavMeshPathfinding::FindAndPrintPath(const float startPos[3], const floa
                 pt[1] += v[1];
                 pt[2] += v[2];
             }
-
             const float invVertCount = 1.0f / poly->vertCount;
             pt[0] *= invVertCount;
             pt[1] *= invVertCount;
             pt[2] *= invVertCount;
-
-            std::cout << "Point " << i << ": (" << pt[0] << ", " << pt[1] << ", " << pt[2] << ")" << std::endl;
-            
-            
+            std::cout << "Point " << i << ": (" << pt[0] << ", " << pt[1] << ", " << pt[2] << ")" << std::endl;              
             return pathPos;
         }
     }

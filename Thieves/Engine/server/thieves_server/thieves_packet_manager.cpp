@@ -57,9 +57,7 @@ void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
 
 	if (mover != m_obj_map.end())
 	{
-		//if (mover->second->GetIsActive() == false)return;
 		if (isnan(packet->posX) ||  isnan(packet->posZ)) return;
-		
 		
 		mover->second->SetPosition(Vec3(packet->posX, packet->posY, packet->posZ));
 		
@@ -411,10 +409,16 @@ void ThievesPacketManager::ProcessBullet(int c_id, unsigned char* p)
 	rot_pos.x = packet->r_x;
 	rot_pos.y = packet->r_y;
 	rot_pos.z = packet->r_z;
-	
-	// ÃÑ¾Ë ±×¸®±â
-	shared_ptr<UsingGun> m_using_gun;
 
+	auto fire = m_obj_map.find(packet->id);
+
+	if (fire != m_obj_map.end())
+	{
+		if (isnan(packet->e_x) || isnan(packet->e_z)) return;
+
+		fire->second->SetBulletPosition(Vec3(packet->e_x, packet->e_y, packet->e_z));
+		fire->second->SetBulletRotation(Vec3(0.0f, atan2(packet->r_x, packet->r_z), 0.0f));
+	}
 
 }
 

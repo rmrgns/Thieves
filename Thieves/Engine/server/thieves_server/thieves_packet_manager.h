@@ -54,7 +54,6 @@ public:
 	std::unordered_map<int, shared_ptr<NetworkMoveObj>>& GetObjMap() { return m_obj_map; };
 	GameInfo& GetGameInfo() { return m_game_info; };
 
-	//UsingGun* m_using_gun;
 
 private:
 	std::unordered_map<int, shared_ptr<NetworkMoveObj>>m_obj_map;

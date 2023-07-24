@@ -55,7 +55,7 @@ public:
 	void SendError(int c_id, int err_type, int err_val);
 	void SendGameStart(int c_id);
 
-	void SendBullet(int c_id, Vector3, Vector3, Vector3);
+	void SendBullet(int c_id, int, Vector3, Vector3, Vector3);
 	void SendLoginFailPacket(int c_id, int reason);
 	void End();
 	void Disconnect(int c_id);

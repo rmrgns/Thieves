@@ -23,7 +23,7 @@ public:
     }
 
     bool LoadNavMesh(const char* navMeshFilePath);
-    void FindAndPrintPath();
+
     Vector3 FindAndPrintPath(const float start[3], const float end[3]);
 private:
     dtNavMesh* navMesh;
