@@ -978,14 +978,14 @@ void PacketManager::ProcessGameStart(int c_id, unsigned char* p)
 
 	Room* room = m_room_manager->GetRoom(player->GetRoomID());
 
-	if (room->IsGameStarted()) return;
+	//if (room->IsGameStarted()) return;
 
 	room->SetGameStart();
 
-	if (room->GetNumberOfPlayer() != room->GetNumberOfReadyPlayer()) {
-		SendError(c_id, ERROR_PLAYER_NOT_READY, -1);
-		return;
-	}
+	//if (room->GetNumberOfPlayer() != room->GetNumberOfReadyPlayer()) {
+	//	SendError(c_id, ERROR_PLAYER_NOT_READY, -1);
+	//	return;
+	//}
 
 	for (int pl : room->GetObjList()) {
 
