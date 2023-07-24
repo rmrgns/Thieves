@@ -59,7 +59,7 @@ Vector3 NavMeshPathfinding::FindAndPrintPath(const float startPos[3], const floa
         // 시작점과 끝점에서 가장 가까운 네비게이션 메시 지점 찾기
     dtQueryFilter filter;
     dtPolyRef startRef, endRef;
-    Vector3 pathPos;
+    Vector3 pathPos = {0.f,0.f,0.f};
     float startNearest[3], endNearest[3];
     const float halfExtents[3] = { 25.0f, 75.0f, 25.0f };
     navQuery->findNearestPoly(startPos, halfExtents, &filter, &startRef, startNearest);

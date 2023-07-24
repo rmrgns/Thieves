@@ -8,7 +8,7 @@ using namespace std;
 Network* Network::m_pInst = NULL;
 bool Network::matching_end = false;
 
-// À©µµ¿ì ¼ÒÄÏ ÃÊ±âÈ­, ¼ÒÄÏ »ý¼º ¹× ÃÊ±âÈ­
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ê±ï¿½È­
 bool Network::Init(client_fw::UPtr<ThievesPacketManager>&& packet_manager, client_fw::UPtr<ThievesSendManager>&& send_manager)
 {
 	m_id = 0;
@@ -33,7 +33,7 @@ bool Network::Init(client_fw::UPtr<ThievesPacketManager>&& packet_manager, clien
     return true;
 }
 
-// ¼­¹ö¿¬°á
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 bool Network::Connect()
 {
 	SOCKADDR_IN server_addr;
@@ -58,7 +58,7 @@ bool Network::Connect()
 	return true;
 }
 
-// ¼­¹ö Worker ½º·¹µå
+// ï¿½ï¿½ï¿½ï¿½ Worker ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void Network::Worker()
 {
 	if (false == Connect())
@@ -113,7 +113,7 @@ void Network::Worker()
 	cout << "Worker End " << endl;
 }
 
-// Recv ÆÐÅ¶ Ã³¸®
+// Recv ï¿½ï¿½Å¶ Ã³ï¿½ï¿½
 void Network::OnRecv(int client_id, EXP_OVER* exp_over, DWORD num_byte, SOCKET& socket)
 {
 	m_packet_manager->ProcessRecv(client_id, exp_over, num_byte, socket);
@@ -193,9 +193,16 @@ void Network::SendRequestInRoomData()
 	m_send_manager->SendRequestInRoomData(m_s_socket);
 }
 
+
 void Network::SendBullet(Vec3 start_pos, Vec3 dir_pos, Vec3 rot_pos)
+
 {
 	m_send_manager->SendBullet(m_s_socket, start_pos, dir_pos, rot_pos);
+}
+
+void Network::SendAttackPacket()
+{
+	m_send_manager->SendAttackPacket(m_s_socket);
 }
 
 // Packet Test

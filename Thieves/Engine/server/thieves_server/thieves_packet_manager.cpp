@@ -46,7 +46,13 @@ void ThievesPacketManager::Init()
 	RegisterRecvFunction(SC_PACKET_ERROR, [this](int c_id, unsigned char* p) {ProcessError(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_GAME_START, [this](int c_id, unsigned char* p) {ProcessGameStart(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_ALL_PLAYER_LOAD_END, [this](int c_id, unsigned char* p) {ProcessAllPlayerLoadend(c_id, p); });
+
 	RegisterRecvFunction(SC_PACKET_BULLET, [this](int c_id, unsigned char* p) {ProcessBullet(c_id, p); });
+
+	RegisterRecvFunction(SC_PACKET_PHASE, [this](int c_id, unsigned char* p) {ProcessPhaseChange(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_ATTACK, [this](int c_id, unsigned char* p) {ProcessAttack(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_STUN, [this](int c_id, unsigned char* p) {ProcessHit(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_GET_ITEM, [this](int c_id, unsigned char* p) {ProcessGetItem(c_id, p); });
 }
 
 void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
@@ -61,7 +67,7 @@ void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
 		
 		mover->second->SetPosition(Vec3(packet->posX, packet->posY, packet->posZ));
 		
-		//°¡Á®¿Â rot °ªÀº look vector ÀÌ¹Ç·Î ÀÌ ºÎºÐÀ» Rotation °¢µµ °ªÀ¸·Î º¯°æÇØ ÁÖ¾î¾ß ÇÔ.
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ rot ï¿½ï¿½ï¿½ï¿½ look vector ï¿½Ì¹Ç·ï¿½ ï¿½ï¿½ ï¿½Îºï¿½ï¿½ï¿½ Rotation ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½ ï¿½ï¿½.
 		mover->second->SetRotation(Vec3(0.0f, atan2(packet->rotX, packet->rotZ), 0.0f));
 		mover->second->SetActionType(packet->action_type);
 	}
@@ -75,7 +81,7 @@ void ThievesPacketManager::ProcessSignin(int c_id, unsigned char* p)
 
 	GET_SINGLE(SceneManager)->SetCheckChangeScene(true);
 	GEngine->SetChangeScene(L"Lobby");
-	// Å¬¶ó·Î
+	// Å¬ï¿½ï¿½ï¿½
 }
 
 void ThievesPacketManager::ProcessObjInfo(int c_id, unsigned char* p)
@@ -85,17 +91,17 @@ void ThievesPacketManager::ProcessObjInfo(int c_id, unsigned char* p)
 	Network::matching_end = true;
 	NW_OBJ_TYPE nw_type;
 	
-	// ÀÌ°Å °¡µ¶¼º ³Ê¹« ¾ÈÁÁ´Ù. ÀÌ·± ¹æ½ÄÀ¸·Î Àû¾îÁÖ¸é ÁÁÀ»µí -> ±èÇõµ¿ÀÓ
+	// ï¿½Ì°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. ï¿½Ì·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ -> ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	// 
-	// ÆÐÅ¶ ¾ÆÀÌµð°¡ °ÔÀÓ Á¤º¸ÀÇ ³×Æ®¿öÅ© ¾ÆÀÌµð¿Í °°´Ù¸é ¿ÀºêÁ§Æ® Å¸ÀÔÀ» Á¶ÀÛ ÇÃ·¹ÀÌ¾î Å¸ÀÔÀ¸·Î, ¾Æ´Ï¶ó¸é ÆÐÅ¶¿¡¼­ ¹ÞÀº ¿ÀºêÁ§Æ® Å¸ÀÔÀ¸·Î ÇÑ´Ù.
+	// ï¿½ï¿½Å¶ ï¿½ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½ï¿½Å© ï¿½ï¿½ï¿½Ìµï¿½ï¿½ ï¿½ï¿½ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½Æ´Ï¶ï¿½ï¿½ ï¿½ï¿½Å¶ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® Å¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ´ï¿½.
 	packet->id == m_game_info.GetNetworkID() ?
 		nw_type = NW_OBJ_TYPE::OT_MY_PLAYER : nw_type = NW_OBJ_TYPE::OT_PLAYER;
-	//-> ³ªÁß¿¡ NPC Ã³¸®¸¦ ÇÒ ¶§¿¡´Â ÀÌ ºÎºÐÀ» º¯°æÇØ ÁÖ¾î¾ß ÇÔ.
+	//-> ï¿½ï¿½ï¿½ß¿ï¿½ NPC Ã³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Îºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½ ï¿½ï¿½.
 
 	bool isNewData = true;
 	if (m_obj_map.contains(packet->id)) isNewData = false;
 
-	// ÇØ´ç µ¥ÀÌÅÍ¸¦ ³×Æ®¿öÅ©ÀÇ id¸¦ Å°·Î ÇØ¼­ ³×Æ®¿öÅ© ¿ÀºêÁ§Æ®¿¡ ³Ö´Â´Ù.
+	// ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½Æ®ï¿½ï¿½Å©ï¿½ï¿½ idï¿½ï¿½ Å°ï¿½ï¿½ ï¿½Ø¼ï¿½ ï¿½ï¿½Æ®ï¿½ï¿½Å© ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ö´Â´ï¿½.
 	auto res = m_obj_map.try_emplace(packet->id, CreateSPtr<NetworkMoveObj>(
 		packet->id,
 		nw_type,
@@ -107,7 +113,7 @@ void ThievesPacketManager::ProcessObjInfo(int c_id, unsigned char* p)
 
 	if (!isNewData) return;
 
-	// ¸¸¾à ÀÌ¹Ì °ÔÀÓÀÌ ÁøÇàµÇ°í ÀÖ´Â »óÅÂ¶ó¸é »õ·Ó°Ô ÁöÁ¤ÇØ ÁÖ¾î¾ß ÇÔ.
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½Â¶ï¿½ï¿½ ï¿½ï¿½ï¿½Ó°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½ ï¿½ï¿½.
 	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
 	{
 		if (m_game_info.GetNetworkID() == packet->id) return;
@@ -133,7 +139,7 @@ void ThievesPacketManager::ProcessObjInfo(int c_id, unsigned char* p)
 							nsys->SetNetworkingType(NetworkType::OTHER_PLAYER);
 						}
 						break;
-						// ÇöÀç OT_PLAYER ÀÌ¿Ü¿¡´Â µé¾î¿Í¼­´Â ¾ÈµÊ
+						// ï¿½ï¿½ï¿½ï¿½ OT_PLAYER ï¿½Ì¿Ü¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ ï¿½Èµï¿½
 						case NW_OBJ_TYPE::OT_MY_PLAYER:
 						case NW_OBJ_TYPE::OT_NONE:
 						default:
@@ -148,7 +154,7 @@ void ThievesPacketManager::ProcessObjInfo(int c_id, unsigned char* p)
 		}
 	}
 
-	// ¿ÀºêÁ§Æ® spqwn ¹× m_objmap[pakcet->id] Àü¼ÛÇÏ¿© id°ª¸¶´Ù ½ºÆù
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® spqwn ï¿½ï¿½ m_objmap[pakcet->id] ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ idï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 }
 
 void ThievesPacketManager::ProcessObjInfoEnd(int c_id, unsigned char* p)
@@ -389,12 +395,13 @@ void ThievesPacketManager::ProcessGameStart(int c_id, unsigned char* p)
 	GEngine->SetChangeScene(L"Game");
 }
 
+
 void ThievesPacketManager::ProcessBullet(int c_id, unsigned char* p)
 {
 	sc_packet_bullet* packet = reinterpret_cast<sc_packet_bullet*>(p);
 
-	// ÄÚµå Ãß°¡
-	// Ãæµ¹ÇÑ ÁÂÇ¥¸¦ ¹Þ¾Æ¼­ ÃÑ¾Ë ±ËÀû ±×¸®´Â ÇÔ¼ö È£Ãâ
+	// ï¿½Úµï¿½ ï¿½ß°ï¿½
+	// ï¿½æµ¹ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½Þ¾Æ¼ï¿½ ï¿½Ñ¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ È£ï¿½ï¿½
 	// 
 	Vec3 start_pos, end_pos, rot_pos;
 
@@ -420,6 +427,28 @@ void ThievesPacketManager::ProcessBullet(int c_id, unsigned char* p)
 		fire->second->SetBulletRotation(Vec3(0.0f, atan2(packet->r_x, packet->r_z), 0.0f));
 	}
 
+}
+
+void ThievesPacketManager::ProcessPhaseChange(int c_id, unsigned char* p)
+{
+	sc_packet_phase_change* packet = reinterpret_cast<sc_packet_phase_change*>(p);
+
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ø¾ï¿½ï¿½ï¿½.
+}
+
+void ThievesPacketManager::ProcessAttack(int c_id, unsigned char* p)
+{
+	sc_packet_attack* packet = reinterpret_cast<sc_packet_attack*>(p);
+}
+
+void ThievesPacketManager::ProcessHit(int c_id, unsigned char* p)
+{
+	sc_packet_stun* packet = reinterpret_cast<sc_packet_stun*>(p);
+}
+
+void ThievesPacketManager::ProcessGetItem(int c_id, unsigned char* p)
+{
+	sc_packet_get_item* packet = reinterpret_cast<sc_packet_get_item*>(p);
 }
 
 
