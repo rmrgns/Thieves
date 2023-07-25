@@ -622,6 +622,31 @@ void PacketManager::EndGame(int room_id)
 	}
 }
 
+void PacketManager::SendItemInfo(int c_id, int item_id)
+{
+	Player* pl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	Room* room = m_room_manager->GetRoom(pl->GetRoomID());
+
+	Item* it = room->GetItem(item_id);
+
+	if (it->GetState() == ITEM_STATE::ST_NOTUSED) return;
+
+	sc_packet_item_info packet;
+	packet.type = SC_PACKET_ITEM_INFO;
+	packet.id = item_id;
+	packet.size = sizeof(packet);
+
+
+
+	packet.x = it->GetPosX();
+	packet.y = it->GetPosY();
+	packet.z = it->GetPosZ();
+
+	packet.item_type = it->GetItemCode();
+
+	pl->DoSend(sizeof(packet), &packet);
+}
+
 //=====================DB
 void PacketManager::CreateDBThread()
 {
@@ -1396,6 +1421,7 @@ void PacketManager::StartGame(int room_id)
 	std::shuffle(m_map_manager->GetEscapePos().begin(), m_map_manager->GetEscapePos().end(), dre);
 	std::shuffle(m_map_manager->GetSpecialEscapePos().begin(), m_map_manager->GetSpecialEscapePos().end(), dre);
 
+	
 
 	for (int i = 0; i < obj_list.size(); ++i)
 	{
@@ -1410,6 +1436,7 @@ void PacketManager::StartGame(int room_id)
 		if (room->GetItem(i) == nullptr) continue;
 
 		Item* it = room->GetItem(i);
+
 		if (i > MAX_ITEM / 2)
 		{
 			it->SetItemCode(ITEM_NUM_TRAP);
@@ -1418,13 +1445,20 @@ void PacketManager::StartGame(int room_id)
 		{
 			it->SetItemCode(ITEM_NUM_GUN);
 		}
+
 		it->SetState(ITEM_STATE::ST_SPAWNED);
+		it->SetPos(m_map_manager->GetItemPos().at(i));
+		
 	}
+
+	// 탈출 위치
 
 	for (int i = 0; i < 3; ++i)
 	{
 		room->SetEscapePos(i, m_map_manager->GetEscapePos().at(i));
 	}
+
+	// 특별 탈출 위치
 
 	room->SetSpecialEscapePos(m_map_manager->GetSpecialEscapePos().at(0));
 
@@ -1449,8 +1483,14 @@ void PacketManager::StartGame(int room_id)
 		}
 	}
 
-
-
+	for (auto c_id : room->GetObjList())
+	{
+		if (false == MoveObjManager::GetInst()->IsPlayer(c_id)) continue;
+		for (int i = 0; i < MAX_ITEM; ++i)
+		{
+			SendItemInfo(c_id, i);
+		}
+	}
 	for (auto c_id : room->GetObjList())
 	{
 		if (false == MoveObjManager::GetInst()->IsPlayer(c_id))continue;

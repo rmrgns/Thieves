@@ -3,7 +3,7 @@
 #include "object/object.h"
 #include "state.h"
 
-class Item : Object
+class Item : public Object
 {
 	char m_itemCode; // 아이템 번호
 	ITEM_STATE m_state;

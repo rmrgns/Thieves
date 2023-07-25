@@ -118,7 +118,9 @@ constexpr char SC_PACKET_STUN_END = 37; // ������ ������
 constexpr char SC_PACKET_ATTACK = 38; // �ƴ� �����ߴٴ°� �˷���� �ϴϱ� �翬�� �־����
 constexpr char SC_PACKET_TIMER_START = 39;
 constexpr char SC_PACKET_BULLET = 40;		// �Ѿ�
-constexpr char SC_PACKET_ITME_INFO = 41;
+constexpr char SC_PACKET_ITEM_INFO = 41;
+constexpr char SC_PACKET_ACTIVE_ESCAPE = 42;
+constexpr char SC_PACKET_ACTIVE_SPECIAL_ESCAPE = 43;
 
 constexpr char SC_PACKET_ATTACKMODE = 99;		// ���� ��� ���� 1. �ָ� 2. �� ���
 constexpr char SC_PACKET_NPC_ATTACK = 100;
@@ -509,10 +511,24 @@ struct sc_packet_timer_start {
 
 };
 
-struct sc_item_info {
+struct sc_packet_item_info {
 	unsigned char size;
 	char	type;
 	int		id;
 	float	x, y, z;
 	char item_type;
+};
+
+struct sc_packet_active_escape {
+	unsigned char size;
+	char type;
+	float x[3];
+	float y[3];
+	float z[3];
+};
+
+struct sc_packet_active_special_escape {
+	unsigned char size;
+	char type;
+	float x, y, z;
 };
