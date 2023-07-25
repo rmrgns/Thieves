@@ -65,6 +65,8 @@ public:
 	bool IsRoomInGame(int room_id);
 	void EndGame(int room_id);
 
+	void SendItemInfo(int c_id, int item_id);
+
 	void CreateDBThread();
 	void DBThread();
 	void ProcessDBTask(db_task& dt);
