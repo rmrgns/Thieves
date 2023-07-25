@@ -41,9 +41,10 @@ bool Network::Connect()
 	server_addr.sin_family = AF_INET;
 	server_addr.sin_port = htons(SERVER_PORT);
 
-	//inet_pton(AF_INET, "110.5.241.37", &server_addr.sin_addr);
+	inet_pton(AF_INET, "110.5.241.37", &server_addr.sin_addr);
+	//inet_pton(AF_INET, "218.37.77.149", &server_addr.sin_addr);
 
-	inet_pton(AF_INET, "127.0.0.1", &server_addr.sin_addr);
+	//inet_pton(AF_INET, "127.0.0.1", &server_addr.sin_addr);
 	int retval = WSAConnect(m_s_socket, reinterpret_cast<sockaddr*>(&server_addr),
 		sizeof(server_addr), NULL, NULL, NULL, NULL);
 	if (0 != retval) {
