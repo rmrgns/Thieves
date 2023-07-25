@@ -1,3 +1,4 @@
+
 #ifndef _PARTICLE_FX_
 #define _PARTICLE_FX_
 
@@ -43,7 +44,7 @@ VS_OUT VS_Main(VS_IN input)
 
     float3 worldPos = mul(float4(input.pos, 1.f), g_matWorld).xyz;
     worldPos += g_data[input.id].worldPos;
-   
+
     output.viewPos = mul(float4(worldPos, 1.f), g_matView);
     output.uv = input.uv;
     output.id = input.id;
@@ -145,62 +146,79 @@ void CS_Main(int3 threadIndex : SV_DispatchThreadID)
     g_shared[0].addCount = addCount;
     GroupMemoryBarrierWithGroupSync();
 
-    if (g_particle[threadIndex.x].alive == 0)
+    int numParticlesToCreate = maxCount;
+    int isInitialized = g_int_3;
+
+
+    //if (g_particle[threadIndex.x].alive == 0)
+    //{
+    //    while (true)
+    //    {
+    //        int remaining = g_shared[0].addCount;
+    //        if (remaining <= 0)
+    //            break;
+
+    //        int expected = remaining;
+    //        int desired = remaining - 1;
+    //        int originalValue;
+    //        InterlockedCompareExchange(g_shared[0].addCount, expected, desired, originalValue);
+
+    //        if (originalValue == expected)
+    //        {
+    //            g_particle[threadIndex.x].alive = 1;
+    //            break;
+    //        }
+    //    }
+
+    //    if (g_particle[threadIndex.x].alive == 1)
+    //    {
+    //        float x = ((float)threadIndex.x / (float)maxCount) + accTime;
+
+    //        float r1 = Rand(float2(x, accTime));
+    //        float r2 = Rand(float2(x * accTime, accTime));
+    //        float r3 = Rand(float2(x * accTime * accTime, accTime * accTime));
+
+    //        // [0.5~1] -> [0~1]
+    //        float3 noise =
+    //        {
+    //            2 * r1 - 1,
+    //            2 * r2 - 1,
+    //            2 * r3 - 1
+    //        };
+
+    //        // [0~1] -> [-1~1]
+    //        float3 dir = (noise - 0.5f) * 2.f;
+
+    //        g_particle[threadIndex.x].worldDir = normalize(dir);
+    //        g_particle[threadIndex.x].worldPos = (noise.xyz - 0.5f) * 25;
+    //        g_particle[threadIndex.x].lifeTime = ((maxLifeTime - minLifeTime) * noise.x) + minLifeTime;
+    //        g_particle[threadIndex.x].curTime = 0.f;
+    //    }
+    //}
+    if (isInitialized == 0 && threadIndex.x < numParticlesToCreate)
     {
-        while (true)
+        float x = ((float)threadIndex.x / (float)numParticlesToCreate) + accTime;
+
+        float r1 = Rand(float2(x, accTime));
+        float r2 = Rand(float2(x * accTime, accTime));
+        float r3 = Rand(float2(x * accTime * accTime, accTime * accTime));
+
+        // [0.5~1] -> [0~1]
+        float3 noise =
         {
-            int remaining = g_shared[0].addCount;
-            if (remaining <= 0)
-                break;
+            2 * r1 - 1,
+            2 * r2 - 1,
+            2 * r3 - 1
+        };
 
-            int expected = remaining;
-            int desired = remaining - 1;
-            int originalValue;
-            InterlockedCompareExchange(g_shared[0].addCount, expected, desired, originalValue);
-
-            if (originalValue == expected)
-            {
-                g_particle[threadIndex.x].alive = 1;
-                break;
-            }
-        }
-
-
-        if (g_particle[threadIndex.x].alive == 1)
-        {
-            float x = ((float)threadIndex.x / (float)maxCount) + accTime;
-
-            /*float r1 = Rand(float2(x, accTime));
-            float r2 = Rand(float2(x * accTime, accTime));
-            float r3 = Rand(float2(x * accTime * accTime, accTime * accTime));*/
-            
-            float r1 = Rand(threadIndex.xy);
-            float r2 = Rand(threadIndex.yx);
-            float r3 = Rand(threadIndex.yz);
-
-            // [0.5~1] -> [0~1]
-            float3 noise =
-            {
-                2 * r1 - 1,
-                1,
-                2 * r3 - 1
-            };
-            //int numParticlesToCreate = 100;
-            //if (threadIndex.x % numParticlesToCreate == 0) // 일부 쓰레드만 입자를 생성하도록 조건 설정
-            {
-                //for (int i = 0; i < numParticlesToCreate; ++i)
-                {
-                    // [0~1] -> [-1~1]
-                    float3 dir = (noise - 0.5f) * 2.f;
-                    dir.y = 1.0f;
-                    //float3 dir = float3(0.f, 1.0f, 0.f);
-                    g_particle[threadIndex.x].worldDir = normalize(dir);
-                    g_particle[threadIndex.x].worldPos = (noise - 0.5f) * 25;
-                    g_particle[threadIndex.x].lifeTime = ((maxLifeTime - minLifeTime) * noise.x) + minLifeTime;
-                    g_particle[threadIndex.x].curTime = 0.f;
-                }
-            }
-        }
+        // [0~1] -> [-1~1]
+        float3 dir = (noise - 0.5f) * 2.f;
+        dir.y = noise.y;
+        g_particle[threadIndex.x].alive = 1;
+        g_particle[threadIndex.x].worldDir = normalize(dir);
+        g_particle[threadIndex.x].worldPos = float3(0,0,0);
+        g_particle[threadIndex.x].lifeTime = ((maxLifeTime - minLifeTime) * noise.x) + minLifeTime;
+        g_particle[threadIndex.x].curTime = 0.f;
     }
     else
     {
@@ -211,19 +229,9 @@ void CS_Main(int3 threadIndex : SV_DispatchThreadID)
             return;
         }
 
-        if (g_particle[threadIndex.x].lifeTime / 2 < g_particle[threadIndex.x].curTime)
-        {
-            float ratio = g_particle[threadIndex.x].curTime / g_particle[threadIndex.x].lifeTime;
-            float speed = (maxSpeed - minSpeed) * ratio + minSpeed;
-            g_particle[threadIndex.x].worldPos.xz += g_particle[threadIndex.x].worldDir.xz * speed * deltaTime;
-            g_particle[threadIndex.x].worldPos.y += g_particle[threadIndex.x].worldDir.y * speed * deltaTime * -1;
-        }
-        else {
-            float ratio = g_particle[threadIndex.x].curTime / g_particle[threadIndex.x].lifeTime;
-            float speed = (maxSpeed - minSpeed) * ratio + minSpeed;
-            g_particle[threadIndex.x].worldPos += g_particle[threadIndex.x].worldDir * speed * deltaTime;
-        }
-        //g_particle[threadIndex.x].worldPos += g_particle[threadIndex.x].worldDir * speed * deltaTime;
+        float ratio = g_particle[threadIndex.x].curTime / g_particle[threadIndex.x].lifeTime;
+        float speed = (maxSpeed - minSpeed) * ratio + minSpeed;
+        g_particle[threadIndex.x].worldPos += g_particle[threadIndex.x].worldDir * speed * deltaTime;
     }
 }
 

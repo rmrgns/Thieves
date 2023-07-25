@@ -482,26 +482,26 @@ void SceneManager::LoadGameScene()
 //	}
 //#pragma endregion
 
-#pragma region PoliceFBX
-	{
-		for (int i = 0; i < 1; i++)
-		{
-			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\PoliceMan.fbx");
-			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-			for (auto& gameObject : gameObjects)
-			{
-				gameObject->SetName(L"Police");
-				gameObject->SetCheckFrustum(false);
-				gameObject->SetStatic(true);
-				gameObject->GetTransform()->SetLocalPosition(Vec3(500.f * i, 10.f, 800.f));
-				gameObject->GetTransform()->SetLocalRotation(Vec3(2.f * i, 2.f, 0.f));
-				gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-				scene->AddGameObject(gameObject);
-
-			}
-		}
-	}
-#pragma endregion
+//#pragma region PoliceFBX
+//	{
+//		for (int i = 0; i < 1; i++)
+//		{
+//			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\PoliceMan.fbx");
+//			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+//			for (auto& gameObject : gameObjects)
+//			{
+//				gameObject->SetName(L"Police");
+//				gameObject->SetCheckFrustum(false);
+//				gameObject->SetStatic(true);
+//				gameObject->GetTransform()->SetLocalPosition(Vec3(500.f * i, 10.f, 800.f));
+//				gameObject->GetTransform()->SetLocalRotation(Vec3(2.f * i, 2.f, 0.f));
+//				gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+//				scene->AddGameObject(gameObject);
+//
+//			}
+//		}
+//	}
+//#pragma endregion
 
 	_LoadText = L"Load Map"; // 16
 	Network::GetInst()->SendLoadProgressPacket((char)1500 / 21);

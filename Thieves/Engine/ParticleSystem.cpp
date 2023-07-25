@@ -26,15 +26,20 @@ ParticleSystem::~ParticleSystem()
 
 void ParticleSystem::FinalUpdate()
 {
-	//if (_useParticle == true)
+	ParticleLogic();
+	if (_useParticle == true)
 	{
-		ParticleLogic();
+		_computeMaterial->SetInt(3, 1);
+	}
+	else
+	{
+		_computeMaterial->SetInt(3, 0);
 	}
 }
 
 void ParticleSystem::Render()
 {
-	//if (_useParticle == true)
+	if (_useParticle == true)
 	{
 		GetTransform()->PushData();
 
@@ -74,9 +79,11 @@ void ParticleSystem::ParticleLogic()
 
 	_computeMaterial->SetInt(0, _maxParticle);
 	_computeMaterial->SetInt(1, add);
+	//_computeMaterial->SetInt(2, 100);
+	//_computeMaterial->SetInt(3, 0);
 
 	_computeMaterial->SetVec2(1, Vec2(DELTA_TIME, _accTime));
 	_computeMaterial->SetVec4(0, Vec4(_minLifeTime, _maxLifeTime, _minSpeed, _maxSpeed));
 
-	_computeMaterial->Dispatch(5, 5, 5);
+	_computeMaterial->Dispatch(1, 1, 1);
 }
