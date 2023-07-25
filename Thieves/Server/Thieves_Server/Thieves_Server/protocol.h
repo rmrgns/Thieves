@@ -11,7 +11,7 @@ constexpr int MAX_CHAT_SIZE = 100;		// ä�� ������
 constexpr int MAX_ROOM_SIZE = 8;		// �� �ִ� ����
 
 constexpr int MAX_USER = MAX_ROOM_SIZE * 8;		// ���� ���� �ο�
-
+constexpr int MAX_ITEM = 40;
 // �� �ϳ��� �ִ� �ο�
 constexpr int USER_NUM = 8;
 // ����
@@ -116,7 +116,9 @@ constexpr char SC_PACKET_OBJ_INFO_END = 35; // OBJ_INFO�� �����ϱ�
 constexpr char SC_PACKET_ITEM_USE = 36; // �������� ��� �Ǿ��ٴ� �� ��ο��Ե� �˷��� ��. ����, �̰� �����ۿ� �¾Ҵ� ���� ���� HIT�� ���� �����ָ� �ɵ�
 constexpr char SC_PACKET_STUN_END = 37; // ������ ������ �͵� �˷� ����� �̰;�
 constexpr char SC_PACKET_ATTACK = 38; // �ƴ� �����ߴٴ°� �˷���� �ϴϱ� �翬�� �־����
+constexpr char SC_PACKET_TIMER_START = 39;
 constexpr char SC_PACKET_BULLET = 40;		// �Ѿ�
+constexpr char SC_PACKET_ITME_INFO = 41;
 
 constexpr char SC_PACKET_ATTACKMODE = 99;		// ���� ��� ���� 1. �ָ� 2. �� ���
 constexpr char SC_PACKET_NPC_ATTACK = 100;
@@ -499,4 +501,18 @@ struct sc_packet_get_item {
 	unsigned char size;
 	char type;
 	int itemNum;
+};
+
+struct sc_packet_timer_start {
+	unsigned char size;
+	char type;
+
+};
+
+struct sc_item_info {
+	unsigned char size;
+	char	type;
+	int		id;
+	float	x, y, z;
+	char item_type;
 };

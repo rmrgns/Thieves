@@ -4,6 +4,7 @@
 #include <MSWSock.h>
 #include <chrono>
 #include <concurrent_priority_queue.h>
+#include <random>
 
 #include "protocol.h"
 #include "state.h"
@@ -20,6 +21,8 @@ extern "C" {
 #pragma comment (lib, "lib/lua54.lib")
 
 const int BUFSIZE = 2048;
+
+
 
 class EXP_OVER
 {

@@ -2,6 +2,7 @@
 #include "pch.h"
 #include "object/object.h"
 #include "object/moveobj_manager.h"
+#include "Item.h"
 using namespace std;
 
 Room::Room(int room_id)
@@ -11,6 +12,9 @@ Room::Room(int room_id)
 	m_start_time = chrono::system_clock::now();
 	m_room_state = ROOM_STATE::RT_FREE;
 	m_obj_list.reserve(max_user + max_npc);
+	for (int i = 0; i < m_item_list.size(); ++i) {
+		m_item_list[i] = new Item();
+	}
 }
 
 Room::~Room()
@@ -44,6 +48,10 @@ void Room::ResetRoom()
 	m_room_master_id = -1;
 	m_start_time = std::chrono::system_clock::now();
 	m_obj_list.clear();
+	for (int i = 0; i < m_item_list.size(); ++i) {
+		m_item_list[i]->SetItemCode(-1);
+		m_item_list[i]->SetState(ITEM_STATE::ST_NOTUSED);
+	}
 }
 
 void Room::LeaveRoom(int c_id)
@@ -68,6 +76,11 @@ void Room::LeaveRoom(int c_id)
 		m_room_master_id = -1;
 		isGameStarted = false;
 		m_state_lock.unlock();
+
+		for (int i = 0; i < m_item_list.size(); ++i) {
+			m_item_list[i]->SetItemCode(-1);
+			m_item_list[i]->SetState(ITEM_STATE::ST_NOTUSED);
+		}
 	}
 	else {
 		if (m_room_master_id == c_id) {

@@ -37,6 +37,7 @@ private:
     std::atomic_bool m_is_attacked = false;
     std::atomic_int m_Item = -1;
     std::atomic_bool m_has_diamond = false;
+    std::atomic_bool m_invincible = false;
 
 public:
 
@@ -58,8 +59,12 @@ public:
  
     void SetAttacked(bool val) { m_is_attacked = val; }
 
-    int GetAttacked() { return m_is_attacked; }
+    bool GetAttacked() { return m_is_attacked; }
      
+    void SetInvincible(bool val) { m_invincible = val; }
+
+    bool GetInvincible() { return m_invincible; };
+
     char* GetPassword() { return m_password; }
     short GetMatchUserSize() { return m_mach_user_size; }
     void SetMatchUserSize(short val) { m_mach_user_size = val; }

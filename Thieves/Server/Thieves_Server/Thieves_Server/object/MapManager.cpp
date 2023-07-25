@@ -151,6 +151,110 @@ void MapManager::LoadPoliceDir()
 
 }
 
+void MapManager::LoadItemSpawnPoint()
+{
+	std::ifstream in{ ".\\ItemBoxData.txt" };
+
+	std::vector<std::string> words{ std::istream_iterator<std::string>{in}, {} };
+
+	while (!words.empty())
+	{
+		auto next = std::find(words.begin(), words.end(), "end");
+		next++;
+
+		auto reader = words.begin();
+
+		//start 客 end
+		reader++;
+
+
+		float x = std::stof((*reader)) * -100.0f; reader++;
+		float y = std::stof((*reader)) * 100.0f; reader++;
+		float z = std::stof((*reader)) * -100.0f; reader++;
+		ItemPos.emplace_back(x, y, z);
+
+		words.erase(words.begin(), next);
+	}
+}
+
+void MapManager::LoadEscapePoint()
+{
+	std::ifstream in{ ".\\ESCAPE_AREA.txt" };
+
+	std::vector<std::string> words{ std::istream_iterator<std::string>{in}, {} };
+
+	while (!words.empty())
+	{
+		auto next = std::find(words.begin(), words.end(), "end");
+		next++;
+
+		auto reader = words.begin();
+
+		//start 客 end
+		reader++;
+
+
+		float x = std::stof((*reader)) * -100.0f; reader++;
+		float y = std::stof((*reader)) * 100.0f; reader++;
+		float z = std::stof((*reader)) * -100.0f; reader++;
+		EscapePos.emplace_back(x, y, z);
+
+		words.erase(words.begin(), next);
+	}
+}
+
+void MapManager::LoadSpecialEscapePoint()
+{
+	std::ifstream in{ ".\\SPECIAL_ESCAPE_AREA.txt" };
+
+	std::vector<std::string> words{ std::istream_iterator<std::string>{in}, {} };
+
+	while (!words.empty())
+	{
+		auto next = std::find(words.begin(), words.end(), "end");
+		next++;
+
+		auto reader = words.begin();
+
+		//start 客 end
+		reader++;
+
+
+		float x = std::stof((*reader)) * -100.0f; reader++;
+		float y = std::stof((*reader)) * 100.0f; reader++;
+		float z = std::stof((*reader)) * -100.0f; reader++;
+		SpecialEscapePos.emplace_back(x, y, z);
+
+		words.erase(words.begin(), next);
+	}
+}
+
+void MapManager::LoadPlayerSpawnArea()
+{
+	std::ifstream in{ ".\\SPAWN_AREA.txt" };
+
+	std::vector<std::string> words{ std::istream_iterator<std::string>{in}, {} };
+
+	while (!words.empty())
+	{
+		auto next = std::find(words.begin(), words.end(), "end");
+		next++;
+
+		auto reader = words.begin();
+
+		//start 客 end
+		reader++;
+
+
+		float x = std::stof((*reader)) * -100.0f; reader++;
+		float y = std::stof((*reader)) * 100.0f; reader++;
+		float z = std::stof((*reader)) * -100.0f; reader++;
+		PlayerSpawnPos.emplace_back(x, y, z);
+
+		words.erase(words.begin(), next);
+	}
+}
+
 // true捞搁 面倒 
 Vector3 MapManager::checkCollision(CBox& playerBox, Vector3& playerOldPos)
 {

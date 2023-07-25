@@ -9,8 +9,8 @@ enum class COMP_OP {
 	OP_SEND,
 	OP_ACCEPT,
 	OP_STUN_END,
+	OP_INVINCIBLE_END,
 	OP_NPC_MOVE,
-	
 };
 
 // game state
@@ -86,5 +86,13 @@ enum class PL_ACTION_TYPE {
 
 enum EVENT_TYPE {
 	EV_STUN_END,
+	EV_INVINCIBLE_END,
 	EV_MOVE
+};
+
+enum class ITEM_STATE {
+	ST_NOTUSED,
+	ST_SPAWNED,
+	ST_OCCUPIED,
+	ST_MOVE,
 };

@@ -14,6 +14,7 @@
 #include "recast_astar.h"
 #include "EVENT.h"
 #include "Timer.h"
+#include "Item.h"
 
 
 using namespace std;
@@ -1388,17 +1389,44 @@ void PacketManager::StartGame(int room_id)
 	//Vector3 pos = Vector3(0.0f, 0.0f, 0.0f);
 	vector<int>obj_list{ room->GetObjList().begin(),room->GetObjList().end() };
 
+	std::random_device rd;
+	std::default_random_engine dre(rd());
+	std::shuffle(m_map_manager->GetPlayerSpawnPos().begin(), m_map_manager->GetPlayerSpawnPos().end(), dre);
+	std::shuffle(m_map_manager->GetItemPos().begin(), m_map_manager->GetItemPos().end(), dre);
+	std::shuffle(m_map_manager->GetEscapePos().begin(), m_map_manager->GetEscapePos().end(), dre);
+	std::shuffle(m_map_manager->GetSpecialEscapePos().begin(), m_map_manager->GetSpecialEscapePos().end(), dre);
+
+
 	for (int i = 0; i < obj_list.size(); ++i)
 	{
-		if (i < room->GetMaxUser())
-		{
-			pl = MoveObjManager::GetInst()->GetPlayer(obj_list[i]);
+		if (false == MoveObjManager::GetInst()->IsPlayer(obj_list[i])) continue;
 
-			pl->SetPos({ 1500.f , 0.0f , -1500.f + i * 200.f});
-
-			continue;
-		}
+		pl = MoveObjManager::GetInst()->GetPlayer(obj_list[i]);
+		pl->SetPos(m_map_manager->GetPlayerSpawnPos().at(i));
+		
 	}
+
+	for (int i = 0; i < MAX_ITEM; ++i) {
+		if (room->GetItem(i) == nullptr) continue;
+
+		Item* it = room->GetItem(i);
+		if (i > MAX_ITEM / 2)
+		{
+			it->SetItemCode(ITEM_NUM_TRAP);
+		}
+		else
+		{
+			it->SetItemCode(ITEM_NUM_GUN);
+		}
+		it->SetState(ITEM_STATE::ST_SPAWNED);
+	}
+
+	for (int i = 0; i < 3; ++i)
+	{
+		room->SetEscapePos(i, m_map_manager->GetEscapePos().at(i));
+	}
+
+	room->SetSpecialEscapePos(m_map_manager->GetSpecialEscapePos().at(0));
 
 	for (auto c_id : room->GetObjList())
 	{
@@ -1420,6 +1448,8 @@ void PacketManager::StartGame(int room_id)
 			SendObjInfo(c_id, other_id);
 		}
 	}
+
+
 
 	for (auto c_id : room->GetObjList())
 	{
