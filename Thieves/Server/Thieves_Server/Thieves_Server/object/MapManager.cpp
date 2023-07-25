@@ -5,6 +5,8 @@
 #include "MapManager.h"
 #include "CBox.h"
 
+
+
 void MapManager::LoadMap()
 {
 	std::ifstream in{ ".\\ColliderData.txt" };
@@ -149,6 +151,61 @@ void MapManager::LoadPoliceDir()
 		words.erase(words.begin(), next);
 	}
 
+}
+
+void MapManager::LoadMapFromBinary()
+{
+	std::ifstream in(".\\ColliderData.bin", std::ios::binary);
+
+	if (!in.is_open())
+	{
+		// Handle file open error
+		return;
+	}
+
+	// Get the size of the file
+	in.seekg(0, std::ios::end);
+	std::streampos fileSize = in.tellg();
+	in.seekg(0, std::ios::beg);
+
+	// Read the entire binary data into a vector
+	std::vector<char> buffer(fileSize);
+	in.read(buffer.data(), fileSize);
+	in.close();
+
+	// Create a pointer to read from the buffer
+	char* dataPtr = buffer.data();
+	size_t dataSize = buffer.size();
+
+	while (dataSize > 0)
+	{
+		// Read the "center" data
+		float centerCBox[3];
+		std::memcpy(centerCBox, dataPtr, sizeof(centerCBox));
+		dataPtr += sizeof(centerCBox);
+		dataSize -= sizeof(centerCBox);
+
+		// Read the "extent" data
+		float extentCBox[3];
+		std::memcpy(extentCBox, dataPtr, sizeof(extentCBox));
+		dataPtr += sizeof(extentCBox);
+		dataSize -= sizeof(extentCBox);
+
+		// Read the "axis" data
+		float axisCBox[3][3];
+		std::memcpy(axisCBox, dataPtr, sizeof(axisCBox));
+		dataPtr += sizeof(axisCBox);
+		dataSize -= sizeof(axisCBox);
+
+		// Read the "translation" data
+		float translation[3];
+		std::memcpy(translation, dataPtr, sizeof(translation));
+		dataPtr += sizeof(translation);
+		dataSize -= sizeof(translation);
+
+		// Create a CBox instance and add it to the MapCBox vector
+		MapCBox.push_back(std::make_shared<CBox>(centerCBox, extentCBox, axisCBox, translation));
+	}
 }
 
 // true이면 충돌 

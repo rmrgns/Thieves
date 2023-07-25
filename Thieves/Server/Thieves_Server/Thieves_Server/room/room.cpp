@@ -52,22 +52,19 @@ void Room::LeaveRoom(int c_id)
 	
 	if (m_obj_list.contains(c_id))
 	{
+		m_obj_list.erase(c_id);	
 		Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
-		if (cl->GetState() == STATE::ST_INROOMREDDY || cl->GetState() == STATE::ST_INGAME) {
+		if (cl->GetState() == STATE::ST_INROOMREDDY) {
 			PlayerCancleReady(c_id);
 		}
-		m_obj_list.erase(c_id);	
 	}
 
 
 	
 	if (m_obj_list.empty())
 	{
-		m_state_lock.lock();
 		m_room_state = ROOM_STATE::RT_FREE;
 		m_room_master_id = -1;
-		isGameStarted = false;
-		m_state_lock.unlock();
 	}
 	else {
 		if (m_room_master_id == c_id) {

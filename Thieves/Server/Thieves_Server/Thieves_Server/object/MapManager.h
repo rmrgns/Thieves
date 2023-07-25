@@ -9,6 +9,7 @@ public:
 	~MapManager() {};
 
 	void LoadMap();
+	void LoadMapFromBinary();
 	void LoadSpawnArea();
 	void LoadPoliceDir();
 	Vector3 checkCollision(CBox& playerBox, Vector3& playerOldPos);

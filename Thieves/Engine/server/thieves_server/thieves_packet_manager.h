@@ -35,12 +35,7 @@ public:
 	void ProcessError(int c_id, unsigned char* p);
 	void ProcessGameStart(int c_id, unsigned char* p);
 	void ProcessBullet(int c_id, unsigned char* p);
-	void ProcessPhaseChange(int c_id, unsigned char* p);
-	void ProcessAttack(int c_id, unsigned char* p);
-	void ProcessHit(int c_id, unsigned char* p);
-	void ProcessGetItem(int c_id, unsigned char* p);
-
-	// ï¿½ß°ï¿½ï¿½Ê¿ï¿½
+	// Ãß°¡ÇÊ¿ä
 	void Reset();
 
 	Vec3 GetVec(){ return recv_pos; }

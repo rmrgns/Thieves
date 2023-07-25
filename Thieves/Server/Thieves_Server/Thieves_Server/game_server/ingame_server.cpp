@@ -34,22 +34,35 @@ bool InGameServer::OnRecv(int c_id, EXP_OVER* exp_over, DWORD num_bytes)
 // 이벤트 종류에 따라 다르게 동작
 void InGameServer::OnEvent(int c_id, EXP_OVER* exp_over)
 {
-	/*
 	if (false == m_PacketManager->IsRoomInGame(exp_over->room_id))
 	{
 		delete exp_over;
 		return;
 	}
-	*/
+
 	switch (exp_over->_comp_op)
 	{
-	case COMP_OP::OP_NPC_MOVE:
+	case COMP_OP::OP_NPC_SPAWN: {
+		m_PacketManager->SpawnNPC(exp_over->room_id);
+		delete exp_over;
 		break;
-	case COMP_OP::OP_STUN_END:
-		m_PacketManager->ProcessStunEnd(c_id);
+	}
+	case COMP_OP::OP_NPC_MOVE: {
+		m_PacketManager->DoNPCMove(exp_over->room_id, c_id);
+		delete exp_over;
 		break;
-	defalut:
+	}
+	case COMP_OP::OP_COUNT_TIME: {
+		m_PacketManager->CountTime(exp_over->room_id);
+		delete exp_over;
 		break;
+	}
+	case COMP_OP::OP_NPC_ATTACK: {
+		m_PacketManager->DoNPCAttack(c_id, exp_over->target_id, exp_over->room_id);
+		delete exp_over;
+		break;
+	}
+
 	}
 	
 }
@@ -65,7 +78,7 @@ void InGameServer::Disconnect(int c_id)
 // PacketManager에서 타이머 이벤트 처리
 void InGameServer::DoTimer(HANDLE hiocp)
 {
-	m_PacketManager->ProcessTimer(hiocp);
+//	m_PacketManager->ProcessTimer(hiocp);
 }
 
 // 타이머 쓰레드 생성 함수

@@ -85,7 +85,8 @@ void Engine::ResizeWindow(int32 width, int32 height)
 
 	RECT rect = { 0, 0, width, height };
 	::AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, false);
-	::SetWindowPos(_window.hwnd, 0, 100, 100, width, height, 0);
+	::SetWindowPos(_window.hwnd, 0, 0, 0, width, height, 0);
+	//::SetWindowPos(_window.hwnd, HWND_TOP, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), 0);
 }
 
 void Engine::CheckChangeScene()

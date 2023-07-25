@@ -375,21 +375,6 @@ void Resources::CreateDefaultShader()
 		Add<Shader>(L"Forward", shader);
 	}
 
-	// UI
-	{
-		ShaderInfo info =
-		{
-			SHADER_TYPE::FORWARD,
-			RASTERIZER_TYPE::CULL_BACK,
-			DEPTH_STENCIL_TYPE::LESS,
-			BLEND_TYPE::ALPHA_BLEND,
-		};
-
-		shared_ptr<Shader> shader = make_shared<Shader>();
-		shader->CreateGraphicsShader(L"..\\Resources\\Shader\\forward.fx", info);
-		Add<Shader>(L"UI", shader);
-	}
-
 	// Texture (Forward)
 	{
 		ShaderInfo info =
@@ -697,16 +682,6 @@ void Resources::CreateDefaultMaterial()
 		Add<Material>(L"LoginScreenButton", material);
 	}
 
-	// Back Button Image
-	{
-		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Forward");
-		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"BackButton", L"..\\Resources\\Texture\\Thieves_UI\\BackButton.png");
-		shared_ptr<Material> material = make_shared<Material>();
-		material->SetShader(shader);
-		material->SetTexture(0, texture);
-		Add<Material>(L"BackButton", material);
-	}
-
 	// LobbyScreen
 	{
 		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Forward");
@@ -805,16 +780,6 @@ void Resources::CreateDefaultMaterial()
 		material->SetShader(shader);
 		material->SetTexture(0, texture);
 		Add<Material>(L"ReadyBtnUp", material);
-	}
-
-	// ItemBox
-	{
-		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"UI");
-		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"ItemBox", L"..\\Resources\\Texture\\Thieves_UI\\ItemBox.png");
-		shared_ptr<Material> material = make_shared<Material>();
-		material->SetShader(shader);
-		material->SetTexture(0, texture);
-		Add<Material>(L"ItemBox", material);
 	}
 
 	// ThiefIcon

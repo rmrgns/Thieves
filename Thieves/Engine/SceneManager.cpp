@@ -361,55 +361,34 @@ void SceneManager::LoadGameScene()
 	_LoadText = L"Load UI"; // 6
 	Network::GetInst()->SendLoadProgressPacket((char)500 / 21);
 	
-//#pragma region UI_Test
-//	for (int32 i = 0; i < 1; i++)
-//	{
-//		shared_ptr<GameObject> obj = make_shared<GameObject>();
-//		obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
-//		obj->AddComponent(make_shared<Transform>());
-//		obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
-//		obj->GetTransform()->SetLocalPosition(Vec3(-350.f + (i * 120), 250.f, 500.f));
-//		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
-//		{
-//			shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
-//			meshRenderer->SetMesh(mesh);
-//		}
-//		{
-//			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Texture");
-//
-//			shared_ptr<Texture> texture;
-//			if (i < 3)
-//				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->GetRTTexture(i);
-//			else if (i < 5)
-//				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::LIGHTING)->GetRTTexture(i - 3);
-//			else
-//				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::SHADOW)->GetRTTexture(0);
-//
-//			shared_ptr<Material> material = make_shared<Material>();
-//			material->SetShader(shader);
-//			material->SetTexture(0, texture);
-//			meshRenderer->SetMaterial(material);
-//		}
-//		obj->AddComponent(meshRenderer);
-//		scene->AddGameObject(obj);
-//	}
-//#pragma endregion
-
-#pragma region UI_ItemBox
+#pragma region UI_Test
+	for (int32 i = 0; i < 1; i++)
 	{
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
 		obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
 		obj->AddComponent(make_shared<Transform>());
 		obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
-		obj->GetTransform()->SetLocalPosition(Vec3(650.f, -350.f, 500.f));
+		obj->GetTransform()->SetLocalPosition(Vec3(-350.f + (i * 120), 250.f, 500.f));
 		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
 		{
 			shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
 			meshRenderer->SetMesh(mesh);
 		}
 		{
-			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"ItemBox");
-			meshRenderer->SetMaterial(material->Clone());
+			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Texture");
+
+			shared_ptr<Texture> texture;
+			if (i < 3)
+				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->GetRTTexture(i);
+			else if (i < 5)
+				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::LIGHTING)->GetRTTexture(i - 3);
+			else
+				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::SHADOW)->GetRTTexture(0);
+
+			shared_ptr<Material> material = make_shared<Material>();
+			material->SetShader(shader);
+			material->SetTexture(0, texture);
+			meshRenderer->SetMaterial(material);
 		}
 		obj->AddComponent(meshRenderer);
 		scene->AddGameObject(obj);
@@ -613,7 +592,7 @@ void SceneManager::LoadGameScene()
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
 
 		light->GetLight()->SetDiffuse(Vec3(1.0f, 1.0f, 1.0f));
-		light->GetLight()->SetAmbient(Vec3(1.0f, 1.0f, 1.0f));
+		light->GetLight()->SetAmbient(Vec3(0.3f, 0.3f, 0.3f));
 		light->GetLight()->SetSpecular(Vec3(0.3f, 0.3f, 0.3f));
 
 
@@ -737,42 +716,12 @@ void SceneManager::LoadLoginScene()
 		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45��
 
 		camera->GetCamera()->SetFar(10000.f);
-		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
-		camera->GetCamera()->SetProjectionType(PROJECTION_TYPE::ORTHOGRAPHIC);
-		//uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
-		//camera->GetCamera()->SetCullingMaskAll(); // �� ����
-		//camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, false); // UI�� ����
+		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, -100.f));
+
 		scene->AddGameObject(camera);
 	}
 #pragma endregion
 
-	_LoadText = L"Load Login Image";
-#pragma region LoginScreenImage
-	{
-		float width = static_cast<float>(GEngine->GetWindow().width);
-		float height = static_cast<float>(GEngine->GetWindow().height);
-
-		shared_ptr<GameObject> obj = make_shared<GameObject>();
-		obj->SetName(L"LOGINSCREENBUTTON");
-		obj->AddComponent(make_shared<Transform>());
-		obj->GetTransform()->SetLocalScale(Vec3(width / 4.f, height / 10.f, 1.f));
-		obj->GetTransform()->SetLocalPosition(Vec3((width / 2) * 0.25, (height / 2) * -1 * 0.45, 1.f));
-		obj->SetStatic(false);
-
-		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
-		{
-			shared_ptr<Mesh> ScreenMesh = GET_SINGLE(Resources)->LoadRectangleMesh();
-			meshRenderer->SetMesh(ScreenMesh);
-		}
-		{
-			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"LoginScreenButton");
-			meshRenderer->SetMaterial(material->Clone());
-		}
-		obj->AddComponent(meshRenderer);
-		scene->AddGameObject(obj);
-
-	}
-#pragma endregion
 	_LoadText = L"Load Login Image";
 #pragma region LoginScreen
 	{
@@ -783,8 +732,8 @@ void SceneManager::LoadLoginScene()
 		obj->SetName(L"LOGINSCREEN");
 		obj->AddComponent(make_shared<Transform>());
 		obj->AddComponent(make_shared<LoginScript>());
-		obj->GetTransform()->SetLocalScale(Vec3(width, height, 1.f));
-		obj->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 1.f));
+		obj->GetTransform()->SetLocalScale(Vec3(width / 10.6f, height / 10.6f, 1.f));
+		obj->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 2.f));
 		obj->SetStatic(false);
 
 		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
@@ -801,6 +750,36 @@ void SceneManager::LoadLoginScene()
 		
 	}
 #pragma endregion
+
+	_LoadText = L"Load Login Image";
+#pragma region LoginScreenImage
+	{
+		float width = static_cast<float>(GEngine->GetWindow().width);
+		float height = static_cast<float>(GEngine->GetWindow().height);
+
+		shared_ptr<GameObject> obj = make_shared<GameObject>();
+		obj->SetName(L"LOGINSCREENBUTTON");
+		obj->AddComponent(make_shared<Transform>());
+		obj->AddComponent(make_shared<LoginScript>());
+		obj->GetTransform()->SetLocalScale(Vec3(40.0f, 9.0f, 1.f));
+		obj->GetTransform()->SetLocalPosition(Vec3(20.f,-15.f, 1.f));
+		obj->SetStatic(false);
+
+		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+		{
+			shared_ptr<Mesh> ScreenMesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+			meshRenderer->SetMesh(ScreenMesh);
+		}
+		{
+			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"LoginScreenButton");
+			meshRenderer->SetMaterial(material->Clone());
+		}
+		obj->AddComponent(meshRenderer);
+		scene->AddGameObject(obj);
+
+	}
+#pragma endregion
+
 	
 	/*_LoadText = L"Load Icon";
 #pragma region ThiefIcon
@@ -892,11 +871,8 @@ void SceneManager::LoadLobbyScene()
 		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45��
 
 		camera->GetCamera()->SetFar(10000.f);
-		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
-		camera->GetCamera()->SetProjectionType(PROJECTION_TYPE::ORTHOGRAPHIC);
-		//uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
-		//camera->GetCamera()->SetCullingMaskAll(); // �� ����
-		//camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, false); // UI�� ����
+		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, -100.f));
+
 		scene->AddGameObject(camera);
 	}
 #pragma endregion
@@ -907,25 +883,25 @@ void SceneManager::LoadLobbyScene()
 		script->SetName(L"Script");
 		script->AddComponent(make_shared<Transform>());
 		script->AddComponent(make_shared<LobbyScript>());
-		script->AddComponent(make_shared<LoginScript>());
+
 		script->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
 
 		scene->AddGameObject(script);
 	}
 #pragma endregion
 
-
-	_LoadText = L"Load Lobby Back Button";
-#pragma region LobbyBackButton
+	_LoadText = L"Load Robby Image";
+#pragma region LobbyScreen
 	{
 		float width = static_cast<float>(GEngine->GetWindow().width);
 		float height = static_cast<float>(GEngine->GetWindow().height);
 
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
-		obj->SetName(L"LOBBYBACKBUTTON");
+		obj->SetName(L"LobbyScreen");
 		obj->AddComponent(make_shared<Transform>());
-		obj->GetTransform()->SetLocalScale(Vec3(width / 7.f, height / 11.f, 1.f));
-		obj->GetTransform()->SetLocalPosition(Vec3((width / 2) * -1 * 0.825, (height / 2) * 0.2, 1.f));
+		//obj->AddComponent(make_shared<LoginScript>());
+		obj->GetTransform()->SetLocalScale(Vec3(width / 15.0f, height / 15.0f, 100.f));
+		obj->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 2.f));
 		obj->SetStatic(false);
 
 		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
@@ -934,35 +910,7 @@ void SceneManager::LoadLobbyScene()
 			meshRenderer->SetMesh(ScreenMesh);
 		}
 		{
-			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"BackButton");
-			meshRenderer->SetMaterial(material->Clone());
-		}
-		obj->AddComponent(meshRenderer);
-		scene->AddGameObject(obj);
-
-	}
-#pragma endregion
-
-	_LoadText = L"Load Make Room Button";
-#pragma region MakeRoomButton
-	{
-		float width = static_cast<float>(GEngine->GetWindow().width);
-		float height = static_cast<float>(GEngine->GetWindow().height);
-
-		shared_ptr<GameObject> obj = make_shared<GameObject>();
-		obj->SetName(L"MKROOMBUTTON");
-		obj->AddComponent(make_shared<Transform>());
-		obj->GetTransform()->SetLocalScale(Vec3(width / 7.f, height / 11.f, 1.f));
-		obj->GetTransform()->SetLocalPosition(Vec3((width / 2) * -1 * 0.825, (height / 2) * -1.f * 0.05f, 1.f));
-		obj->SetStatic(false);
-
-		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
-		{
-			shared_ptr<Mesh> ScreenMesh = GET_SINGLE(Resources)->LoadRectangleMesh();
-			meshRenderer->SetMesh(ScreenMesh);
-		}
-		{
-			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"LoginScreenButton");
+			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"LobbyScreen");
 			meshRenderer->SetMaterial(material->Clone());
 		}
 		obj->AddComponent(meshRenderer);
@@ -986,11 +934,12 @@ void SceneManager::LoadLobbyScene()
 				text.append(to_wstring(i * 2 + j + 1));
 				obj->SetName(text);
 				obj->AddComponent(make_shared<Transform>());
-				obj->GetTransform()->SetLocalScale(Vec3(width / 3.f, height / 7.5f, 1.f));
+				//obj->AddComponent(make_shared<LoginScript>());
+				obj->GetTransform()->SetLocalScale(Vec3(36.0f, 9.0f, 1.f));
 				if (j == 0)
-					obj->GetTransform()->SetLocalPosition(Vec3((width / 2) * -1.f * 0.25f, (height / 2) * (0.6f - (i * 0.4f)), 1.f));
+					obj->GetTransform()->SetLocalPosition(Vec3(-12.f, 20.f - (13.f * (i)), 1.f));
 				else
-					obj->GetTransform()->SetLocalPosition(Vec3((width / 2) * 0.55f, (height / 2) * (0.6f - (i * 0.4f)), 1.f));
+					obj->GetTransform()->SetLocalPosition(Vec3(29.f, 20.f - ( 13.f * (i)), 1.f));
 				obj->SetStatic(false);
 
 				shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
@@ -1009,18 +958,18 @@ void SceneManager::LoadLobbyScene()
 	}
 #pragma endregion
 
-	_LoadText = L"Load Robby Image";
-#pragma region LobbyScreen
+	_LoadText = L"Load Login Image";
+#pragma region LoginScreenImage
 	{
 		float width = static_cast<float>(GEngine->GetWindow().width);
 		float height = static_cast<float>(GEngine->GetWindow().height);
 
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
-		obj->SetName(L"LobbyScreen");
+		obj->SetName(L"LOBBYBACKBUTTON");
 		obj->AddComponent(make_shared<Transform>());
-		//obj->AddComponent(make_shared<LoginScript>());
-		obj->GetTransform()->SetLocalScale(Vec3(width, height, 1.f));
-		obj->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 1.f));
+		obj->AddComponent(make_shared<LoginScript>());
+		obj->GetTransform()->SetLocalScale(Vec3(15.0f, 8.0f, 1.f));
+		obj->GetTransform()->SetLocalPosition(Vec3(-43.5f, 0.f, 1.f));
 		obj->SetStatic(false);
 
 		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
@@ -1029,7 +978,36 @@ void SceneManager::LoadLobbyScene()
 			meshRenderer->SetMesh(ScreenMesh);
 		}
 		{
-			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"LobbyScreen");
+			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"LoginScreenButton");
+			meshRenderer->SetMaterial(material->Clone());
+		}
+		obj->AddComponent(meshRenderer);
+		scene->AddGameObject(obj);
+
+	}
+#pragma endregion
+
+	_LoadText = L"Load Make Room Button";
+#pragma region MakeRoomButton
+	{
+		float width = static_cast<float>(GEngine->GetWindow().width);
+		float height = static_cast<float>(GEngine->GetWindow().height);
+
+		shared_ptr<GameObject> obj = make_shared<GameObject>();
+		obj->SetName(L"MKROOMBUTTON");
+		obj->AddComponent(make_shared<Transform>());
+		obj->AddComponent(make_shared<LoginScript>());
+		obj->GetTransform()->SetLocalScale(Vec3(15.0f, 8.0f, 1.f));
+		obj->GetTransform()->SetLocalPosition(Vec3(-43.5f, -10.f, 1.f));
+		obj->SetStatic(false);
+
+		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+		{
+			shared_ptr<Mesh> ScreenMesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+			meshRenderer->SetMesh(ScreenMesh);
+		}
+		{
+			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"LoginScreenButton");
 			meshRenderer->SetMaterial(material->Clone());
 		}
 		obj->AddComponent(meshRenderer);
@@ -1045,7 +1023,7 @@ void SceneManager::LoadLobbyScene()
 		light->AddComponent(make_shared<Transform>());
 		light->GetTransform()->SetLocalPosition(Vec3(0, 1000, 500));
 		light->AddComponent(make_shared<Light>());
-		light->GetLight()->SetLightDirection(Vec3(0.f, -1, 1.f));
+		light->GetLight()->SetLightDirection(Vec3(0, -1, 1.f));
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
 		light->GetLight()->SetDiffuse(Vec3(1.f, 1.f, 1.f));
 		light->GetLight()->SetAmbient(Vec3(0.1f, 0.1f, 0.1f));
@@ -1095,11 +1073,8 @@ void SceneManager::LoadRoomScene()
 		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45��
 
 		camera->GetCamera()->SetFar(10000.f);
-		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
-		camera->GetCamera()->SetProjectionType(PROJECTION_TYPE::ORTHOGRAPHIC);
-		//uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
-		//camera->GetCamera()->SetCullingMaskAll(); // �� ����
-		//camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, false); // UI�� ����
+		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, -100.f));
+
 		scene->AddGameObject(camera);
 	}
 #pragma endregion
@@ -1117,18 +1092,17 @@ void SceneManager::LoadRoomScene()
 	}
 #pragma endregion
 
-	_LoadText = L"Room Back Button Image";
-#pragma region RoomBackButtonImage
+	_LoadText = L"Load Room Image";
+#pragma region RoomScreen
 	{
 		float width = static_cast<float>(GEngine->GetWindow().width);
 		float height = static_cast<float>(GEngine->GetWindow().height);
 
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
-		obj->SetName(L"ROOMBACKBUTTON");
+		obj->SetName(L"ROOMSCREEN");
 		obj->AddComponent(make_shared<Transform>());
-		obj->AddComponent(make_shared<LoginScript>());
-		obj->GetTransform()->SetLocalScale(Vec3(width / 7.f, height / 11.f, 1.f));
-		obj->GetTransform()->SetLocalPosition(Vec3((width / 2) * -1 * 0.825, (height / 2) * 0.2, 1.f));
+		obj->GetTransform()->SetLocalScale(Vec3(width / 15.0f, height / 15.0f, 100.f));
+		obj->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 2.f));
 		obj->SetStatic(false);
 
 		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
@@ -1137,7 +1111,36 @@ void SceneManager::LoadRoomScene()
 			meshRenderer->SetMesh(ScreenMesh);
 		}
 		{
-			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"BackButton");
+			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"LobbyScreen");
+			meshRenderer->SetMaterial(material->Clone());
+		}
+		obj->AddComponent(meshRenderer);
+		scene->AddGameObject(obj);
+
+	}
+#pragma endregion
+
+	_LoadText = L"Load Login Image";
+#pragma region LoginScreenImage
+	{
+		float width = static_cast<float>(GEngine->GetWindow().width);
+		float height = static_cast<float>(GEngine->GetWindow().height);
+
+		shared_ptr<GameObject> obj = make_shared<GameObject>();
+		obj->SetName(L"ROOMBACKBUTTON");
+		obj->AddComponent(make_shared<Transform>());
+		obj->AddComponent(make_shared<LoginScript>());
+		obj->GetTransform()->SetLocalScale(Vec3(15.0f, 8.0f, 1.f));
+		obj->GetTransform()->SetLocalPosition(Vec3(-43.5f, 0.f, 1.f));
+		obj->SetStatic(false);
+
+		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+		{
+			shared_ptr<Mesh> ScreenMesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+			meshRenderer->SetMesh(ScreenMesh);
+		}
+		{
+			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"LoginScreenButton");
 			meshRenderer->SetMaterial(material->Clone());
 		}
 		obj->AddComponent(meshRenderer);
@@ -1147,7 +1150,7 @@ void SceneManager::LoadRoomScene()
 #pragma endregion
 
 	_LoadText = L"Load Ready Button";
-#pragma region ReadyButtonImage
+#pragma region LoginScreenImage
 	{
 		float width = static_cast<float>(GEngine->GetWindow().width);
 		float height = static_cast<float>(GEngine->GetWindow().height);
@@ -1155,8 +1158,9 @@ void SceneManager::LoadRoomScene()
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
 		obj->SetName(L"ROOMREADYBUTTON");
 		obj->AddComponent(make_shared<Transform>());
-		obj->GetTransform()->SetLocalScale(Vec3(width / 7.f, height / 11.f, 1.f));
-		obj->GetTransform()->SetLocalPosition(Vec3((width / 2) * -1 * 0.825, (height / 2) * -1.f * 0.05f, 1.f));
+		obj->AddComponent(make_shared<LoginScript>());
+		obj->GetTransform()->SetLocalScale(Vec3(15.0f, 8.0f, 1.f));
+		obj->GetTransform()->SetLocalPosition(Vec3(-43.5f, -10.f, 1.f));
 		obj->SetStatic(false);
 
 		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
@@ -1175,7 +1179,7 @@ void SceneManager::LoadRoomScene()
 #pragma endregion
 
 	_LoadText = L"Load GameStart Button";
-#pragma region GameStartButtonImage
+#pragma region LoginScreenImage
 	{
 		float width = static_cast<float>(GEngine->GetWindow().width);
 		float height = static_cast<float>(GEngine->GetWindow().height);
@@ -1184,8 +1188,8 @@ void SceneManager::LoadRoomScene()
 		obj->SetName(L"ROOMGAMESTARTBUTTON");
 		obj->AddComponent(make_shared<Transform>());
 		obj->AddComponent(make_shared<LoginScript>());
-		obj->GetTransform()->SetLocalScale(Vec3(width / 7.f, height / 11.f, 1.f));
-		obj->GetTransform()->SetLocalPosition(Vec3((width / 2) * -1 * 0.825, (height / 2) * -1.f * 0.3f, 1.f));
+		obj->GetTransform()->SetLocalScale(Vec3(15.0f, 8.0f, 1.f));
+		obj->GetTransform()->SetLocalPosition(Vec3(-43.5f, -20.f, 1.f));
 		obj->SetStatic(false);
 
 		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
@@ -1215,11 +1219,12 @@ void SceneManager::LoadRoomScene()
 			text.append(to_wstring(i * 2 + j + 1));
 			obj->SetName(text);
 			obj->AddComponent(make_shared<Transform>());
-			obj->GetTransform()->SetLocalScale(Vec3(width / 3.f, height / 7.5f, 1.f));
+			//obj->AddComponent(make_shared<LoginScript>());
+			obj->GetTransform()->SetLocalScale(Vec3(36.0f, 9.0f, 1.f));
 			if (j == 0)
-				obj->GetTransform()->SetLocalPosition(Vec3((width / 2) * -1.f * 0.25f, (height / 2) * (0.6f - (i * 0.4f)), 1.f));
+				obj->GetTransform()->SetLocalPosition(Vec3(-12.f, 20.f - (13.f * (i)), 1.f));
 			else
-				obj->GetTransform()->SetLocalPosition(Vec3((width / 2) * 0.55f, (height / 2) * (0.6f - (i * 0.4f)), 1.f));
+				obj->GetTransform()->SetLocalPosition(Vec3(29.f, 20.f - (13.f * (i)), 1.f));
 			obj->SetStatic(false);
 
 			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
@@ -1235,34 +1240,6 @@ void SceneManager::LoadRoomScene()
 			scene->AddGameObject(obj);
 		}
 	}
-
-	_LoadText = L"Load Room Image";
-#pragma region RoomScreen
-	{
-		float width = static_cast<float>(GEngine->GetWindow().width);
-		float height = static_cast<float>(GEngine->GetWindow().height);
-
-		shared_ptr<GameObject> obj = make_shared<GameObject>();
-		obj->SetName(L"ROOMSCREEN");
-		obj->AddComponent(make_shared<Transform>());
-		obj->GetTransform()->SetLocalScale(Vec3(width, height, 1.f));
-		obj->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 1.f));
-		obj->SetStatic(false);
-
-		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
-		{
-			shared_ptr<Mesh> ScreenMesh = GET_SINGLE(Resources)->LoadRectangleMesh();
-			meshRenderer->SetMesh(ScreenMesh);
-		}
-		{
-			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"LobbyScreen");
-			meshRenderer->SetMaterial(material->Clone());
-		}
-		obj->AddComponent(meshRenderer);
-		scene->AddGameObject(obj);
-
-	}
-#pragma endregion
 
 
 	_LoadText = L"Load Directional Light";
@@ -1315,11 +1292,8 @@ shared_ptr<Scene> SceneManager::LoadLoadingScene()
 		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45��
 
 		camera->GetCamera()->SetFar(10000.f);
-		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
-		camera->GetCamera()->SetProjectionType(PROJECTION_TYPE::ORTHOGRAPHIC);
-		//uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
-		//camera->GetCamera()->SetCullingMaskAll(); // �� ����
-		//camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, false); // UI�� ����
+		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, -100.f));
+
 		scene->AddGameObject(camera);
 	}
 #pragma endregion
@@ -1334,8 +1308,8 @@ shared_ptr<Scene> SceneManager::LoadLoadingScene()
 		obj->SetName(L"LOADSCREEN");
 		obj->AddComponent(make_shared<Transform>());
 		
-		obj->GetTransform()->SetLocalScale(Vec3(width, height, 1.f));
-		obj->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 1.f));
+		obj->GetTransform()->SetLocalScale(Vec3(width / 15.0f, height / 15.0f, 100.f));
+		obj->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 2.f));
 		obj->SetStatic(false);
 
 		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();

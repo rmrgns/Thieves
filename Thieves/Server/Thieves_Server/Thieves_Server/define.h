@@ -29,6 +29,7 @@ public:
 	WSABUF		  _wsa_buf;
 	unsigned char _net_buf[BUFSIZE];
 	int room_id;
+	int target_id;
 public:
 	EXP_OVER(COMP_OP comp_op, char num_bytes, void* mess) : _comp_op(comp_op)
 	{
@@ -47,7 +48,7 @@ struct timer_event {
 	int obj_id;
 	int room_id;
 	std::chrono::system_clock::time_point	start_time;
-	//EVENT_TYPE ev;
+	EVENT_TYPE ev;
 	int target_id;
 //구조체에 대한 연산자 오버로딩
 	// start_time 이벤트 발생해야할 시간 저장
