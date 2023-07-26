@@ -166,7 +166,7 @@ void MapManager::LoadItemSpawnPoint()
 
 		//start 人 end
 		reader++;
-
+		reader++;
 
 		float x = std::stof((*reader)) * -100.0f; reader++;
 		float y = std::stof((*reader)) * 100.0f; reader++;
@@ -191,6 +191,7 @@ void MapManager::LoadEscapePoint()
 		auto reader = words.begin();
 
 		//start 人 end
+		reader++;
 		reader++;
 
 
@@ -218,7 +219,7 @@ void MapManager::LoadSpecialEscapePoint()
 
 		//start 人 end
 		reader++;
-
+		reader++;
 
 		float x = std::stof((*reader)) * -100.0f; reader++;
 		float y = std::stof((*reader)) * 100.0f; reader++;
@@ -244,7 +245,7 @@ void MapManager::LoadPlayerSpawnArea()
 
 		//start 人 end
 		reader++;
-
+		reader++;
 
 		float x = std::stof((*reader)) * -100.0f; reader++;
 		float y = std::stof((*reader)) * 100.0f; reader++;

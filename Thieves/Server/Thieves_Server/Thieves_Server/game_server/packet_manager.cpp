@@ -38,6 +38,10 @@ void PacketManager::Init()
 	m_room_manager->InitRoom();
 	m_map_manager->LoadMap();
 	m_map_manager->LoadSpawnArea();
+	m_map_manager->LoadEscapePoint();
+	m_map_manager->LoadItemSpawnPoint();
+	m_map_manager->LoadPlayerSpawnArea();
+	m_map_manager->LoadSpecialEscapePoint();
 	m_db->Init();
 	m_db2->Init();
 }
@@ -1491,6 +1495,7 @@ void PacketManager::StartGame(int room_id)
 			SendItemInfo(c_id, i);
 		}
 	}
+
 	for (auto c_id : room->GetObjList())
 	{
 		if (false == MoveObjManager::GetInst()->IsPlayer(c_id))continue;
