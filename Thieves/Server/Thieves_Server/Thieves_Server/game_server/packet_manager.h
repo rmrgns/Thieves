@@ -70,7 +70,7 @@ public:
 	void JoinDBThread();
 
 	void SpawnNPCTime(int en_id, int room_id);
-	static concurrency::concurrent_priority_queue <timer_event> g_timer_queue;
+
 
 	//-------TIMER--------
 	void ProcessTimer(HANDLE hiocp);

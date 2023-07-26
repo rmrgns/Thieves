@@ -487,7 +487,7 @@ void PacketManager::SendBullet(int c_id, int mover, Vector3 start_point, Vector3
 	sc_packet_bullet packet;
 	packet.type = SC_PACKET_BULLET;
 	packet.size = sizeof(packet);
-	packet.id = mover;
+	packet.id  = mover;
 	packet.s_x = start_point.x;
 	packet.s_y = start_point.y;
 	packet.s_z = start_point.z;
@@ -1377,34 +1377,6 @@ void PacketManager::ProcessEvent(HANDLE hiocp, timer_event& ev)
 }
 
 //-------TIMER-------
-void PacketManager::ProcessTimer(HANDLE hiocp)
-{
-	timer_event ev;
-	while (true) {
-		while (true) {
-
-			if (!g_timer_queue.try_pop(ev))continue;
-
-			// 현재시간
-			auto start_t = chrono::system_clock::now();
-			if (ev.start_time <= start_t) {
-				// 타이머 이벤트를 처리하는 함수
-				ProcessEvent(hiocp, ev);
-			}
-			else if (10ms >= ev.start_time - start_t)
-			{
-				this_thread::sleep_for(ev.start_time - start_t);
-				ProcessEvent(hiocp, ev);
-			}
-			else {
-				g_timer_queue.push(ev);
-				break;
-			}
-		}
-
-		this_thread::sleep_for(10ms);
-	}
-}
 
 ////------NPC-----------
 

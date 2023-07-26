@@ -233,8 +233,9 @@ struct cs_packet_request_rooms_data_for_room {
 struct cs_packet_bullet {
 	unsigned char size;
 	char type;
-	float p_x, p_y, p_z;	// ���� ��ǥ
-	float d_x, d_y, d_z;	// ���� ����
+	float p_x, p_y, p_z;	// 
+	float d_x, d_y, d_z;	// 
+	float r_x, r_y, r_z;	// 
 };
 
 
@@ -465,9 +466,12 @@ struct sc_packet_obj_info_end {
 
 struct sc_packet_bullet {
 	unsigned char size;
-	char type;
-	float p_x, p_y, p_z;	// �浹 ��ǥ
-	//	float d_x, d_y, d_z;	
+	char	type;
+	int		id;
+	float	s_x, s_y, s_z;	
+	float	e_x, e_y, e_z;	
+	float	r_x, r_y, r_z;	
+	
 };
 
 struct sc_packet_attackmode {
