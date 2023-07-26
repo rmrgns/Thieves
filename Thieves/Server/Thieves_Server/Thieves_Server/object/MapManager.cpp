@@ -20,7 +20,7 @@ void MapManager::LoadMap()
 
 		auto reader = words.begin();
 
-		//start ¿Í end
+		//start ï¿½ï¿½ end
 		reader++;
 		reader++;
 		
@@ -83,7 +83,7 @@ void MapManager::LoadSpawnArea()
 
 		auto reader = words.begin();
 
-		//start ¿Í end
+		//start ï¿½ï¿½ end
 		reader++;
 
 		float centerCBox[3]{};
@@ -112,7 +112,7 @@ void MapManager::LoadPoliceDir()
 
 		auto reader = words.begin();
 
-		//start ¿Í end
+		//start ï¿½ï¿½ end
 		reader++;
 
 		float centerCBox1[3]{};
@@ -153,62 +153,114 @@ void MapManager::LoadPoliceDir()
 
 }
 
-void MapManager::LoadMapFromBinary()
+
+void MapManager::LoadItemSpawnPoint()
 {
-	std::ifstream in(".\\ColliderData.bin", std::ios::binary);
+	std::ifstream in{ ".\\ItemBoxData.txt" };
 
-	if (!in.is_open())
+	std::vector<std::string> words{ std::istream_iterator<std::string>{in}, {} };
+
+	while (!words.empty())
 	{
-		// Handle file open error
-		return;
-	}
+		auto next = std::find(words.begin(), words.end(), "end");
+		next++;
 
-	// Get the size of the file
-	in.seekg(0, std::ios::end);
-	std::streampos fileSize = in.tellg();
-	in.seekg(0, std::ios::beg);
+		auto reader = words.begin();
 
-	// Read the entire binary data into a vector
-	std::vector<char> buffer(fileSize);
-	in.read(buffer.data(), fileSize);
-	in.close();
+		//start ï¿½ï¿½ end
+		reader++;
+		reader++;
 
-	// Create a pointer to read from the buffer
-	char* dataPtr = buffer.data();
-	size_t dataSize = buffer.size();
+		float x = std::stof((*reader)) * -100.0f; reader++;
+		float y = std::stof((*reader)) * 100.0f; reader++;
+		float z = std::stof((*reader)) * -100.0f; reader++;
+		ItemPos.emplace_back(x, y, z);
 
-	while (dataSize > 0)
-	{
-		// Read the "center" data
-		float centerCBox[3];
-		std::memcpy(centerCBox, dataPtr, sizeof(centerCBox));
-		dataPtr += sizeof(centerCBox);
-		dataSize -= sizeof(centerCBox);
-
-		// Read the "extent" data
-		float extentCBox[3];
-		std::memcpy(extentCBox, dataPtr, sizeof(extentCBox));
-		dataPtr += sizeof(extentCBox);
-		dataSize -= sizeof(extentCBox);
-
-		// Read the "axis" data
-		float axisCBox[3][3];
-		std::memcpy(axisCBox, dataPtr, sizeof(axisCBox));
-		dataPtr += sizeof(axisCBox);
-		dataSize -= sizeof(axisCBox);
-
-		// Read the "translation" data
-		float translation[3];
-		std::memcpy(translation, dataPtr, sizeof(translation));
-		dataPtr += sizeof(translation);
-		dataSize -= sizeof(translation);
-
-		// Create a CBox instance and add it to the MapCBox vector
-		MapCBox.push_back(std::make_shared<CBox>(centerCBox, extentCBox, axisCBox, translation));
+		words.erase(words.begin(), next);
 	}
 }
 
-// trueÀÌ¸é Ãæµ¹ 
+void MapManager::LoadEscapePoint()
+{
+	std::ifstream in{ ".\\ESCAPE_AREA.txt" };
+
+	std::vector<std::string> words{ std::istream_iterator<std::string>{in}, {} };
+
+	while (!words.empty())
+	{
+		auto next = std::find(words.begin(), words.end(), "end");
+		next++;
+
+		auto reader = words.begin();
+
+		//start ï¿½ï¿½ end
+		reader++;
+		reader++;
+
+
+		float x = std::stof((*reader)) * -100.0f; reader++;
+		float y = std::stof((*reader)) * 100.0f; reader++;
+		float z = std::stof((*reader)) * -100.0f; reader++;
+		EscapePos.emplace_back(x, y, z);
+
+		words.erase(words.begin(), next);
+	}
+}
+
+void MapManager::LoadSpecialEscapePoint()
+{
+	std::ifstream in{ ".\\SPECIAL_ESCAPE_AREA.txt" };
+
+	std::vector<std::string> words{ std::istream_iterator<std::string>{in}, {} };
+
+	while (!words.empty())
+	{
+		auto next = std::find(words.begin(), words.end(), "end");
+		next++;
+
+		auto reader = words.begin();
+
+		//start ï¿½ï¿½ end
+		reader++;
+		reader++;
+
+		float x = std::stof((*reader)) * -100.0f; reader++;
+		float y = std::stof((*reader)) * 100.0f; reader++;
+		float z = std::stof((*reader)) * -100.0f; reader++;
+		SpecialEscapePos.emplace_back(x, y, z);
+
+		words.erase(words.begin(), next);
+	}
+}
+
+void MapManager::LoadPlayerSpawnArea()
+{
+	std::ifstream in{ ".\\SPAWN_AREA.txt" };
+
+	std::vector<std::string> words{ std::istream_iterator<std::string>{in}, {} };
+
+	while (!words.empty())
+	{
+		auto next = std::find(words.begin(), words.end(), "end");
+		next++;
+
+		auto reader = words.begin();
+
+		//start ï¿½ï¿½ end
+		reader++;
+		reader++;
+
+		float x = std::stof((*reader)) * -100.0f; reader++;
+		float y = std::stof((*reader)) * 100.0f; reader++;
+		float z = std::stof((*reader)) * -100.0f; reader++;
+		PlayerSpawnPos.emplace_back(x, y, z);
+
+		words.erase(words.begin(), next);
+
+	}
+}
+
+// trueï¿½Ì¸ï¿½ ï¿½æµ¹ 
 Vector3 MapManager::checkCollision(CBox& playerBox, Vector3& playerOldPos)
 {
 	playerOldPos.y += 75.f;
@@ -217,7 +269,7 @@ Vector3 MapManager::checkCollision(CBox& playerBox, Vector3& playerOldPos)
 	Vector3 boxVelocity(currentPlayerPos - playerOldPos);
 	bool collideRet = FALSE;
 	int collisionDirection = 0;
-	// Ãæµ¹ÇÏ´Â ¼ø°£ÀÇ ¸Ê µ¥ÀÌÅÍ
+	// ï¿½æµ¹ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	for (auto& obj : MapCBox)
 	{
 		
@@ -265,7 +317,7 @@ bool MapManager::checkCollisionRay(CBox& ray_temp)
 	
 	bool collideRet = FALSE;
 	int collisionDirection = 0;
-	// Ãæµ¹ÇÏ´Â ¼ø°£ÀÇ ¸Ê µ¥ÀÌÅÍ
+	// ï¿½æµ¹ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	for (auto& obj : MapCBox)
 	{
 

@@ -13,7 +13,13 @@
 #include "object/MapManager.h"
 #include "Astar.h"
 #include "recast_astar.h"
-concurrency::concurrent_priority_queue <timer_event> timer_queue;
+
+#include "EVENT.h"
+#include "Timer.h"
+#include "Item.h"
+
+
+
 using namespace std;
 PacketManager::PacketManager()
 {
@@ -34,6 +40,10 @@ void PacketManager::Init()
 	m_map_manager->LoadMap();
 	//m_map_manager->LoadMapFromBinary();
 	m_map_manager->LoadSpawnArea();
+	m_map_manager->LoadEscapePoint();
+	m_map_manager->LoadItemSpawnPoint();
+	m_map_manager->LoadPlayerSpawnArea();
+	m_map_manager->LoadSpecialEscapePoint();
 	m_db->Init();
 	m_db2->Init();
 }
@@ -564,6 +574,31 @@ void PacketManager::EndGame(int room_id)
 	}
 }
 
+void PacketManager::SendItemInfo(int c_id, int item_id)
+{
+	Player* pl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	Room* room = m_room_manager->GetRoom(pl->GetRoomID());
+
+	Item* it = room->GetItem(item_id);
+
+	if (it->GetState() == ITEM_STATE::ST_NOTUSED) return;
+
+	sc_packet_item_info packet;
+	packet.type = SC_PACKET_ITEM_INFO;
+	packet.id = item_id;
+	packet.size = sizeof(packet);
+
+
+
+	packet.x = it->GetPosX();
+	packet.y = it->GetPosY();
+	packet.z = it->GetPosZ();
+
+	packet.item_type = it->GetItemCode();
+
+	pl->DoSend(sizeof(packet), &packet);
+}
+
 //=====================DB
 void PacketManager::CreateDBThread()
 {
@@ -929,14 +964,14 @@ void PacketManager::ProcessGameStart(int c_id, unsigned char* p)
 
 	Room* room = m_room_manager->GetRoom(player->GetRoomID());
 
-	if (room->IsGameStarted()) return;
+	//if (room->IsGameStarted()) return;
 
 	room->SetGameStart();
 
-	if (room->GetNumberOfPlayer() != room->GetNumberOfReadyPlayer()) {
-		SendError(c_id, ERROR_PLAYER_NOT_READY, -1);
-		return;
-	}
+	//if (room->GetNumberOfPlayer() != room->GetNumberOfReadyPlayer()) {
+	//	SendError(c_id, ERROR_PLAYER_NOT_READY, -1);
+	//	return;
+	//}
 
 	for (int pl : room->GetObjList()) {
 
@@ -1216,17 +1251,53 @@ void PacketManager::StartGame(int room_id)
 	//Vector3 pos = Vector3(0.0f, 0.0f, 0.0f);
 	vector<int>obj_list{ room->GetObjList().begin(),room->GetObjList().end() };
 
+	std::random_device rd;
+	std::default_random_engine dre(rd());
+	std::shuffle(m_map_manager->GetPlayerSpawnPos().begin(), m_map_manager->GetPlayerSpawnPos().end(), dre);
+	std::shuffle(m_map_manager->GetItemPos().begin(), m_map_manager->GetItemPos().end(), dre);
+	std::shuffle(m_map_manager->GetEscapePos().begin(), m_map_manager->GetEscapePos().end(), dre);
+	std::shuffle(m_map_manager->GetSpecialEscapePos().begin(), m_map_manager->GetSpecialEscapePos().end(), dre);
+
+	
+
 	for (int i = 0; i < obj_list.size(); ++i)
 	{
-		if (i < room->GetMaxUser())
-		{
-			pl = MoveObjManager::GetInst()->GetPlayer(obj_list[i]);
+		if (false == MoveObjManager::GetInst()->IsPlayer(obj_list[i])) continue;
 
-			pl->SetPos({ 1500.f , 0.0f , -1500.f + i * 200.f});
-
-			continue;
-		}
+		pl = MoveObjManager::GetInst()->GetPlayer(obj_list[i]);
+		pl->SetPos(m_map_manager->GetPlayerSpawnPos().at(i));
+		
 	}
+
+	for (int i = 0; i < MAX_ITEM; ++i) {
+		if (room->GetItem(i) == nullptr) continue;
+
+		Item* it = room->GetItem(i);
+
+		if (i > MAX_ITEM / 2)
+		{
+			it->SetItemCode(ITEM_NUM_TRAP);
+		}
+		else
+		{
+			it->SetItemCode(ITEM_NUM_GUN);
+		}
+
+		it->SetState(ITEM_STATE::ST_SPAWNED);
+		it->SetPos(m_map_manager->GetItemPos().at(i));
+		
+	}
+
+	// 탈출 위치
+
+	for (int i = 0; i < 3; ++i)
+	{
+		room->SetEscapePos(i, m_map_manager->GetEscapePos().at(i));
+	}
+
+	// 특별 탈출 위치
+
+	room->SetSpecialEscapePos(m_map_manager->GetSpecialEscapePos().at(0));
 
 	for (auto c_id : room->GetObjList())
 	{
@@ -1246,6 +1317,15 @@ void PacketManager::StartGame(int room_id)
 				continue;
 			if (c_id == other_id)continue;
 			SendObjInfo(c_id, other_id);
+		}
+	}
+
+	for (auto c_id : room->GetObjList())
+	{
+		if (false == MoveObjManager::GetInst()->IsPlayer(c_id)) continue;
+		for (int i = 0; i < MAX_ITEM; ++i)
+		{
+			SendItemInfo(c_id, i);
 		}
 	}
 
