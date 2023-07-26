@@ -64,7 +64,7 @@ public:
 
 	void SendItemInfo(int c_id, int item_id);
 
-	void CreateDBThread();
+ 	void CreateDBThread();
 	void DBThread();
 	void ProcessDBTask(db_task& dt);
 	void JoinDBThread();
