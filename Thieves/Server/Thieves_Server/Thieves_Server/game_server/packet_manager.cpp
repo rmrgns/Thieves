@@ -1413,8 +1413,8 @@ void PacketManager::DoNPCMove(int room_id, int npc_id)
 {
 	Room* room = m_room_manager->GetRoom(room_id);
 
-	Enemy* enemy = MoveObjManager::GetInst()->GetEnemy(enemy_id);
-	if (false == enemy->GetIsActive())return;
+	/*Enemy* enemy = MoveObjManager::GetInst()->GetEnemy(enemy_id);
+	if (false == enemy->GetIsActive())return;*/
 
 	//Vector3 target_pos;
 	//const Vector3 base_pos = m_map_manager->GetMapObjectByType(OBJ_TYPE::OT_BASE).GetGroundPos();

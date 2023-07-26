@@ -147,7 +147,6 @@
   <ItemGroup>
     <ClCompile Include="Astar.cpp" />
     <ClCompile Include="CBox.cpp" />
-    <ClCompile Include="collision_checker.cpp" />
     <ClCompile Include="database\db.cpp" />
     <ClCompile Include="Detour\Source\DetourAlloc.cpp" />
     <ClCompile Include="Detour\Source\DetourAssert.cpp" />
@@ -183,11 +182,11 @@
     <ClCompile Include="recast_astar.cpp" />
     <ClCompile Include="room\room.cpp" />
     <ClCompile Include="room\room_manager.cpp" />
+    <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Astar.h" />
     <ClInclude Include="CBox.h" />
-    <ClInclude Include="collision_checker.h" />
     <ClInclude Include="database\db.h" />
     <ClInclude Include="define.h" />
     <ClInclude Include="Detour\Include\DetourAlloc.h" />
@@ -222,6 +221,7 @@
     <ClInclude Include="state.h" />
     <ClInclude Include="header.h" />
     <ClInclude Include="protocol.h" />
+    <ClInclude Include="Timer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,7 +1,7 @@
 #include"pch.h"
 #include"Astar.h"
 #include"map_object.h"
-#include"collision_checker.h"
+
 #include<iostream>
 #include<cmath>
 #include<bitset>
