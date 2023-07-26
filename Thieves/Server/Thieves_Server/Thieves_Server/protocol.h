@@ -37,7 +37,12 @@ constexpr int ERROR_PLAYER_NOT_READY = 4;
 
 //---------
 
+constexpr int ITEM_NUM_DIAMOND = 0;
+constexpr int ITEM_NUM_GUN = 1;
+constexpr int ITEM_NUM_TRAP = 2;
+constexpr int ITEM_NUM_MAP = 3;
 
+//---------
 // CS
 constexpr char CS_PACKET_SIGN_IN = 1;			// �α���
 constexpr char CS_PACKET_SIGN_UP = 2;			// ����
@@ -59,9 +64,18 @@ constexpr char CS_PACKET_PLAYER_CANCLE_READY = 17;
 constexpr char CS_PACKET_PLAYER_LOG_OUT = 18;	// �α׾ƿ�
 constexpr char CS_PACKET_REQUEST_ROOMS_DATA_FOR_LOBBY = 19; // �κ񿡼� ������ �����͸� �ޱ�
 constexpr char CS_PACKET_REQUEST_ROOMS_DATA_FOR_ROOM = 20; // �뿡�� ������ �����͸� �ޱ�
-constexpr char CS_PACKET_BULLET = 21;	// �Ѿ�
+
+constexpr char CS_PACKET_STEEL_DIAMOND = 21; // ���̾Ƹ� ������
+constexpr char CS_PACKET_GET_ITEM = 22; // ������ ȹ��
+constexpr char CS_PACKET_USE_ITEM = 23; // ������ ���
+constexpr char CS_PACKET_BULLET = 24;	// �Ѿ�
 
 constexpr char CS_PACKET_ATTACKMODE = 99;		// ���� ��� ���� 1. �ָ� 2. �� ���
+
+
+
+
+
 // SC
 constexpr char SC_PACKET_SIGN_IN_OK = 1;		// �α��� OK
 constexpr char SC_PACKET_SIGN_UP_OK = 2;		// ���� OK
@@ -110,6 +124,7 @@ constexpr char SC_PACKET_ACTIVE_SPECIAL_ESCAPE = 43;
 
 constexpr char SC_PACKET_ATTACKMODE = 99;		// ���� ��� ���� 1. �ָ� 2. �� ���
 constexpr char SC_PACKET_NPC_ATTACK = 100;
+
 
 
 
@@ -220,10 +235,25 @@ struct cs_packet_bullet {
 	char type;
 	float p_x, p_y, p_z;	// ���� ��ǥ
 	float d_x, d_y, d_z;	// ���� ����
-	float r_x, r_y, r_z;	// rot
 };
 
 
+struct cs_packet_steel_diamond {
+	unsigned char size;
+	char type;
+};
+
+struct cs_packet_get_item {
+	unsigned char size;
+	char type;
+	char itemNum;
+};
+
+struct cs_packet_use_item {
+	unsigned char size;
+	char type;
+	char itemNum;
+};
 
 //------------------------------------------------------------------
 
@@ -309,6 +339,11 @@ struct sc_packet_stun {
 	int	obj_id;
 };
 struct sc_packet_interaction {
+};
+
+struct sc_packet_phase_change {
+	unsigned char size;
+	char type;
 };
 
 struct sc_packet_test {
@@ -431,10 +466,8 @@ struct sc_packet_obj_info_end {
 struct sc_packet_bullet {
 	unsigned char size;
 	char type;
-	int id;
-	float s_x, s_y, s_z;	// ���� ��ǥ
-	float e_x, e_y, e_z;	// �浹 ��ǥ
-	float r_x, r_y, r_z;
+	float p_x, p_y, p_z;	// �浹 ��ǥ
+	//	float d_x, d_y, d_z;	
 };
 
 struct sc_packet_attackmode {
