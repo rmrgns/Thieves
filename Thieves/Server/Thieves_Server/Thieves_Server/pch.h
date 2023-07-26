@@ -12,6 +12,8 @@
 #include <DirectXMath.h>
 #include <math.h>
 #include <random>
+#include <queue>
+#include <algorithm>
 #include "define.h"
 
 #endif 

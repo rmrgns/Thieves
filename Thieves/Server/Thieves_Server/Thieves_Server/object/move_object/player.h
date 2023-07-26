@@ -30,9 +30,14 @@ private:
     char m_password[MAX_PASSWORD_SIZE + 1];
     short m_mach_user_size = 0;
     
-    // ÀÎ°ÔÀÓ ·Îµù Áß È°¿ëÇÒ µ¥ÀÌÅÍ
+    // ï¿½Î°ï¿½ï¿½ï¿½ ï¿½Îµï¿½ ï¿½ï¿½ È°ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     int m_loadProgressed = 0;
 
+    // ï¿½Î°ï¿½ï¿½Ó¿ï¿½ï¿½ï¿½ ï¿½Ñ´ï¿½ ï¿½Â¾ï¿½ï¿½ï¿½ ï¿½ï¿½
+    std::atomic_bool m_is_attacked = false;
+    std::atomic_int m_Item = -1;
+    std::atomic_bool m_has_diamond = false;
+    std::atomic_bool m_invincible = false;
 
 public:
 
@@ -52,6 +57,14 @@ public:
 
     int GetLoadProgressed() { return m_loadProgressed; }
  
+    void SetAttacked(bool val) { m_is_attacked = val; }
+
+    bool GetAttacked() { return m_is_attacked; }
+     
+    void SetInvincible(bool val) { m_invincible = val; }
+
+    bool GetInvincible() { return m_invincible; };
+
     char* GetPassword() { return m_password; }
     short GetMatchUserSize() { return m_mach_user_size; }
     void SetMatchUserSize(short val) { m_mach_user_size = val; }

@@ -159,6 +159,7 @@
     <ClCompile Include="game_server\ingame_server.cpp" />
     <ClCompile Include="game_server\packet_manager.cpp" />
     <ClCompile Include="iocp_server\iocp_server.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="map_object.cpp" />
     <ClCompile Include="object\MapManager.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="game_server\ingame_server.h" />
     <ClInclude Include="game_server\packet_manager.h" />
     <ClInclude Include="iocp_server\iocp_server.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="map_object.h" />
     <ClInclude Include="object\MapManager.h" />
     <ClInclude Include="object\moveobj_manager.h" />

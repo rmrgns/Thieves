@@ -518,7 +518,7 @@ void SceneManager::LoadGameScene()
 			gameObject->SetCheckFrustum(true);
 			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
 			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 3.1415f, 0.f));
-			gameObject->GetTransform()->SetLocalScale(Vec3(60.f, 100.f, 60.f));
+			gameObject->GetTransform()->SetLocalScale(Vec3(40.f, 100.f, 40.f));
 			//gameObject->AddComponent(make_shared<TestObjectMove>());
 			//gameObject->AddComponent(make_shared<PlayerInput>());
 			gameObject->SetStatic(false);
@@ -553,28 +553,97 @@ void SceneManager::LoadGameScene()
 //	}
 //#pragma endregion
 
-#pragma region Object
-	{
-		shared_ptr<GameObject> obj = make_shared<GameObject>();
-		obj->SetName(L"BulletLine");
-		obj->AddComponent(make_shared<Transform>());
+//#pragma region Object
+//	{
+//		shared_ptr<GameObject> obj = make_shared<GameObject>();
+//		obj->SetName(L"BulletLine");
+//		obj->AddComponent(make_shared<Transform>());
+//
+//		obj->GetTransform()->SetLocalScale(Vec3(2.f, 2.f, 1000.f));
+//		obj->GetTransform()->SetLocalPosition(Vec3(-100.f, -100.f, -100.f));
+//		
+//		obj->SetStatic(true);
+//		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+//		{
+//			shared_ptr<Mesh> sphereMesh = GET_SINGLE(Resources)->LoadCubeMesh();
+//			meshRenderer->SetMesh(sphereMesh);
+//		}
+//		{
+//			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
+//			meshRenderer->SetMaterial(material->Clone());
+//		}
+//		obj->AddComponent(make_shared<UsingGun>());
+//		obj->AddComponent(meshRenderer);
+//		scene->AddGameObject(obj);
+//	}
+//#pragma endregion
 
-		obj->GetTransform()->SetLocalScale(Vec3(2.f, 2.f, 1000.f));
-		obj->GetTransform()->SetLocalPosition(Vec3(-100.f, -100.f, -100.f));
-		
-		obj->SetStatic(true);
-		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+#pragma region Diamond
+	{
+
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Diamond.fbx");
+
+		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+
+		for (auto& gameObject : gameObjects)
 		{
-			shared_ptr<Mesh> sphereMesh = GET_SINGLE(Resources)->LoadCubeMesh();
-			meshRenderer->SetMesh(sphereMesh);
+			gameObject->SetName(L"Diamond");
+			gameObject->SetCheckFrustum(true);
+			gameObject->GetTransform()->SetLocalPosition(Vec3(100.f, 100.f, 100.f));
+			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 3.1415f, 0.f));
+			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+			//gameObject->AddComponent(make_shared<TestObjectMove>());
+			//gameObject->AddComponent(make_shared<PlayerInput>());
+			gameObject->SetStatic(false);
+			scene->AddGameObject(gameObject);
+			//gameObject->AddComponent(make_shared<TestDragon>());
 		}
+	}
+#pragma endregion
+
+#pragma region Safe
+	{
+
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\ClosedSafe.fbx");
+
+		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+
+		for (auto& gameObject : gameObjects)
 		{
-			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
-			meshRenderer->SetMaterial(material->Clone());
+			gameObject->SetName(L"Safe");
+			gameObject->SetCheckFrustum(true);
+			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 1.57f, 1.57f));
+			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+			//gameObject->AddComponent(make_shared<TestObjectMove>());
+			//gameObject->AddComponent(make_shared<PlayerInput>());
+			gameObject->SetStatic(false);
+			scene->AddGameObject(gameObject);
+			//gameObject->AddComponent(make_shared<TestDragon>());
 		}
-		obj->AddComponent(make_shared<UsingGun>());
-		obj->AddComponent(meshRenderer);
-		scene->AddGameObject(obj);
+	}
+#pragma endregion
+
+#pragma region Trap
+	{
+
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Trap.fbx");
+
+		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+
+		for (auto& gameObject : gameObjects)
+		{
+			gameObject->SetName(L"Trap");
+			gameObject->SetCheckFrustum(true);
+			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 100.f, 0.f));
+			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 1.57f, 1.57f));
+			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+			//gameObject->AddComponent(make_shared<TestObjectMove>());
+			//gameObject->AddComponent(make_shared<PlayerInput>());
+			gameObject->SetStatic(false);
+			scene->AddGameObject(gameObject);
+			//gameObject->AddComponent(make_shared<TestDragon>());
+		}
 	}
 #pragma endregion
 
@@ -591,9 +660,11 @@ void SceneManager::LoadGameScene()
 		light->GetLight()->SetLightDirection(Vec3(0.f, -1, 0.f));
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
 
-		light->GetLight()->SetDiffuse(Vec3(1.0f, 1.0f, 1.0f));
-		light->GetLight()->SetAmbient(Vec3(0.3f, 0.3f, 0.3f));
-		light->GetLight()->SetSpecular(Vec3(0.3f, 0.3f, 0.3f));
+
+		light->GetLight()->SetDiffuse(Vec3(0.0f, 0.0f, 0.0f));
+		light->GetLight()->SetAmbient(Vec3(0.2f, 0.2f, 0.2f));
+		light->GetLight()->SetSpecular(Vec3(0.2f, 0.2f, 0.2f));
+
 
 
 		scene->AddGameObject(light);
@@ -608,14 +679,14 @@ void SceneManager::LoadGameScene()
 		shared_ptr<GameObject> light = make_shared<GameObject>();
 		light->SetName(L"Pnt_Light");
 		light->AddComponent(make_shared<Transform>());
-		light->GetTransform()->SetLocalPosition(Vec3(0.f, 100.f, 150.f));
+		light->GetTransform()->SetLocalPosition(Vec3(0.f, 470.f, 0.f));
 		light->AddComponent(make_shared<Light>());
 		//light->GetLight()->SetLightDirection(Vec3(-1.f, -1.f, 0));
 		light->GetLight()->SetLightType(LIGHT_TYPE::POINT_LIGHT);
-		light->GetLight()->SetDiffuse(Vec3(0.0f, 0.5f, 0.0f));
-		light->GetLight()->SetAmbient(Vec3(0.0f, 0.3f, 0.0f));
-		light->GetLight()->SetSpecular(Vec3(0.0f, 0.3f, 0.0f));
-		light->GetLight()->SetLightRange(200.f);
+		light->GetLight()->SetDiffuse(Vec3(0.5f, 0.0f, 0.0f));
+		light->GetLight()->SetAmbient(Vec3(0.0f, 0.0f, 0.0f));
+		light->GetLight()->SetSpecular(Vec3(0.0f, 0.0f, 0.0f));
+		light->GetLight()->SetLightRange(500.f);
 		light->AddComponent(make_shared<LightEffect>());
 
 		//light->GetLight()->SetLightState(false);
@@ -631,9 +702,9 @@ void SceneManager::LoadGameScene()
 		shared_ptr<GameObject> light = make_shared<GameObject>();
 		light->SetName(L"Spt_Light");
 		light->AddComponent(make_shared<Transform>());
-		light->GetTransform()->SetLocalPosition(Vec3(75.f, 500.f, 150.f));
+		light->GetTransform()->SetLocalPosition(Vec3(0.f, 500.f, -600.f));
 		light->AddComponent(make_shared<Light>());
-		light->GetLight()->SetLightDirection(Vec3(0.f, -1.f, 0));
+		light->GetLight()->SetLightDirection(Vec3(0.f, -1.f, 0.5f));
 		light->GetLight()->SetLightType(LIGHT_TYPE::SPOT_LIGHT);
 		light->GetLight()->SetDiffuse(Vec3(0.5f, 0.5f, 0.5f));
 		light->GetLight()->SetAmbient(Vec3(0.1f, 0.1f, 0.1f));

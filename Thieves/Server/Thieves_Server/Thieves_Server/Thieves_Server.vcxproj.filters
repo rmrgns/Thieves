@@ -11,9 +11,6 @@
     <ClCompile Include="object\moveobj_manager.cpp" />
     <ClCompile Include="object\move_object\player.cpp" />
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="Lobby.cpp" />
-    <ClCompile Include="room\room.cpp" />
-    <ClCompile Include="room\room_manager.cpp" />
     <ClCompile Include="ray\ray_casting.cpp">
       <Filter>ray</Filter>
     </ClCompile>
@@ -84,23 +81,119 @@
     <ClCompile Include="recast_astar.cpp">
       <Filter>astar</Filter>
     </ClCompile>
+    <ClCompile Include="game_server\packet_manager.cpp">
+      <Filter>packet_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Astar.cpp" />
+    <ClCompile Include="map_object.cpp">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="object\moveobj_manager.cpp">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="game_server\ingame_server.cpp">
+      <Filter>iocp</Filter>
+    </ClCompile>
+    <ClCompile Include="iocp_server\iocp_server.cpp">
+      <Filter>iocp</Filter>
+    </ClCompile>
+    <ClCompile Include="EVENT.cpp">
+      <Filter>timer</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>timer</Filter>
+    </ClCompile>
+    <ClCompile Include="database\db.cpp">
+      <Filter>database</Filter>
+    </ClCompile>
+    <ClCompile Include="object\move_object\enemy.cpp">
+      <Filter>NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="object\move_object\player.cpp">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="room\room.cpp">
+      <Filter>room</Filter>
+    </ClCompile>
+    <ClCompile Include="room\room_manager.cpp">
+      <Filter>room</Filter>
+    </ClCompile>
+    <ClCompile Include="Lobby.cpp">
+      <Filter>lobby</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>item</Filter>
+    </ClCompile>
+    <ClCompile Include="object\MapManager.cpp">
+      <Filter>map</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CBox.h" />
+    <ClInclude Include="game_server\packet_manager.h">
+      <Filter>packet_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Astar.h" />
+    <ClInclude Include="map_object.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="object\move_object\move_object.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="object\moveobj_manager.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="object\object.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="game_server\ingame_server.h">
+      <Filter>iocp</Filter>
+    </ClInclude>
+    <ClInclude Include="iocp_server\iocp_server.h">
+      <Filter>iocp</Filter>
+    </ClInclude>
+    <ClInclude Include="EVENT.h">
+      <Filter>timer</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>timer</Filter>
+    </ClInclude>
+    <ClInclude Include="database\db.h">
+      <Filter>database</Filter>
+    </ClInclude>
+    <ClInclude Include="object\move_object\enemy.h">
+      <Filter>NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="object\move_object\player.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="room\room.h">
+      <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="room\room_manager.h">
+      <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="Lobby.h">
+      <Filter>lobby</Filter>
+    </ClInclude>
+    <ClInclude Include="state.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="define.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>item</Filter>
+    </ClInclude>
+    <ClInclude Include="object\MapManager.h">
+      <Filter>map</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CBox.h" />
     <ClInclude Include="database\db.h" />
     <ClInclude Include="game_server\ingame_server.h" />
-    <ClInclude Include="iocp_server\iocp_server.h" />
-    <ClInclude Include="map_object.h" />
-    <ClInclude Include="object\MapManager.h" />
-    <ClInclude Include="object\moveobj_manager.h" />
-    <ClInclude Include="object\move_object\move_object.h" />
-    <ClInclude Include="object\move_object\player.h" />
-    <ClInclude Include="object\object.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Lobby.h" />
-    <ClInclude Include="room\room.h" />
-    <ClInclude Include="room\room_manager.h" />
-    <ClInclude Include="state.h" />
     <ClInclude Include="ray\ray_casting.h">
       <Filter>ray</Filter>
     </ClInclude>
@@ -162,6 +255,8 @@
     <ClInclude Include="recast_astar.h">
       <Filter>astar</Filter>
     </ClInclude>
+    <ClInclude Include="header.h" />
+    <ClInclude Include="protocol.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ray">
@@ -196,6 +291,33 @@
     </Filter>
     <Filter Include="packet_manager">
       <UniqueIdentifier>{bf0076f0-1bc3-460c-976d-e79b247972e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object">
+      <UniqueIdentifier>{6772893c-e368-46f5-b094-1f4425687159}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="iocp">
+      <UniqueIdentifier>{ca78e052-fb96-48be-acaf-da162c354671}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="timer">
+      <UniqueIdentifier>{790ccb5f-2ab3-44c6-ab82-48bcc8cedf1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="database">
+      <UniqueIdentifier>{afa4cbed-b99f-4f28-b8b2-753c2d979e96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="player">
+      <UniqueIdentifier>{930dcf63-a20f-4765-acd2-53dc87a03bee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="room">
+      <UniqueIdentifier>{b4dda07d-ffd2-455d-91dd-5134b5eadbad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lobby">
+      <UniqueIdentifier>{c02327de-4c79-4899-8700-e8f6e7b6f89b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="item">
+      <UniqueIdentifier>{8ffd7ea7-7cd2-450c-9c93-a17d4473f610}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="map">
+      <UniqueIdentifier>{32ca24ec-9235-4c82-ae9d-1890adbbb1d4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
