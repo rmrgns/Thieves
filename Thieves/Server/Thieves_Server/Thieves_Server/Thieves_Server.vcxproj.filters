@@ -3,10 +3,7 @@
   <ItemGroup>
     <ClCompile Include="CBox.cpp" />
     <ClCompile Include="CBox.cpp" />
-    <ClCompile Include="database\db.cpp" />
-    <ClCompile Include="game_server\ingame_server.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="pch.cpp" />
     <ClCompile Include="ray\ray_casting.cpp">
       <Filter>ray</Filter>
     </ClCompile>
@@ -91,7 +88,7 @@
       <Filter>iocp</Filter>
     </ClCompile>
     <ClCompile Include="iocp_server\iocp_server.cpp">
-      <Filter>iocp</Filter>
+      <Filter>server</Filter>
     </ClCompile>
     <ClCompile Include="EVENT.cpp">
       <Filter>timer</Filter>
@@ -123,6 +120,15 @@
     <ClCompile Include="object\MapManager.cpp">
       <Filter>map</Filter>
     </ClCompile>
+    <ClCompile Include="database\db.cpp">
+      <Filter>database</Filter>
+    </ClCompile>
+    <ClCompile Include="game_server\ingame_server.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>header</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CBox.h" />
@@ -143,10 +149,10 @@
       <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="game_server\ingame_server.h">
-      <Filter>iocp</Filter>
+      <Filter>server</Filter>
     </ClInclude>
     <ClInclude Include="iocp_server\iocp_server.h">
-      <Filter>iocp</Filter>
+      <Filter>server</Filter>
     </ClInclude>
     <ClInclude Include="EVENT.h">
       <Filter>timer</Filter>
@@ -184,12 +190,14 @@
     <ClInclude Include="object\MapManager.h">
       <Filter>map</Filter>
     </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CBox.h" />
     <ClInclude Include="database\db.h" />
     <ClInclude Include="game_server\ingame_server.h" />
-    <ClInclude Include="pch.h" />
     <ClInclude Include="ray\ray_casting.h">
       <Filter>ray</Filter>
     </ClInclude>
@@ -291,9 +299,6 @@
     <Filter Include="object">
       <UniqueIdentifier>{6772893c-e368-46f5-b094-1f4425687159}</UniqueIdentifier>
     </Filter>
-    <Filter Include="iocp">
-      <UniqueIdentifier>{ca78e052-fb96-48be-acaf-da162c354671}</UniqueIdentifier>
-    </Filter>
     <Filter Include="timer">
       <UniqueIdentifier>{790ccb5f-2ab3-44c6-ab82-48bcc8cedf1e}</UniqueIdentifier>
     </Filter>
@@ -314,6 +319,9 @@
     </Filter>
     <Filter Include="map">
       <UniqueIdentifier>{32ca24ec-9235-4c82-ae9d-1890adbbb1d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="server">
+      <UniqueIdentifier>{ca78e052-fb96-48be-acaf-da162c354671}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
