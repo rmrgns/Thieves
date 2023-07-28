@@ -1505,33 +1505,21 @@ void PacketManager::StartGame(int room_id)
 	}
 }
 
-////------NPC
+////------NPC--------
 
-//void PacketManager::UpdateObjMove()
-//{
-//	for (int i = 0; i < MAX_USER; ++i)
-//	{
-//		for (int j = 0; j <= NPC_ID_END; ++j) {
-//			//���Ŀ� ���� �߰�
-//			if (i != j)
-//				SendMovePacket(i, j);
-//		}
-//	}
-//	SetTimerEvent(0, 0, EVENT_TYPE::EVENT_PLAYER_MOVE, 10);
-//}
 
 void PacketManager::SpawnNPC(int room_id)
 {
 	Room* room = m_room_manager->GetRoom(room_id);
 	int curr_round = room->GetRound();
-	int NPC_num = room->GetMaxUser() * 2;
+	int NPC_num = 8;
 
 	if (curr_round == 2) {
 		for (auto c_id : room->GetObjList())
 		{
 			if (false == MoveObjManager::GetInst()->IsPlayer(c_id))
 				continue;
-			//SendWaveInfo(c_id, curr_round + 1, room->GetMaxUser() * (curr_round + 1), room->GetMaxUser() * (curr_round + 2));
+//			SendRound(c_id);
 		}
 	}
 	Enemy* enemy = NULL;
@@ -1557,34 +1545,137 @@ void PacketManager::SpawnNPC(int room_id)
 	//if (enemy_list.size() < static_cast<INT64>(NPC_num)) {
 	//	cout << "NPC가 모자랍니다" << endl;
 	//}
-	//vector<MapObj>spawn_area;
+	vector<MapObj>NPC_spawn_area;
 	random_device rd;
 	mt19937 gen(rd());
-	uniform_int_distribution<int> random_point(0, 1);
-	//spawn_area.reserve(10);
+	uniform_int_distribution<int> random_point(0, 8);
+	NPC_spawn_area.reserve(8);
 
 
 	int i = 0;
 	for (auto& en : enemy_list)
 	{
-
-		//for (auto pl : room->GetObjList())
-		//{
-		//	if (false == MoveObjManager::GetInst()->IsPlayer(pl))continue;
-		//	SendObjInfo(pl, en);
-	//	g_timer_queue.push(SetTimerEvent(en, en, room_id, EVENT_TYPE::EVENT_NPC_TIMER_SPAWN, (1500 * i)));
-	//	++i;
-		//}
-		//g_timer_queue.push(SetTimerEvent(en, en, room_id, EVENT_TYPE::EVENT_NPC_MOVE, 30+en*100));
+		// 타이머이벤트 queue.push NPC_SPAWN
 	}
 
 
-	//enemy->SetMoveTime(300);
+
 
 
 }
 
-void PacketManager::SpawnNPCTime(int en_id, int room_id)
+void PacketManager::SpawnNPCTime(int enemy_id, int room_id)
 {
+	Room* room = m_room_manager->GetRoom(room_id);
+
+
+	// NPC 스폰좌표 저장
+
+	for (auto pl : room->GetObjList())
+	{
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl))continue;
+		SendObjInfo(pl, enemy_id);
+	}
+}
+
+void PacketManager::DoNpcMove(int enemy_id, int room_id)
+{
+	Room* room = m_room_manager->GetRoom(room_id);
+	Enemy* enemy = MoveObjManager::GetInst()->GetEnemy(enemy_id);
+	if (false == enemy->GetIsActive())return;
+
+	//NPC POS
+	Vector3 npc_pos;
+
+	//이동하려는 pos
+	Vector3 target_pos;
+	
+	//  
+	const Vector3 base_pos; // 경찰 원래 이동하는 pos
+
+	if (/*적이 없으면 저장된 다음 위치로*/)
+	{
+		target_pos = base_pos;
+	}
+	else
+	{
+		target_pos = MoveObjManager::GetInst()->GetPlayer(enemy->GetTargetId())->GetPos();
+	}
+	Vector3 target_vec = Vector3{ target_pos - enemy->GetPos() };
+	enemy->DoMove(target_vec);
+	
+
+	// A star
+	//target_vec으로 이동 필요한것 현재위치와 target 위치
+	// 이동방법 각각의 다음 이동 경로 좌표들을 받아와 저장하며 DO MOVE로 NPC 이동시킨다.
+
+	for (;;)
+	{
+		if (target_pos == npc_pos)
+		{
+			break;
+		}
+
+	}
+	
+
+	for (auto pl : room->GetObjList())
+	{
+		//  NPC의 모든 이동을 플레이어에게 전송
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl))continue;
+		SendMovePacket(pl, enemy_id);
+	}
+	CallStateMachine(enemy_id, room_id, base_pos);
 
 }
+
+
+// 1. 적개체 가져옴
+// 2. room 객체를 가져옴
+// 3. distance_map에 기준 위치로 부터 플레이어 또는 기지까지의 거리와 ID를 저장
+// 4. 일정시간마다 주변 플레이어를 체크하고 저의 타겟을 설정
+void PacketManager::CallStateMachine(int enemy_id, int room_id, const Vector3& base_pos)
+{
+	Enemy* enemy = MoveObjManager::GetInst()->GetEnemy(enemy_id);
+	Room* room = m_room_manager->GetRoom(room_id);
+	map<float, int>distance_map;
+
+	float base_dist = sqrt(pow(abs(base_pos.x - enemy->GetPos().x), 2) + pow(abs(base_pos.z - enemy->GetPos().z), 2));
+	distance_map.try_emplace(base_dist, BASE_ID);
+	Player* player = NULL;
+	auto check_end_time = std::chrono::system_clock::now();
+	auto& check_time = enemy->GetCheckTime();
+	int target_id = enemy->GetTargetId();
+	if (check_time <= check_end_time) {
+		for (auto pl : room->GetObjList())
+		{
+			if (false == MoveObjManager::GetInst()->IsPlayer(pl))continue;
+
+			if (true == MoveObjManager::GetInst()->IsNear(pl, enemy_id))//이거는 시야범위안에 있는지 확인
+			{
+				player = MoveObjManager::GetInst()->GetPlayer(pl);
+				if (false == m_map_manager->CheckInRange(player->GetPos(), OBJ_TYPE::OT_ACTIViTY_AREA)) continue;
+				auto fail_obj = distance_map.try_emplace(MoveObjManager::GetInst()->ObjDistance(pl, enemy_id), pl);
+
+				//여기서 기지와 플레이어 거리 비교후
+				//플레이어가 더 가까우면 target_id 플레이어로
+				//아니면 기지 그대로
+			}
+		}
+		auto nealist = distance_map.begin();
+		target_id = nealist->second;
+		check_time = check_end_time + 1s;
+	}
+
+
+	lua_State* L = enemy->GetLua();
+	enemy->lua_lock.lock();
+	lua_getglobal(L, "state_machine");
+	lua_pushnumber(L, target_id);
+	int err = lua_pcall(L, 1, 0, 0);
+	if (err)
+		MoveObjManager::LuaErrorDisplay(L, err);
+	enemy->lua_lock.unlock();
+}
+
+void 

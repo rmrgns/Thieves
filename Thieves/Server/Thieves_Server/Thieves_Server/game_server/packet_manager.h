@@ -74,10 +74,20 @@ public:
 
 	void ProcessTimer(HANDLE hiocp);
 
+	
+
+	//------timer-------
+	timer_event SetTimerEvent(int obj_id, int target_id, EVENT_TYPE ev, int seconds);
+
+	////------NPC--------
+	void UpdateObjMove();
 	void SpawnNPCTime(int en_id, int room_id);
-	static concurrency::concurrent_priority_queue <timer_event> g_timer_queue;
+	void SpawnNPC(int room_id);
+	void DoNpcMove(int enemy_id, int room_id);
+	bool CheckMoveOK(int enemy_id, int room_id);
+	void CallStateMachine(int enemy_id, int room_id, const Vector3& base_pos);
 
-
+	// npc º“»Ø
 private:
 	Lobby* m_Lobby;
 	RoomManager* m_room_manager;
@@ -118,5 +128,7 @@ private:
 
 	void StartGame(int room_id);
 
-	void SpawnNPC(int room_id);
+
+
+
 };

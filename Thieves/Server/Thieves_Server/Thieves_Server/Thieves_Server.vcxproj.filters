@@ -84,9 +84,6 @@
     <ClCompile Include="object\moveobj_manager.cpp">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="game_server\ingame_server.cpp">
-      <Filter>iocp</Filter>
-    </ClCompile>
     <ClCompile Include="iocp_server\iocp_server.cpp">
       <Filter>server</Filter>
     </ClCompile>
@@ -129,6 +126,7 @@
     <ClCompile Include="pch.cpp">
       <Filter>header</Filter>
     </ClCompile>
+    <ClCompile Include="game_server\ingame_server.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CBox.h" />
@@ -192,6 +190,15 @@
     </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="vec\vec2.h">
+      <Filter>vec</Filter>
+    </ClInclude>
+    <ClInclude Include="vec\vec3.h">
+      <Filter>vec</Filter>
+    </ClInclude>
+    <ClInclude Include="vec\vec4.h">
+      <Filter>vec</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -322,6 +329,9 @@
     </Filter>
     <Filter Include="server">
       <UniqueIdentifier>{ca78e052-fb96-48be-acaf-da162c354671}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vec">
+      <UniqueIdentifier>{f9fe88bf-9188-49e1-86d8-0efb891040e6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
