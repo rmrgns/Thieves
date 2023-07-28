@@ -760,39 +760,54 @@ void PacketManager::JoinDBThread()
 void PacketManager::ProcessTimer(HANDLE hiocp)
 {
 	while (true) {
-		m_Timer->timerLock.lock();
+		while (true) {
+			m_Timer->timerLock.lock();
 
-		if (m_Timer->timerQ.empty()) {
+			if (m_Timer->timerQ.empty()) {
+				m_Timer->timerLock.unlock();
+				this_thread::sleep_for(10ms);
+				continue;
+			}
+
+			auto tEvent = m_Timer->timerQ.top();
+
+			if (tEvent.GetExecTime() > chrono::system_clock::now()) {
+				m_Timer->timerLock.unlock();
+				this_thread::sleep_for(10ms);
+				continue;
+			}
+
+			m_Timer->timerQ.pop();
+
 			m_Timer->timerLock.unlock();
-			this_thread::sleep_for(10ms);
-			continue;
+
+			EXP_OVER* exover = new EXP_OVER;
+
+			if (tEvent.GetEventType() == EVENT_TYPE::EV_MOVE) {
+				exover->_comp_op = COMP_OP::OP_NPC_MOVE;
+			}
+			else if (tEvent.GetEventType() == EVENT_TYPE::EV_STUN_END) {
+				exover->_comp_op = COMP_OP::OP_STUN_END;
+			}
+			else if (tEvent.GetEventType() == EVENT_TYPE::EVENT_NPC_SPAWN) {
+				exover->_comp_op = COMP_OP::OP_STUN_END;
+			}
+			else if (tEvent.GetEventType() ==EVENT_TYPE::EVENT_NPC_MOVE) {
+				exover->_comp_op = COMP_OP::OP_STUN_END;
+			}
+			else if (tEvent.GetEventType() == EVENT_TYPE::EVENT_NPC_ATTACK) {
+				exover->_comp_op = COMP_OP::OP_STUN_END;
+			}
+			else if (tEvent.GetEventType() == EVENT_TYPE::EVENT_TIME) {
+				exover->_comp_op = COMP_OP::OP_STUN_END;
+			}
+
+			Player* pl = MoveObjManager::GetInst()->GetPlayer(tEvent.GetObjId());
+			exover->room_id = pl->GetRoomID();
+			PostQueuedCompletionStatus(hiocp, 1, tEvent.GetObjId(), &exover->_wsa_over);
+
 		}
-
-		auto tEvent = m_Timer->timerQ.top();
-
-		if (tEvent.GetExecTime() > chrono::system_clock::now()) {
-			m_Timer->timerLock.unlock();
-			this_thread::sleep_for(10ms);
-			continue;
-		}
-
-		m_Timer->timerQ.pop();
-
-		m_Timer->timerLock.unlock();
-
-		EXP_OVER* exover = new EXP_OVER;
-
-		if (tEvent.GetEventType() == EV_MOVE) {
-			exover->_comp_op = COMP_OP::OP_NPC_MOVE;
-		}
-		else if (tEvent.GetEventType() == EV_STUN_END) {
-			exover->_comp_op = COMP_OP::OP_STUN_END;
-		}
-
-		Player* pl = MoveObjManager::GetInst()->GetPlayer(tEvent.GetObjId());
-		exover->room_id = pl->GetRoomID();
-		PostQueuedCompletionStatus(hiocp, 1, tEvent.GetObjId(), &exover->_wsa_over);
-
+		this_thread::sleep_for(10ms);
 	}
 }
 
@@ -1668,14 +1683,131 @@ void PacketManager::CallStateMachine(int enemy_id, int room_id, const Vector3& b
 	}
 
 
-	lua_State* L = enemy->GetLua();
-	enemy->lua_lock.lock();
-	lua_getglobal(L, "state_machine");
-	lua_pushnumber(L, target_id);
-	int err = lua_pcall(L, 1, 0, 0);
-	if (err)
-		MoveObjManager::LuaErrorDisplay(L, err);
-	enemy->lua_lock.unlock();
+//	lua_State* L = enemy->GetLua();
+//	enemy->lua_lock.lock();
+//	lua_getglobal(L, "state_machine");
+//	lua_pushnumber(L, target_id);
+//	int err = lua_pcall(L, 1, 0, 0);
+//	if (err)
+//		MoveObjManager::LuaErrorDisplay(L, err);
+//	enemy->lua_lock.unlock();
 }
 
-void 
+void PacketManager::CountTime(int room_id)
+{
+	Room* room = m_room_manager->GetRoom(room_id);
+	auto timer = std::chrono::system_clock::now();
+	std::chrono::duration<float> elapsed = room->GetRoundTime() - end_time;
+}
+
+void PacketManager::DoEnemyAttack(int enemy_id, int target_id, int room_id)
+{
+	//초당두발
+	Room* room = m_room_manager->GetRoom(room_id);
+	Enemy* enemy = MoveObjManager::GetInst()->GetEnemy(enemy_id);
+
+	if (false == enemy->GetIsActive())return;
+
+	if (target_id == BASE_ID)
+	{
+		Vector3 base_pos;// = m_map_manager->GetMapObjectByType(OBJ_TYPE::OT_BASE).GetPos();
+
+		int base_attack_t;
+
+		if (enemy->GetType() == OBJ_TYPE::OT_PLAYER) {
+			float dist = enemy->GetPos().Dist(base_pos);
+			base_attack_t = (dist / 1500.0f) * 1000;
+		}
+		g_timer_queue.push(SetTimerEvent(enemy_id, enemy_id, room_id, EVENT_TYPE::EVENT_BASE_ATTACK,
+			base_attack_t));
+	}
+	for (int pl : room->GetObjList())
+	{
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl))continue;
+
+		SendNPCAttackPacket(pl, enemy_id, target_id);
+
+	}
+
+	auto& attack_time = enemy->GetAttackTime();
+	attack_time = chrono::system_clock::now() + 1s;
+	const Vector3 base_pos;// = m_map_manager->GetMapObjectByType(OBJ_TYPE::OT_BASE).GetGroundPos();
+	CallStateMachine(enemy_id, room_id, base_pos);
+}
+
+void SendNPCAttackPacket(int c_id, int obj_id, int target_id)
+{
+	sc_packet_attack packet;
+	packet.size = sizeof(packet);
+	packet.type = SC_PACKET_ATTACK;
+	//packet.obj_id = attacker;
+	//packet.f_x = forward_vec.x;
+	//packet.f_y = forward_vec.y;
+	//packet.f_z = forward_vec.z;
+	//MoveObjManager::GetInst()->GetPlayer(c_id)->DoSend(sizeof(packet), &packet);
+}
+
+//-------------EVENT--------------
+void PacketManager::ProcessEvent(HANDLE hiocp, timer_event& ev)
+{
+	EXP_OVER* ex_over = new EXP_OVER;
+
+	switch (ev.ev) {
+	case EVENT_TYPE::EVENT_NPC_SPAWN:
+	{
+		ex_over->_comp_op = COMP_OP::OP_NPC_SPAWN;
+		ex_over->target_id = ev.target_id;
+		ex_over->room_id = ev.room_id;
+		PostQueuedCompletionStatus(hiocp, 1, ev.obj_id, &ex_over->_wsa_over);
+		break;
+	}
+	case EVENT_TYPE::EVENT_NPC_MOVE:
+	{
+		ex_over->_comp_op = COMP_OP::OP_NPC_SPAWN;
+		ex_over->target_id = ev.target_id;
+		ex_over->room_id = ev.room_id;
+		PostQueuedCompletionStatus(hiocp, 1, ev.obj_id, &ex_over->_wsa_over);
+		break;
+	}
+	case EVENT_TYPE::EVENT_NPC_ATTACK:
+	{
+		ex_over->_comp_op = COMP_OP::OP_NPC_SPAWN;
+		ex_over->target_id = ev.target_id;
+		ex_over->room_id = ev.room_id;
+		PostQueuedCompletionStatus(hiocp, 1, ev.obj_id, &ex_over->_wsa_over);
+		break;
+	}
+	case EVENT_TYPE::EVENT_TIME:
+	{
+		ex_over->_comp_op = COMP_OP::OP_NPC_SPAWN;
+		ex_over->target_id = ev.target_id;
+		ex_over->room_id = ev.room_id;
+		PostQueuedCompletionStatus(hiocp, 1, ev.obj_id, &ex_over->_wsa_over);
+		break;
+	}
+	case EVENT_TYPE::EV_STUN_END:
+	{
+		ex_over->_comp_op = COMP_OP::OP_NPC_SPAWN;
+		ex_over->target_id = ev.target_id;
+		ex_over->room_id = ev.room_id;
+		PostQueuedCompletionStatus(hiocp, 1, ev.obj_id, &ex_over->_wsa_over);
+		break;
+	}
+	case EVENT_TYPE::EV_INVINCIBLE_END:
+	{
+		ex_over->_comp_op = COMP_OP::OP_NPC_SPAWN;
+		ex_over->target_id = ev.target_id;
+		ex_over->room_id = ev.room_id;
+		PostQueuedCompletionStatus(hiocp, 1, ev.obj_id, &ex_over->_wsa_over);
+		break;
+	}
+	case EVENT_TYPE::EV_MOVE:
+	{
+		ex_over->_comp_op = COMP_OP::OP_NPC_SPAWN;
+		ex_over->target_id = ev.target_id;
+		ex_over->room_id = ev.room_id;
+		PostQueuedCompletionStatus(hiocp, 1, ev.obj_id, &ex_over->_wsa_over);
+		break;
+	}
+	}
+}

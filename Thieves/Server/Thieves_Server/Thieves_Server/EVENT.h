@@ -5,11 +5,15 @@
 class EVENT
 {
 	int objId;
+	int room_id;
 	std::chrono::system_clock::time_point execTime;
 	EVENT_TYPE eventType;
+	int target_id;
 public:
 
 	EVENT(int id, std::chrono::system_clock::time_point time, EVENT_TYPE type) : objId(id), execTime(time), eventType(type)
+	{};
+	EVENT(int obj_id, int target_i, std::chrono::system_clock::time_point time, EVENT_TYPE type) : objId(id), execTime(time), eventType(type)
 	{};
 
 	std::chrono::system_clock::time_point GetExecTime() { return execTime; };

@@ -43,11 +43,26 @@ void InGameServer::OnEvent(int c_id, EXP_OVER* exp_over)
 	*/
 	switch (exp_over->_comp_op)
 	{
+	case COMP_OP::OP_NPC_SPAWN: {
+		m_PacketManager->SpawnNPC(exp_over->room_id);
+		delete exp_over;
+		break;
+	}
 	case COMP_OP::OP_NPC_MOVE:
 		break;
 	case COMP_OP::OP_STUN_END:
 		m_PacketManager->ProcessStunEnd(c_id);
 		break;
+	case COMP_OP::OP_COUNT_TIME: {
+		m_PacketManager->CountTime(exp_over->room_id);
+		delete exp_over;
+		break;
+	}
+	case COMP_OP::OP_NPC_ATTACK: {
+		m_PacketManager->DoEnemyAttack(c_id, exp_over->target_id, exp_over->room_id);
+		delete exp_over;
+		break;
+	}
 	defalut:
 		break;
 	}
