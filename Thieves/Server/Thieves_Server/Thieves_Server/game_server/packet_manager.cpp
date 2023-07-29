@@ -19,6 +19,8 @@
 
 
 using namespace std;
+
+
 PacketManager::PacketManager()
 {
 	MoveObjManager::GetInst();
@@ -64,7 +66,7 @@ void PacketManager::ProcessPacket(int c_id, unsigned char* p)
 	}
 	case CS_PACKET_MOVE: {
 		ProcessMove(c_id, p);
-		cout << "move" << endl;
+		//cout << "move" << endl;
 		break;
 	}
 	case CS_PACKET_ATTACK: {
@@ -200,7 +202,7 @@ void PacketManager::ProcessRecv(int c_id , EXP_OVER* exp_over, DWORD num_bytes)
 	int packet_size = packet_start[0];
 	if (packet_size == 0) std::cout << "packet_size 0" << cl->GetID();
 	while (packet_size <= remain_data) {
-		std::cout << packet_size << "byte\n";
+		//std::cout << packet_size << "byte\n";
 		ProcessPacket(c_id, packet_start);
 		remain_data -= packet_size;
 		packet_start += packet_size;
@@ -826,8 +828,6 @@ void PacketManager::ProcessDBTask(db_task& dt)
 		ret = m_db->CheckLoginData(dt.user_id, dt.user_password);
 		if (ret == LOGINFAIL_TYPE::NO_ID || ret == LOGINFAIL_TYPE::WRONG_PASSWORD)
 		{
-			//m_db2->SaveData(dt.user_id, dt.user_password);
-			//cout << "들어옴" << endl;
 			SendSignUpOK(dt.obj_id);
 		}
 		else
@@ -870,32 +870,32 @@ void PacketManager::ProcessTimer(HANDLE hiocp)
 
 		EXP_OVER* exover = new EXP_OVER;
 
-		if (tEvent.GetEventType() == EV_MOVE) {
+		if (tEvent.GetEventType() == EVENT_TYPE::EV_MOVE) {
 			exover->_comp_op = COMP_OP::OP_NPC_MOVE;
 		}
-		else if (tEvent.GetEventType() == EV_STUN_END) {
+		else if (tEvent.GetEventType() == EVENT_TYPE::EV_STUN_END) {
 			exover->_comp_op = COMP_OP::OP_STUN_END;
 		}
-		else if (tEvent.GetEventType() == EV_TIMER_START) {
+		else if (tEvent.GetEventType() == EVENT_TYPE::EV_TIMER_START) {
 			exover->_comp_op = COMP_OP::OP_TIMER_START;
 		}
-		else if (tEvent.GetEventType() == EV_OPEN_SAFE) {
+		else if (tEvent.GetEventType() == EVENT_TYPE::EV_OPEN_SAFE) {
 			exover->_comp_op = COMP_OP::OP_OPEN_SAFE;
 		}
-		else if (tEvent.GetEventType() == EV_OPEN_ESCAPE_AREA) {
+		else if (tEvent.GetEventType() == EVENT_TYPE::EV_OPEN_ESCAPE_AREA) {
 			exover->_comp_op = COMP_OP::OP_OPEN_ESCAPE;
 		}
-		else if (tEvent.GetEventType() == EV_OPEN_SPECIAL_ESCAPE_AREA) {
+		else if (tEvent.GetEventType() == EVENT_TYPE::EV_OPEN_SPECIAL_ESCAPE_AREA) {
 			exover->_comp_op = COMP_OP::OP_OPEN_SPECIAL_ESCAPE;
 		}
-		else if (tEvent.GetEventType() == EV_INVINCIBLE_END) {
+		else if (tEvent.GetEventType() == EVENT_TYPE::EV_INVINCIBLE_END) {
 			exover->_comp_op = COMP_OP::OP_INVINCIBLE_END;
 		}
 		else if (tEvent.GetEventType() == EVENT_TYPE::EVENT_NPC_SPAWN) {
 			exover->_comp_op = COMP_OP::OP_NPC_SPAWN;
 		}
 		else if (tEvent.GetEventType() == EVENT_TYPE::EVENT_TIMER_NPC_SPAWN) {
-			exover->_comp_op = COMP_OP::OP_NPC_SPAWN;
+			exover->_comp_op = COMP_OP::OP_NPC_TIMER_SPAWN;
 		}
 		else if (tEvent.GetEventType() ==EVENT_TYPE::EVENT_NPC_MOVE) {
 			exover->_comp_op = COMP_OP::OP_NPC_MOVE;
@@ -1138,11 +1138,6 @@ void PacketManager::ProcessGameStart(int c_id, unsigned char* p)
 	//if (room->IsGameStarted()) return;
 
 	room->SetGameStart();
-
-	//if (room->GetNumberOfPlayer() != room->GetNumberOfReadyPlayer()) {
-	//	SendError(c_id, ERROR_PLAYER_NOT_READY, -1);
-	//	return;
-	//}
 
 	for (int pl : room->GetObjList()) {
 
@@ -1601,13 +1596,7 @@ void PacketManager::ProcessOpenSpecialEscape(int r_id)
 void PacketManager::StartGame(int room_id)
 {
 	Room* room = m_room_manager->GetRoom(room_id);
-	//const Vector3 base_pos = m_map_manager->GetMapObjectByType(OBJ_TYPE::OT_BASE).GetGroundPos();
-	//�� ������Ʈ ������ ������ �ʿ����
-	//npc�� player �ʱ�ȭ �� �����ֱ�
-	//const Vector3 base_pos = m_map_manager->GetMapObjectByType(OBJ_TYPE::OT_BASE).GetGroundPos();
-
 	Player* pl = NULL;
-	//Vector3 pos = Vector3(0.0f, 0.0f, 0.0f);
 	vector<int>obj_list{ room->GetObjList().begin(),room->GetObjList().end() };
 
 	std::random_device rd;
@@ -1616,7 +1605,8 @@ void PacketManager::StartGame(int room_id)
 	std::shuffle(m_map_manager->GetItemPos().begin(), m_map_manager->GetItemPos().end(), dre);
 	std::shuffle(m_map_manager->GetEscapePos().begin(), m_map_manager->GetEscapePos().end(), dre);
 	std::shuffle(m_map_manager->GetSpecialEscapePos().begin(), m_map_manager->GetSpecialEscapePos().end(), dre);
-
+	
+	
 	
 
 	for (int i = 0; i < obj_list.size(); ++i)
@@ -1627,7 +1617,7 @@ void PacketManager::StartGame(int room_id)
 		pl->SetPos(m_map_manager->GetPlayerSpawnPos().at(i));
 		
 	}
-
+	
 	for (int i = 0; i < MAX_ITEM; ++i) {
 		if (room->GetItem(i) == nullptr) continue;
 
@@ -1702,6 +1692,7 @@ void PacketManager::StartGame(int room_id)
 
 void PacketManager::SpawnNPC(int room_id)
 {
+	cout << "NPC 생성" << endl;
 	Room* room = m_room_manager->GetRoom(room_id);
 	int curr_round = room->GetRound();
 	int NPC_num = 8;
@@ -1747,6 +1738,7 @@ void PacketManager::SpawnNPC(int room_id)
 	for (auto& en : enemy_list)
 	{
 		m_Timer->AddTimer(room->GetRoomID(), room->GetRoundStartTime() + 1s, EVENT_TYPE::EVENT_TIMER_NPC_SPAWN);
+		cout << "NPC 생성 2" << endl;
 	}
 	// m_Timer->AddTimer(room->GetRoomID(), room->GetRoundStartTime() + 1s, EVENT_TYPE::EVENT_NPC_SPAWN);
 	//m_Timer->AddTimer(room->GetRoomID(), std::chrono::system_clock::now(), EVENT_TYPE::EVENT_NPC_SPAWN);
