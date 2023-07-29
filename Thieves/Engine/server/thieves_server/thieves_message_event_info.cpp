@@ -106,24 +106,12 @@ namespace thieves
 	//{
 	//}
 
-	//SignUpMessageEventOkInfo::SignUpMessageEventOkInfo(UINT event_id)
-	//	:MessageEventInfo(event_id)
-	//{
+
 	//}
 
-	//WaveInfoMessageEventInfo::WaveInfoMessageEventInfo(UINT event_id, float wave_time)
-	//	:MessageEventInfo(event_id), m_wave_time(wave_time)
-	//{
-	//}
 
-	//NextWaveInfoMessageEventInfo::NextWaveInfoMessageEventInfo(UINT event_id, int curr_round, int soldier_num, int king_num)
-	//	: MessageEventInfo(event_id), m_curr_round(curr_round), m_soldier_num(soldier_num), m_king_num(king_num)
-	//{
-	//}
 
-	//SendDamageCheatEventInfo::SendDamageCheatEventInfo(UINT event_id)
-	//	:MessageEventInfo(event_id)
-	//{
-	//}
+
+
 
 }

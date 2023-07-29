@@ -60,6 +60,7 @@ void ThievesPacketManager::Init()
 	RegisterRecvFunction(SC_PACKET_INVINCIBLE, [this](int c_id, unsigned char* p) {ProcessInvincible(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_INVINCIBLE_END, [this](int c_id, unsigned char* p) {ProcessInvincibleEnd(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_ITEM_USE, [this](int c_id, unsigned char* p) {ProcessItemUse(c_id, p); });
+
 }
 
 void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
@@ -529,6 +530,29 @@ void ThievesPacketManager::ProcessInvincible(int c_id, unsigned char* p)
 void ThievesPacketManager::ProcessInvincibleEnd(int c_id, unsigned char* p)
 {
 	sc_packet_invincible_end* packet = reinterpret_cast<sc_packet_invincible_end*>(p);
+}
+
+////----------------------수정이 필요
+// timer
+void ThievesPacketManager::ProcessTime(int c_id, unsigned char* p)
+{
+	sc_packet_time* packet = reinterpret_cast<sc_packet_time*>(p);
+	int t = packet->send_time;
+	//
+}
+// NPC
+void ThievesPacketManager::ProcessNpcAttack(int c_id, unsigned char* p)
+{
+	sc_packet_npc_attack* packet = reinterpret_cast<sc_packet_npc_attack*>(p);
+	auto target = m_obj_map.find(packet->target_id);
+	if (target != m_obj_map.end()) {
+		if (target->second->GetIsActive() == false)return;
+
+		Vec3 attack_pos{ target->second->GetPosition().x,target->second->GetPosition().y + 80.0f,target->second->GetPosition().z };
+
+
+
+	}
 }
 
 

@@ -108,5 +108,11 @@ public:
 		Vector3 projection = (dotProduct / (vectorLength * vectorLength)) * vector;
 		return projection;
 	}
+	Vector3 Normalrize()
+	{
+		float scale = VectorScale();
+		Vector3 nor{ x / scale, y / scale, z / scale };
+		return nor;
+	}
 };
 

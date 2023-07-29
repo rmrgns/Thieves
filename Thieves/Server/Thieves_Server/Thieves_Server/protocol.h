@@ -23,7 +23,7 @@ constexpr int MAX_NPC = MAX_ROOM_SIZE * 8;
 // ���� NPC�� ����
 constexpr int NPC_ID_START = MAX_USER;
 constexpr int NPC_ID_END = MAX_USER + MAX_NPC - 1;
-
+constexpr int BASE_ID = NPC_ID_END + 2;
 constexpr int PLAYER_HP = 5;		// �÷��̾� HP
 constexpr int PLAYER_DAMAGE = 1;	// �÷��̾� DMG
 // �÷��̾� �̵��Ÿ�
