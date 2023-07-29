@@ -580,7 +580,7 @@ void SceneManager::LoadGameScene()
 		for (auto& gameObject : gameObjects)
 		{
 			gameObject->SetName(L"Diamond");
-			gameObject->SetCheckFrustum(true);
+			//gameObject->SetCheckFrustum(true);
 			gameObject->GetTransform()->SetLocalPosition(Vec3(100.f, 100.f, 100.f));
 			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 3.1415f, 0.f));
 			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
@@ -603,7 +603,7 @@ void SceneManager::LoadGameScene()
 		for (auto& gameObject : gameObjects)
 		{
 			gameObject->SetName(L"Safe");
-			gameObject->SetCheckFrustum(true);
+			//gameObject->SetCheckFrustum(true);
 			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
 			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 1.57f, 1.57f));
 			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
@@ -626,7 +626,30 @@ void SceneManager::LoadGameScene()
 		for (auto& gameObject : gameObjects)
 		{
 			gameObject->SetName(L"Trap");
-			gameObject->SetCheckFrustum(true);
+			//gameObject->SetCheckFrustum(true);
+			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 100.f, 0.f));
+			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 1.57f, 1.57f));
+			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+			//gameObject->AddComponent(make_shared<TestObjectMove>());
+			//gameObject->AddComponent(make_shared<PlayerInput>());
+			gameObject->SetStatic(false);
+			scene->AddGameObject(gameObject);
+			//gameObject->AddComponent(make_shared<TestDragon>());
+		}
+	}
+#pragma endregion
+
+#pragma region Gun
+	{
+
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Gun.fbx");
+
+		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+
+		for (auto& gameObject : gameObjects)
+		{
+			gameObject->SetName(L"Gun");
+			//gameObject->SetCheckFrustum(true);
 			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 100.f, 0.f));
 			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 1.57f, 1.57f));
 			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
