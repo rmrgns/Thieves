@@ -633,14 +633,27 @@ void SceneManager::LoadGameScene()
 		particle->AddComponent(make_shared<ParticleSystem>());
 		particle->SetCheckFrustum(false);
 		particle->AddComponent(make_shared<PlayerParticle>());
-		particle->GetParticleSystem()->UseParticle(true);
-		particle->GetParticleSystem()->MakeParticle(L"blood", L"..\\Resources\\Texture\\Particle\\bubble.png");
-		particle->GetTransform()->SetLocalPosition(Vec3(0.f, 100.f, 0.f));
+		//particle->GetParticleSystem()->UseParticle(true);
+		particle->GetParticleSystem()->MakeParticle(L"blood", L"..\\Resources\\Texture\\Particle\\bubble.png", 2);
+		particle->GetTransform()->SetLocalPosition(Vec3(-100.f, -100.f, -100.f));
 		scene->AddGameObject(particle);
 	}
 #pragma endregion
 
-
+//#pragma region ParticleSystem
+//	{
+//		shared_ptr<GameObject> particle = make_shared<GameObject>();
+//		particle->SetName(L"Particle");
+//		particle->AddComponent(make_shared<Transform>());
+//		particle->AddComponent(make_shared<ParticleSystem>());
+//		particle->SetCheckFrustum(false);
+//		particle->AddComponent(make_shared<PlayerParticle>());
+//		particle->GetParticleSystem()->UseParticle(true);
+//		particle->GetParticleSystem()->MakeParticle(L"blood", L"..\\Resources\\Texture\\Particle\\bubble.png", 1);
+//		particle->GetTransform()->SetLocalPosition(Vec3(100.f, 100.f, 100.f));
+//		scene->AddGameObject(particle);
+//	}
+//#pragma endregion
 	
 
 	scene->SetSceneLoaded(true);

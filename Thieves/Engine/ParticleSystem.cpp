@@ -5,7 +5,9 @@
 #include "Resources.h"
 #include "Transform.h"
 #include "Timer.h"
-
+#include "SceneManager.h"
+#include "Scene.h"
+#include "Camera.h"
 ParticleSystem::ParticleSystem() : Component(COMPONENT_TYPE::PARTICLE_SYSTEM)
 {
 	_particleBuffer = make_shared<StructuredBuffer>();
@@ -39,8 +41,10 @@ void ParticleSystem::FinalUpdate()
 
 void ParticleSystem::Render()
 {
-	if (_useParticle == true)
+	//if (_useParticle == true)
 	{
+
+
 		GetTransform()->PushData();
 
 		_particleBuffer->PushGraphicsData(SRV_REGISTER::t9);
@@ -52,15 +56,17 @@ void ParticleSystem::Render()
 	}
 }
 
-void ParticleSystem::MakeParticle(wstring name, wstring path)
+void ParticleSystem::MakeParticle(wstring name, wstring path, int effect)
 {
 	wstring pt_name = name;
 	wstring pt_path = path;
-
+	_effectNumber = effect;
+	
 	shared_ptr<Texture> tex = GET_SINGLE(Resources)->Load<Texture>(
 		pt_name, pt_path);
 
 	_material->SetTexture(0, tex);
+	
 }
 
 void ParticleSystem::ParticleLogic()
@@ -72,6 +78,9 @@ void ParticleSystem::ParticleLogic()
 	{
 		_accTime = _accTime - _createInterval;
 		add = 1;
+		Vec3 look = GetTransform()->GetLook();
+		printf("watch                 x:%f z:%f\n", look.x, look.z);
+		_computeMaterial->SetVec4(1, Vec4(look.x, look.y, look.z, 0));
 	}
 
 	_particleBuffer->PushComputeUAVData(UAV_REGISTER::u0);
@@ -79,11 +88,11 @@ void ParticleSystem::ParticleLogic()
 
 	_computeMaterial->SetInt(0, _maxParticle);
 	_computeMaterial->SetInt(1, add);
+	_computeMaterial->SetInt(2, _effectNumber);
 	//_computeMaterial->SetInt(2, 100);
-	//_computeMaterial->SetInt(3, 0);
 
 	_computeMaterial->SetVec2(1, Vec2(DELTA_TIME, _accTime));
 	_computeMaterial->SetVec4(0, Vec4(_minLifeTime, _maxLifeTime, _minSpeed, _maxSpeed));
-
+	
 	_computeMaterial->Dispatch(1, 1, 1);
 }
