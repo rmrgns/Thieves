@@ -121,6 +121,10 @@ constexpr char SC_PACKET_BULLET = 40;		// �Ѿ�
 constexpr char SC_PACKET_ITEM_INFO = 41;
 constexpr char SC_PACKET_ACTIVE_ESCAPE = 42;
 constexpr char SC_PACKET_ACTIVE_SPECIAL_ESCAPE = 43;
+constexpr char SC_PACKET_OPEN_SAFE = 45;
+constexpr char SC_PACKET_INVINCIBLE_END = 46;
+constexpr char SC_PACKET_INVINCIBLE = 47;
+constexpr char SC_PACKET_GET_ITEM = 48;
 
 constexpr char SC_PACKET_ATTACKMODE = 99;		// ���� ��� ���� 1. �ָ� 2. �� ���
 constexpr char SC_PACKET_NPC_ATTACK = 100;
@@ -467,7 +471,7 @@ struct sc_packet_bullet {
 	unsigned char size;
 	char type;
 	float p_x, p_y, p_z;	// �浹 ��ǥ
-//	float d_x, d_y, d_z;	
+	//	float d_x, d_y, d_z;	
 };
 
 struct sc_packet_attackmode {
@@ -491,6 +495,7 @@ struct sc_packet_item_use {
 struct sc_packet_stun_end {
 	unsigned char size;
 	char type;
+	int obj_id;
 };
 
 struct sc_packet_attack {
@@ -503,12 +508,7 @@ struct sc_packet_get_item {
 	unsigned char size;
 	char type;
 	int itemNum;
-};
-
-struct sc_packet_timer_start {
-	unsigned char size;
-	char type;
-
+	int player;
 };
 
 struct sc_packet_item_info {
@@ -531,4 +531,27 @@ struct sc_packet_active_special_escape {
 	unsigned char size;
 	char type;
 	float x, y, z;
+};
+
+struct sc_packet_timer_start {
+	unsigned char size;
+	char type;
+	std::chrono::system_clock::time_point start_time;
+};
+
+struct sc_packet_open_safe {
+	unsigned char size;
+	char type;
+};
+
+struct sc_packet_invincible {
+	unsigned char size;
+	char type;
+	int player;
+};
+
+struct sc_packet_invincible_end {
+	unsigned char size;
+	char type;
+	int player;
 };

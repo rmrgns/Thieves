@@ -4,34 +4,34 @@
 
 using namespace std;
 
-// »ý¼ºÀÚ ÇÔ¼ö PacketManager¸¦ ÃÊ±âÈ­
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ PacketManagerï¿½ï¿½ ï¿½Ê±ï¿½È­
 InGameServer::InGameServer()
 {
 	m_PacketManager = std::make_unique<PacketManager>();
 	m_PacketManager->Init();
 }
 
-// ¼Ò¸êÀÚ ÇÔ¼ö
+// ï¿½Ò¸ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 InGameServer::~InGameServer()
 {
 }
 
-// Å¬¶óÀÌ¾ðÆ®¿Í ¿¬°áÀÌ ¼º°øÇÒ½Ã È£ÃâÇÏ´Â ÇÔ¼ö PacketManager¿¡ ¿¬°áµÈ Å¬¶ó Á¤º¸ Àü´Þ
+// Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ò½ï¿½ È£ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½ PacketManagerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 bool InGameServer::OnAccept(EXP_OVER* exp_over)
 {
 	m_PacketManager->ProcessAccept(m_hiocp, m_s_socket, exp_over);
 	return true;
 }
 
-// Å¬¶ó µ¥ÀÌÅÍ¸¦ ¼ö½Å½Ã È£ÃâµÇ´Â ÇÔ¼ö ¼ö½ÅµÈ µ¥ÀÌÅÍ PacketManager¿¡ ¼ö½ÅµÈ µ¥ÀÌÅÍ Àü´Þ
+// Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½Å½ï¿½ È£ï¿½ï¿½Ç´ï¿½ ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½Åµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ PacketManagerï¿½ï¿½ ï¿½ï¿½ï¿½Åµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 bool InGameServer::OnRecv(int c_id, EXP_OVER* exp_over, DWORD num_bytes)
 {
 	m_PacketManager->ProcessRecv(c_id, exp_over, num_bytes);
 	return true;
 }
 
-// ºñµ¿±â ÀÔÃâ·Â ¿Ï·á ·çÆ¾¿¡¼­ ÀÌº¥Æ® ¹ß»ý½Ã È£ÃâµÇ´Â ÇÔ¼ö
-// ÀÌº¥Æ® Á¾·ù¿¡ µû¶ó ´Ù¸£°Ô µ¿ÀÛ
+// ï¿½ñµ¿±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½ ï¿½ï¿½Æ¾ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ® ï¿½ß»ï¿½ï¿½ï¿½ È£ï¿½ï¿½Ç´ï¿½ ï¿½Ô¼ï¿½
+// ï¿½Ìºï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 void InGameServer::OnEvent(int c_id, EXP_OVER* exp_over)
 {
 	
@@ -55,44 +55,53 @@ void InGameServer::OnEvent(int c_id, EXP_OVER* exp_over)
 	case COMP_OP::OP_STUN_END:
 		m_PacketManager->ProcessStunEnd(c_id);
 		break;
-	case COMP_OP::OP_COUNT_TIME: {
-		m_PacketManager->CountTime(exp_over->room_id);
-		delete exp_over;
-		break;
-	}
-	case COMP_OP::OP_NPC_ATTACK: {
+	case COMP_OP::OP_NPC_ATTACK:{
 		m_PacketManager->DoEnemyAttack(c_id, exp_over->target_id, exp_over->room_id);
 		delete exp_over;
 		break;
 	}
+	case COMP_OP::OP_INVINCIBLE_END:
+		m_PacketManager->ProcessInvincibleEnd(c_id);
+		break;
+	case COMP_OP::OP_TIMER_START:
+		break;
+	case COMP_OP::OP_OPEN_SAFE:
+		m_PacketManager->ProcessOpenSafe(c_id);
+		break;
+	case COMP_OP::OP_OPEN_ESCAPE:
+		m_PacketManager->ProcessOpenEscape(c_id);
+		break;
+	case COMP_OP::OP_OPEN_SPECIAL_ESCAPE:
+		m_PacketManager->ProcessOpenSpecialEscape(c_id);
+		break;
 	defalut:
 		break;
 	}
 	
 }
 
-// Å¬¶ó ¿¬°áÀ» ²÷À» ¶§ È£ÃâµÇ´Â ÇÔ¼ö
-// PacketManager¿¡ ¿¬°áÀ» ²÷Àº Å¬¶ó Á¤º¸¸¦ Àü´Þ
+// Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ È£ï¿½ï¿½Ç´ï¿½ ï¿½Ô¼ï¿½
+// PacketManagerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 void InGameServer::Disconnect(int c_id)
 {
 	m_PacketManager->Disconnect(c_id);
 }
 
-// Å¸ÀÌ¸Ó ½º·¹µå¿¡¼­ ÁÖ±âÀûÀ¸·Î È£ÃâµÇ´Â ÇÔ¼ö
-// PacketManager¿¡¼­ Å¸ÀÌ¸Ó ÀÌº¥Æ® Ã³¸®
+// Å¸ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½å¿¡ï¿½ï¿½ ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½Ç´ï¿½ ï¿½Ô¼ï¿½
+// PacketManagerï¿½ï¿½ï¿½ï¿½ Å¸ï¿½Ì¸ï¿½ ï¿½Ìºï¿½Æ® Ã³ï¿½ï¿½
 void InGameServer::DoTimer(HANDLE hiocp)
 {
 	m_PacketManager->ProcessTimer(hiocp);
 }
 
-// Å¸ÀÌ¸Ó ¾²·¹µå »ý¼º ÇÔ¼ö
+// Å¸ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 void InGameServer::CreateTimer()
 {
 	m_worker_threads.emplace_back(std::thread(&InGameServer::DoTimer, this, m_hiocp));
 
 }
 
-// °ÔÀÓ ¼­¹ö¸¦ ½ÃÀÛÇÏ´Â ÇÔ¼ö ¼­¹ö½ÃÀÛ, Å¸ÀÌ¸Ó¾²·¹µå »ý¼º, DB¾²·¹µå »ý¼º, ¾²·¹µå Á¶ÀÎ µ¿ÀÛ
+// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, Å¸ï¿½Ì¸Ó¾ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, DBï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 void InGameServer::Run()
 {
 	StartServer();
@@ -102,7 +111,7 @@ void InGameServer::Run()
 	m_PacketManager->JoinDBThread();
 }
 
-// ¼­¹ö Á¾·á ÇÔ¼ö
+// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 void InGameServer::End()
 {
 	m_PacketManager->End();

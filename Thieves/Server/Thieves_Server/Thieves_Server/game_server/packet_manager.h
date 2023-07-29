@@ -25,6 +25,12 @@ public:
 	void ProcessAccept(HANDLE, SOCKET&, EXP_OVER*);
 	void ProcessRecv(int, EXP_OVER*, DWORD);	
 	void ProcessStunEnd(int c_id);
+	void ProcessInvincibleEnd(int c_id);
+	void ProcessOpenSafe(int r_id);
+	void ProcessOpenEscape(int r_id);
+	void ProcessOpenSpecialEscape(int r_id);
+
+
 	void SendMovePacket(int c_id, int mover);
 	
 	void SendLoginFailPacket(SOCKET&, int reason);
@@ -38,7 +44,8 @@ public:
 	void SendAttackPacket(int c_id, int room_id);
 	void SendGameWin(int c_id);
 	void SendGameDefeat(int c_id);
-	void SendStun(int c_id, int obj_id);
+	void SendStun(int c_id, int obj_id); //obj_id가 c_id를 공격
+	void SendStunEnd(int c_id);
 	void SendPhasePacket(int c_id);
 
 	void SendLoadProgress(int c_id, int p_id, int progressed);
@@ -62,6 +69,15 @@ public:
 
 	void SendBullet(int c_id, Vector3);
 	void SendLoginFailPacket(int c_id, int reason);
+
+	void SendTimerStart(int c_id, std::chrono::system_clock::time_point tp);
+
+	void SendOpenSafe(int c_id);
+	void SendOpenEscapeArea(int c_id, int r_id);
+	void SendOpenSpecialEscapeArea(int c_id, int r_id);
+	void SendInvincible(int c_id, int p_id);
+	void SendInvincibleEnd(int c_id, int p_id); // c_id에게 p_id의 무적이 끝났음을 알림
+
 	void End();
 	void Disconnect(int c_id);
 	bool IsRoomInGame(int room_id);
@@ -133,6 +149,8 @@ private:
 	void ProcessRoomsDataInRoom(int c_id, unsigned char* p);
 	void ProcessDamageCheat(int c_id, unsigned char* p);
 	void ProcessBullet(int c_id, unsigned char* p);
+
+
 
 	void StartGame(int room_id);
 

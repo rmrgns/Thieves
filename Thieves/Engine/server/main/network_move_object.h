@@ -52,9 +52,18 @@ public:
 	const int GetActionType()const { return m_action_type; }
 
 	bool GetIsActive() { return m_is_active; }
-	void SetIsActive(bool val) { m_is_active; }
+	void SetIsActive(bool val) { m_is_active = val; }
+
+	bool GetIsInvincible() { return m_is_invincible; }
+	void SetIsInvincible(bool val) { m_is_invincible = val; }
+
+	bool GetIsStun() { return m_is_stun; }
+	void SetIsStun(bool val) { m_is_stun = val; }
+
 private:
 	NW_OBJ_TYPE m_obj_type;
 	int m_action_type;
 	bool m_is_active = true;
+	bool m_is_invincible = false;
+	bool m_is_stun = false;
 };

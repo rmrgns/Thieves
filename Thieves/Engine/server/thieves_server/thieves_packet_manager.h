@@ -7,6 +7,7 @@
 #include "server/thieves_server/game_info.h"
 #include "PlayerInput.h"
 
+class Item;
 
 class ThievesPacketManager : public PacketManager 
 {
@@ -37,7 +38,16 @@ public:
 	void ProcessPhaseChange(int c_id, unsigned char* p);
 	void ProcessAttack(int c_id, unsigned char* p);
 	void ProcessHit(int c_id, unsigned char* p);
+	void ProcessStunEnd(int c_id, unsigned char* p);
 	void ProcessGetItem(int c_id, unsigned char* p);
+	void ProcessItemUse(int c_id, unsigned char* p);
+	void ProcessItemInfo(int c_id, unsigned char* p);
+	void ProcessTimerStart(int c_id, unsigned char* p);
+	void ProcessActiveEscape(int c_id, unsigned char* p);
+	void ProcessActiveSpecialEscape(int c_id, unsigned char* p);
+	void ProcessOpenSafe(int c_id, unsigned char* p);
+	void ProcessInvincible(int c_id, unsigned char* p);
+	void ProcessInvincibleEnd(int c_id, unsigned char* p);
 
 
 	void ProcessTime(int c_id, unsigned char* p);
@@ -63,6 +73,7 @@ public:
 
 private:
 	std::unordered_map<int, shared_ptr<NetworkMoveObj>>m_obj_map;
+	std::unordered_map<int, shared_ptr<Item>>m_item_map;
 	GameInfo m_game_info;
 
 	char pl_action;

@@ -90,7 +90,7 @@ void Light::SetLightType(LIGHT_TYPE type)
 		_shadowCamera->GetCamera()->SetFar(10000.f);
 		_shadowCamera->GetCamera()->SetWidth(4096);
 		_shadowCamera->GetCamera()->SetHeight(4096);
-		_shadowCamera->GetCamera()->SetFOV(1.f / 1.5f);
+		_shadowCamera->GetCamera()->SetFOV(1.f / 1.07f);
 		break;
 	case LIGHT_TYPE::POINT_LIGHT:
 		_volumeMesh = GET_SINGLE(Resources)->Get<Mesh>(L"Sphere");

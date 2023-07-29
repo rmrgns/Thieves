@@ -20,6 +20,7 @@
 #include "InGameScene.h"
 #include "GameObject.h"
 #include "NetworkSystem.h"
+#include "Item.h"
 
 using namespace std;
 using namespace client_fw;
@@ -45,13 +46,21 @@ void ThievesPacketManager::Init()
 	RegisterRecvFunction(SC_PACKET_ERROR, [this](int c_id, unsigned char* p) {ProcessError(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_GAME_START, [this](int c_id, unsigned char* p) {ProcessGameStart(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_ALL_PLAYER_LOAD_END, [this](int c_id, unsigned char* p) {ProcessAllPlayerLoadend(c_id, p); });
-
 	RegisterRecvFunction(SC_PACKET_BULLET, [this](int c_id, unsigned char* p) {ProcessBullet(c_id, p); });
-
 	RegisterRecvFunction(SC_PACKET_PHASE, [this](int c_id, unsigned char* p) {ProcessPhaseChange(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_ATTACK, [this](int c_id, unsigned char* p) {ProcessAttack(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_STUN, [this](int c_id, unsigned char* p) {ProcessHit(c_id, p); });
-	//RegisterRecvFunction(SC_PACKET_GET_ITEM, [this](int c_id, unsigned char* p) {ProcessGetItem(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_GET_ITEM, [this](int c_id, unsigned char* p) {ProcessGetItem(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_STUN_END, [this](int c_id, unsigned char* p) {ProcessStunEnd(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_ITEM_INFO, [this](int c_id, unsigned char* p) {ProcessItemInfo(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_TIMER_START, [this](int c_id, unsigned char* p) {ProcessTimerStart(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_ACTIVE_ESCAPE, [this](int c_id, unsigned char* p) {ProcessActiveEscape(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_ACTIVE_SPECIAL_ESCAPE, [this](int c_id, unsigned char* p) {ProcessActiveSpecialEscape(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_OPEN_SAFE, [this](int c_id, unsigned char* p) {ProcessOpenSafe(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_INVINCIBLE, [this](int c_id, unsigned char* p) {ProcessInvincible(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_INVINCIBLE_END, [this](int c_id, unsigned char* p) {ProcessInvincibleEnd(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_ITEM_USE, [this](int c_id, unsigned char* p) {ProcessItemUse(c_id, p); });
+
 }
 
 void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
@@ -421,11 +430,104 @@ void ThievesPacketManager::ProcessAttack(int c_id, unsigned char* p)
 void ThievesPacketManager::ProcessHit(int c_id, unsigned char* p)
 {
 	sc_packet_stun* packet = reinterpret_cast<sc_packet_stun*>(p);
+
+	m_obj_map.find(packet->obj_id)->second->SetIsStun(true);
+
+}
+
+void ThievesPacketManager::ProcessStunEnd(int c_id, unsigned char* p)
+{
+	sc_packet_stun_end* packet = reinterpret_cast<sc_packet_stun_end*>(p);
+
+	m_obj_map.find(packet->obj_id)->second->SetIsStun(false);
 }
 
 void ThievesPacketManager::ProcessGetItem(int c_id, unsigned char* p)
 {
 	sc_packet_get_item* packet = reinterpret_cast<sc_packet_get_item*>(p);
+
+	shared_ptr<InGameScene> iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetActiveScene());
+	
+	m_item_map.erase(packet->obj_id);
+
+	if (packet->player == m_game_info.GetNetworkID())
+	{
+		iScene->SetItemNum(packet->itemNum);
+	}
+}
+
+void ThievesPacketManager::ProcessItemUse(int c_id, unsigned char* p)
+{
+	sc_packet_item_use* packet = reinterpret_cast<sc_packet_item_use*>(p);
+	
+}
+
+void ThievesPacketManager::ProcessItemInfo(int c_id, unsigned char* p)
+{
+	sc_packet_item_info* packet = reinterpret_cast<sc_packet_item_info*>(p);
+
+	const char* name;
+
+	if (packet->item_type == ITEM_NUM_TRAP)
+	{
+		name = "Trap";
+	}
+	else if (packet->item_type == ITEM_NUM_GUN)
+	{
+		name = "Gun";
+	}
+	else
+	{
+		name = "Another";
+	}
+	
+	auto res = m_item_map.try_emplace(packet->id,
+		name,
+		packet->x,
+		packet->y,
+		packet->z,
+		ITEM_STATE::IT_SPAWN
+	);
+}
+
+void ThievesPacketManager::ProcessTimerStart(int c_id, unsigned char* p)
+{
+	sc_packet_timer_start* packet = reinterpret_cast<sc_packet_timer_start*>(p);
+	
+	shared_ptr<InGameScene> iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetLoadProgressScene());
+	iScene->SetStartTime(std::chrono::system_clock::now());
+	iScene->SetIsGetTime(true);
+}
+
+void ThievesPacketManager::ProcessActiveEscape(int c_id, unsigned char* p)
+{
+	sc_packet_active_escape* packet = reinterpret_cast<sc_packet_active_escape*>(p);
+	
+	shared_ptr<InGameScene> iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetActiveScene());
+
+}
+
+
+void ThievesPacketManager::ProcessActiveSpecialEscape(int c_id, unsigned char* p)
+{
+	sc_packet_active_special_escape* packet = reinterpret_cast<sc_packet_active_special_escape*>(p);
+}
+
+void ThievesPacketManager::ProcessOpenSafe(int c_id, unsigned char* p)
+{
+	sc_packet_open_safe* packet = reinterpret_cast<sc_packet_open_safe*>(p);
+}
+
+void ThievesPacketManager::ProcessInvincible(int c_id, unsigned char* p)
+{
+	sc_packet_invincible* packet = reinterpret_cast<sc_packet_invincible*>(p);
+
+	
+}
+
+void ThievesPacketManager::ProcessInvincibleEnd(int c_id, unsigned char* p)
+{
+	sc_packet_invincible_end* packet = reinterpret_cast<sc_packet_invincible_end*>(p);
 }
 
 ////----------------------수정이 필요
