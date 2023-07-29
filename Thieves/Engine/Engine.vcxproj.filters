@@ -277,6 +277,9 @@
       <Filter>Object\Script</Filter>
     </ClCompile>
     <ClCompile Include="MapItem.cpp" />
+    <ClCompile Include="PlayerShadow.cpp">
+      <Filter>Object\Script</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -520,6 +523,9 @@
       <Filter>Object\Script</Filter>
     </ClInclude>
     <ClInclude Include="MapItem.h" />
+    <ClInclude Include="PlayerShadow.h">
+      <Filter>Object\Script</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">

@@ -385,19 +385,16 @@ void CS_Main(int3 threadIndex : SV_DispatchThreadID)
             // [0.5~1] -> [0~1]
             float3 noise =
             {
-                2 * r1 - 1,
-                2 * r2 - 1,
-                2 * r3 - 1
+                r1 * 2 - 1.5f,
+                r2 * 2 - 1.5f,
+                r3 * 2 - 1.5f
             };
 
-            float3 perpendicular = cross(look, float3(0, 1, 0));
-            float angle = r1 * 3.14159265359f * 0.25f; // 0도 ~ 90도 사이의 각도
-            // [0~1] -> [-1~1]
-            float3 dir = cos(angle) * look - sin(angle) * normalize(perpendicular);
-            
-            //dir = normalize(look) + normalize(dir);
-        
 
+            look = normalize(look);
+            float Angle = 25.f * 3.141592 / 180.f;
+
+            float3 dir = normalize(look + Angle * noise);
 
             g_particle[threadIndex.x].alive = 1;
             g_particle[threadIndex.x].worldDir = normalize(dir);

@@ -218,6 +218,7 @@
     <ClInclude Include="PlayerCamera.h" />
     <ClInclude Include="PlayerInput.h" />
     <ClInclude Include="PlayerParticle.h" />
+    <ClInclude Include="PlayerShadow.h" />
     <ClInclude Include="RenderTargetGroup.h" />
     <ClInclude Include="Resources.h" />
     <ClInclude Include="RoomScene.h" />
@@ -308,6 +309,7 @@
     <ClCompile Include="PlayerCamera.cpp" />
     <ClCompile Include="PlayerInput.cpp" />
     <ClCompile Include="PlayerParticle.cpp" />
+    <ClCompile Include="PlayerShadow.cpp" />
     <ClCompile Include="RenderTargetGroup.cpp" />
     <ClCompile Include="Resources.cpp" />
     <ClCompile Include="RoomScene.cpp" />
