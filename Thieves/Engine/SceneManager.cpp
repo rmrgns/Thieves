@@ -529,29 +529,32 @@ void SceneManager::LoadGameScene()
 	}
 #pragma endregion
 
-#/*pragma region Object
-	{
-		shared_ptr<GameObject> obj = make_shared<GameObject>();
-		obj->SetName(L"OBJ");
-		obj->AddComponent(make_shared<Transform>());
-		
-		obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
-		obj->GetTransform()->SetLocalPosition(Vec3(0.f, 100.f,1000.f));
-
-		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
-		{
-			shared_ptr<Mesh> sphereMesh = GET_SINGLE(Resources)->LoadCubeMesh();
-			meshRenderer->SetMesh(sphereMesh);
-		}
-		{
-			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
-			meshRenderer->SetMaterial(material->Clone());
-		}
-		obj->SetCheckFrustum(true);
-		obj->AddComponent(meshRenderer);
-		scene->AddGameObject(obj);
-	}
-#pragma endregion*/
+//#pragma region Object
+//	{
+//		shared_ptr<GameObject> obj = make_shared<GameObject>();
+//		obj->SetName(L"OBJ");
+//		obj->AddComponent(make_shared<Transform>());
+//		
+//		obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
+//		obj->GetTransform()->SetLocalPosition(Vec3(0.f, 100.f,1000.f));
+//
+//		
+//
+//		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+//		{
+//			shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadCubeMesh();
+//			meshRenderer->SetMesh(mesh);
+//			
+//		}
+//		{
+//			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
+//			meshRenderer->SetMaterial(material->Clone());
+//		}
+//		obj->SetCheckFrustum(true);
+//		obj->AddComponent(meshRenderer);
+//		scene->AddGameObject(obj);
+//	}
+//#pragma endregion
 
 	_LoadText = L"Load Directinal Light"; // 17
 	Network::GetInst()->SendLoadProgressPacket((char)1500 / 21);
@@ -634,7 +637,7 @@ void SceneManager::LoadGameScene()
 		particle->SetCheckFrustum(false);
 		particle->AddComponent(make_shared<PlayerParticle>());
 		//particle->GetParticleSystem()->UseParticle(true);
-		particle->GetParticleSystem()->MakeParticle(L"blood", L"..\\Resources\\Texture\\Particle\\bubble.png", 2);
+		particle->GetParticleSystem()->MakeParticle(L"blood", L"..\\Resources\\Texture\\Particle\\bubble.png", 3);
 		particle->GetTransform()->SetLocalPosition(Vec3(-100.f, -100.f, -100.f));
 		scene->AddGameObject(particle);
 	}
