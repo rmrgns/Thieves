@@ -72,9 +72,9 @@ void LoginScript::ClickLoginButton()
 	float width = static_cast<float>(GEngine->GetWindow().width);
 	float height = static_cast<float>(GEngine->GetWindow().height);
 	
-	if (point.x > width * 39 / 80 && point.x < width * 59 / 80)
+	if (point.x > width * 970 / 1600 && point.x < width * 1365 / 1600)
 	{
-		if (point.y > height * 405 / 640 && point.y < height * 465 / 640)
+		if (point.y > height * 585 / 900 && point.y < height * 665 / 900)
 		{
 			if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOGIN)
 			{

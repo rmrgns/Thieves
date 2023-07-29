@@ -95,13 +95,13 @@ void LobbyScript::ClickRobbyButton()
 
 	if (point.x > width * 25.f / 1600.f && point.x < width * 250.f / 1600.f)
 	{
-		if (point.y > height * 305.f / 900.f && point.y < height * 380.f / 900.f)
+		if (point.y > height * 305.f / 900.f && point.y < height * 360.f / 900.f)
 		{
 			GET_SINGLE(SceneManager)->SetCheckChangeScene(true);
 			GEngine->SetChangeScene(L"Login");
 			
 		}
-		else if (point.y > height * 413.f / 900.f && point.y < height * 488.f / 900.f)
+		else if (point.y > height * 430.f / 900.f && point.y < height * 480.f / 900.f)
 		{
 			Network::GetInst()->SendEnterRoom(-1);
 			
