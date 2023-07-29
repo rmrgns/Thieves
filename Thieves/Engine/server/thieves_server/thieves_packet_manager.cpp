@@ -60,6 +60,7 @@ void ThievesPacketManager::Init()
 	RegisterRecvFunction(SC_PACKET_INVINCIBLE, [this](int c_id, unsigned char* p) {ProcessInvincible(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_INVINCIBLE_END, [this](int c_id, unsigned char* p) {ProcessInvincibleEnd(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_ITEM_USE, [this](int c_id, unsigned char* p) {ProcessItemUse(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_GAME_TIMER_START, [this](int c_id, unsigned char* p) {ProcessGameTimerStart(c_id, p); });
 
 }
 
@@ -460,6 +461,7 @@ void ThievesPacketManager::ProcessItemUse(int c_id, unsigned char* p)
 {
 	sc_packet_item_use* packet = reinterpret_cast<sc_packet_item_use*>(p);
 	
+	
 }
 
 void ThievesPacketManager::ProcessItemInfo(int c_id, unsigned char* p)
@@ -496,40 +498,130 @@ void ThievesPacketManager::ProcessTimerStart(int c_id, unsigned char* p)
 {
 	sc_packet_timer_start* packet = reinterpret_cast<sc_packet_timer_start*>(p);
 	
-	shared_ptr<InGameScene> iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetLoadProgressScene());
-	iScene->SetStartTime(std::chrono::system_clock::now());
-	iScene->SetIsGetTime(true);
+	shared_ptr<InGameScene> iScene;
+	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
+	{
+		iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetLoadProgressScene());
+		iScene->SetStartTime(std::chrono::system_clock::now());
+		iScene->SetIsGetTime(true);
+	}
+	else if (GET_SINGLE(SceneManager)->GetCurrentLoadProgressScene() == CURRENT_SCENE::GAME)
+	{
+		iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetActiveScene());
+		iScene->SetStartTime(std::chrono::system_clock::now());
+		iScene->SetIsGetTime(true);
+	}
+ 
 }
 
 void ThievesPacketManager::ProcessActiveEscape(int c_id, unsigned char* p)
 {
 	sc_packet_active_escape* packet = reinterpret_cast<sc_packet_active_escape*>(p);
 	
-	shared_ptr<InGameScene> iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetActiveScene());
+	shared_ptr<InGameScene> iScene;
+	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
+	{
+		iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetLoadProgressScene());
+		iScene->SetIsActiveEscape(true);
+		iScene->SetActiveEscapeTime(std::chrono::system_clock::now());
+	}
+	else if (GET_SINGLE(SceneManager)->GetCurrentLoadProgressScene() == CURRENT_SCENE::GAME)
+	{
+		iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetActiveScene());
+		iScene->SetIsActiveEscape(true);
+		iScene->SetActiveEscapeTime(std::chrono::system_clock::now());
+	}
 	
+	// 오브젝트 활성화 처리 해야함.
+
 }
 
 
 void ThievesPacketManager::ProcessActiveSpecialEscape(int c_id, unsigned char* p)
 {
 	sc_packet_active_special_escape* packet = reinterpret_cast<sc_packet_active_special_escape*>(p);
+
+	shared_ptr<InGameScene> iScene;
+	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
+	{
+		iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetLoadProgressScene());
+		iScene->SetIsActiveSpecialEscape(true);
+		iScene->SetActiveSpecialEscapeTime(std::chrono::system_clock::now());
+	}
+	else if (GET_SINGLE(SceneManager)->GetCurrentLoadProgressScene() == CURRENT_SCENE::GAME)
+	{
+		iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetActiveScene());
+		iScene->SetIsActiveEscape(true);
+		iScene->SetActiveSpecialEscapeTime(std::chrono::system_clock::now());
+	}
+
+	// 오브젝트 활성활 처리 해야함.
 }
 
 void ThievesPacketManager::ProcessOpenSafe(int c_id, unsigned char* p)
 {
 	sc_packet_open_safe* packet = reinterpret_cast<sc_packet_open_safe*>(p);
+
+
+	shared_ptr<InGameScene> iScene;
+	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
+	{
+		iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetLoadProgressScene());
+		iScene->SetIsOpenSafe(true);
+		iScene->SetOpenSafeTime(std::chrono::system_clock::now());
+	}
+	else if (GET_SINGLE(SceneManager)->GetCurrentLoadProgressScene() == CURRENT_SCENE::GAME)
+	{
+		iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetActiveScene());
+		iScene->SetIsOpenSafe(true);
+		iScene->SetOpenSafeTime(std::chrono::system_clock::now());
+	}
+	
+	auto& objects = GET_SINGLE(SceneManager)->GetActiveScene()->GetGameObjects();
+
+	for (auto& obj : objects)
+	{
+		if (obj->GetName() == L"Safe")
+		{
+			obj->GetTransform()->SetLocalPosition(Vec3(0.f, -4000.f, 0.f));
+		}
+		else if (obj->GetName() == L"OpenedSafe")
+		{
+			obj->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+		}
+		else {
+			continue;
+		}
+	}
 }
 
 void ThievesPacketManager::ProcessInvincible(int c_id, unsigned char* p)
 {
 	sc_packet_invincible* packet = reinterpret_cast<sc_packet_invincible*>(p);
 
-	
+	m_obj_map.find(packet->player)->second->SetIsInvincible(true);
 }
 
 void ThievesPacketManager::ProcessInvincibleEnd(int c_id, unsigned char* p)
 {
 	sc_packet_invincible_end* packet = reinterpret_cast<sc_packet_invincible_end*>(p);
+	m_obj_map.find(packet->player)->second->SetIsInvincible(false);
+}
+
+void ThievesPacketManager::ProcessGameTimerStart(int c_id, unsigned char* p)
+{
+	
+	shared_ptr<InGameScene> iScene;
+	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
+	{
+		iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetLoadProgressScene());
+		iScene->SetIsTimerStart(true);
+	}
+	else if (GET_SINGLE(SceneManager)->GetCurrentLoadProgressScene() == CURRENT_SCENE::GAME)
+	{
+		iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetActiveScene());
+		iScene->SetIsTimerStart(true);
+	}
 }
 
 ////----------------------수정이 필요

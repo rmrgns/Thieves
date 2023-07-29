@@ -4,8 +4,10 @@
 #include "Scene.h"
 #include "LobbyScene.h"
 #include "RoomScene.h"
+#include "InGameScene.h"
 #include "SceneManager.h"
 #include "Input.h"
+#include "server\main\network.h"
 
 void Text::Init()
 {
@@ -54,6 +56,92 @@ void Text::Update()
 			wstring text6 = L"FALSE";
 			SetText(text6, 0.f, 0.f, 1.f, 1.f);
 		}*/
+
+		shared_ptr<InGameScene> iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetActiveScene());
+
+		if (!iScene->GetIsTimerStart())
+		{
+			if (iScene->IsGetTime())
+			{
+				SetTextInfo(TEXT_FORMAT::INFO);
+				auto time = iScene->GetStartTime();
+				auto sec = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - time);
+				wstring timerText;
+				timerText.append(to_wstring(5 - sec.count()));
+				
+				SetText(timerText, width / 2 - 50.f, height / 2 - 50.f, 1.f, 1.f);
+			}
+		}
+		else
+		{
+			if (iScene->IsGetTime())
+			{
+				SetTextInfo(TEXT_FORMAT::TIMER);
+				auto time = iScene->GetStartTime();
+				auto sec = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - time);
+
+				int seconds = sec.count() - 5;
+
+				int min = seconds / 60;
+				int nSec = seconds % 60;
+
+				wstring timerText;
+				timerText.append(to_wstring(min));
+				timerText.append(L":");
+				timerText.append(to_wstring(nSec));
+
+				SetText(timerText, width / 2, 50.f, 1.f, 1.f);
+			}
+		}
+
+		if (iScene->GetIsActiveEscape())
+		{
+			if (std::chrono::duration_cast<std::chrono::seconds>
+				(std::chrono::system_clock::now() - iScene->GetActiveEscapeTime()).count() < 3)
+			{
+				SetTextInfo(TEXT_FORMAT::INFO);
+				wstring mText = L"Escape Zone Activated.";
+				SetText(mText, width / 2, 300.f, 1.f, 1.f);
+			}
+		}
+
+		if (iScene->GetIsActiveSpecialEscape())
+		{
+			if (std::chrono::duration_cast<std::chrono::seconds>
+				(std::chrono::system_clock::now() - iScene->GetActiveSpecialEscapeTime()).count() < 3)
+			{
+				SetTextInfo(TEXT_FORMAT::INFO);
+				wstring mText = L"Special Escape Zone Activated.";
+				SetText(mText, width / 2, 300.f, 1.f, 1.f);
+			}
+		}
+
+		if (iScene->GetIsOpenSafe())
+		{
+			if (std::chrono::duration_cast<std::chrono::seconds>
+				(std::chrono::system_clock::now() - iScene->GetOpenSafeTime()).count() < 3)
+			{
+				SetTextInfo(TEXT_FORMAT::INFO);
+				wstring mText = L"Safe Opened.";
+				SetText(mText, width / 2, 300.f, 1.f, 1.f);
+			}
+		}
+
+		int netID = Network::GetInst()->GetPacketManager()->GetGameInfo().GetNetworkID();
+		
+		if (Network::GetInst()->GetNetworkObjMap().find(netID)->second->GetIsStun())
+		{
+			SetTextInfo(TEXT_FORMAT::INFO);
+			wstring mText = L"You've Stunned!";
+			SetText(mText, width / 2, height / 2, 1.f, 1.f);
+		}
+
+		if (Network::GetInst()->GetNetworkObjMap().find(netID)->second->GetIsInvincible())
+		{
+			SetTextInfo(TEXT_FORMAT::INFO);
+			wstring mText = L"Now Invincible!";
+			SetText(mText, width / 2, height / 2, 1.f, 1.f);
+		}
 	}
 	else if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOBBY)
 	{
@@ -282,6 +370,24 @@ void Text::SetTextInfo(TEXT_FORMAT infoNumber)
 		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"상주경천섬체", nullptr,
 			DWRITE_FONT_WEIGHT_SEMI_BOLD, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL,
 			width * 25.f / 1600.f, L"en-us", _writeTextFormat.GetAddressOf()));
+		break;
+	case TEXT_FORMAT::TIMER:
+		// 텍스트 색깔
+		ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), _solidColorBrush.GetAddressOf()));
+
+		// 텍스트 폰트 등
+		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"상주경천섬체", nullptr,
+			DWRITE_FONT_WEIGHT_SEMI_BOLD, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL,
+			width * 50.f / 1600.f, L"en-us", _writeTextFormat.GetAddressOf()));
+		break;
+	case TEXT_FORMAT::INFO:
+		// 텍스트 색깔
+		ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), _solidColorBrush.GetAddressOf()));
+
+		// 텍스트 폰트 등
+		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"상주경천섬체", nullptr,
+			DWRITE_FONT_WEIGHT_SEMI_BOLD, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL,
+			width * 100.f / 1600.f, L"en-us", _writeTextFormat.GetAddressOf()));
 		break;
 	default:
 		break;

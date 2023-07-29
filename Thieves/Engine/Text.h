@@ -4,7 +4,9 @@ enum class TEXT_FORMAT {
 	DEFALUT,
 	LOGIN,
 	LOADING,
-	INROOM
+	INROOM,
+	TIMER,
+	INFO,
 };
 
 class Text

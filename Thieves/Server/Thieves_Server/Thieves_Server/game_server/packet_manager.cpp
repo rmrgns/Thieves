@@ -735,6 +735,16 @@ void PacketManager::SendInvincibleEnd(int c_id, int p_id)
 	pl->DoSend(sizeof(packet), &packet);
 }
 
+void PacketManager::SendGameTimerStart(int c_id)
+{
+	sc_packet_game_timer_start packet;
+	packet.type = SC_PACKET_GAME_TIMER_START;
+	packet.size = sizeof(packet);
+
+	Player* pl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	pl->DoSend(sizeof(packet), &packet);
+}
+
 // �񵿱�� DB�۾��� �����ϴ� Thread
 void PacketManager::DBThread()
 {
@@ -1569,6 +1579,18 @@ void PacketManager::ProcessOpenSpecialEscape(int r_id)
 		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
 
 		SendOpenSpecialEscapeArea(pl, r_id);
+	}
+}
+
+void PacketManager::ProcessTimerStart(int r_id)
+{
+	Room* room = m_room_manager->GetRoom(r_id);
+
+	for (int pl : room->GetObjList())
+	{
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+
+		SendGameTimerStart(pl);
 	}
 }
 

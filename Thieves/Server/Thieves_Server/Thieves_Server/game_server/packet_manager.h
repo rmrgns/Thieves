@@ -29,7 +29,7 @@ public:
 	void ProcessOpenSafe(int r_id);
 	void ProcessOpenEscape(int r_id);
 	void ProcessOpenSpecialEscape(int r_id);
-
+	void ProcessTimerStart(int r_id);
 
 	void SendMovePacket(int c_id, int mover);
 	
@@ -77,6 +77,8 @@ public:
 	void SendOpenSpecialEscapeArea(int c_id, int r_id);
 	void SendInvincible(int c_id, int p_id);
 	void SendInvincibleEnd(int c_id, int p_id); // c_id에게 p_id의 무적이 끝났음을 알림
+
+	void SendGameTimerStart(int c_id);
 
 	void End();
 	void Disconnect(int c_id);

@@ -35,11 +35,11 @@ bool InGameServer::OnRecv(int c_id, EXP_OVER* exp_over, DWORD num_bytes)
 void InGameServer::OnEvent(int c_id, EXP_OVER* exp_over)
 {
 	
-	if (false == m_PacketManager->IsRoomInGame(exp_over->room_id))
-	{
-		delete exp_over;
-		return;
-	}
+	//if (false == m_PacketManager->IsRoomInGame(exp_over->room_id))
+	//{
+	//	delete exp_over;
+	//	return;
+	//}
 	
 	switch (exp_over->_comp_op)
 	{
@@ -55,6 +55,7 @@ void InGameServer::OnEvent(int c_id, EXP_OVER* exp_over)
 	}
 	case COMP_OP::OP_STUN_END:
 		m_PacketManager->ProcessStunEnd(c_id);
+		delete exp_over;
 		break;
 	case COMP_OP::OP_NPC_ATTACK:{
 		m_PacketManager->DoEnemyAttack(c_id, exp_over->target_id, exp_over->room_id);
@@ -63,17 +64,23 @@ void InGameServer::OnEvent(int c_id, EXP_OVER* exp_over)
 	}
 	case COMP_OP::OP_INVINCIBLE_END:
 		m_PacketManager->ProcessInvincibleEnd(c_id);
+		delete exp_over;
 		break;
 	case COMP_OP::OP_TIMER_START:
+		m_PacketManager->ProcessTimerStart(c_id);
+		delete exp_over;
 		break;
 	case COMP_OP::OP_OPEN_SAFE:
 		m_PacketManager->ProcessOpenSafe(c_id);
+		delete exp_over;
 		break;
 	case COMP_OP::OP_OPEN_ESCAPE:
 		m_PacketManager->ProcessOpenEscape(c_id);
+		delete exp_over;
 		break;
 	case COMP_OP::OP_OPEN_SPECIAL_ESCAPE:
 		m_PacketManager->ProcessOpenSpecialEscape(c_id);
+		delete exp_over;
 		break;
 	case COMP_OP::OP_NPC_TIMER_SPAWN: {
 		m_PacketManager->SpawnNPCTime(c_id, exp_over->room_id);

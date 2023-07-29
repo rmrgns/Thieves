@@ -12,7 +12,7 @@ constexpr int MAX_CHAT_SIZE = 100;		// ä�� ������
 constexpr int MAX_ROOM_SIZE = 8;		// �� �ִ� ����
 
 constexpr int MAX_USER = MAX_ROOM_SIZE * 8;		// ���� ���� �ο�
-constexpr int MAX_ITEM = 40;
+constexpr int MAX_ITEM = 20;
 // �� �ϳ��� �ִ� �ο�
 constexpr int USER_NUM = 8;
 // ����
@@ -122,10 +122,12 @@ constexpr char SC_PACKET_BULLET = 40;		// �Ѿ�
 constexpr char SC_PACKET_ITEM_INFO = 41;
 constexpr char SC_PACKET_ACTIVE_ESCAPE = 42;
 constexpr char SC_PACKET_ACTIVE_SPECIAL_ESCAPE = 43;
+constexpr char SC_PACKET_GAME_TIMER_START = 44;
 constexpr char SC_PACKET_OPEN_SAFE = 45;
 constexpr char SC_PACKET_INVINCIBLE_END = 46;
 constexpr char SC_PACKET_INVINCIBLE = 47;
 constexpr char SC_PACKET_GET_ITEM = 48;
+
 
 constexpr char SC_PACKET_ATTACKMODE = 99;		// ���� ��� ���� 1. �ָ� 2. �� ���
 constexpr char SC_PACKET_NPC_ATTACK = 100;
@@ -560,4 +562,9 @@ struct sc_packet_invincible_end {
 	unsigned char size;
 	char type;
 	int player;
+};
+
+struct sc_packet_game_timer_start {
+	unsigned char size;
+	char type;
 };
