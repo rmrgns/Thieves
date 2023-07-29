@@ -842,59 +842,60 @@ void Resources::CreateDefaultMaterial()
 		material->SetTexture(0, texture);
 		Add<Material>(L"ItemBox", material);
 
-	// EnterButtonUp
-	{
-		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"UI");
-		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"EnterBtn", L"..\\Resources\\Texture\\Thieves_UI\\EnterRoomButton.png");
-		shared_ptr<Material> material = make_shared<Material>();
-		material->SetShader(shader);
-		material->SetTexture(0, texture);
-		Add<Material>(L"EnterBtn", material);
+		// EnterButtonUp
+		{
+			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"UI");
+			shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"EnterBtn", L"..\\Resources\\Texture\\Thieves_UI\\EnterRoomButton.png");
+			shared_ptr<Material> material = make_shared<Material>();
+			material->SetShader(shader);
+			material->SetTexture(0, texture);
+			Add<Material>(L"EnterBtn", material);
 
-	}
+		}
 
-	// ThiefIcon
-	{
-		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Forward");
-		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"ThiefIcon", L"..\\Resources\\Texture\\thief_icon.jpg");
-		shared_ptr<Material> material = make_shared<Material>();
-		material->SetShader(shader);
-		material->SetTexture(0, texture);
-		Add<Material>(L"ThiefIcon", material);
-	}
+		// ThiefIcon
+		{
+			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Forward");
+			shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"ThiefIcon", L"..\\Resources\\Texture\\thief_icon.jpg");
+			shared_ptr<Material> material = make_shared<Material>();
+			material->SetShader(shader);
+			material->SetTexture(0, texture);
+			Add<Material>(L"ThiefIcon", material);
+		}
 
-	// Shadow
-	{
-		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Shadow");
-		shared_ptr<Material> material = make_shared<Material>();
-		material->SetShader(shader);
-		Add<Material>(L"Shadow", material);
-	}
+		// Shadow
+		{
+			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Shadow");
+			shared_ptr<Material> material = make_shared<Material>();
+			material->SetShader(shader);
+			Add<Material>(L"Shadow", material);
+		}
 
-	// Tessellation
-	{
-		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Tessellation");
-		shared_ptr<Material> material = make_shared<Material>();
-		material->SetShader(shader);
-		Add<Material>(L"Tessellation", material);
-	}
+		// Tessellation
+		{
+			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Tessellation");
+			shared_ptr<Material> material = make_shared<Material>();
+			material->SetShader(shader);
+			Add<Material>(L"Tessellation", material);
+		}
 
-	// Terrain
-	{
-		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Terrain");
-		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"Terrain", L"..\\Resources\\Texture\\Terrain\\terrain.png");
-		shared_ptr<Material> material = make_shared<Material>();
-		material->SetShader(shader);
-		material->SetTexture(0, texture);
-		Add<Material>(L"Terrain", material);
-	}
+		// Terrain
+		{
+			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Terrain");
+			shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"Terrain", L"..\\Resources\\Texture\\Terrain\\terrain.png");
+			shared_ptr<Material> material = make_shared<Material>();
+			material->SetShader(shader);
+			material->SetTexture(0, texture);
+			Add<Material>(L"Terrain", material);
+		}
 
-	// ComputeAnimation
-	{
-		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"ComputeAnimation");
-		shared_ptr<Material> material = make_shared<Material>();
-		material->SetShader(shader);
+		// ComputeAnimation
+		{
+			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"ComputeAnimation");
+			shared_ptr<Material> material = make_shared<Material>();
+			material->SetShader(shader);
 
-		Add<Material>(L"ComputeAnimation", material);
+			Add<Material>(L"ComputeAnimation", material);
+		}
 	}
 }
