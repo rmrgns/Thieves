@@ -64,7 +64,7 @@ void RoomScript::ClickRoomButton()
 
 	if (point.x > width * 25.f / 1600.f && point.x < width * 250.f / 1600.f)
 	{
-		if (point.y > height * 305.f / 900.f && point.y < height * 380.f / 900.f)
+		if (point.y > height * 305.f / 900.f && point.y < height * 360.f / 900.f)
 		{
 			int playerId = Network::GetInst()->GetPacketManager()->GetID();
 
@@ -77,7 +77,7 @@ void RoomScript::ClickRoomButton()
 			GEngine->SetChangeScene(L"Lobby");
 			//Network::GetInst()->SendSignInPacket();
 		}
-		else if (point.y > height * 413.f / 900.f && point.y < height * 488.f / 900.f)
+		else if (point.y > height * 430.f / 900.f && point.y < height * 480.f / 900.f)
 		{
 			int playerId = Network::GetInst()->GetPacketManager()->GetID();
 
@@ -95,7 +95,7 @@ void RoomScript::ClickRoomButton()
 				Network::GetInst()->SendCancleReady();
 			}
 		}
-		else if (point.y > height * 521.f / 900.f && point.y < height * 596.f / 900.f)
+		else if (point.y > height * 550.f / 900.f && point.y < height * 595.f / 900.f)
 		{
 			shared_ptr<RoomScene> rScene = static_pointer_cast<RoomScene>(GET_SINGLE(SceneManager)->GetActiveScene());
 			if (rScene->GetRoomMasterId() == Network::GetInst()->GetPacketManager()->GetID())
