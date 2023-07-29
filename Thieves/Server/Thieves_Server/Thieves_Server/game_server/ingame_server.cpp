@@ -48,10 +48,11 @@ void InGameServer::OnEvent(int c_id, EXP_OVER* exp_over)
 		delete exp_over;
 		break;
 	}
-	case COMP_OP::OP_NPC_MOVE:
+	case COMP_OP::OP_NPC_MOVE: {
 		m_PacketManager->DoNpcMove(exp_over->room_id, c_id);
 		delete exp_over;
 		break;
+	}
 	case COMP_OP::OP_STUN_END:
 		m_PacketManager->ProcessStunEnd(c_id);
 		break;
@@ -74,6 +75,12 @@ void InGameServer::OnEvent(int c_id, EXP_OVER* exp_over)
 	case COMP_OP::OP_OPEN_SPECIAL_ESCAPE:
 		m_PacketManager->ProcessOpenSpecialEscape(c_id);
 		break;
+	case COMP_OP::OP_NPC_TIMER_SPAWN: {
+		m_PacketManager->SpawnNPCTime(c_id, exp_over->room_id);
+		delete exp_over;
+		break;
+	}
+
 	defalut:
 		break;
 	}

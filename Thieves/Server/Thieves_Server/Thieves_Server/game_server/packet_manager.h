@@ -90,8 +90,6 @@ public:
 	void ProcessDBTask(db_task& dt);
 	void JoinDBThread();
 
-
-	void SendStunEnd(int c_id);
 	
 
 	//------timer-------

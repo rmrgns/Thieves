@@ -96,10 +96,3 @@ enum class EVENT_TYPE {
 	EV_INVINCIBLE_END,
 	EV_MOVE
 };
-
-enum class ITEM_STATE {
-	ST_NOTUSED,
-	ST_SPAWNED,
-	ST_OCCUPIED,
-	ST_MOVE,
-};
