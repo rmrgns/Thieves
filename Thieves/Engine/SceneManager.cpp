@@ -364,7 +364,7 @@ void SceneManager::LoadGameScene()
 	
 
 #pragma region UI_Test
-	for (int32 i = 0; i < 0; i++)
+	
 	{
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
 		obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
