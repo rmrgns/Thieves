@@ -48,6 +48,20 @@ void InGameServer::OnEvent(int c_id, EXP_OVER* exp_over)
 	case COMP_OP::OP_STUN_END:
 		m_PacketManager->ProcessStunEnd(c_id);
 		break;
+	case COMP_OP::OP_INVINCIBLE_END:
+		m_PacketManager->ProcessInvincibleEnd(c_id);
+		break;
+	case COMP_OP::OP_TIMER_START:
+		break;
+	case COMP_OP::OP_OPEN_SAFE:
+		m_PacketManager->ProcessOpenSafe(c_id);
+		break;
+	case COMP_OP::OP_OPEN_ESCAPE:
+		m_PacketManager->ProcessOpenEscape(c_id);
+		break;
+	case COMP_OP::OP_OPEN_SPECIAL_ESCAPE:
+		m_PacketManager->ProcessOpenSpecialEscape(c_id);
+		break;
 	defalut:
 		break;
 	}

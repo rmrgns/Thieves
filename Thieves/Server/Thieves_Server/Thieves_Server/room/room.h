@@ -37,6 +37,7 @@ public:
 	void SetState(ROOM_STATE val) { m_room_state = val; }
 	void SetRoundStartTime();
 	float GetRoundTime();
+	std::chrono::system_clock::time_point GetRoundStartTime();
 	void SetRound(int val) { curr_round = val; }
 
 	bool IsPlayerReady(int c_id) { return m_ready_player_list.contains(c_id); }

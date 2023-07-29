@@ -103,6 +103,11 @@ float Room::GetRoundTime() {
 	return round_time;
 }
 
+std::chrono::system_clock::time_point Room::GetRoundStartTime()
+{
+	return m_start_time;
+}
+
 void Room::PlayerReady(int c_id)
 {
 	m_ready_player_list.insert(c_id);

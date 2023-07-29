@@ -197,6 +197,8 @@ void PacketManager::ProcessStunEnd(int c_id)
 {
 	Player* pl = MoveObjManager::GetInst()->GetPlayer(c_id);
 	pl->SetAttacked(false);
+
+	SendStunEnd(c_id);
 }
 
 //void PacketManager::UpdateObjMove()
@@ -352,6 +354,17 @@ void PacketManager::SendGameDefeat(int c_id)
 void PacketManager::SendStun(int c_id, int obj_id)
 {
 	sc_packet_stun packet;
+	packet.type = SC_PACKET_STUN;
+	packet.size = sizeof(packet);
+	packet.obj_id = obj_id;
+
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
+}
+
+void PacketManager::SendStunEnd(int c_id)
+{
+	sc_packet_stun_end packet;
 	packet.type = SC_PACKET_STUN;
 	packet.size = sizeof(packet);
 
@@ -668,6 +681,83 @@ void PacketManager::SendLoginFailPacket(int c_id, int reason)
 
 }
 
+void PacketManager::SendTimerStart(int c_id, std::chrono::system_clock::time_point tp)
+{
+	sc_packet_timer_start packet;
+	packet.type = SC_PACKET_TIMER_START;
+	packet.size = sizeof(packet);
+	packet.start_time = tp;
+	
+	Player* pl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	pl->DoSend(sizeof(packet), &packet);
+
+}
+
+void PacketManager::SendOpenSafe(int c_id)
+{
+	sc_packet_open_safe packet;
+	packet.type = SC_PACKET_OPEN_SAFE;
+	packet.size = sizeof(packet);
+	
+	Player* pl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	pl->DoSend(sizeof(packet), &packet);
+}
+
+void PacketManager::SendOpenEscapeArea(int c_id, int r_id)
+{
+	sc_packet_active_escape packet;
+	packet.type = SC_PACKET_ACTIVE_ESCAPE;
+	packet.size = sizeof(packet);
+
+	Room* room = m_room_manager->GetRoom(r_id);
+	for (int i = 0; i < 3; ++i) {
+		packet.x[i] = room->GetEscapePos(i).x;
+		packet.y[i] = room->GetEscapePos(i).y;
+		packet.z[i] = room->GetEscapePos(i).z;
+	}
+
+	Player* pl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	pl->DoSend(sizeof(packet), &packet);
+
+}
+
+void PacketManager::SendOpenSpecialEscapeArea(int c_id, int r_id)
+{
+	sc_packet_active_special_escape packet;
+	packet.type = SC_PACKET_ACTIVE_SPECIAL_ESCAPE;
+	packet.size = sizeof(packet);
+
+	Room* room = m_room_manager->GetRoom(r_id);
+	packet.x = room->GetSpecialEscapePos().x;
+	packet.y = room->GetSpecialEscapePos().y;
+	packet.z = room->GetSpecialEscapePos().z;
+
+	Player* pl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	pl->DoSend(sizeof(packet), &packet);
+}
+
+void PacketManager::SendInvincible(int c_id, int p_id)
+{
+	sc_packet_invincible packet;
+	packet.type = SC_PACKET_INVINCIBLE_END;
+	packet.size = sizeof(packet);
+	packet.player = p_id;
+
+	Player* pl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	pl->DoSend(sizeof(packet), &packet);
+}
+
+void PacketManager::SendInvincibleEnd(int c_id, int p_id)
+{
+	sc_packet_invincible_end packet;
+	packet.type = SC_PACKET_INVINCIBLE_END;
+	packet.size = sizeof(packet);
+	packet.player = p_id;
+
+	Player* pl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	pl->DoSend(sizeof(packet), &packet);
+}
+
 // �񵿱�� DB�۾��� �����ϴ� Thread
 void PacketManager::DBThread()
 {
@@ -836,6 +926,14 @@ void PacketManager::ProcessAttack(int c_id, unsigned char* p)
 
 		Player* cpl = MoveObjManager::GetInst()->GetPlayer(pl);
 
+		SendAttackPacket(pl, clRoom->GetRoomID());
+	}
+
+	for (int pl : clRoom->GetObjList()) {
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+
+		Player* cpl = MoveObjManager::GetInst()->GetPlayer(pl);
+
 		if (cpl->GetPos().Dist(cl->GetPos()) > 30.f) {
 			Hit(c_id, pl);
 		}
@@ -849,6 +947,8 @@ void PacketManager::Hit(int c_id, int p_id) { //c_id가 p_id를 공격하여 맞
 	Player* pl = MoveObjManager::GetInst()->GetPlayer(p_id);
 	pl->SetAttacked(true);
 	
+	SendStun(p_id, c_id);
+
 	m_Timer->AddTimer(p_id, std::chrono::system_clock::now() + 3s, EV_STUN_END);
 }
 
@@ -1211,6 +1311,19 @@ void PacketManager::ProcessLoadEnd(int c_id, unsigned char* p)
 		SendAllPlayerLoadEnd(pl);
 	}
 
+	room->SetRoundStartTime();
+
+	for (auto pl : room->GetObjList())
+	{
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+
+		SendTimerStart(pl, room->GetRoundStartTime());
+	}
+
+	m_Timer->AddTimer(room->GetRoomID(), room->GetRoundStartTime() + 5s, EV_TIMER_START); // objID를 룸 넘버로 사용하면 될 것으로 보임.
+	m_Timer->AddTimer(room->GetRoomID(), room->GetRoundStartTime() + 65s, EV_OPEN_SAFE);
+	m_Timer->AddTimer(room->GetRoomID(), room->GetRoundStartTime() + 125s, EV_OPEN_ESCAPE_AREA);
+	m_Timer->AddTimer(room->GetRoomID(), room->GetRoundStartTime() + 185s, EV_OPEN_SPECIAL_ESCAPE_AREA);
 }
 
 void PacketManager::ProcessEnterRoom(int c_id, unsigned char* p)
@@ -1404,6 +1517,58 @@ void PacketManager::ProcessBullet(int c_id, unsigned char* p)
 	Vector3 col_pos = m_ray_casting->Shoot(start_pos, dir_pos);
 
 	SendBullet(c_id, col_pos);
+}
+
+void PacketManager::ProcessInvincibleEnd(int c_id)
+{
+	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
+
+	player->SetInvincible(false);
+
+	Room* room = m_room_manager->GetRoom(player->GetRoomID());
+
+	for (int pl : room->GetObjList())
+	{
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+
+		SendInvincibleEnd(pl, c_id);
+	}
+}
+
+void PacketManager::ProcessOpenSafe(int r_id)
+{
+	Room* room = m_room_manager->GetRoom(r_id);
+
+	for (int pl : room->GetObjList())
+	{
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+
+		SendOpenSafe(pl);
+	}
+}
+
+void PacketManager::ProcessOpenEscape(int r_id)
+{
+	Room* room = m_room_manager->GetRoom(r_id);
+
+	for (int pl : room->GetObjList())
+	{
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+
+		SendOpenEscapeArea(pl, r_id);
+	}
+}
+
+void PacketManager::ProcessOpenSpecialEscape(int r_id)
+{
+	Room* room = m_room_manager->GetRoom(r_id);
+
+	for (int pl : room->GetObjList())
+	{
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+
+		SendOpenSpecialEscapeArea(pl, r_id);
+	}
 }
 
 void PacketManager::StartGame(int room_id)

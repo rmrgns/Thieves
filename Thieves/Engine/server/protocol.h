@@ -11,7 +11,7 @@ constexpr int MAX_CHAT_SIZE = 100;		// ä�� ������
 constexpr int MAX_ROOM_SIZE = 8;		// �� �ִ� ����
 
 constexpr int MAX_USER = MAX_ROOM_SIZE * 8;		// ���� ���� �ο�
-
+constexpr int MAX_ITEM = 40;
 // �� �ϳ��� �ִ� �ο�
 constexpr int USER_NUM = 8;
 // ����
@@ -64,12 +64,17 @@ constexpr char CS_PACKET_PLAYER_CANCLE_READY = 17;
 constexpr char CS_PACKET_PLAYER_LOG_OUT = 18;	// �α׾ƿ�
 constexpr char CS_PACKET_REQUEST_ROOMS_DATA_FOR_LOBBY = 19; // �κ񿡼� ������ �����͸� �ޱ�
 constexpr char CS_PACKET_REQUEST_ROOMS_DATA_FOR_ROOM = 20; // �뿡�� ������ �����͸� �ޱ�
+
 constexpr char CS_PACKET_STEEL_DIAMOND = 21; // ���̾Ƹ� ������
 constexpr char CS_PACKET_GET_ITEM = 22; // ������ ȹ��
 constexpr char CS_PACKET_USE_ITEM = 23; // ������ ���
 constexpr char CS_PACKET_BULLET = 24;	// �Ѿ�
 
 constexpr char CS_PACKET_ATTACKMODE = 99;		// ���� ��� ���� 1. �ָ� 2. �� ���
+
+
+
+
 
 // SC
 constexpr char SC_PACKET_SIGN_IN_OK = 1;		// �α��� OK
@@ -111,11 +116,19 @@ constexpr char SC_PACKET_OBJ_INFO_END = 35; // OBJ_INFO�� �����ϱ�
 constexpr char SC_PACKET_ITEM_USE = 36; // �������� ��� �Ǿ��ٴ� �� ��ο��Ե� �˷��� ��. ����, �̰� �����ۿ� �¾Ҵ� ���� ���� HIT�� ���� �����ָ� �ɵ�
 constexpr char SC_PACKET_STUN_END = 37; // ������ ������ �͵� �˷� ����� �̰;�
 constexpr char SC_PACKET_ATTACK = 38; // �ƴ� �����ߴٴ°� �˷���� �ϴϱ� �翬�� �־����
-constexpr char SC_PACKET_GET_ITEM = 39;
+constexpr char SC_PACKET_TIMER_START = 39;
 constexpr char SC_PACKET_BULLET = 40;		// �Ѿ�
+constexpr char SC_PACKET_ITEM_INFO = 41;
+constexpr char SC_PACKET_ACTIVE_ESCAPE = 42;
+constexpr char SC_PACKET_ACTIVE_SPECIAL_ESCAPE = 43;
+constexpr char SC_PACKET_OPEN_SAFE = 45;
+constexpr char SC_PACKET_INVINCIBLE_END = 46;
+constexpr char SC_PACKET_INVINCIBLE = 47;
+constexpr char SC_PACKET_GET_ITEM = 48;
 
 constexpr char SC_PACKET_ATTACKMODE = 99;		// ���� ��� ���� 1. �ָ� 2. �� ���
 constexpr char SC_PACKET_NPC_ATTACK = 100;
+
 
 
 
@@ -221,13 +234,13 @@ struct cs_packet_request_rooms_data_for_room {
 	char type;
 };
 
-
 struct cs_packet_bullet {
 	unsigned char size;
 	char type;
 	float p_x, p_y, p_z;	// ���� ��ǥ
 	float d_x, d_y, d_z;	// ���� ����
 };
+
 
 struct cs_packet_steel_diamond {
 	unsigned char size;
@@ -245,7 +258,6 @@ struct cs_packet_use_item {
 	char type;
 	char itemNum;
 };
-
 
 //------------------------------------------------------------------
 
@@ -455,7 +467,6 @@ struct sc_packet_obj_info_end {
 	char type;
 };
 
-
 struct sc_packet_bullet {
 	unsigned char size;
 	char type;
@@ -476,15 +487,19 @@ struct sc_packet_npc_attack {
 	int target_id;
 };
 
-
 struct sc_packet_item_use {
 	unsigned char size;
 	char type;
+	int obj_id;
+	int player;
+	float x, y, z;
+	char item_type;
 };
 
 struct sc_packet_stun_end {
 	unsigned char size;
 	char type;
+	int obj_id;
 };
 
 struct sc_packet_attack {
@@ -497,5 +512,51 @@ struct sc_packet_get_item {
 	unsigned char size;
 	char type;
 	int itemNum;
+	int obj_id;
+	int player;
 };
 
+struct sc_packet_item_info {
+	unsigned char size;
+	char	type;
+	int		id;
+	float	x, y, z;
+	char item_type;
+};
+
+struct sc_packet_active_escape {
+	unsigned char size;
+	char type;
+	float x[3];
+	float y[3];
+	float z[3];
+};
+
+struct sc_packet_active_special_escape {
+	unsigned char size;
+	char type;
+	float x, y, z;
+};
+
+struct sc_packet_timer_start {
+	unsigned char size;
+	char type;
+	std::chrono::system_clock::time_point start_time;
+};
+
+struct sc_packet_open_safe {
+	unsigned char size;
+	char type;
+};
+
+struct sc_packet_invincible {
+	unsigned char size;
+	char type;
+	int player;
+};
+
+struct sc_packet_invincible_end {
+	unsigned char size;
+	char type;
+	int player;
+};
