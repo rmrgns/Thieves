@@ -79,7 +79,7 @@ void ParticleSystem::ParticleLogic()
 		_accTime = _accTime - _createInterval;
 		add = 1;
 		Vec3 look = GetTransform()->GetLook();
-		printf("watch                 x:%f z:%f\n", look.x, look.z);
+
 		_computeMaterial->SetVec4(1, Vec4(look.x, look.y, look.z, 0));
 	}
 
