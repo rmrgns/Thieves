@@ -1,6 +1,5 @@
 #pragma once
 #include <chrono>
-
 constexpr short SERVER_PORT = 8471;
 
 // �� ũ��
@@ -23,7 +22,7 @@ constexpr int MAX_NPC = MAX_ROOM_SIZE * 8;
 // ���� NPC�� ����
 constexpr int NPC_ID_START = MAX_USER;
 constexpr int NPC_ID_END = MAX_USER + MAX_NPC - 1;
-
+constexpr int BASE_ID = NPC_ID_END + 2;
 constexpr int PLAYER_HP = 5;		// �÷��̾� HP
 constexpr int PLAYER_DAMAGE = 1;	// �÷��̾� DMG
 // �÷��̾� �̵��Ÿ�
@@ -516,7 +515,6 @@ struct sc_packet_get_item {
 	int obj_id;
 	int player;
 };
-
 struct sc_packet_item_info {
 	unsigned char size;
 	char	type;
@@ -537,6 +535,7 @@ struct sc_packet_active_special_escape {
 	unsigned char size;
 	char type;
 	float x, y, z;
+
 };
 
 struct sc_packet_timer_start {
@@ -560,4 +559,5 @@ struct sc_packet_invincible_end {
 	unsigned char size;
 	char type;
 	int player;
+
 };

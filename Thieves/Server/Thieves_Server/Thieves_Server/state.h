@@ -1,9 +1,9 @@
 #pragma once
 
-//enum class ╪╠╬П
-//// ╟╒ ╩Себ©║ ╣Ш╦╔ ╩Себ
+//enum class О©╫О©╫О©╫О©╫
+//// О©╫О©╫ О©╫О©╫О©╫б©О©╫ О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫
 
-// дЁ╦╞ем ╩Себ
+// дЁО©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫
 enum class COMP_OP {
 	OP_RECV,
 	OP_SEND,
@@ -11,6 +11,9 @@ enum class COMP_OP {
 	OP_STUN_END,
 	OP_INVINCIBLE_END,
 	OP_NPC_MOVE,
+	OP_NPC_SPAWN,
+	OP_NPC_TIMER_SPAWN,
+	OP_NPC_ATTACK,
 	OP_TIMER_START,
 	OP_OPEN_SAFE,
 	OP_OPEN_ESCAPE,
@@ -88,7 +91,12 @@ enum class PL_ACTION_TYPE {
 	ATTACK
 };
 
-enum EVENT_TYPE {
+enum class EVENT_TYPE {
+	EVENT_NPC_SPAWN,
+	EVENT_TIMER_NPC_SPAWN,
+	EVENT_NPC_MOVE,
+	EVENT_NPC_ATTACK,
+	EVENT_TIME,
 	EV_STUN_END,
 	EV_INVINCIBLE_END,
 	EV_MOVE,

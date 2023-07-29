@@ -1,7 +1,8 @@
+#include "pch.h"
 #include <map>
 #include <set>
 #include <bitset>
-#include "pch.h"
+
 
 #include "packet_manager.h"
 #include "room/room_manager.h"
@@ -18,7 +19,8 @@
 
 
 using namespace std;
-//concurrency::concurrent_priority_queue<timer_event> PacketManager::g_timer_queue = concurrency::concurrent_priority_queue<timer_event>();
+
+
 PacketManager::PacketManager()
 {
 	MoveObjManager::GetInst();
@@ -34,6 +36,7 @@ PacketManager::PacketManager()
 void PacketManager::Init()
 {
 	MoveObjManager::GetInst()->InitPlayer();
+	MoveObjManager::GetInst()->InitNPC();
 	m_Lobby->Init();
 	m_room_manager->InitRoom();
 	m_map_manager->LoadMap();
@@ -200,32 +203,6 @@ void PacketManager::ProcessStunEnd(int c_id)
 
 	SendStunEnd(c_id);
 }
-
-//void PacketManager::UpdateObjMove()
-//{
-//	for (int i = 0; i < MAX_USER; ++i)
-//	{
-//		for (int j = 0; j <= NPC_ID_END; ++j) {
-//			//���Ŀ� ���� �߰�
-//			if (i != j)
-//				SendMovePacket(i, j);
-//		}
-//	}
-//	SetTimerEvent(0, 0, EVENT_TYPE::EVENT_PLAYER_MOVE, 10);
-//}
-
-//void PacketManager::UpdateObjMove()//�ϴ� ����
-//{
-//	for (int i = 0; i < MAX_USER; ++i)
-//	{
-//		for (int j = 0; j <= NPC_ID_END; ++j) {
-//			//���Ŀ� ���� �߰�
-//			if (i != j)
-//				SendMovePacket(i, j);
-//		}
-//	}
-//	SetTimerEvent(0, 0, EVENT_TYPE::EVENT_PLAYER_MOVE, 10);
-//}
 
 void PacketManager::SendMovePacket(int c_id, int mover)
 {
@@ -830,8 +807,6 @@ void PacketManager::ProcessDBTask(db_task& dt)
 		ret = m_db->CheckLoginData(dt.user_id, dt.user_password);
 		if (ret == LOGINFAIL_TYPE::NO_ID || ret == LOGINFAIL_TYPE::WRONG_PASSWORD)
 		{
-			//m_db2->SaveData(dt.user_id, dt.user_password);
-			//cout << "들어옴" << endl;
 			SendSignUpOK(dt.obj_id);
 		}
 		else
@@ -850,13 +825,15 @@ void PacketManager::JoinDBThread()
 void PacketManager::ProcessTimer(HANDLE hiocp)
 {
 	while (true) {
-		m_Timer->timerLock.lock();
+		while (true) {
+			m_Timer->timerLock.lock();
 
-		if (m_Timer->timerQ.empty()) {
-			m_Timer->timerLock.unlock();
-			this_thread::sleep_for(10ms);
-			continue;
-		}
+			if (m_Timer->timerQ.empty()) {
+				m_Timer->timerLock.unlock();
+				this_thread::sleep_for(10ms);
+				continue;
+			}
+
 
 		auto tEvent = m_Timer->timerQ.top();
 
@@ -872,33 +849,49 @@ void PacketManager::ProcessTimer(HANDLE hiocp)
 
 		EXP_OVER* exover = new EXP_OVER;
 
-		if (tEvent.GetEventType() == EV_MOVE) {
+		if (tEvent.GetEventType() == EVENT_TYPE::EV_MOVE) {
 			exover->_comp_op = COMP_OP::OP_NPC_MOVE;
 		}
-		else if (tEvent.GetEventType() == EV_STUN_END) {
+		else if (tEvent.GetEventType() == EVENT_TYPE::EV_STUN_END) {
 			exover->_comp_op = COMP_OP::OP_STUN_END;
 		}
-		else if (tEvent.GetEventType() == EV_TIMER_START) {
+		else if (tEvent.GetEventType() == EVENT_TYPE::EV_TIMER_START) {
 			exover->_comp_op = COMP_OP::OP_TIMER_START;
 		}
-		else if (tEvent.GetEventType() == EV_OPEN_SAFE) {
+		else if (tEvent.GetEventType() == EVENT_TYPE::EV_OPEN_SAFE) {
 			exover->_comp_op = COMP_OP::OP_OPEN_SAFE;
 		}
-		else if (tEvent.GetEventType() == EV_OPEN_ESCAPE_AREA) {
+		else if (tEvent.GetEventType() == EVENT_TYPE::EV_OPEN_ESCAPE_AREA) {
 			exover->_comp_op = COMP_OP::OP_OPEN_ESCAPE;
 		}
-		else if (tEvent.GetEventType() == EV_OPEN_SPECIAL_ESCAPE_AREA) {
+		else if (tEvent.GetEventType() == EVENT_TYPE::EV_OPEN_SPECIAL_ESCAPE_AREA) {
 			exover->_comp_op = COMP_OP::OP_OPEN_SPECIAL_ESCAPE;
 		}
-		else if (tEvent.GetEventType() == EV_INVINCIBLE_END) {
+		else if (tEvent.GetEventType() == EVENT_TYPE::EV_INVINCIBLE_END) {
 			exover->_comp_op = COMP_OP::OP_INVINCIBLE_END;
 		}
+		else if (tEvent.GetEventType() == EVENT_TYPE::EVENT_NPC_SPAWN) {
+			exover->_comp_op = COMP_OP::OP_NPC_SPAWN;
+		}
+		else if (tEvent.GetEventType() == EVENT_TYPE::EVENT_TIMER_NPC_SPAWN) {
+			exover->_comp_op = COMP_OP::OP_NPC_TIMER_SPAWN;
+		}
+		else if (tEvent.GetEventType() ==EVENT_TYPE::EVENT_NPC_MOVE) {
+			exover->_comp_op = COMP_OP::OP_NPC_MOVE;
+		}
+		else if (tEvent.GetEventType() == EVENT_TYPE::EVENT_NPC_ATTACK) {
+			exover->_comp_op = COMP_OP::OP_NPC_ATTACK;
+		}
+		else if (tEvent.GetEventType() == EVENT_TYPE::EVENT_TIME) {
+			exover->_comp_op = COMP_OP::OP_STUN_END;
+		}		
 		
 
 		Player* pl = MoveObjManager::GetInst()->GetPlayer(tEvent.GetObjId());
 		exover->room_id = pl->GetRoomID();
 		PostQueuedCompletionStatus(hiocp, 1, tEvent.GetObjId(), &exover->_wsa_over);
-
+		this_thread::sleep_for(10ms);
+		}
 	}
 }
 
@@ -953,10 +946,7 @@ void PacketManager::ProcessAttack(int c_id, unsigned char* p)
 		if (cpl->GetPos().Dist(cl->GetPos()) > 30.f) {
 			Hit(c_id, pl);
 		}
-
 	}
-
-
 }
 
 void PacketManager::Hit(int c_id, int p_id) { //c_id가 p_id를 공격하여 맞추었음.
@@ -965,7 +955,7 @@ void PacketManager::Hit(int c_id, int p_id) { //c_id가 p_id를 공격하여 맞
 	
 	SendStun(p_id, c_id);
 
-	m_Timer->AddTimer(p_id, std::chrono::system_clock::now() + 3s, EV_STUN_END);
+	m_Timer->AddTimer(p_id, std::chrono::system_clock::now() + 3s, EVENT_TYPE::EV_STUN_END);
 }
 
 void PacketManager::ProcessMove(int c_id, unsigned char* p)
@@ -1127,11 +1117,6 @@ void PacketManager::ProcessGameStart(int c_id, unsigned char* p)
 	//if (room->IsGameStarted()) return;
 
 	room->SetGameStart();
-
-	//if (room->GetNumberOfPlayer() != room->GetNumberOfReadyPlayer()) {
-	//	SendError(c_id, ERROR_PLAYER_NOT_READY, -1);
-	//	return;
-	//}
 
 	for (int pl : room->GetObjList()) {
 
@@ -1336,10 +1321,10 @@ void PacketManager::ProcessLoadEnd(int c_id, unsigned char* p)
 		SendTimerStart(pl, room->GetRoundStartTime());
 	}
 
-	m_Timer->AddTimer(room->GetRoomID(), room->GetRoundStartTime() + 5s, EV_TIMER_START); // objID를 룸 넘버로 사용하면 될 것으로 보임.
-	m_Timer->AddTimer(room->GetRoomID(), room->GetRoundStartTime() + 65s, EV_OPEN_SAFE);
-	m_Timer->AddTimer(room->GetRoomID(), room->GetRoundStartTime() + 125s, EV_OPEN_ESCAPE_AREA);
-	m_Timer->AddTimer(room->GetRoomID(), room->GetRoundStartTime() + 185s, EV_OPEN_SPECIAL_ESCAPE_AREA);
+	m_Timer->AddTimer(room->GetRoomID(), room->GetRoundStartTime() + 5s, EVENT_TYPE::EV_TIMER_START); // objID를 룸 넘버로 사용하면 될 것으로 보임.
+	m_Timer->AddTimer(room->GetRoomID(), room->GetRoundStartTime() + 65s, EVENT_TYPE::EV_OPEN_SAFE);
+	m_Timer->AddTimer(room->GetRoomID(), room->GetRoundStartTime() + 125s, EVENT_TYPE::EV_OPEN_ESCAPE_AREA);
+	m_Timer->AddTimer(room->GetRoomID(), room->GetRoundStartTime() + 185s, EVENT_TYPE::EV_OPEN_SPECIAL_ESCAPE_AREA);
 }
 
 void PacketManager::ProcessEnterRoom(int c_id, unsigned char* p)
@@ -1590,13 +1575,7 @@ void PacketManager::ProcessOpenSpecialEscape(int r_id)
 void PacketManager::StartGame(int room_id)
 {
 	Room* room = m_room_manager->GetRoom(room_id);
-	//const Vector3 base_pos = m_map_manager->GetMapObjectByType(OBJ_TYPE::OT_BASE).GetGroundPos();
-	//�� ������Ʈ ������ ������ �ʿ����
-	//npc�� player �ʱ�ȭ �� �����ֱ�
-	//const Vector3 base_pos = m_map_manager->GetMapObjectByType(OBJ_TYPE::OT_BASE).GetGroundPos();
-
 	Player* pl = NULL;
-	//Vector3 pos = Vector3(0.0f, 0.0f, 0.0f);
 	vector<int>obj_list{ room->GetObjList().begin(),room->GetObjList().end() };
 
 	std::random_device rd;
@@ -1605,7 +1584,8 @@ void PacketManager::StartGame(int room_id)
 	std::shuffle(m_map_manager->GetItemPos().begin(), m_map_manager->GetItemPos().end(), dre);
 	std::shuffle(m_map_manager->GetEscapePos().begin(), m_map_manager->GetEscapePos().end(), dre);
 	std::shuffle(m_map_manager->GetSpecialEscapePos().begin(), m_map_manager->GetSpecialEscapePos().end(), dre);
-
+	
+	
 	
 
 	for (int i = 0; i < obj_list.size(); ++i)
@@ -1616,7 +1596,7 @@ void PacketManager::StartGame(int room_id)
 		pl->SetPos(m_map_manager->GetPlayerSpawnPos().at(i));
 		
 	}
-
+	
 	for (int i = 0; i < MAX_ITEM; ++i) {
 		if (room->GetItem(i) == nullptr) continue;
 
@@ -1686,35 +1666,28 @@ void PacketManager::StartGame(int room_id)
 	}
 }
 
-////------NPC
+////------NPC--------
 
-//void PacketManager::UpdateObjMove()
-//{
-//	for (int i = 0; i < MAX_USER; ++i)
-//	{
-//		for (int j = 0; j <= NPC_ID_END; ++j) {
-//			//���Ŀ� ���� �߰�
-//			if (i != j)
-//				SendMovePacket(i, j);
-//		}
-//	}
-//	SetTimerEvent(0, 0, EVENT_TYPE::EVENT_PLAYER_MOVE, 10);
-//}
 
 void PacketManager::SpawnNPC(int room_id)
 {
+	cout << "NPC 생성" << endl;
 	Room* room = m_room_manager->GetRoom(room_id);
 	int curr_round = room->GetRound();
-	int NPC_num = room->GetMaxUser() * 2;
+	int NPC_num = 8;
 
-	if (curr_round == 2) {
-		for (auto c_id : room->GetObjList())
-		{
-			if (false == MoveObjManager::GetInst()->IsPlayer(c_id))
-				continue;
-			//SendWaveInfo(c_id, curr_round + 1, room->GetMaxUser() * (curr_round + 1), room->GetMaxUser() * (curr_round + 2));
-		}
-	}
+
+	// 다이아를 훔치면 2라운드 2라운드시 소환시작
+	//	if (curr_round == 2) {
+	//		for (auto c_id : room->GetObjList())
+	//		{
+	//			if (false == MoveObjManager::GetInst()->IsPlayer(c_id))
+	//				continue;
+	//			SendRound(c_id);
+	//		}
+	//	}
+
+
 	Enemy* enemy = NULL;
 	unordered_set<int>enemy_list;
 	for (auto e_id : room->GetObjList())
@@ -1727,45 +1700,174 @@ void PacketManager::SpawnNPC(int room_id)
 
 		if (true == enemy->in_game)
 			continue;
-		if (enemy->GetType() == OBJ_TYPE::OT_POLICE )
+		if (enemy->GetType() == OBJ_TYPE::OT_POLICE)
 		{
 			enemy->in_game = true;
 			enemy->SetIsActive(true);
 			enemy_list.insert(e_id);
 		}
 	}
+	vector<Vector3>NPC_spawn_area;
 
-	//if (enemy_list.size() < static_cast<INT64>(NPC_num)) {
-	//	cout << "NPC가 모자랍니다" << endl;
-	//}
-	//vector<MapObj>spawn_area;
-	random_device rd;
-	mt19937 gen(rd());
-	uniform_int_distribution<int> random_point(0, 1);
-	//spawn_area.reserve(10);
+
+	//NPC_spawn_area.push_back(obj);
 
 
 	int i = 0;
 	for (auto& en : enemy_list)
 	{
-
-		//for (auto pl : room->GetObjList())
-		//{
-		//	if (false == MoveObjManager::GetInst()->IsPlayer(pl))continue;
-		//	SendObjInfo(pl, en);
-	//	g_timer_queue.push(SetTimerEvent(en, en, room_id, EVENT_TYPE::EVENT_NPC_TIMER_SPAWN, (1500 * i)));
-	//	++i;
-		//}
-		//g_timer_queue.push(SetTimerEvent(en, en, room_id, EVENT_TYPE::EVENT_NPC_MOVE, 30+en*100));
+		m_Timer->AddTimer(room->GetRoomID(), room->GetRoundStartTime() + 1s, EVENT_TYPE::EVENT_TIMER_NPC_SPAWN);
+		cout << "NPC 생성 2" << endl;
 	}
+	// m_Timer->AddTimer(room->GetRoomID(), room->GetRoundStartTime() + 1s, EVENT_TYPE::EVENT_NPC_SPAWN);
+	//m_Timer->AddTimer(room->GetRoomID(), std::chrono::system_clock::now(), EVENT_TYPE::EVENT_NPC_SPAWN);
+}
 
+void PacketManager::SpawnNPCTime(int enemy_id, int room_id)
+{
+	Room* room = m_room_manager->GetRoom(room_id);
+	Enemy* enemy = NULL;
 
-	//enemy->SetMoveTime(300);
+	// NPC 스폰좌표 저장
+	vector<Vector3>NPC_spawn_area;
 
+	for (auto& obj : m_map_manager->GetNPCSpawnPos()) {
+		NPC_spawn_area.push_back(obj);
+	}
+	enemy = MoveObjManager::GetInst()->GetEnemy(enemy_id);
+	enemy->SetSpawnPoint(NPC_spawn_area[enemy_id/8].x, NPC_spawn_area[enemy_id/8].z);
+	
+	for (auto pl : room->GetObjList())
+	{
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl))continue;
+		SendObjInfo(pl, enemy_id);
+	}
+	m_Timer->AddTimer(enemy_id, std::chrono::system_clock::now(), EVENT_TYPE::EVENT_NPC_MOVE);
+}
+
+void PacketManager::DoNpcMove(int enemy_id, int room_id)
+{
+	Room* room = m_room_manager->GetRoom(room_id);
+	Enemy* enemy = MoveObjManager::GetInst()->GetEnemy(enemy_id);
+	if (false == enemy->GetIsActive())return;
+
+	//NPC POS
+	Vector3 npc_pos;
+
+	//이동하려는 pos
+	Vector3 target_pos;
+	
+	
+	const Vector3 base_pos; // 경찰 원래 이동하는 pos
+
+	if (true)//적이 없으면 저장된 다음 위치로
+	{
+		//target_pos = base_pos;
+	}
+	else
+	{
+		target_pos = MoveObjManager::GetInst()->GetPlayer(enemy->GetTargetId())->GetPos();
+	}
+	Vector3 target_vec = Vector3{ target_pos - enemy->GetPos() };
+	enemy->DoMove(target_vec);
+	
+
+	// A star
+	//target_vec으로 이동 필요한것 현재위치와 target 위치
+	// 이동방법 각각의 다음 이동 경로 좌표들을 받아와 저장하며 DO MOVE로 NPC 이동시킨다.
+	// 이거 고쳐야 돼
+	//for (;;)
+	//{
+	//	if (target_pos == npc_pos)
+	//	{
+	//		break;
+	//	}
+	//}
+	
+
+	for (auto pl : room->GetObjList())
+	{
+		//  NPC의 모든 이동을 플레이어에게 전송
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl))continue;
+		SendMovePacket(pl, enemy_id);
+	}
+	CallStateMachine(enemy_id, room_id, base_pos);
 
 }
 
-void PacketManager::SpawnNPCTime(int en_id, int room_id)
-{
 
+// 1. 적개체 가져옴
+// 2. room 객체를 가져옴
+// 3. distance_map에 기준 위치로 부터 플레이어 또는 기지까지의 거리와 ID를 저장
+// 4. 일정시간마다 주변 플레이어를 체크하고 저의 타겟을 설정
+void PacketManager::CallStateMachine(int enemy_id, int room_id, const Vector3& base_pos)
+{
+	//Enemy* enemy = MoveObjManager::GetInst()->GetEnemy(enemy_id);
+	//Room* room = m_room_manager->GetRoom(room_id);
+
+	//Player* player = NULL;
+	//auto check_end_time = std::chrono::system_clock::now();
+	//auto& check_time = enemy->GetCheckTime();
+	//int target_id = enemy->GetTargetId();
+	//if (check_time <= check_end_time) {
+	//	for (auto pl : room->GetObjList())
+	//	{
+	//		if (false == MoveObjManager::GetInst()->IsPlayer(pl))continue;
+
+	//		if (true == MoveObjManager::GetInst()->IsNear(pl, enemy_id))//이거는 시야범위안에 있는지 확인
+	//		{
+	//			player = MoveObjManager::GetInst()->GetPlayer(pl);
+	//			if (false == m_map_manager->CheckInRange2(player->GetPosX(), player->GetPosZ(), enemy->GetPos() + Vector3(-100.0f, 0.0f, -100.0f), enemy->GetPos() + Vector3(100.0f, 0.0f, 100.0f))) continue;
+	//			
+	//			//플레이어가 가까우면 target_id 플레이어로
+	//			target_id = pl;
+	//		}
+	//	}
+	//}
+}
+
+void PacketManager::DoEnemyAttack(int enemy_id, int target_id, int room_id)
+{
+	//초당두발
+	Room* room = m_room_manager->GetRoom(room_id);
+	Enemy* enemy = MoveObjManager::GetInst()->GetEnemy(enemy_id);
+
+	if (false == enemy->GetIsActive())return;
+
+	if (target_id == BASE_ID)
+	{
+		Vector3 base_pos;// = m_map_manager->GetMapObjectByType(OBJ_TYPE::OT_BASE).GetPos();
+
+		int base_attack_t;
+
+		if (enemy->GetType() == OBJ_TYPE::OT_PLAYER) {
+			float dist = enemy->GetPos().Dist(base_pos);
+			base_attack_t = (dist / 1500.0f) * 1000;
+		}
+		//g_timer_queue.push(SetTimerEvent(enemy_id, enemy_id, room_id, EVENT_TYPE::EVENT_NPC_ATTACK, base_attack_t));
+	}
+	for (int pl : room->GetObjList())
+	{
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl))continue;
+
+		SendNPCAttackPacket(pl, enemy_id, target_id);
+
+	}
+
+	auto& attack_time = enemy->GetAttackTime();
+	attack_time = chrono::system_clock::now() + 1s;
+	const Vector3 base_pos;// = m_map_manager->GetMapObjectByType(OBJ_TYPE::OT_BASE).GetGroundPos();
+	//CallStateMachine(enemy_id, room_id, base_pos);
+}
+
+void PacketManager::SendNPCAttackPacket(int c_id, int obj_id, int target_id)
+{
+	sc_packet_attack packet;
+	packet.size = sizeof(packet);
+	packet.type = SC_PACKET_ATTACK;
+	//packet.obj_id = attacker;
+	//packet.f_x = forward_vec.x;
+	//packet.f_y = forward_vec.y;
+	//packet.f_z = forward_vec.z;
+	//MoveObjManager::GetInst()->GetPlayer(c_id)->DoSend(sizeof(packet), &packet);
 }

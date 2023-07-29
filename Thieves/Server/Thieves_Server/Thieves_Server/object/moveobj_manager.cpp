@@ -61,6 +61,8 @@ void MoveObjManager::InitPlayer()
 
 void MoveObjManager::InitNPC()
 {
+	for (int i = NPC_ID_START; i <= NPC_ID_END; ++i)
+		m_moveobj_arr[i] = new Enemy(i);
 }
 
 

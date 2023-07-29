@@ -5,7 +5,7 @@
 #include "CBox.h"
 #include "ray/ray_casting.h"
 #include "Timer.h"
-
+#include "NavMeshLoader.h"
 
 class MoveObjManager;
 class DB;
@@ -13,6 +13,8 @@ class RoomManager;
 class MapManager;
 class Lobby;
 class RayCasting;
+class NavMeshLoader;
+
 class PacketManager {
 public:
 	PacketManager();
@@ -88,12 +90,26 @@ public:
 	void ProcessDBTask(db_task& dt);
 	void JoinDBThread();
 
+	
+
+	//------timer-------
+	static timer_event SetTimerEvent(int obj_id, int target_id, EVENT_TYPE ev, int seconds);
+	static timer_event SetTimerEvent(int obj_id, int target_id, int room_id, EVENT_TYPE ev, int seconds);
 	void ProcessTimer(HANDLE hiocp);
 
+	//------NPC--------
+	void UpdateObjMove();
 	void SpawnNPCTime(int en_id, int room_id);
-	static concurrency::concurrent_priority_queue <timer_event> g_timer_queue;
-
-
+	void SpawnNPC(int room_id);
+	void DoNpcMove(int enemy_id, int room_id);
+	bool CheckMoveOK(int enemy_id, int room_id);
+	void CallStateMachine(int enemy_id, int room_id, const Vector3& base_pos);
+	void CountTime(int room_id);
+	void DoEnemyAttack(int enemy_id, int target_id, int room_id);
+	void SendNPCAttackPacket(int c_id, int obj_id, int target_id);
+	
+	void ProcessEvent(HANDLE hiocp, timer_event& ev);
+	
 private:
 	Lobby* m_Lobby;
 	RoomManager* m_room_manager;
@@ -136,5 +152,7 @@ private:
 
 	void StartGame(int room_id);
 
-	void SpawnNPC(int room_id);
+
+
+
 };

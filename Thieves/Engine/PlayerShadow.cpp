@@ -21,7 +21,11 @@ void PlayerShadow::LateUpdate()
 	int myID = Network::GetInst()->GetPacketManager()->GetGameInfo().GetNetworkID();
 	Vec3 pos(0.0f, 0.0f, 0.0f);
 	if (myID != -1) pos = Network::GetInst()->GetNetworkObjMap().find(myID)->second->GetPosition();
-	pos.y += 1000.f;
-	pos.z += 250.f;
-	GetTransform()->SetLocalPosition(pos);
+	
+	Vec3 calculatedPos(0.0f, 0.0f, 0.0f);
+	calculatedPos.x = pos.x * 0.93f;
+	calculatedPos.z = pos.z * 0.93f;
+	calculatedPos.y = 1000.f;
+
+	GetTransform()->SetLocalPosition(calculatedPos);
 }

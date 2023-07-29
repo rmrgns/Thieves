@@ -18,7 +18,7 @@ void MapManager::LoadMap()
 
 		auto reader = words.begin();
 
-		//start ¿Í end
+		//start ï¿½ï¿½ end
 		reader++;
 		reader++;
 		
@@ -81,18 +81,19 @@ void MapManager::LoadSpawnArea()
 
 		auto reader = words.begin();
 
-		//start ¿Í end
+		//start ï¿½ï¿½ end
 		reader++;
 		reader++;
+
 
 		float centerCBox[3]{};
 
 		//center		
-		centerCBox[0] = std::stof((*reader)) * -100.0f; reader++;
-		centerCBox[1] = std::stof((*reader)) * 100.0f; reader++;
-		centerCBox[2] = std::stof((*reader)) * -100.0f; reader++;
-
-		PoliceSpawnCBox.push_back(std::make_shared<CBox>(centerCBox));
+		float x = std::stof((*reader)) * -100.0f; reader++;
+		float y = std::stof((*reader)) * 100.0f; reader++;
+		float z = std::stof((*reader)) * -100.0f; reader++;
+	
+		PoliceSpawnCBox.emplace_back(x,y,z);
 		words.erase(words.begin(), next);
 	}
 
@@ -111,7 +112,7 @@ void MapManager::LoadPoliceDir()
 
 		auto reader = words.begin();
 
-		//start ¿Í end
+		//start ï¿½ï¿½ end
 		reader++;
 		reader++;
 
@@ -166,7 +167,7 @@ void MapManager::LoadItemSpawnPoint()
 
 		auto reader = words.begin();
 
-		//start ¿Í end
+		//start ï¿½ï¿½ end
 		reader++;
 		reader++;
 
@@ -192,7 +193,7 @@ void MapManager::LoadEscapePoint()
 
 		auto reader = words.begin();
 
-		//start ¿Í end
+		//start ï¿½ï¿½ end
 		reader++;
 		reader++;
 
@@ -219,7 +220,7 @@ void MapManager::LoadSpecialEscapePoint()
 
 		auto reader = words.begin();
 
-		//start ¿Í end
+		//start ï¿½ï¿½ end
 		reader++;
 		reader++;
 
@@ -234,7 +235,7 @@ void MapManager::LoadSpecialEscapePoint()
 
 void MapManager::LoadPlayerSpawnArea()
 {
-	std::ifstream in{ ".\\SPAWN_AREA.txt" };
+	std::ifstream in{ ".\\PLAYER_SPAWN_AREA.txt" };
 
 	std::vector<std::string> words{ std::istream_iterator<std::string>{in}, {} };
 
@@ -245,7 +246,7 @@ void MapManager::LoadPlayerSpawnArea()
 
 		auto reader = words.begin();
 
-		//start ¿Í end
+		//start ï¿½ï¿½ end
 		reader++;
 		reader++;
 
@@ -258,7 +259,7 @@ void MapManager::LoadPlayerSpawnArea()
 	}
 }
 
-// trueÀÌ¸é Ãæµ¹ 
+// trueï¿½Ì¸ï¿½ ï¿½æµ¹ 
 Vector3 MapManager::checkCollision(CBox& playerBox, Vector3& playerOldPos)
 {
 	playerOldPos.y += 75.f;
@@ -267,7 +268,7 @@ Vector3 MapManager::checkCollision(CBox& playerBox, Vector3& playerOldPos)
 	Vector3 boxVelocity(currentPlayerPos - playerOldPos);
 	bool collideRet = FALSE;
 	int collisionDirection = 0;
-	// Ãæµ¹ÇÏ´Â ¼ø°£ÀÇ ¸Ê µ¥ÀÌÅÍ
+	// ï¿½æµ¹ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	for (auto& obj : MapCBox)
 	{
 		
@@ -315,7 +316,7 @@ bool MapManager::checkCollisionRay(CBox& ray_temp)
 	
 	bool collideRet = FALSE;
 	int collisionDirection = 0;
-	// Ãæµ¹ÇÏ´Â ¼ø°£ÀÇ ¸Ê µ¥ÀÌÅÍ
+	// ï¿½æµ¹ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	for (auto& obj : MapCBox)
 	{
 
