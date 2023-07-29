@@ -163,10 +163,12 @@
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="map_object.cpp" />
+    <ClCompile Include="NavMeshLoader.cpp" />
     <ClCompile Include="object\MapManager.cpp" />
     <ClCompile Include="object\moveobj_manager.cpp" />
     <ClCompile Include="object\move_object\enemy.cpp" />
     <ClCompile Include="object\move_object\player.cpp" />
+    <ClCompile Include="PathFinder.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Lobby.cpp" />
     <ClCompile Include="ray\ray_casting.cpp" />
@@ -207,12 +209,14 @@
     <ClInclude Include="iocp_server\iocp_server.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="map_object.h" />
+    <ClInclude Include="NavMeshLoader.h" />
     <ClInclude Include="object\MapManager.h" />
     <ClInclude Include="object\moveobj_manager.h" />
     <ClInclude Include="object\move_object\enemy.h" />
     <ClInclude Include="object\move_object\move_object.h" />
     <ClInclude Include="object\move_object\player.h" />
     <ClInclude Include="object\object.h" />
+    <ClInclude Include="PathFinder.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Lobby.h" />
     <ClInclude Include="ray\ray_casting.h" />

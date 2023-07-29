@@ -51,7 +51,7 @@ void ThievesPacketManager::Init()
 	RegisterRecvFunction(SC_PACKET_PHASE, [this](int c_id, unsigned char* p) {ProcessPhaseChange(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_ATTACK, [this](int c_id, unsigned char* p) {ProcessAttack(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_STUN, [this](int c_id, unsigned char* p) {ProcessHit(c_id, p); });
-	RegisterRecvFunction(SC_PACKET_GET_ITEM, [this](int c_id, unsigned char* p) {ProcessGetItem(c_id, p); });
+	//RegisterRecvFunction(SC_PACKET_GET_ITEM, [this](int c_id, unsigned char* p) {ProcessGetItem(c_id, p); });
 }
 
 void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
@@ -426,6 +426,29 @@ void ThievesPacketManager::ProcessHit(int c_id, unsigned char* p)
 void ThievesPacketManager::ProcessGetItem(int c_id, unsigned char* p)
 {
 	sc_packet_get_item* packet = reinterpret_cast<sc_packet_get_item*>(p);
+}
+
+////----------------------수정이 필요
+// timer
+void ThievesPacketManager::ProcessTime(int c_id, unsigned char* p)
+{
+	sc_packet_time* packet = reinterpret_cast<sc_packet_time*>(p);
+	int t = packet->send_time;
+	//
+}
+// NPC
+void ThievesPacketManager::ProcessNpcAttack(int c_id, unsigned char* p)
+{
+	sc_packet_npc_attack* packet = reinterpret_cast<sc_packet_npc_attack*>(p);
+	auto target = m_obj_map.find(packet->target_id);
+	if (target != m_obj_map.end()) {
+		if (target->second->GetIsActive() == false)return;
+
+		Vec3 attack_pos{ target->second->GetPosition().x,target->second->GetPosition().y + 80.0f,target->second->GetPosition().z };
+
+
+
+	}
 }
 
 

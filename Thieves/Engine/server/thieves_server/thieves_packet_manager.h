@@ -39,6 +39,9 @@ public:
 	void ProcessHit(int c_id, unsigned char* p);
 	void ProcessGetItem(int c_id, unsigned char* p);
 
+
+	void ProcessTime(int c_id, unsigned char* p);
+	void ProcessNpcAttack(int c_id, unsigned char* p);
 	// �߰��ʿ�
 	void Reset();
 

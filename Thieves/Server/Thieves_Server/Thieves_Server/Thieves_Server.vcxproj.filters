@@ -127,6 +127,12 @@
       <Filter>header</Filter>
     </ClCompile>
     <ClCompile Include="game_server\ingame_server.cpp" />
+    <ClCompile Include="NavMeshLoader.cpp">
+      <Filter>astar</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFinder.cpp">
+      <Filter>astar</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CBox.h" />
@@ -199,6 +205,12 @@
     </ClInclude>
     <ClInclude Include="vec\vec4.h">
       <Filter>vec</Filter>
+    </ClInclude>
+    <ClInclude Include="NavMeshLoader.h">
+      <Filter>astar</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFinder.h">
+      <Filter>astar</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

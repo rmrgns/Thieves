@@ -5,7 +5,7 @@
 #include "CBox.h"
 #include "ray/ray_casting.h"
 #include "Timer.h"
-
+#include "NavMeshLoader.h"
 
 class MoveObjManager;
 class DB;
@@ -13,6 +13,8 @@ class RoomManager;
 class MapManager;
 class Lobby;
 class RayCasting;
+class NavMeshLoader;
+
 class PacketManager {
 public:
 	PacketManager();
@@ -93,6 +95,7 @@ public:
 	void SendNPCAttackPacket(int c_id, int obj_id, int target_id);
 	
 	void ProcessEvent(HANDLE hiocp, timer_event& ev);
+	
 private:
 	Lobby* m_Lobby;
 	RoomManager* m_room_manager;

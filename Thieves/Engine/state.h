@@ -8,12 +8,12 @@
 //	OP_RECV,
 //	OP_SEND,
 //	OP_ACCEPT,
-//	//	OP_POLICE_SPAWN,
-//	//	OP_POLICE_MOVE,
-//	//	OP_POLICE_ATTACK,
-//	//	OP_PLAYER_MOVE,
-//	//	OP_PLAYER_ATTACK
-//
+//	OP_STUN_END,
+//	OP_INVINCIBLE_END,
+//	OP_NPC_MOVE,
+//	OP_NPC_SPAWN,
+//	OP_COUNT_TIME,
+//	OP_NPC_ATTACK
 //};
 
 // game state
@@ -21,12 +21,15 @@ enum class STATE {
 	ST_FREE,
 	ST_ACCEPT,
 	ST_LOGIN,
+	ST_INROOM,
+	ST_INROOMREDDY,
 	ST_INGAME
 };
 
 enum class ROOM_STATE
 {
 	RT_FREE,
+	RT_USED,
 	RT_INGAME,
 	RT_RESET
 };
@@ -34,6 +37,7 @@ enum class ROOM_STATE
 // Room state
 enum class ROOM_TYPE {
 	RT_FREE,
+	RT_USED,
 	RE_INGAME,
 	RT_RESET
 };
@@ -81,4 +85,21 @@ enum class PL_ACTION_TYPE {
 	MOVE,
 	JUMP,
 	ATTACK
+};
+
+enum class EVENT_TYPE {
+	EVENT_NPC_SPAWN,
+	EVENT_NPC_MOVE,
+	EVENT_NPC_ATTACK,
+	EVENT_TIME,
+	EV_STUN_END,
+	EV_INVINCIBLE_END,
+	EV_MOVE
+};
+
+enum class ITEM_STATE {
+	ST_NOTUSED,
+	ST_SPAWNED,
+	ST_OCCUPIED,
+	ST_MOVE,
 };
