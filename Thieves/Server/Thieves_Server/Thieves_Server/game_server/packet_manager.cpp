@@ -53,84 +53,104 @@ void PacketManager::ProcessPacket(int c_id, unsigned char* p)
 	switch (packet_type) {
 	case CS_PACKET_SIGN_IN: {
 		ProcessSignIn(c_id, p);
+		cout << "signIN" << endl;
 		break;
 	}
 	case CS_PACKET_SIGN_UP: {
 		ProcessSignUp(c_id, p);
+		cout << "signup" << endl;
 		break;
 	}
 	case CS_PACKET_MOVE: {
 		ProcessMove(c_id, p);
+		cout << "move" << endl;
 		break;
 	}
 	case CS_PACKET_ATTACK: {
 		ProcessAttack(c_id, p);
+		cout << "attack" << endl;
 		break;
 	}
 	case CS_PACKET_MATCHING: {
 		ProcessMatching(c_id, p);
+		cout << "match" << endl;
 		break;
 	}
 	case CS_PACKET_HIT: {
 		ProcessHit(c_id, p);
+		cout << "hit" << endl;
 		break;
 	}
 	case CS_PACKET_GAME_START: {
 		ProcessGameStart(c_id, p);
+		cout << "start" << endl;
 		break;
 	}
 	case CS_PACKET_LOAD_PROGRESSING: {
 		ProcessLoadProgressing(c_id, p);
+		cout << "progress" << endl;
 		break;
 	}	
 	case CS_PACKET_LOAD_END: {
 		ProcessLoadEnd(c_id, p);
+		cout << "loadend" << endl;
 		break;
 	}
 	case CS_PACKET_ENTER_ROOM: {
 		ProcessEnterRoom(c_id, p);
+		cout << "enterroom" << endl;
 		break;
 	}
 	case CS_PACKET_LEAVE_ROOM: {
 		ProcessLeaveRoom(c_id, p);
+		cout << "leaveroom" << endl;
 		break;
 	}
 	case CS_PACKET_PLAYER_READY: {
 		ProcessPlayerReady(c_id, p);
+		cout << "ready" << endl;
 		break;
 	}
 	case CS_PACKET_PLAYER_CANCLE_READY: {
-		ProcessPlayerReady(c_id, p);
+		ProcessPlayerCancleReady(c_id, p);
+		cout << "cancle" << endl;
 		break;
 	}
 	case CS_PACKET_PLAYER_LOG_OUT: {
 		ProcessLogOut(c_id, p);
+		cout << "logout" << endl;
 		break;
 	}
 	case CS_PACKET_REQUEST_ROOMS_DATA_FOR_LOBBY: {
 		ProcessRoomsDataInLobby(c_id, p);
+		cout << "lobbydata" << endl;
 		break;
 	}
 	case CS_PACKET_REQUEST_ROOMS_DATA_FOR_ROOM: {
 		ProcessRoomsDataInRoom(c_id, p);
+		cout << "roomdata" << endl;
 		break;
 	}
 
 	case CS_PACKET_BULLET: {
 		ProcessBullet(c_id, p);
+		cout << "bullet" << endl;
 		break;
 	}
 
 	case CS_PACKET_STEEL_DIAMOND: {
 		ProcessChangePhase(c_id, p);
+		cout << "phase" << endl;
 		break;
 	}
 	case CS_PACKET_GET_ITEM: {
 		ProcessGetItem(c_id, p);
+		cout << "item" << endl;
 		break;
 	}
 	case CS_PACKET_USE_ITEM: {
 		ProcessUseItem(c_id, p);
+		cout << "item" << endl;
 		break;
 	}
 	case CS_PACKET_TEST: {
@@ -179,6 +199,7 @@ void PacketManager::ProcessRecv(int c_id , EXP_OVER* exp_over, DWORD num_bytes)
 	int packet_size = packet_start[0];
 	if (packet_size == 0) std::cout << "packet_size 0" << cl->GetID();
 	while (packet_size <= remain_data) {
+		std::cout << packet_size << "byte\n";
 		ProcessPacket(c_id, packet_start);
 		remain_data -= packet_size;
 		packet_start += packet_size;
@@ -878,6 +899,22 @@ void PacketManager::ProcessTimer(HANDLE hiocp)
 		else if (tEvent.GetEventType() == EV_STUN_END) {
 			exover->_comp_op = COMP_OP::OP_STUN_END;
 		}
+		else if (tEvent.GetEventType() == EV_TIMER_START) {
+			exover->_comp_op = COMP_OP::OP_TIMER_START;
+		}
+		else if (tEvent.GetEventType() == EV_OPEN_SAFE) {
+			exover->_comp_op = COMP_OP::OP_OPEN_SAFE;
+		}
+		else if (tEvent.GetEventType() == EV_OPEN_ESCAPE_AREA) {
+			exover->_comp_op = COMP_OP::OP_OPEN_ESCAPE;
+		}
+		else if (tEvent.GetEventType() == EV_OPEN_SPECIAL_ESCAPE_AREA) {
+			exover->_comp_op = COMP_OP::OP_OPEN_SPECIAL_ESCAPE;
+		}
+		else if (tEvent.GetEventType() == EV_INVINCIBLE_END) {
+			exover->_comp_op = COMP_OP::OP_INVINCIBLE_END;
+		}
+		
 
 		Player* pl = MoveObjManager::GetInst()->GetPlayer(tEvent.GetObjId());
 		exover->room_id = pl->GetRoomID();
@@ -901,12 +938,12 @@ void PacketManager::ProcessSignIn(int c_id, unsigned char* p)
 void PacketManager::ProcessSignUp(int c_id, unsigned char* p)
 {
 	cs_packet_sign_up* packet = reinterpret_cast<cs_packet_sign_up*>(p);
-	db_task dt;
-	dt.dt = DB_TASK_TYPE::SIGN_UP;
-	dt.obj_id = c_id;
-	strcpy_s(dt.user_id, packet->name);
-	strcpy_s(dt.user_password, packet->password);
-	m_db_queue.push(move(dt));
+	//db_task dt;
+	//dt.dt = DB_TASK_TYPE::SIGN_UP;
+	//dt.obj_id = c_id;
+	//strcpy_s(dt.user_id, packet->name);
+	//strcpy_s(dt.user_password, packet->password);
+	//m_db_queue.push(move(dt));
 }
 
 void PacketManager::ProcessAttack(int c_id, unsigned char* p)
