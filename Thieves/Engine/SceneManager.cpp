@@ -22,6 +22,7 @@
 #include "PlayerCamera.h"
 #include "PlayerParticle.h"
 #include "LightEffect.h"
+#include "PlayerShadow.h"
 
 #include "Resources.h"
 #include "ParticleSystem.h"
@@ -564,7 +565,7 @@ void SceneManager::LoadGameScene()
 		shared_ptr<GameObject> light = make_shared<GameObject>();
 		light->SetName(L"Dir_Light");
 		light->AddComponent(make_shared<Transform>());
-		light->GetTransform()->SetLocalPosition(Vec3(0, 1000, 0));
+		light->GetTransform()->SetLocalPosition(Vec3(0, 1000, -500));
 		light->AddComponent(make_shared<Light>());
 		light->GetLight()->SetLightDirection(Vec3(0.f, -1, 0.f));
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
@@ -577,7 +578,25 @@ void SceneManager::LoadGameScene()
 		scene->AddGameObject(light);
 	}
 #pragma endregion
-	
+
+#pragma region Directional Light
+	{
+		shared_ptr<GameObject> light = make_shared<GameObject>();
+		light->SetName(L"Dir_Light2");
+		light->AddComponent(make_shared<Transform>());
+		light->GetTransform()->SetLocalPosition(Vec3(0, 1000, 250));
+		light->AddComponent(make_shared<Light>());
+		light->GetLight()->SetLightDirection(Vec3(0.f, -1, 0.f));
+		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
+		light->AddComponent(make_shared<PlayerShadow>());
+		light->GetLight()->SetDiffuse(Vec3(0.1f, 0.1f, 0.1f));
+		light->GetLight()->SetAmbient(Vec3(0.1f, 0.1f, 0.1f));
+		light->GetLight()->SetSpecular(Vec3(0.1f, 0.1f, 0.1f));
+
+
+		scene->AddGameObject(light);
+	}
+#pragma endregion
 //	_LoadText = L"Load Point Light"; // 18
 //	Network::GetInst()->SendLoadProgressPacket((char)1700 / 21);
 //
