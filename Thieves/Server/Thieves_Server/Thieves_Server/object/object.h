@@ -22,10 +22,7 @@ public:
 		m_rot.x = 0.0f;
 		m_rot.y = 0.0f;
 		m_rot.z = 0.0f;
-//		m_type = type;
-//		m_pos.x = f_x;
-//		m_pos.y = f_y;
-//		m_pos.z = f_z;
+
 	};
 	float GetPosX()const { return m_pos.x; };
 	float GetPosY()const { return m_pos.y; };

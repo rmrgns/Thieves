@@ -62,7 +62,7 @@
       <Filter>detuor\source</Filter>
     </ClCompile>
     <ClCompile Include="object\move_object\enemy.cpp">
-      <Filter>NPC</Filter>
+      <Filter>object\NPC</Filter>
     </ClCompile>
     <ClCompile Include="Astar.cpp">
       <Filter>astar</Filter>
@@ -100,7 +100,7 @@
       <Filter>NPC</Filter>
     </ClCompile>
     <ClCompile Include="object\move_object\player.cpp">
-      <Filter>player</Filter>
+      <Filter>object\player</Filter>
     </ClCompile>
     <ClCompile Include="room\room.cpp">
       <Filter>room</Filter>
@@ -168,10 +168,10 @@
       <Filter>database</Filter>
     </ClInclude>
     <ClInclude Include="object\move_object\enemy.h">
-      <Filter>NPC</Filter>
+      <Filter>object\NPC</Filter>
     </ClInclude>
     <ClInclude Include="object\move_object\player.h">
-      <Filter>player</Filter>
+      <Filter>object\player</Filter>
     </ClInclude>
     <ClInclude Include="room\room.h">
       <Filter>room</Filter>
@@ -306,9 +306,6 @@
     <Filter Include="recast\include">
       <UniqueIdentifier>{b0a50ee9-b903-448d-8134-af60e9a3dd3d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="NPC">
-      <UniqueIdentifier>{e94ff246-26df-476e-a352-38134454b265}</UniqueIdentifier>
-    </Filter>
     <Filter Include="astar">
       <UniqueIdentifier>{edc370c0-d3b3-4787-85b6-f3731a890de4}</UniqueIdentifier>
     </Filter>
@@ -323,9 +320,6 @@
     </Filter>
     <Filter Include="database">
       <UniqueIdentifier>{afa4cbed-b99f-4f28-b8b2-753c2d979e96}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="player">
-      <UniqueIdentifier>{930dcf63-a20f-4765-acd2-53dc87a03bee}</UniqueIdentifier>
     </Filter>
     <Filter Include="room">
       <UniqueIdentifier>{b4dda07d-ffd2-455d-91dd-5134b5eadbad}</UniqueIdentifier>
@@ -344,6 +338,12 @@
     </Filter>
     <Filter Include="vec">
       <UniqueIdentifier>{f9fe88bf-9188-49e1-86d8-0efb891040e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object\player">
+      <UniqueIdentifier>{930dcf63-a20f-4765-acd2-53dc87a03bee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object\NPC">
+      <UniqueIdentifier>{e94ff246-26df-476e-a352-38134454b265}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

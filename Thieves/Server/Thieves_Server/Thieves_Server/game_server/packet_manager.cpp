@@ -34,6 +34,7 @@ PacketManager::PacketManager()
 void PacketManager::Init()
 {
 	MoveObjManager::GetInst()->InitPlayer();
+	MoveObjManager::GetInst()->InitNPC();
 	m_Lobby->Init();
 	m_room_manager->InitRoom();
 	m_map_manager->LoadMap();
@@ -198,32 +199,6 @@ void PacketManager::ProcessStunEnd(int c_id)
 	Player* pl = MoveObjManager::GetInst()->GetPlayer(c_id);
 	pl->SetAttacked(false);
 }
-
-//void PacketManager::UpdateObjMove()
-//{
-//	for (int i = 0; i < MAX_USER; ++i)
-//	{
-//		for (int j = 0; j <= NPC_ID_END; ++j) {
-//			//���Ŀ� ���� �߰�
-//			if (i != j)
-//				SendMovePacket(i, j);
-//		}
-//	}
-//	SetTimerEvent(0, 0, EVENT_TYPE::EVENT_PLAYER_MOVE, 10);
-//}
-
-//void PacketManager::UpdateObjMove()//�ϴ� ����
-//{
-//	for (int i = 0; i < MAX_USER; ++i)
-//	{
-//		for (int j = 0; j <= NPC_ID_END; ++j) {
-//			//���Ŀ� ���� �߰�
-//			if (i != j)
-//				SendMovePacket(i, j);
-//		}
-//	}
-//	SetTimerEvent(0, 0, EVENT_TYPE::EVENT_PLAYER_MOVE, 10);
-//}
 
 void PacketManager::SendMovePacket(int c_id, int mover)
 {
@@ -759,56 +734,59 @@ void PacketManager::JoinDBThread()
 
 void PacketManager::ProcessTimer(HANDLE hiocp)
 {
-//	while (true) {
-//		while (true) {
-//			m_Timer->timerLock.lock();
-//
-//			if (m_Timer->timerQ.empty()) {
-//				m_Timer->timerLock.unlock();
-//				this_thread::sleep_for(10ms);
-//				continue;
-//			}
-//
-//			auto tEvent = m_Timer->timerQ.top();
-//
-//			if (tEvent.GetExecTime() > chrono::system_clock::now()) {
-//				m_Timer->timerLock.unlock();
-//				this_thread::sleep_for(10ms);
-//				continue;
-//			}
-//
-//			m_Timer->timerQ.pop();
-//
-//			m_Timer->timerLock.unlock();
-//
-//			EXP_OVER* exover = new EXP_OVER;
-//
-//			if (tEvent.GetEventType() == EVENT_TYPE::EV_MOVE) {
-//				exover->_comp_op = COMP_OP::OP_NPC_MOVE;
-//			}
-//			else if (tEvent.GetEventType() == EVENT_TYPE::EV_STUN_END) {
-//				exover->_comp_op = COMP_OP::OP_STUN_END;
-//			}
-//			else if (tEvent.GetEventType() == EVENT_TYPE::EVENT_NPC_SPAWN) {
-//				exover->_comp_op = COMP_OP::OP_STUN_END;
-//			}
-//			else if (tEvent.GetEventType() ==EVENT_TYPE::EVENT_NPC_MOVE) {
-//				exover->_comp_op = COMP_OP::OP_STUN_END;
-//			}
-//			else if (tEvent.GetEventType() == EVENT_TYPE::EVENT_NPC_ATTACK) {
-//				exover->_comp_op = COMP_OP::OP_STUN_END;
-//			}
-//			else if (tEvent.GetEventType() == EVENT_TYPE::EVENT_TIME) {
-//				exover->_comp_op = COMP_OP::OP_STUN_END;
-//			}
-//
-//			Player* pl = MoveObjManager::GetInst()->GetPlayer(tEvent.GetObjId());
-//			exover->room_id = pl->GetRoomID();
-//			PostQueuedCompletionStatus(hiocp, 1, tEvent.GetObjId(), &exover->_wsa_over);
-//
-//		}
-//		this_thread::sleep_for(10ms);
-//	}
+	while (true) {
+		while (true) {
+			m_Timer->timerLock.lock();
+
+			if (m_Timer->timerQ.empty()) {
+				m_Timer->timerLock.unlock();
+				this_thread::sleep_for(10ms);
+				continue;
+			}
+
+			auto tEvent = m_Timer->timerQ.top();
+
+			if (tEvent.GetExecTime() > chrono::system_clock::now()) {
+				m_Timer->timerLock.unlock();
+				this_thread::sleep_for(10ms);
+				continue;
+			}
+
+			m_Timer->timerQ.pop();
+
+			m_Timer->timerLock.unlock();
+
+			EXP_OVER* exover = new EXP_OVER;
+
+			if (tEvent.GetEventType() == EVENT_TYPE::EV_MOVE) {
+				exover->_comp_op = COMP_OP::OP_NPC_MOVE;
+			}
+			else if (tEvent.GetEventType() == EVENT_TYPE::EV_STUN_END) {
+				exover->_comp_op = COMP_OP::OP_STUN_END;
+			}
+			else if (tEvent.GetEventType() == EVENT_TYPE::EVENT_NPC_SPAWN) {
+				exover->_comp_op = COMP_OP::OP_NPC_SPAWN;
+			}
+			else if (tEvent.GetEventType() == EVENT_TYPE::EVENT_NPC_SPAWN) {
+				exover->_comp_op = COMP_OP::OP_NPC_TIMER_SPAWN;
+			}
+			else if (tEvent.GetEventType() ==EVENT_TYPE::EVENT_NPC_MOVE) {
+				exover->_comp_op = COMP_OP::OP_NPC_MOVE;
+			}
+			else if (tEvent.GetEventType() == EVENT_TYPE::EVENT_NPC_ATTACK) {
+				exover->_comp_op = COMP_OP::OP_NPC_ATTACK;
+			}
+			else if (tEvent.GetEventType() == EVENT_TYPE::EVENT_TIME) {
+				exover->_comp_op = COMP_OP::OP_STUN_END;
+			}
+
+			Player* pl = MoveObjManager::GetInst()->GetPlayer(tEvent.GetObjId());
+			exover->room_id = pl->GetRoomID();
+			PostQueuedCompletionStatus(hiocp, 1, tEvent.GetObjId(), &exover->_wsa_over);
+
+		}
+		this_thread::sleep_for(10ms);
+	}
 }
 
 void PacketManager::ProcessSignIn(int c_id, unsigned char* p)
@@ -1677,41 +1655,41 @@ void PacketManager::CallStateMachine(int enemy_id, int room_id, const Vector3& b
 void PacketManager::CountTime(int room_id)
 {
 	Room* room = m_room_manager->GetRoom(room_id);
-	//auto timer = std::chrono::system_clock::now();
+	auto timer = std::chrono::system_clock::now();
 	//std::chrono::duration<float> elapsed = room->GetRoundTime() - end_time;
 }
 
 void PacketManager::DoEnemyAttack(int enemy_id, int target_id, int room_id)
 {
-	////초당두발
-	//Room* room = m_room_manager->GetRoom(room_id);
-	//Enemy* enemy = MoveObjManager::GetInst()->GetEnemy(enemy_id);
+	//초당두발
+	Room* room = m_room_manager->GetRoom(room_id);
+	Enemy* enemy = MoveObjManager::GetInst()->GetEnemy(enemy_id);
 
-	//if (false == enemy->GetIsActive())return;
+	if (false == enemy->GetIsActive())return;
 
-	//if (target_id == BASE_ID)
-	//{
-	//	Vector3 base_pos;// = m_map_manager->GetMapObjectByType(OBJ_TYPE::OT_BASE).GetPos();
+	if (target_id == BASE_ID)
+	{
+		Vector3 base_pos;// = m_map_manager->GetMapObjectByType(OBJ_TYPE::OT_BASE).GetPos();
 
-	//	int base_attack_t;
+		int base_attack_t;
 
-	//	if (enemy->GetType() == OBJ_TYPE::OT_PLAYER) {
-	//		float dist = enemy->GetPos().Dist(base_pos);
-	//		base_attack_t = (dist / 1500.0f) * 1000;
-	//	}
-	//	//g_timer_queue.push(SetTimerEvent(enemy_id, enemy_id, room_id, EVENT_TYPE::EVENT_NPC_ATTACK, base_attack_t));
-	//}
-	//for (int pl : room->GetObjList())
-	//{
-	//	if (false == MoveObjManager::GetInst()->IsPlayer(pl))continue;
+		if (enemy->GetType() == OBJ_TYPE::OT_PLAYER) {
+			float dist = enemy->GetPos().Dist(base_pos);
+			base_attack_t = (dist / 1500.0f) * 1000;
+		}
+		//g_timer_queue.push(SetTimerEvent(enemy_id, enemy_id, room_id, EVENT_TYPE::EVENT_NPC_ATTACK, base_attack_t));
+	}
+	for (int pl : room->GetObjList())
+	{
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl))continue;
 
-	//	SendNPCAttackPacket(pl, enemy_id, target_id);
+		SendNPCAttackPacket(pl, enemy_id, target_id);
 
-	//}
+	}
 
-	//auto& attack_time = enemy->GetAttackTime();
-	//attack_time = chrono::system_clock::now() + 1s;
-	//const Vector3 base_pos;// = m_map_manager->GetMapObjectByType(OBJ_TYPE::OT_BASE).GetGroundPos();
+	auto& attack_time = enemy->GetAttackTime();
+	attack_time = chrono::system_clock::now() + 1s;
+	const Vector3 base_pos;// = m_map_manager->GetMapObjectByType(OBJ_TYPE::OT_BASE).GetGroundPos();
 	//CallStateMachine(enemy_id, room_id, base_pos);
 }
 
