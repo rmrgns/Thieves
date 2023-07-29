@@ -23,6 +23,7 @@
 #include "PlayerParticle.h"
 #include "LightEffect.h"
 #include "UsingGun.h"
+#include "PlayerShadow.h"
 
 #include "Resources.h"
 #include "ParticleSystem.h"
@@ -646,7 +647,7 @@ void SceneManager::LoadGameScene()
 		shared_ptr<GameObject> light = make_shared<GameObject>();
 		light->SetName(L"Dir_Light");
 		light->AddComponent(make_shared<Transform>());
-		light->GetTransform()->SetLocalPosition(Vec3(0, 1000, 0));
+		light->GetTransform()->SetLocalPosition(Vec3(0, 1000, -500));
 		light->AddComponent(make_shared<Light>());
 		light->GetLight()->SetLightDirection(Vec3(0.f, -1, 0.f));
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
@@ -707,6 +708,25 @@ void SceneManager::LoadGameScene()
 	}
 #pragma endregion
 
+#pragma region Directional Light
+	{
+		shared_ptr<GameObject> light = make_shared<GameObject>();
+		light->SetName(L"Dir_Light2");
+		light->AddComponent(make_shared<Transform>());
+		light->GetTransform()->SetLocalPosition(Vec3(0, 1000, 250));
+		light->AddComponent(make_shared<Light>());
+		light->GetLight()->SetLightDirection(Vec3(0.f, -1, 0.f));
+		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
+		light->AddComponent(make_shared<PlayerShadow>());
+		light->GetLight()->SetDiffuse(Vec3(0.1f, 0.1f, 0.1f));
+		light->GetLight()->SetAmbient(Vec3(0.1f, 0.1f, 0.1f));
+		light->GetLight()->SetSpecular(Vec3(0.1f, 0.1f, 0.1f));
+
+
+		scene->AddGameObject(light);
+	}
+#pragma endregion
+
 	_LoadText = L"Load Particle"; // 20
 	Network::GetInst()->SendLoadProgressPacket((char)1900 / 21);
 
@@ -719,7 +739,7 @@ void SceneManager::LoadGameScene()
 		particle->SetCheckFrustum(false);
 		particle->AddComponent(make_shared<PlayerParticle>());
 		//particle->GetParticleSystem()->UseParticle(true);
-		particle->GetParticleSystem()->MakeParticle(L"blood", L"..\\Resources\\Texture\\Particle\\bubble.png", 2);
+		particle->GetParticleSystem()->MakeParticle(L"blood", L"..\\Resources\\Texture\\Particle\\bubble.png", 3);
 		particle->GetTransform()->SetLocalPosition(Vec3(-100.f, -100.f, -100.f));
 		scene->AddGameObject(particle);
 	}

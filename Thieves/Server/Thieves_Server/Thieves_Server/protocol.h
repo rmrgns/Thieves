@@ -1,4 +1,5 @@
 #pragma once
+#include <chrono>
 
 constexpr short SERVER_PORT = 8471;
 
@@ -490,6 +491,10 @@ struct sc_packet_npc_attack {
 struct sc_packet_item_use {
 	unsigned char size;
 	char type;
+	int obj_id;
+	int player;
+	float x, y, z;
+	char item_type;
 };
 
 struct sc_packet_stun_end {
@@ -508,6 +513,7 @@ struct sc_packet_get_item {
 	unsigned char size;
 	char type;
 	int itemNum;
+	int obj_id;
 	int player;
 };
 
