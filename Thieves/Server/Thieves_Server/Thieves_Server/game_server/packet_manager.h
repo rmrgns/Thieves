@@ -91,7 +91,7 @@ public:
 	void JoinDBThread();
 
 
-
+	void SendStunEnd(int c_id);
 	
 
 	//------timer-------

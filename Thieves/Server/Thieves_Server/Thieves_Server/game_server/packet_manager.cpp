@@ -857,9 +857,9 @@ void PacketManager::ProcessTimer(HANDLE hiocp)
 			else if (tEvent.GetEventType() == EVENT_TYPE::EVENT_NPC_SPAWN) {
 				exover->_comp_op = COMP_OP::OP_NPC_SPAWN;
 			}
-			else if (tEvent.GetEventType() == EVENT_TYPE::EVENT_NPC_SPAWN) {
-				exover->_comp_op = COMP_OP::OP_NPC_TIMER_SPAWN;
-			}
+			//else if (tEvent.GetEventType() == EVENT_TYPE::EVENT_NPC_SPAWN) {
+			//	exover->_comp_op = COMP_OP::OP_NPC_TIMER_SPAWN;
+			//}
 			else if (tEvent.GetEventType() ==EVENT_TYPE::EVENT_NPC_MOVE) {
 				exover->_comp_op = COMP_OP::OP_NPC_MOVE;
 			}
