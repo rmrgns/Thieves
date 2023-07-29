@@ -24,13 +24,13 @@ void Text::Update()
 	// 텍스트 출력
 	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOGIN)
 	{
-		/*SetTextInfo(TEXT_FORMAT::LOGIN);
-		wstring text = L"Thieves ID";
-		SetText(text, 500.f, 400.f, 1.f, 1.f);
-		wstring ID = INPUT->GetUserID();
-		SetText(ID, 500.f, 450.f, 1.f, 1.f);
+		SetTextInfo(TEXT_FORMAT::LOGIN);
+		wstring text = L"LOGIN";
+		SetText(text, 1060.f, 620.f, 1.f, 1.f);
+		//wstring ID = INPUT->GetUserID();
+		//SetText(ID, 500.f, 450.f, 1.f, 1.f);
 
-		wstring text1 = L"Thieves Password";
+		/*wstring text1 = L"Thieves Password";
 		SetText(text1, 500.f, 500.f, 1.f, 1.f);
 		wstring Password = INPUT->GetUserPassword();
 		SetText(Password, 500.f, 550.f, 1.f, 1.f);*/
@@ -74,7 +74,7 @@ void Text::Update()
 		for (auto& data : lScene->GetRoomsData())
 		{
 
-			wstring tempText = L"";
+			wstring tempText = L"Room No.";
 			tempText.append(to_wstring(data.second.id + 1));
 			tempText.append(L" ");
 
@@ -85,13 +85,13 @@ void Text::Update()
 
 			if (count % 2 == 0)
 			{
-				SetText(tempText, width * 360.f / 1600.f, height * (145.f + 90.f * count) / 900.f, 1.f, 1.f);
-				SetText(tempText2, width * 790.f / 1600.f, height * (190.f + 90.f * count) / 900.f, 1.f, 1.f);
+				SetText(tempText, width * 390.f / 1600.f, height * (145.f + 90.f * count) / 900.f, 1.f, 1.f);
+				SetText(tempText2, width * 745.f / 1600.f, height * (185.f + 90.f * count) / 900.f, 1.f, 1.f);
 			}
 			else
 			{
-				SetText(tempText, width * 995.f / 1600.f, height * (145.f + 90.f * (count - 1)) / 900.f, 1.f, 1.f);
-				SetText(tempText2, width * 1425.f / 1600.f, height * (190.f + 90.f * (count - 1)) / 900.f , 1.f, 1.f);
+				SetText(tempText, width * 1025.f / 1600.f, height * (145.f + 90.f * (count - 1)) / 900.f, 1.f, 1.f);
+				SetText(tempText2, width * 1380.f / 1600.f, height * (185.f + 90.f * (count - 1)) / 900.f , 1.f, 1.f);
 			}
 			count += 1;
 		}
@@ -110,45 +110,34 @@ void Text::Update()
 		int count = 0;
 		for (auto& data : rScene->GetRoomData())
 		{
-			if (count % 2 == 0)
+			if (data.second.id == rScene->GetRoomMasterId())
 			{
-				if (data.second.id == rScene->GetRoomMasterId())
-				{
-					wstring masterText = L"Master";
-					SetText(masterText, width * 360.f / 1600.f, height* (145.f + 90.f * count) / 900.f, 1.f, 1.f);
-				}
-				else {
-					wstring tempText = L"";
-					tempText.append(data.second.name);
-					SetText(tempText, width * 360.f / 1600.f, height * (145.f + 90.f * count) / 900.f, 1.f, 1.f);
-				}
-				wstring tempText2 = L"";
-
-				if (data.second.isReady) {
-					tempText2.append(L"Ready!");
-					SetText(tempText2, width * 740.f / 1600.f, height* (190.f + 90.f * count) / 900.f, 1.f, 1.f);
-				}
+				wstring masterText = L"Master : ID : Ready";
+				SetText(masterText, width * 950.f / 1600.f, height * (115.f + 45.f * count) / 900.f, 1.f, 1.f);
 			}
-			else
-			{
-				if (data.second.id == rScene->GetRoomMasterId())
-				{
-					wstring masterText = L"Master";
-					SetText(masterText, width * 995.f / 1600.f, height* (145.f + 90.f * (count - 1)) / 900.f, 1.f, 1.f);
-				}
-				wstring tempText = L"";
+			else {
+				wstring tempText = L"temp";
 				tempText.append(data.second.name);
-				SetText(tempText, width * 995.f / 1600.f, height * (145.f + 90.f * (count - 1)) / 900.f, 1.f, 1.f);
-				
-				wstring tempText2 = L"";
+				SetText(tempText, width * 950.f / 1600.f, height * (115.f + 45.f * count) / 900.f, 1.f, 1.f);
+			}
 
-				if (data.second.isReady) {
-					tempText2.append(L"Ready!");
-					SetText(tempText2, width * 1375.f / 1600.f, height* (190.f + 90.f * (count - 1)) / 900.f, 1.f, 1.f);
-				}
+			wstring tempText2 = L"";
+
+			if (data.second.isReady) {
+				tempText2.append(L"Ready!");
+				SetText(tempText2, width * 1315.f / 1600.f, height* (115.f + 45.f * count) / 900.f, 1.f, 1.f);
 			}
 			count += 1;
 		}
+		for (int i = 0; i < 7; i++)
+		{
+			wstring tempText = L"temp : ID : Ready";
+			//tempText.append(data.second.name);
+			SetText(tempText, width * 950.f / 1600.f, height* (115.f + 80.f * count) / 900.f, 1.f, 1.f);
+			count += 1;
+		
+		}
+
 	}
 	else if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOADING)
 	{
@@ -261,7 +250,7 @@ void Text::SetTextInfo(TEXT_FORMAT infoNumber)
 		// 텍스트 폰트 등
 		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"상주경천섬체", nullptr,
 			DWRITE_FONT_WEIGHT_SEMI_BOLD, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL,
-			width * 25.f / 1600.f, L"en-us", _writeTextFormat.GetAddressOf()));
+			width * 75.f / 1600.f, L"en-us", _writeTextFormat.GetAddressOf()));
 
 		//_writeTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 		//_writeTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);

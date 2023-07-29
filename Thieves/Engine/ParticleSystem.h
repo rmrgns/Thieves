@@ -32,7 +32,7 @@ public:
 	void Render();
 	
 	void UseParticle(bool flag) { _useParticle = flag; };
-	void MakeParticle(wstring name, wstring path);
+	void MakeParticle(wstring name, wstring path, int effect);
 	void ParticleLogic();
 
 public:
@@ -42,21 +42,22 @@ public:
 private:
 	shared_ptr<StructuredBuffer>	_particleBuffer;
 	shared_ptr<StructuredBuffer>	_computeSharedBuffer;
-	uint32							_maxParticle = 1000;
+	uint32							_maxParticle = 2000;
 
 	shared_ptr<Material>		_computeMaterial;
 	shared_ptr<Material>		_material;
 	shared_ptr<Mesh>			_mesh;
 
-	float				_createInterval = 0.005f;
+	float				_createInterval = 0.0000005f;
 	float				_accTime = 0.f;
 
-	float				_minLifeTime = 0.5f;
-	float				_maxLifeTime = 1.f;
-	float				_minSpeed = 100;
-	float				_maxSpeed = 50;
-	float				_startScale = 10.f;
+	float				_minLifeTime = 2.0f;
+	float				_maxLifeTime = 2.0f;
+	float				_minSpeed = 300.f;
+	float				_maxSpeed = 300.f;
+	float				_startScale = 5.f;
 	float				_endScale = 5.f;
 
-	bool				_useParticle = true;
+	bool				_useParticle = false;
+	int					_effectNumber = 0;
 };

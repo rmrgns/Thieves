@@ -69,7 +69,7 @@ void PlayerParticle::PlayerAttack()
 	else if (_attackState == 2)
 	{
 		_attackCount += DELTA_TIME;
-		if (_attackCount > 0.7f)
+		if (_attackCount > 2.5f)
 		{
 			// offtrigger
 			for (auto& gameObject : GET_SINGLE(SceneManager)->GetActiveScene()->GetGameObjects())
