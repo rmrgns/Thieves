@@ -199,6 +199,7 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="InstancingBuffer.h" />
     <ClInclude Include="InstancingManager.h" />
+    <ClInclude Include="MapItem.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightEffect.h" />
     <ClInclude Include="LobbyScene.h" />
@@ -283,6 +284,7 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="InstancingBuffer.cpp" />
     <ClCompile Include="InstancingManager.cpp" />
+    <ClCompile Include="MapItem.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="LightEffect.cpp" />
     <ClCompile Include="LobbyScene.cpp" />

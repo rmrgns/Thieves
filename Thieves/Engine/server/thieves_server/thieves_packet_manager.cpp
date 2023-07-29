@@ -20,7 +20,7 @@
 #include "InGameScene.h"
 #include "GameObject.h"
 #include "NetworkSystem.h"
-#include "Item.h"
+#include "MapItem.h"
 
 using namespace std;
 using namespace client_fw;
@@ -480,14 +480,16 @@ void ThievesPacketManager::ProcessItemInfo(int c_id, unsigned char* p)
 	{
 		name = "Another";
 	}
-	
-	auto res = m_item_map.try_emplace(packet->id,
+
+	m_item_map.try_emplace(packet->id, make_shared<MapItem>(
+		packet->id,
 		name,
 		packet->x,
 		packet->y,
 		packet->z,
+		packet->item_type,
 		ITEM_STATE::IT_SPAWN
-	);
+		));
 }
 
 void ThievesPacketManager::ProcessTimerStart(int c_id, unsigned char* p)
@@ -504,7 +506,7 @@ void ThievesPacketManager::ProcessActiveEscape(int c_id, unsigned char* p)
 	sc_packet_active_escape* packet = reinterpret_cast<sc_packet_active_escape*>(p);
 	
 	shared_ptr<InGameScene> iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetActiveScene());
-
+	
 }
 
 

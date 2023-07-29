@@ -6,8 +6,8 @@
 #include "server/main/network_move_object.h"
 #include "server/thieves_server/game_info.h"
 #include "PlayerInput.h"
+#include "MapItem.h"
 
-class Item;
 
 class ThievesPacketManager : public PacketManager 
 {
@@ -73,7 +73,7 @@ public:
 
 private:
 	std::unordered_map<int, shared_ptr<NetworkMoveObj>>m_obj_map;
-	std::unordered_map<int, shared_ptr<Item>>m_item_map;
+	std::unordered_map<int, shared_ptr<MapItem>>m_item_map;
 	GameInfo m_game_info;
 
 	char pl_action;
