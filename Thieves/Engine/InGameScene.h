@@ -22,6 +22,9 @@ private:
 	bool m_isAllPlayerLoaded = false;
 	bool m_isGetAllObjInfo = false;
 	bool m_isGetTime = false;
+	bool m_isOpenSafe = false;
+	bool m_isActiveEscape = false;
+	bool m_isActiveSpecialEscape = false;
 	std::chrono::system_clock::time_point m_startTime;
 	int m_item_num = -1;
 };

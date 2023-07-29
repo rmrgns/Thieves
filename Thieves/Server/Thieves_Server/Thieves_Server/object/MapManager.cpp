@@ -83,6 +83,7 @@ void MapManager::LoadSpawnArea()
 
 		//start ¿Í end
 		reader++;
+		reader++;
 
 		float centerCBox[3]{};
 
@@ -111,6 +112,7 @@ void MapManager::LoadPoliceDir()
 		auto reader = words.begin();
 
 		//start ¿Í end
+		reader++;
 		reader++;
 
 		float centerCBox1[3]{};

@@ -276,6 +276,7 @@
     <ClCompile Include="UsingGun.cpp">
       <Filter>Object\Script</Filter>
     </ClCompile>
+    <ClCompile Include="MapItem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -518,6 +519,7 @@
     <ClInclude Include="UsingGun.h">
       <Filter>Object\Script</Filter>
     </ClInclude>
+    <ClInclude Include="MapItem.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
