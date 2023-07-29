@@ -56,104 +56,84 @@ void PacketManager::ProcessPacket(int c_id, unsigned char* p)
 	switch (packet_type) {
 	case CS_PACKET_SIGN_IN: {
 		ProcessSignIn(c_id, p);
-		cout << "signIN" << endl;
 		break;
 	}
 	case CS_PACKET_SIGN_UP: {
 		ProcessSignUp(c_id, p);
-		cout << "signup" << endl;
 		break;
 	}
 	case CS_PACKET_MOVE: {
 		ProcessMove(c_id, p);
-		//cout << "move" << endl;
 		break;
 	}
 	case CS_PACKET_ATTACK: {
 		ProcessAttack(c_id, p);
-		cout << "attack" << endl;
 		break;
 	}
 	case CS_PACKET_MATCHING: {
 		ProcessMatching(c_id, p);
-		cout << "match" << endl;
 		break;
 	}
 	case CS_PACKET_HIT: {
 		ProcessHit(c_id, p);
-		cout << "hit" << endl;
 		break;
 	}
 	case CS_PACKET_GAME_START: {
 		ProcessGameStart(c_id, p);
-		cout << "start" << endl;
 		break;
 	}
 	case CS_PACKET_LOAD_PROGRESSING: {
 		ProcessLoadProgressing(c_id, p);
-		cout << "progress" << endl;
 		break;
 	}	
 	case CS_PACKET_LOAD_END: {
 		ProcessLoadEnd(c_id, p);
-		cout << "loadend" << endl;
 		break;
 	}
 	case CS_PACKET_ENTER_ROOM: {
 		ProcessEnterRoom(c_id, p);
-		cout << "enterroom" << endl;
 		break;
 	}
 	case CS_PACKET_LEAVE_ROOM: {
 		ProcessLeaveRoom(c_id, p);
-		cout << "leaveroom" << endl;
 		break;
 	}
 	case CS_PACKET_PLAYER_READY: {
 		ProcessPlayerReady(c_id, p);
-		cout << "ready" << endl;
 		break;
 	}
 	case CS_PACKET_PLAYER_CANCLE_READY: {
 		ProcessPlayerCancleReady(c_id, p);
-		cout << "cancle" << endl;
 		break;
 	}
 	case CS_PACKET_PLAYER_LOG_OUT: {
 		ProcessLogOut(c_id, p);
-		cout << "logout" << endl;
 		break;
 	}
 	case CS_PACKET_REQUEST_ROOMS_DATA_FOR_LOBBY: {
 		ProcessRoomsDataInLobby(c_id, p);
-		cout << "lobbydata" << endl;
 		break;
 	}
 	case CS_PACKET_REQUEST_ROOMS_DATA_FOR_ROOM: {
 		ProcessRoomsDataInRoom(c_id, p);
-		cout << "roomdata" << endl;
 		break;
 	}
 
 	case CS_PACKET_BULLET: {
 		ProcessBullet(c_id, p);
-		cout << "bullet" << endl;
 		break;
 	}
 
 	case CS_PACKET_STEEL_DIAMOND: {
 		ProcessChangePhase(c_id, p);
-		cout << "phase" << endl;
 		break;
 	}
 	case CS_PACKET_GET_ITEM: {
 		ProcessGetItem(c_id, p);
-		cout << "item" << endl;
 		break;
 	}
 	case CS_PACKET_USE_ITEM: {
 		ProcessUseItem(c_id, p);
-		cout << "item" << endl;
 		break;
 	}
 	case CS_PACKET_TEST: {
@@ -202,7 +182,6 @@ void PacketManager::ProcessRecv(int c_id , EXP_OVER* exp_over, DWORD num_bytes)
 	int packet_size = packet_start[0];
 	if (packet_size == 0) std::cout << "packet_size 0" << cl->GetID();
 	while (packet_size <= remain_data) {
-		//std::cout << packet_size << "byte\n";
 		ProcessPacket(c_id, packet_start);
 		remain_data -= packet_size;
 		packet_start += packet_size;
