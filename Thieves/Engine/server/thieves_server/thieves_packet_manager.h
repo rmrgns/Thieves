@@ -73,10 +73,14 @@ public:
 	std::unordered_map<int, shared_ptr<MapItem>>& GetItemObjMap() { return m_item_map; }
 	GameInfo& GetGameInfo() { return m_game_info; };
 
+	void SetDiamondPlayer(int val) { m_diamond_player = val; }
+	int GetDiamondPlayer() { return m_diamond_player; }
+
 private:
 	std::unordered_map<int, shared_ptr<NetworkMoveObj>>m_obj_map;
 	std::unordered_map<int, shared_ptr<MapItem>>m_item_map;
 	GameInfo m_game_info;
+	int m_diamond_player = -1;
 
 	char pl_action;
 	bool bRecv;

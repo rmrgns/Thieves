@@ -26,6 +26,7 @@
 #include "UsingGun.h"
 #include "PlayerShadow.h"
 #include "ItemScript.h"
+#include "DiamondScript.h"
 //#include "ItemUI.h"
 
 #include "Resources.h"
@@ -633,6 +634,7 @@ void SceneManager::LoadGameScene()
 			//gameObject->AddComponent(make_shared<TestObjectMove>());
 			//gameObject->AddComponent(make_shared<PlayerInput>());
 			gameObject->SetStatic(true);
+			gameObject->AddComponent(make_shared<DiamondScript>());
 			scene->AddGameObject(gameObject);
 			//gameObject->AddComponent(make_shared<TestDragon>());
 		}

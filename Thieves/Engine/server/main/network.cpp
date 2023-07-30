@@ -189,10 +189,20 @@ void Network::SendRequestInRoomData()
 	m_send_manager->SendRequestInRoomData(m_s_socket);
 }
 
+void Network::SendSteelDiamond()
+{
+	m_send_manager->SendSteelDiamond(m_s_socket);
+}
+
 
 void Network::SendBullet(Vec3 start_pos, Vec3 dir_pos)
 {
 	m_send_manager->SendBullet(m_s_socket, start_pos, dir_pos);
+}
+
+void Network::SendUseItem()
+{
+	m_send_manager->SendUseItem(m_s_socket);
 }
 
 void Network::SendAttackPacket()
