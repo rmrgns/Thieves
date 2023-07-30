@@ -13,7 +13,6 @@ class Enemy :
 public:
     Enemy(int i) :in_use(false){
         m_id = i;
-        target_id = BASE_ID;
         m_attack_time = std::chrono::system_clock::now();
         m_check_time = std::chrono::system_clock::now();
         m_move_time = std::chrono::system_clock::now();

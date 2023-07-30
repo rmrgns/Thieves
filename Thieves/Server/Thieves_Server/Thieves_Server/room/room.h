@@ -56,6 +56,10 @@ public:
 	{
 		return m_obj_list;
 	}
+	void SetObjList(int obj)
+	{
+		m_obj_list.insert(obj);
+	}
 
 	std::array<Item*, MAX_ITEM>& GetItemList()
 	{
@@ -134,4 +138,6 @@ private:
 
 	Vector3 m_special_escape_pos;
 	std::atomic_bool m_isSpecialEscapeActive;
+
+	Vector3 m_player_spawn;
 };

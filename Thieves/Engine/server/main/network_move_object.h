@@ -5,7 +5,7 @@ enum class NW_OBJ_TYPE
 {
 	OT_NONE,
 	OT_MY_PLAYER,
-	
+	OT_NPC,
 	OT_PLAYER
 };
 

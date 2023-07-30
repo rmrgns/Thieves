@@ -25,39 +25,39 @@ UsingGun::~UsingGun()
 void UsingGun::LateUpdate()
 {
 
-	//if (_bulletcheck)
-	//{
-	//	_count += DELTA_TIME;
-	//	if (_count > 1.0f)
-	//	{
-	//		GetTransform()->SetLocalPosition(Vec3(-100.f, -100.f, -100.f));
-	//		_count = 0.f;
-	//		_bulletcheck = false;
-	//	}
-	//	return;
-	//}
+	if (_bulletcheck)
+	{
+		_count += DELTA_TIME;
+		if (_count > 1.0f)
+		{
+			GetTransform()->SetLocalPosition(Vec3(-100.f, -100.f, -100.f));
+			_count = 0.f;
+			_bulletcheck = false;
+		}
+		return;
+	}
 
 
-	//if (INPUT->GetButtonDown(KEY_TYPE::LBUTTON) && _bulletcheck == false)
-	//{
-	//	// 플레이어 위치 좌표
-	//	int myID = Network::GetInst()->GetPacketManager()->GetGameInfo().GetNetworkID();
+	if (INPUT->GetButtonDown(KEY_TYPE::LBUTTON) && _bulletcheck == false)
+	{
+		// 플레이어 위치 좌표
+		int myID = Network::GetInst()->GetPacketManager()->GetGameInfo().GetNetworkID();
 
-	//	if (myID != -1)
-	//	{
-	//		bullet_pos = Network::GetInst()->GetNetworkObjMap().find(myID)->second->GetPosition();
-	//		bullet_rotation = Network::GetInst()->GetNetworkObjMap().find(myID)->second->GetRotation();
-	//	}
+		if (myID != -1)
+		{
+			bullet_pos = Network::GetInst()->GetNetworkObjMap().find(myID)->second->GetPosition();
+			bullet_rotation = Network::GetInst()->GetNetworkObjMap().find(myID)->second->GetRotation();
+		}
 
-	//	bullet_pos.x += GET_SINGLE(SceneManager)->GetLookVec().x * 100.f;
-	//	bullet_pos.z += GET_SINGLE(SceneManager)->GetLookVec().z * 100.f;
-	//	bullet_pos.y += 100.f;
+		bullet_pos.x += GET_SINGLE(SceneManager)->GetLookVec().x * 100.f;
+		bullet_pos.z += GET_SINGLE(SceneManager)->GetLookVec().z * 100.f;
+		bullet_pos.y += 100.f;
 
-	//	Vec3 lookVec = GET_SINGLE(SceneManager)->GetLookVec();
+		Vec3 lookVec = GET_SINGLE(SceneManager)->GetLookVec();
 
-	//	// 서버로 전송
-	//	Network::GetInst()->SendBullet(bullet_pos, bullet_rotation);
-	//}
+		// 서버로 전송
+		Network::GetInst()->SendBullet(bullet_pos, bullet_rotation);
+	}
 	int myID = Network::GetInst()->GetPacketManager()->GetGameInfo().GetNetworkID();
 
 	if (myID != -1)

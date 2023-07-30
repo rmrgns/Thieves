@@ -25,6 +25,9 @@ public:
 	std::vector<Vector3>& GetNPCSpawnPos() { return PoliceSpawnCBox; }
 	Vector3 checkCollision(CBox& playerBox, Vector3& playerOldPos);
 	bool checkCollisionRay(CBox&);
+	bool checkCollisionSafe(CBox& ray_temp);
+	
+
 	bool CheckInRange2(float x, float z, const Vector3& min_pos, const Vector3& max_pos)
 	{
 		return (min_pos.x <= x && x <= max_pos.x && min_pos.z <= z && z <= max_pos.z);
@@ -40,6 +43,8 @@ private:
 	std::vector<Vector3> PlayerSpawnPos;
 
 	std::vector<Vector3> PlayerPos;
+
+	CBox m_box_manager;
 
 
 };

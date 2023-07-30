@@ -17,7 +17,10 @@
 //
 //	void MessageEventManager::ExecuteEvent()
 //	{
-//		const auto& current_level = LevelManager::GetLevelManager().GetCurrentLevel();
+//		const 
+// 
+// 
+// & current_level = LevelManager::GetLevelManager().GetCurrentLevel();
 //		if (current_level != nullptr)
 //		{
 //			while (m_message_queue.empty() == false)

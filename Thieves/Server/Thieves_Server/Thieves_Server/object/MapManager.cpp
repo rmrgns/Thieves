@@ -327,6 +327,56 @@ bool MapManager::checkCollisionRay(CBox& ray_temp)
 		}
 	}
 
-	return TRUE;
+	return FALSE;
+}
+
+bool MapManager::checkCollisionSafe(CBox& ray_temp)
+{
+	Vector3 currentPlayerPos(ray_temp.center[0], ray_temp.center[1], ray_temp.center[2]);
+
+	bool collideRet = FALSE;
+	int collisionDirection = 0;
+	// �浹�ϴ� ������ �� ������
+
+	// 금고 좌표
+	
+	CBox safe_cbox;
+
+	safe_cbox.center[0] = 0.0378830400;
+	safe_cbox.center[1] = 1.9030080000;
+	safe_cbox.center[2] = -0.3053722000;
+
+	safe_cbox.extent[0] = 1.9818200000;
+	safe_cbox.extent[1] = 2.1062360000;
+	safe_cbox.extent[2] = 1.9767230000;
+
+	Vector3 collisionSlidingVector = { 0,0,0 };
+
+	float dx = fabsf(safe_cbox.center[0] - ray_temp.center[0]);
+	float sumX = safe_cbox.extent[0] + ray_temp.extent[0];
+
+	if (dx > sumX) {
+		return false;
+	}
+	else {
+		float dy = fabsf(safe_cbox.center[1] - ray_temp.center[1]);
+		float sumY = safe_cbox.extent[1] + ray_temp.extent[1];
+
+		if (dy > sumY) {
+			return false;
+		}
+		else {
+			float dz = fabsf(safe_cbox.center[2] - ray_temp.center[2]);
+			float sumZ = safe_cbox.extent[2] + ray_temp.extent[2];
+
+			if (dz > sumZ) {
+				return false;
+			}
+			else {
+				return true;
+			}
+		}
+	}
+
 }
 
