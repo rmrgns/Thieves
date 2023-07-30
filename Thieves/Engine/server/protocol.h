@@ -345,7 +345,6 @@ struct sc_packet_stun {
 	char type;
 	int	obj_id;
 	bool stun_by_item;
-	int item_id;
 };
 struct sc_packet_interaction {
 };
