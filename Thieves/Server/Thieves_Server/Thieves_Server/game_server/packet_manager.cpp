@@ -1143,9 +1143,9 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 
 						SendGetItem(other_pl, i, c_id);
 					}
-
-					it->SetState(ITEM_STATE::ST_OCCUPIED);
 					
+					it->SetState(ITEM_STATE::ST_OCCUPIED);
+					cl->SetItem(i);
 				}
 			}
 			else {
@@ -1162,8 +1162,11 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 						continue;
 
 					SendStun(c_id, i, true);
-					
 				}
+
+				it->SetState(ITEM_STATE::ST_NOTUSED);
+				m_Timer->AddTimer(c_id, std::chrono::system_clock::now() + 3s, EVENT_TYPE::EV_STUN_END);
+				
 			}
 		}
 		else {
@@ -1279,24 +1282,26 @@ void PacketManager::ProcessUseItem(int c_id, unsigned char* p)
 
 	Room* room = m_room_manager->GetRoom(player->GetRoomID());
 
-	switch (packet->itemNum) {
+	Item* it = room->GetItemList().at(player->GetItem());
+
+	switch (it->GetItemCode())
+	{
 	case ITEM_NUM_GUN:
-		if (player->GetItem() == ITEM_NUM_GUN) {
-			player->SetItem(-1);
-			// 총 쓴 처리를 해줘야 함
-		}
+		//총 처리
+
+		it->SetState(ITEM_STATE::ST_NOTUSED);
 		break;
 	case ITEM_NUM_TRAP:
-		if (player->GetItem() == ITEM_NUM_TRAP) {
-			player->SetItem(-1);
-			// 덫을 쓴 처리를 해줘야 함
-		}
-		break;
-	case ITEM_NUM_MAP:
-		break;
-	default:
+		Vector3 look = Vector3(player->GetRotX(), 0.0f, player->GetRotZ());
+		Vector3 normal = look.Normalize();
+		Vector3 front = normal * 40.f;
+		it->SetPos(Vector3(player->GetPosX(), 0.f, player->GetPosZ()) + front);
+		it->SetState(ITEM_STATE::ST_SET);
 		break;
 	}
+
+	player->SetItem(-1);
+	
 }
 
 void PacketManager::ChangePhase(int c_id)

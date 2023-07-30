@@ -420,7 +420,21 @@ void ThievesPacketManager::ProcessPhaseChange(int c_id, unsigned char* p)
 {
 	sc_packet_phase_change* packet = reinterpret_cast<sc_packet_phase_change*>(p);
 
-	//������ ���� �� �������� �ؾ���.
+	shared_ptr<InGameScene> iScene;
+	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
+	{
+		iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetActiveScene());
+		iScene->SetPhaseChanged(true);
+		iScene->SetPhaseChangedTime(std::chrono::system_clock::now());
+	}
+	else if (GET_SINGLE(SceneManager)->GetCurrentLoadProgressScene() == CURRENT_SCENE::GAME)
+	{
+		iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetLoadProgressScene());
+		iScene->SetPhaseChanged(true);
+		iScene->SetPhaseChangedTime(std::chrono::system_clock::now());
+	}
+	
+	//페이즈 변경 시 빛 처리
 
 }
 
@@ -509,13 +523,13 @@ void ThievesPacketManager::ProcessTimerStart(int c_id, unsigned char* p)
 	shared_ptr<InGameScene> iScene;
 	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
 	{
-		iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetLoadProgressScene());
+		iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetActiveScene());
 		iScene->SetStartTime(std::chrono::system_clock::now());
 		iScene->SetIsGetTime(true);
 	}
 	else if (GET_SINGLE(SceneManager)->GetCurrentLoadProgressScene() == CURRENT_SCENE::GAME)
 	{
-		iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetActiveScene());
+		iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetLoadProgressScene());
 		iScene->SetStartTime(std::chrono::system_clock::now());
 		iScene->SetIsGetTime(true);
 	}

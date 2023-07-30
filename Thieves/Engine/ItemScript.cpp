@@ -17,7 +17,7 @@ void ItemScript::Update()
 		this->GetTransform()->SetLocalPosition(Vec3(Item->GetPosition().x, 100.f, Item->GetPosition().z));
 		break;
 	case ITEM_STATE::IT_OCCUPIED:
-		this->GetTransform()->SetLocalPosition(Item->GetPosition());
+		this->GetTransform()->SetLocalPosition(Vec3(0.f, -4000.f, 0.f));
 		break;
 	case ITEM_STATE::IT_SET:
 		if (Item->GetItemType() == ITEM_NUM_TRAP)

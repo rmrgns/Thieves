@@ -44,7 +44,7 @@ public:
 	void SendAttackPacket(int c_id, int room_id);
 	void SendGameWin(int c_id);
 	void SendGameDefeat(int c_id);
-	void SendStun(int c_id, int obj_id, bool stun_by_item, int item_id); //obj_id가 c_id를 공격
+	void SendStun(int c_id, int obj_id, bool stun_by_item); //obj_id가 c_id를 공격
 	void SendStunEnd(int c_id);
 	void SendPhasePacket(int c_id);
 
