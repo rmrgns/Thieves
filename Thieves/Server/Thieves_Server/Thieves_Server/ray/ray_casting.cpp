@@ -59,7 +59,7 @@ Vector3 RayCasting::Shoot(Vector3 RayPos, Vector3 RayDir)
 }
 
 
-Vector3 RayCasting::CheckSafe(Vector3 RayPos, Vector3 RayDir)
+bool RayCasting::CheckSafe(Vector3 RayPos, Vector3 RayDir)
 {
 	CBox Raytemp;
 	MapManager _map_manager;
