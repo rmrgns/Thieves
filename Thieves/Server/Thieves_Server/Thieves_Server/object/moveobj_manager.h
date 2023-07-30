@@ -42,7 +42,7 @@ public:
 	MoveObj* GetMoveObj(int id) { return m_moveobj_arr[id]; }
 	bool IsPlayer(int id) { return (id >= 0) && (id < MAX_USER); }
 	bool IsNear(int a, int b);
-	bool IsNPC(int id) { return (MAX_USER < id) && (id < MAX_NPC); };
+	bool IsNPC(int id) { return (MAX_USER <= id) && (id < MAX_NPC); };
 	float ObjDistance(int a, int b);
 
 	//

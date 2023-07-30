@@ -1671,9 +1671,9 @@ void PacketManager::StartGame(int room_id)
 	Player* pl = NULL;
 	Enemy* e = NULL;
 
-	
-	Vector3 NPC_init_pos{0.0f, 300.0f, 0.0f};
-	vector<int>obj_list{ room->GetObjList().begin(),room->GetObjList().end() };
+
+	Vector3 NPC_init_pos{ 0.0f, 300.0f, 0.0f };
+	vector<int>obj_list{ room->GetObjList().begin(), room->GetObjList().end() };
 
 	std::random_device rd;
 	std::default_random_engine dre(rd());
@@ -1681,10 +1681,10 @@ void PacketManager::StartGame(int room_id)
 	std::shuffle(m_map_manager->GetItemPos().begin(), m_map_manager->GetItemPos().end(), dre);
 	std::shuffle(m_map_manager->GetEscapePos().begin(), m_map_manager->GetEscapePos().end(), dre);
 	std::shuffle(m_map_manager->GetSpecialEscapePos().begin(), m_map_manager->GetSpecialEscapePos().end(), dre);
-	
+
 	std::shuffle(m_map_manager->GetNPCSpawnPos().begin(), m_map_manager->GetNPCSpawnPos().end(), dre);
-	
-	for (int i = NPC_ID_START; i < NPC_ID_START+8; ++i)
+
+	for (int i = NPC_ID_START; i < NPC_ID_START + 8; ++i)
 	{
 		e = MoveObjManager::GetInst()->GetEnemy(i);
 
@@ -1694,32 +1694,33 @@ void PacketManager::StartGame(int room_id)
 			e->SetRoomID(room_id);
 			obj_list.push_back(e->GetID());
 		}
-		
+
 		room->EnterEnemyRoom(i);
 	}
 	//npc아이디 넣어주기
 
-	
+
 
 
 
 	for (int i = 0; i < obj_list.size(); ++i)
 	{
-		if (false == MoveObjManager::GetInst()->IsPlayer(obj_list[i])) continue;
-
-		pl = MoveObjManager::GetInst()->GetPlayer(obj_list[i]);
-		pl->SetPos(m_map_manager->GetPlayerSpawnPos().at(i));
-		
-		e = MoveObjManager::GetInst()->GetEnemy(obj_list[i]);
-
-		if (i < (room->GetMaxUser() + 8))
+		if (false == MoveObjManager::GetInst()->IsPlayer(obj_list[i])) {
+			pl = MoveObjManager::GetInst()->GetPlayer(obj_list[i]);
+			pl->SetPos(m_map_manager->GetPlayerSpawnPos().at(i));
+		}
+		else if (false == MoveObjManager::GetInst()->IsNPC(obj_list[i]))
 		{
-			e->InitEnemy(OBJ_TYPE::OT_POLICE, room->GetRoomID(), NPC_init_pos);
-			e->SetPos(m_map_manager->GetNPCSpawnPos().at(i));
-			
+			e = MoveObjManager::GetInst()->GetEnemy(obj_list[i]);
+
+				if (i <= (room->GetMaxUser() + 8))
+				{
+					e->InitEnemy(OBJ_TYPE::OT_POLICE, room->GetRoomID(), NPC_init_pos);
+						e->SetPos(m_map_manager->GetNPCSpawnPos().at(i));
+				}
 		}
 	}
-	
+
 	for (int i = 0; i < MAX_ITEM; ++i) {
 		if (room->GetItem(i) == nullptr) continue;
 
