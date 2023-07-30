@@ -286,6 +286,9 @@
     <ClCompile Include="ItemUI.cpp">
       <Filter>Object\Script</Filter>
     </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -537,6 +540,12 @@
     </ClInclude>
     <ClInclude Include="ItemUI.h">
       <Filter>Object\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Library\Include\inc\fmod.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

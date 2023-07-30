@@ -3,7 +3,14 @@
 // std::byte 사용하지 않음
 #define _HAS_STD_BYTE 0
 
+// rotation max value
 #define LIMIT_ROTATION XM_PI / 2.f
+
+// FMOD
+#define SOUND_COUNT 4
+#define EFFECT_COUNT 3
+#define CHANNEL_COUNT 4
+
 
 // 각종 include
 #include <windows.h>
@@ -20,6 +27,9 @@ using namespace std;
 
 #include <filesystem>
 namespace fs = std::filesystem;
+
+// FMOD
+#include "inc/fmod.hpp"
 
 #include "d3dx12.h"
 
@@ -57,6 +67,14 @@ using namespace Microsoft::WRL;
 #pragma comment(lib, "dwrite")
 #pragma comment(lib, "d2d1")
 #pragma comment(lib, "d3d11")
+
+
+
+#ifdef _DEBUG
+#pragma comment(lib, "inc\\fmodL_vc.lib")
+#else
+#pragma comment(lib, "inc\\fmod_vc.lib")
+#endif
 
 #ifdef _DEBUG
 #pragma comment(lib, "DirectXTex\\DirectXTex_debug.lib")
