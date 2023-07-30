@@ -471,6 +471,39 @@ void ThievesPacketManager::ProcessGetItem(int c_id, unsigned char* p)
 	
 	m_item_map.find(packet->obj_id)->second->SetState(ITEM_STATE::IT_OCCUPIED);
 
+	printf("c\n");
+	// 아이템 획득시 UI
+	if (m_item_map.find(packet->obj_id)->second->GetItemType() == ITEM_NUM_GUN)
+	{
+		printf("GetItem\n");
+		for (auto& GameObject : iScene->GetGameObjects())
+		{
+			if (GameObject->GetName() == L"ItemBox_Gun")
+			{
+				Vec3 pos = GameObject->GetTransform()->GetLocalPosition();
+				pos.z = 499.f;
+				GameObject->GetTransform()->SetLocalPosition(pos);
+				
+				return;
+			}
+		}
+	}
+	else if (m_item_map.find(packet->obj_id)->second->GetItemType() == ITEM_NUM_TRAP)
+	{
+		printf("GetItem\n");
+		for (auto& GameObject : iScene->GetGameObjects())
+		{
+			if (GameObject->GetName() == L"ItemBox_Trap")
+			{
+				Vec3 pos = GameObject->GetTransform()->GetLocalPosition();
+				pos.z = 499.f;
+				GameObject->GetTransform()->SetLocalPosition(pos);
+				return;
+			}
+		}
+	}
+	
+
 	if (packet->player == m_game_info.GetNetworkID())
 	{
 		iScene->SetItemNum(packet->obj_id);

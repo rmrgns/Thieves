@@ -25,6 +25,7 @@
 #include "UsingGun.h"
 #include "PlayerShadow.h"
 #include "ItemScript.h"
+#include "ItemUI.h"
 
 #include "Resources.h"
 #include "ParticleSystem.h"
@@ -364,10 +365,11 @@ void SceneManager::LoadGameScene()
 	Network::GetInst()->SendLoadProgressPacket((char)500 / 21);
 	
 
-#pragma region ItemBox
+#pragma region ItemBox UI
 	
 	{
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
+		obj->SetName(L"ItemBox");
 		obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
 		obj->AddComponent(make_shared<Transform>());
 		obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
@@ -382,6 +384,48 @@ void SceneManager::LoadGameScene()
 			meshRenderer->SetMaterial(material->Clone());
 		}
 		obj->AddComponent(meshRenderer);
+		scene->AddGameObject(obj);
+	}
+
+	{
+		shared_ptr<GameObject> obj = make_shared<GameObject>();
+		obj->SetName(L"ItemBox_Gun");
+		obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
+		obj->AddComponent(make_shared<Transform>());
+		obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
+		obj->GetTransform()->SetLocalPosition(Vec3(650.f, -350.f, 501.f));
+		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+		{
+			shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+			meshRenderer->SetMesh(mesh);
+		}
+		{
+			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"ItemBox_Gun");
+			meshRenderer->SetMaterial(material->Clone());
+		}
+		obj->AddComponent(meshRenderer);
+		//obj->AddComponent(make_shared<ItemUI>());
+		scene->AddGameObject(obj);
+	}
+
+	{
+		shared_ptr<GameObject> obj = make_shared<GameObject>();
+		obj->SetName(L"ItemBox_Trap");
+		obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
+		obj->AddComponent(make_shared<Transform>());
+		obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
+		obj->GetTransform()->SetLocalPosition(Vec3(650.f, -350.f, 501.f));
+		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+		{
+			shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+			meshRenderer->SetMesh(mesh);
+		}
+		{
+			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"ItemBox_Trap");
+			meshRenderer->SetMaterial(material->Clone());
+		}
+		obj->AddComponent(meshRenderer);
+		//obj->AddComponent(make_shared<ItemUI>());
 		scene->AddGameObject(obj);
 	}
 #pragma endregion
@@ -748,7 +792,7 @@ void SceneManager::LoadGameScene()
 
 		light->GetLight()->SetDiffuse(Vec3(0.0f, 0.0f, 0.0f));
 		light->GetLight()->SetAmbient(Vec3(0.2f, 0.2f, 0.2f));
-		light->GetLight()->SetSpecular(Vec3(0.2f, 0.2f, 0.2f));
+		light->GetLight()->SetSpecular(Vec3(0.6f, 0.6f, 0.6f));
 		light->AddComponent(make_shared<LightEffect>());
 
 		scene->AddGameObject(light);
@@ -778,7 +822,7 @@ void SceneManager::LoadGameScene()
 	}
 #pragma endregion
 
-#pragma region Point Light
+#pragma region DiaRoom Point Light
 	{
 		shared_ptr<GameObject> light = make_shared<GameObject>();
 		light->SetName(L"DiaRoom_Pnt_Light");
@@ -796,9 +840,7 @@ void SceneManager::LoadGameScene()
 		//light->GetLight()->SetLightState(false);
 		scene->AddGameObject(light);
 	}
-#pragma endregion
 
-#pragma region Point Light
 	{
 		shared_ptr<GameObject> light = make_shared<GameObject>();
 		light->SetName(L"DiaRoom_Pnt_Light");
@@ -816,9 +858,7 @@ void SceneManager::LoadGameScene()
 		//light->GetLight()->SetLightState(false);
 		scene->AddGameObject(light);
 	}
-#pragma endregion
 
-#pragma region Point Light
 	{
 		shared_ptr<GameObject> light = make_shared<GameObject>();
 		light->SetName(L"DiaRoom_Pnt_Light");
@@ -836,9 +876,7 @@ void SceneManager::LoadGameScene()
 		//light->GetLight()->SetLightState(false);
 		scene->AddGameObject(light);
 	}
-#pragma endregion
 
-#pragma region Point Light
 	{
 		shared_ptr<GameObject> light = make_shared<GameObject>();
 		light->SetName(L"DiaRoom_Pnt_Light");
@@ -860,7 +898,7 @@ void SceneManager::LoadGameScene()
 	_LoadText = L"Load Spot Light"; // 19
 	Network::GetInst()->SendLoadProgressPacket((char)1800 / 21);
 
-#pragma region Spot Light
+#pragma region DiaRoom Spot Light
 	{
 		shared_ptr<GameObject> light = make_shared<GameObject>();
 		light->SetName(L"DiaRoom_Spt_Light");
@@ -881,7 +919,7 @@ void SceneManager::LoadGameScene()
 	}
 #pragma endregion
 
-#pragma region Directional Light
+#pragma region Shadow Making Directional Light
 	//for(int i=0;i<9;i++)
 	{
 		shared_ptr<GameObject> light = make_shared<GameObject>();
