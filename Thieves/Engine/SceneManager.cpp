@@ -364,7 +364,7 @@ void SceneManager::LoadGameScene()
 	Network::GetInst()->SendLoadProgressPacket((char)500 / 21);
 	
 
-#pragma region UI_Test
+#pragma region ItemBox
 	
 	{
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
@@ -931,7 +931,7 @@ void SceneManager::LoadGameScene()
 		particle->SetCheckFrustum(false);
 		particle->AddComponent(make_shared<PlayerParticle>());
 		//particle->GetParticleSystem()->UseParticle(true);
-		particle->GetParticleSystem()->MakeParticle(L"blood", L"..\\Resources\\Texture\\Particle\\bubble.png", 3);
+		particle->GetParticleSystem()->MakeParticle(L"blood", L"..\\Resources\\Texture\\Particle\\bubble.png", 4);
 		particle->GetTransform()->SetLocalPosition(Vec3(-100.f, -100.f, -100.f));
 		scene->AddGameObject(particle);
 	}

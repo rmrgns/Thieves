@@ -193,7 +193,7 @@ void CS_Main(int3 threadIndex : SV_DispatchThreadID)
         //    }
         //}
     }
-    if (effectNum == 0)
+    if (effectNum == 0) // 디폴트값 (변경x)
     {
         if (isInitialized == 0 && threadIndex.x < numParticlesToCreate)
         {
@@ -234,7 +234,7 @@ void CS_Main(int3 threadIndex : SV_DispatchThreadID)
             g_particle[threadIndex.x].worldPos += g_particle[threadIndex.x].worldDir * speed * deltaTime;
         }
     }
-    else if (effectNum == 1)
+    else if (effectNum == 1) // 공격 파티클
     {
         if (isInitialized == 0 && threadIndex.x < numParticlesToCreate)
         {
@@ -278,7 +278,7 @@ void CS_Main(int3 threadIndex : SV_DispatchThreadID)
             g_particle[threadIndex.x].worldPos += g_particle[threadIndex.x].worldDir * speed * deltaTime;
         }
     }
-    else if (effectNum == 2)
+    else if (effectNum == 2) // 아이템 획득 파티클
     {
         if (isInitialized == 0 && threadIndex.x < numParticlesToCreate)
         {
@@ -365,14 +365,14 @@ void CS_Main(int3 threadIndex : SV_DispatchThreadID)
             {
                 g_particle[threadIndex.x].worldDir.y -= ratio / 2.f;
             }
-            
-            
 
-            
+
+
+
             g_particle[threadIndex.x].worldPos += g_particle[threadIndex.x].worldDir * speed * deltaTime;
         }
     }
-    else if (effectNum == 3)
+    else if (effectNum == 3) // 총 발사 파티클
     {
         if (isInitialized == 0 && threadIndex.x < numParticlesToCreate)
         {
@@ -417,6 +417,140 @@ void CS_Main(int3 threadIndex : SV_DispatchThreadID)
             g_particle[threadIndex.x].worldPos += g_particle[threadIndex.x].worldDir * speed * deltaTime;
         }
     }
+    else if (effectNum == 4) // 덫 피격 파티클
+    {
+        if (g_particle[threadIndex.x].alive == 0)
+        {
+            while (true)
+            {
+                int remaining = g_shared[0].addCount;
+                if (remaining <= 0)
+                    break;
+                int expected = remaining;
+                int desired = remaining - 1;
+                int originalValue;
+                InterlockedCompareExchange(g_shared[0].addCount, expected, desired, originalValue);
+                if (originalValue == expected)
+                {
+                    g_particle[threadIndex.x].alive = 1;
+                    break;
+                }
+            }
+
+            if (g_particle[threadIndex.x].alive == 1)
+            {
+                float x = ((float)threadIndex.x / (float)maxCount) + accTime;
+                float r1 = Rand(float2(x, accTime));
+                float r2 = Rand(float2(x * accTime, accTime));
+                float r3 = Rand(float2(x * accTime * accTime, accTime * accTime));
+                // [0.5~1] -> [0~1]
+                float3 noise =
+                {
+                    2 * r1 - 1,
+                    2 * r2 - 1,
+                    2 * r3 - 1
+                };
+                // [0~1] -> [-1~1]
+                float3 dir = (noise - 0.5f) * 2.f;
+                dir.y = 0.7f;
+
+                float3 pos = (noise.xyz - 0.5f) * 25;
+                pos.y = -10.f;
+                if (pos.x > 0)
+                {
+                    if (pos.z > 0)
+                    {
+                        dir.x = abs(dir.x);
+                        dir.z = abs(dir.z);
+                    }
+                    else if (pos.z < 0)
+                    {
+                        dir.x = abs(dir.x);
+                        dir.z = abs(dir.z);
+                        dir.z *= -1.f;
+                    }
+                    else
+                    {
+                        dir.x = abs(dir.x);
+                        dir.z = 0.f;
+                    }
+                }
+                else if (pos.x < 0)
+                {
+                    if (pos.z > 0)
+                    {
+                        dir.x = abs(dir.x);
+                        dir.x *= -1.f;
+                        dir.z = abs(dir.z);
+                    }
+                    else if (pos.z < 0)
+                    {
+                        dir.x = abs(dir.x);
+                        dir.x *= -1.f;
+                        dir.z = abs(dir.z);
+                        dir.z *= -1.f;
+                    }
+                    else
+                    {
+                        dir.x = abs(dir.x);
+                        dir.x *= -1.f;
+                        dir.z = 0.f;
+                    }
+                }
+                else
+                {
+                    if (pos.z > 0)
+                    {
+                        dir.x = 0.f;
+                        dir.z = abs(dir.z);
+                    }
+                    else if (pos.z < 0)
+                    {
+                        dir.x = 0.f;
+                        dir.z = abs(dir.z);
+                        dir.z *= -1.f;
+                    }
+                    else
+                    {
+                        dir.x = 0.f;
+                        dir.z = 0.f;
+                    }
+                }
+
+
+                g_particle[threadIndex.x].worldDir = normalize(dir);
+                g_particle[threadIndex.x].worldPos = pos;
+                g_particle[threadIndex.x].lifeTime = ((maxLifeTime - minLifeTime) * noise.x) + minLifeTime;
+                g_particle[threadIndex.x].curTime = 0.f;
+            }
+            
+        }
+        else
+        {
+            g_particle[threadIndex.x].curTime += deltaTime;
+            if (g_particle[threadIndex.x].lifeTime < g_particle[threadIndex.x].curTime)
+            {
+                g_particle[threadIndex.x].alive = 0;
+                return;
+            }
+
+            
+
+            float ratio = g_particle[threadIndex.x].curTime / g_particle[threadIndex.x].lifeTime;
+            if (g_particle[threadIndex.x].lifeTime < g_particle[threadIndex.x].curTime * 2.f)
+            {
+                g_particle[threadIndex.x].worldDir.y -= ratio;
+            }
+            else
+            {
+                g_particle[threadIndex.x].worldDir.y -= ratio / 2.f;
+            }
+            float speed = (maxSpeed - minSpeed) * ratio + minSpeed;
+            
+            g_particle[threadIndex.x].worldPos += g_particle[threadIndex.x].worldDir * speed * deltaTime;
+        }
+    }
+
 }
 
 #endif

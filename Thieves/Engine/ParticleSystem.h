@@ -55,8 +55,8 @@ private:
 
 	float				_minLifeTime = 2.0f;
 	float				_maxLifeTime = 2.0f;
-	float				_minSpeed = 300.f;
-	float				_maxSpeed = 300.f;
+	float				_minSpeed = 50.f;
+	float				_maxSpeed = 50.f;
 	float				_startScale = 5.f;
 	float				_endScale = 5.f;
 
