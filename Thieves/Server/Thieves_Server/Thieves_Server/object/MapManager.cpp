@@ -342,13 +342,18 @@ bool MapManager::checkCollisionSafe(CBox& ray_temp)
 	
 	CBox safe_cbox;
 
-	safe_cbox.center[0] = 0.0378830400;
-	safe_cbox.center[1] = 1.9030080000;
-	safe_cbox.center[2] = -0.3053722000;
+	safe_cbox.center[0] = 0.0378830400 		*-100.0f;	
+	safe_cbox.center[1] = 1.9030080000		*100.0f;
+	safe_cbox.center[2] = -0.3053722000		*-100.0f;
 
-	safe_cbox.extent[0] = 1.9818200000;
-	safe_cbox.extent[1] = 2.1062360000;
-	safe_cbox.extent[2] = 1.9767230000;
+	safe_cbox.extent[0] = 1.9818200000 	*100.0f;
+	safe_cbox.extent[1] = 2.1062360000 	*100.0f;
+	safe_cbox.extent[2] = 1.9767230000 	*100.0f;
+
+
+
+
+
 
 	Vector3 collisionSlidingVector = { 0,0,0 };
 
