@@ -83,6 +83,12 @@ void NetworkSystem::Update()
 
 		auto& myData = Network::GetInst()->GetNetworkObjMap().find(_networkId)->second;
 
+		if (myData->GetIsInvincible())
+		{
+			this->GetTransform()->SetLocalPosition(Vec3(0.f, -4000.f, 0.f));
+			break;
+		}
+
 		this->GetTransform()->SetLocalPosition(myData->GetPosition());
 		this->GetTransform()->SetLocalRotation(myData->GetRotation());
 		if (this->GetAnimator()->GetCurrentClipIndex() != myData->GetActionType() && (myData->GetActionType() < 16 && myData->GetActionType() >= 0))

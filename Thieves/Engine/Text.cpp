@@ -101,7 +101,7 @@ void Text::Update()
 			{
 				SetTextInfo(TEXT_FORMAT::INFO);
 				wstring mText = L"Escape Zone Activated.";
-				SetText(mText, width / 2, 300.f, 1.f, 1.f);
+				SetText(mText, width / 2 - 300.f, 300.f, 1.f, 1.f);
 			}
 		}
 
@@ -112,7 +112,7 @@ void Text::Update()
 			{
 				SetTextInfo(TEXT_FORMAT::INFO);
 				wstring mText = L"Special Escape Zone Activated.";
-				SetText(mText, width / 2, 300.f, 1.f, 1.f);
+				SetText(mText, width / 2 - 300.f, 300.f, 1.f, 1.f);
 			}
 		}
 
@@ -123,7 +123,18 @@ void Text::Update()
 			{
 				SetTextInfo(TEXT_FORMAT::INFO);
 				wstring mText = L"Safe Opened.";
-				SetText(mText, width / 2, 300.f, 1.f, 1.f);
+				SetText(mText, width / 2 - 300.f, 300.f, 1.f, 1.f);
+			}
+		}
+
+		if (iScene->GetPhaseChanged())
+		{
+			if (std::chrono::duration_cast<std::chrono::seconds>
+				(std::chrono::system_clock::now() - iScene->GetPhaseChangedTime()).count() < 3)
+			{
+				SetTextInfo(TEXT_FORMAT::INFO);
+				wstring mText = L"Someone Stole The Diamond!";
+				SetText(mText, width / 2 - 300.f, 300.f, 1.f, 1.f);
 			}
 		}
 
@@ -133,15 +144,17 @@ void Text::Update()
 		{
 			SetTextInfo(TEXT_FORMAT::INFO);
 			wstring mText = L"You've Stunned!";
-			SetText(mText, width / 2, height / 2, 1.f, 1.f);
+			SetText(mText, width / 2 - 300.f, height / 2, 1.f, 1.f);
 		}
 
 		if (Network::GetInst()->GetNetworkObjMap().find(netID)->second->GetIsInvincible())
 		{
 			SetTextInfo(TEXT_FORMAT::INFO);
 			wstring mText = L"Now Invincible!";
-			SetText(mText, width / 2, height / 2, 1.f, 1.f);
+			SetText(mText, width / 2 - 300.f, height / 2, 1.f, 1.f);
 		}
+
+		
 	}
 	else if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOBBY)
 	{
@@ -381,6 +394,15 @@ void Text::SetTextInfo(TEXT_FORMAT infoNumber)
 			width * 50.f / 1600.f, L"en-us", _writeTextFormat.GetAddressOf()));
 		break;
 	case TEXT_FORMAT::INFO:
+		// 텍스트 색깔
+		ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), _solidColorBrush.GetAddressOf()));
+
+		// 텍스트 폰트 등
+		ThrowIfFailed(_dWriteFactory->CreateTextFormat(L"상주경천섬체", nullptr,
+			DWRITE_FONT_WEIGHT_SEMI_BOLD, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL,
+			width * 50.f / 1600.f, L"en-us", _writeTextFormat.GetAddressOf()));
+		break;
+	case TEXT_FORMAT::INFO_BIG:
 		// 텍스트 색깔
 		ThrowIfFailed(_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), _solidColorBrush.GetAddressOf()));
 

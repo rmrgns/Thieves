@@ -7,6 +7,7 @@ enum class TEXT_FORMAT {
 	INROOM,
 	TIMER,
 	INFO,
+	INFO_BIG
 };
 
 class Text

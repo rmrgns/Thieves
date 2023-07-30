@@ -12,7 +12,7 @@ constexpr int MAX_CHAT_SIZE = 100;		// ä�� ������
 constexpr int MAX_ROOM_SIZE = 8;		// �� �ִ� ����
 
 constexpr int MAX_USER = MAX_ROOM_SIZE * 8;		// ���� ���� �ο�
-constexpr int MAX_ITEM = 40;
+constexpr int MAX_ITEM = 20;
 // �� �ϳ��� �ִ� �ο�
 constexpr int USER_NUM = 8;
 // ����

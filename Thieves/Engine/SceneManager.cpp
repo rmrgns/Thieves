@@ -24,6 +24,7 @@
 #include "LightEffect.h"
 #include "UsingGun.h"
 #include "PlayerShadow.h"
+#include "ItemScript.h"
 
 #include "Resources.h"
 #include "ParticleSystem.h"
@@ -581,7 +582,7 @@ void SceneManager::LoadGameScene()
 		{
 			gameObject->SetName(L"Diamond");
 			//gameObject->SetCheckFrustum(true);
-			gameObject->GetTransform()->SetLocalPosition(Vec3(100.f, 100.f, 100.f));
+			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 100.f, 0.f));
 			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 3.1415f, 0.f));
 			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 			//gameObject->AddComponent(make_shared<TestObjectMove>());
@@ -604,7 +605,7 @@ void SceneManager::LoadGameScene()
 		{
 			gameObject->SetName(L"Safe");
 			gameObject->SetCheckFrustum(false);
-			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, -4000.f, 0.f));
+			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
 			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 1.57f, 1.57f));
 			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 			//gameObject->AddComponent(make_shared<TestObjectMove>());
@@ -626,7 +627,7 @@ void SceneManager::LoadGameScene()
 		{
 			gameObject->SetName(L"OpenedSafe");
 			gameObject->SetCheckFrustum(false);
-			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, -4000.f, 0.f));
 			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 1.57f, 1.57f));
 			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 			//gameObject->AddComponent(make_shared<TestObjectMove>());
@@ -638,51 +639,99 @@ void SceneManager::LoadGameScene()
 	}
 #pragma endregion
 
-#pragma region Trap
+#pragma region Items
 	{
-
-		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Trap.fbx");
-
-		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-
-		for (auto& gameObject : gameObjects)
+		for (auto& item : Network::GetInst()->GetItemObjMap())
 		{
-			gameObject->SetName(L"Trap");
-			gameObject->SetCheckFrustum(false);
-			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 100.f, 0.f));
-			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 1.57f, 1.57f));
-			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-			//gameObject->AddComponent(make_shared<TestObjectMove>());
-			//gameObject->AddComponent(make_shared<PlayerInput>());
-			gameObject->SetStatic(true);
-			scene->AddGameObject(gameObject);
-			//gameObject->AddComponent(make_shared<TestDragon>());
+			if (item.second->GetItemType() == ITEM_NUM_GUN)
+			{
+				shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Gun.fbx");
+
+				vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+
+				for (auto& gameObject : gameObjects)
+				{
+					gameObject->SetName(L"Gun");
+					gameObject->SetCheckFrustum(false);
+					gameObject->GetTransform()->SetLocalPosition(item.second->GetPosition());
+					gameObject->GetTransform()->SetLocalRotation(Vec3(1.f, 1.57f, 1.57f));
+					gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+					gameObject->AddComponent(make_shared<ItemScript>(item.second->GetID()));
+					gameObject->SetStatic(false);
+					scene->AddGameObject(gameObject);
+				}
+			}
+			else if (item.second->GetItemType() == ITEM_NUM_TRAP)
+			{
+				shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Trap.fbx");
+
+				vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+
+				for (auto& gameObject : gameObjects)
+				{
+					gameObject->SetName(L"Trap");
+					gameObject->SetCheckFrustum(false);
+					gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 100.f, 0.f));
+					//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 1.57f, 1.57f));
+					gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+					gameObject->AddComponent(make_shared<ItemScript>(item.second->GetID()));
+					gameObject->SetStatic(true);
+					scene->AddGameObject(gameObject);
+				}
+			}
+			else
+			{
+				continue;
+			}
 		}
 	}
 #pragma endregion
 
-#pragma region Gun
-	{
-
-		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Gun.fbx");
-
-		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-
-		for (auto& gameObject : gameObjects)
-		{
-			gameObject->SetName(L"Gun");
-			gameObject->SetCheckFrustum(false);
-			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 100.f, 0.f));
-			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 1.57f, 1.57f));
-			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-			//gameObject->AddComponent(make_shared<TestObjectMove>());
-			//gameObject->AddComponent(make_shared<PlayerInput>());
-			gameObject->SetStatic(false);
-			scene->AddGameObject(gameObject);
-			//gameObject->AddComponent(make_shared<TestDragon>());
-		}
-	}
-#pragma endregion
+//#pragma region Trap
+//	{
+//
+//		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Trap.fbx");
+//
+//		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+//
+//		for (auto& gameObject : gameObjects)
+//		{
+//			gameObject->SetName(L"Trap");
+//			gameObject->SetCheckFrustum(false);
+//			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 100.f, 0.f));
+//			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 1.57f, 1.57f));
+//			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+//			//gameObject->AddComponent(make_shared<TestObjectMove>());
+//			//gameObject->AddComponent(make_shared<PlayerInput>());
+//			gameObject->SetStatic(true);
+//			scene->AddGameObject(gameObject);
+//			//gameObject->AddComponent(make_shared<TestDragon>());
+//		}
+//	}
+//#pragma endregion
+//
+//#pragma region Gun
+//	{
+//
+//		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Gun.fbx");
+//
+//		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+//
+//		for (auto& gameObject : gameObjects)
+//		{
+//			gameObject->SetName(L"Gun");
+//			gameObject->SetCheckFrustum(false);
+//			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 100.f, 0.f));
+//			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 1.57f, 1.57f));
+//			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+//			//gameObject->AddComponent(make_shared<TestObjectMove>());
+//			//gameObject->AddComponent(make_shared<PlayerInput>());
+//			gameObject->SetStatic(false);
+//			scene->AddGameObject(gameObject);
+//			//gameObject->AddComponent(make_shared<TestDragon>());
+//		}
+//	}
+//#pragma endregion
 
 	_LoadText = L"Load Directinal Light"; // 17
 	Network::GetInst()->SendLoadProgressPacket((char)1500 / 21);

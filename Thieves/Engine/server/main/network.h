@@ -10,6 +10,9 @@
 #include "server/thieves_server/thieves_packet_manager.h"
 #include "server/thieves_server/thieves_send_manager.h"
 #include "server/ptr.h"
+
+class MapItem;
+
 class Network {
 private:
 	static Network* m_pInst;
@@ -83,6 +86,7 @@ public:
 	client_fw::UPtr<ThievesSendManager>& GetSendManager() { return m_send_manager; };
 
 	std::unordered_map<int, shared_ptr<NetworkMoveObj>>& GetNetworkObjMap() { return m_packet_manager->GetObjMap(); }
+	std::unordered_map<int, shared_ptr<MapItem>>& GetItemObjMap() { return m_packet_manager->GetItemObjMap(); }
 
 
 	void SendMessageToServer(const shared_ptr<MessageEventInfo>& message);

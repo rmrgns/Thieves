@@ -421,6 +421,7 @@ void ThievesPacketManager::ProcessPhaseChange(int c_id, unsigned char* p)
 	sc_packet_phase_change* packet = reinterpret_cast<sc_packet_phase_change*>(p);
 
 	//������ ���� �� �������� �ؾ���.
+
 }
 
 void ThievesPacketManager::ProcessAttack(int c_id, unsigned char* p)
@@ -461,7 +462,9 @@ void ThievesPacketManager::ProcessItemUse(int c_id, unsigned char* p)
 {
 	sc_packet_item_use* packet = reinterpret_cast<sc_packet_item_use*>(p);
 	
-	
+	auto mItem = m_item_map.find(packet->obj_id)->second;
+	mItem->SetState(ITEM_STATE::IT_SET);
+	mItem->SetPosition(Vec3(packet->x, packet->y, packet->z));
 }
 
 void ThievesPacketManager::ProcessItemInfo(int c_id, unsigned char* p)

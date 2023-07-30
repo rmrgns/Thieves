@@ -39,6 +39,11 @@ public:
 	void SetActiveSpecialEscapeTime(std::chrono::system_clock::time_point val) { m_ActiveSpecialEscapeTime = val; }
 	std::chrono::system_clock::time_point GetActiveSpecialEscapeTime() { return m_ActiveSpecialEscapeTime; }
 
+	void SetPhaseChanged(bool val) { m_isPhaseChanged = val; }
+	bool GetPhaseChanged() { return m_isPhaseChanged; }
+
+	void SetPhaseChangedTime(std::chrono::system_clock::time_point val) { m_PhaseChangedTime = val; }
+	std::chrono::system_clock::time_point GetPhaseChangedTime() { return m_PhaseChangedTime; }
 
 private:
 	bool m_isAllPlayerLoaded = false;
@@ -48,10 +53,12 @@ private:
 	bool m_isActiveEscape = false;
 	bool m_isActiveSpecialEscape = false;
 	bool m_isTimerStart = false;
+	bool m_isPhaseChanged = false;
 	std::chrono::system_clock::time_point m_startTime;
 	std::chrono::system_clock::time_point m_openSafeTime;
 	std::chrono::system_clock::time_point m_ActiveEscapeTime;
 	std::chrono::system_clock::time_point m_ActiveSpecialEscapeTime;
+	std::chrono::system_clock::time_point m_PhaseChangedTime;
 	int m_item_num = -1;
 };
 
