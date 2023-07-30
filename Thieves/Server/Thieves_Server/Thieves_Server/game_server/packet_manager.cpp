@@ -1749,7 +1749,7 @@ void PacketManager::StartGame(int room_id)
 				if (i <= (room->GetMaxUser() + 8))
 				{
 					e->InitEnemy(OBJ_TYPE::OT_POLICE, room->GetRoomID(), NPC_init_pos);
-						e->SetPos(m_map_manager->GetNPCSpawnPos().at(i));
+					e->SetPos(m_map_manager->GetNPCSpawnPos()[i%8]);
 				}
 		}
 	}
