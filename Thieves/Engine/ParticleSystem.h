@@ -33,6 +33,8 @@ public:
 	
 	void UseParticle(bool flag) { _useParticle = flag; };
 	void MakeParticle(wstring name, wstring path, int effect);
+	void SetParticleOption(float minLifeTime, float maxLifeTime, float minSpeed, float maxSpeed);
+
 	void ParticleLogic();
 
 public:

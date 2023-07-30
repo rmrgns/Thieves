@@ -69,6 +69,14 @@ void ParticleSystem::MakeParticle(wstring name, wstring path, int effect)
 	
 }
 
+void ParticleSystem::SetParticleOption(float minLifeTime, float maxLifeTime, float minSpeed, float maxSpeed)
+{
+	_minLifeTime = minLifeTime;
+	_maxLifeTime = maxLifeTime;
+	_minSpeed = minSpeed;
+	_maxSpeed = maxSpeed;
+}
+
 void ParticleSystem::ParticleLogic()
 {
 	_accTime += DELTA_TIME;
