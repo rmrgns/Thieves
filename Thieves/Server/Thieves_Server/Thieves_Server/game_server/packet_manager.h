@@ -46,7 +46,7 @@ public:
 	void SendGameDefeat(int c_id);
 	void SendStun(int c_id, int obj_id, bool stun_by_item); //obj_id가 c_id를 공격
 	void SendStunEnd(int c_id);
-	void SendPhasePacket(int c_id);
+	void SendPhasePacket(int c_id, int d_id);
 
 	void SendLoadProgress(int c_id, int p_id, int progressed);
 
@@ -81,6 +81,10 @@ public:
 	void SendGameTimerStart(int c_id);
 
 	void SendInteract(int c_id, bool val);
+
+	void SendDiamondOwnerChange(int c_id, int new_owner);
+
+	void SendItemUse(int c_id, Vector3 pos, int item_id, int item_type);
 
 	void End();
 	void Disconnect(int c_id);

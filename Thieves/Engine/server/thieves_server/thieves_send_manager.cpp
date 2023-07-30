@@ -138,6 +138,25 @@ void ThievesSendManager::SendRequestInRoomData(const SOCKET& s_socket)
 	SendPacket(s_socket, sizeof(packet), &packet);
 }
 
+void ThievesSendManager::SendSteelDiamond(const SOCKET& s_socket)
+{
+	cs_packet_steel_diamond packet;
+	packet.type = CS_PACKET_STEEL_DIAMOND;
+	packet.size = sizeof(packet);
+
+	SendPacket(s_socket, sizeof(packet), &packet);
+}
+
+void ThievesSendManager::SendUseItem(const SOCKET& s_socket)
+{
+	cs_packet_use_item packet;
+	packet.type = CS_PACKET_USE_ITEM;
+	packet.size = sizeof(packet);
+
+	SendPacket(s_socket, sizeof(packet), &packet);
+}
+
+
 void ThievesSendManager::SendBullet(const SOCKET& s_socket, Vec3 start_pos, Vec3 dir_pos)
 {
 	cs_packet_bullet packet;

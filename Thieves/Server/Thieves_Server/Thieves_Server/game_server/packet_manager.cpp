@@ -352,12 +352,13 @@ void PacketManager::SendStunEnd(int c_id)
 	cl->DoSend(sizeof(packet), &packet);
 }
 
-void PacketManager::SendPhasePacket(int c_id)
+void PacketManager::SendPhasePacket(int c_id, int d_id)
 {
 
 	sc_packet_phase_change packet;
 	packet.type = SC_PACKET_PHASE;
 	packet.size = sizeof(packet);
+	packet.diamond_player = d_id;
 
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 	cl->DoSend(sizeof(packet), &packet);
@@ -777,6 +778,32 @@ void PacketManager::SendInteract(int c_id, bool val)
 	pl->DoSend(sizeof(packet), &packet);
 }
 
+void PacketManager::SendDiamondOwnerChange(int c_id, int new_owner)
+{
+	sc_packet_diamond_owner_change packet;
+	packet.type = SC_PACKET_DIAMOND_OWNER_CHANGE;
+	packet.size = sizeof(packet);
+	packet.new_owner = new_owner;
+
+	Player* pl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	pl->DoSend(sizeof(packet), &packet);
+}
+
+void PacketManager::SendItemUse(int c_id, Vector3 pos, int item_id, int item_type)
+{
+	sc_packet_item_use packet;
+	packet.type = SC_PACKET_ITEM_USE;
+	packet.size = sizeof(packet);
+	packet.x = pos.x;
+	packet.y = pos.y;
+	packet.z = pos.z;
+	packet.obj_id = item_id;
+	packet.item_type = item_type;
+
+	Player* pl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	pl->DoSend(sizeof(packet), &packet);
+}
+
 // �񵿱�� DB�۾��� �����ϴ� Thread
 void PacketManager::DBThread()
 {
@@ -986,7 +1013,7 @@ void PacketManager::ProcessAttack(int c_id, unsigned char* p)
 
 		Player* cpl = MoveObjManager::GetInst()->GetPlayer(pl);
 
-		if (cpl->GetPos().Dist(cl->GetPos() + AttackPos) > 50.f) {
+		if (cpl->GetPos().Dist(AttackPos) < 50.f) {
 			Hit(c_id, pl);
 		}
 	}
@@ -997,6 +1024,22 @@ void PacketManager::Hit(int c_id, int p_id) { //c_id가 p_id를 공격하여 맞
 	pl->SetAttacked(true);
 	
 	SendStun(p_id, c_id, false);
+
+	if (pl->GetHasDiamond()) {
+		Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+		pl->SetHasDiamond(false);
+		cl->SetHasDiamond(true);
+
+		Room* room = m_room_manager->GetRoom(pl->GetRoomID());
+		for (auto pls : room->GetObjList()) {
+			if (false == MoveObjManager::GetInst()->IsPlayer(pls)) continue;
+			
+			SendDiamondOwnerChange(pls, c_id);
+			SendInvincible(pls, c_id);
+		}
+
+		m_Timer->AddTimer(c_id, std::chrono::system_clock::now() + 3s, EVENT_TYPE::EV_INVINCIBLE_END);
+	}
 
 	m_Timer->AddTimer(p_id, std::chrono::system_clock::now() + 3s, EVENT_TYPE::EV_STUN_END);
 }
@@ -1169,14 +1212,33 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 		}
 		else if (it->GetState() == ITEM_STATE::ST_SET)
 		{
-			if (it->GetPos().Dist(cl->GetPos()) < 30.f)
+			if (it->GetPos().Dist(cl->GetPos()) < 50.f)
 			{
+				// 아이템에 걸렸다
 				for (auto other_pl : room->GetObjList())
 				{
 					if (false == MoveObjManager::GetInst()->IsPlayer(other_pl))
 						continue;
+					
+					SendStun(other_pl, i, true);
+					
+				}
 
-					SendStun(c_id, i, true);
+				// 만약 다이아를 가지고 있는 사람이라면
+
+				if (cl->GetHasDiamond())
+				{
+					cl->SetHasDiamond(false);
+					//다이아를 가운데 위치로 변경해야 함.
+
+					for (auto other_pl : room->GetObjList())
+					{
+						if (false == MoveObjManager::GetInst()->IsPlayer(other_pl))
+							continue;
+
+						SendDiamondOwnerChange(other_pl, -1); // -1은 아무도 가지지 않았다는 뜻.
+					}
+
 				}
 
 				it->SetState(ITEM_STATE::ST_NOTUSED);
@@ -1244,11 +1306,12 @@ void PacketManager::ProcessChangePhase(int c_id, unsigned char* p)
 
 	if (room->GetRound() != 0) return;
 
+	player->SetHasDiamond(true);
+
 	for (int pl : room->GetObjList()) {
 		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
-		Player* cpl = MoveObjManager::GetInst()->GetPlayer(pl);
 		
-		SendPhasePacket(pl);
+		SendPhasePacket(pl, c_id);
 	}
 }
 
@@ -1265,6 +1328,7 @@ void PacketManager::ProcessGetItem(int c_id, unsigned char* p)
 	case ITEM_NUM_DIAMOND:
 		if (room->GetRound() == 0) {
 			// 페이즈 변경
+			// 사용하지 않음.
 			ChangePhase(c_id);
 			player->SetHasDiamond(true);
 		}
@@ -1309,9 +1373,15 @@ void PacketManager::ProcessUseItem(int c_id, unsigned char* p)
 	case ITEM_NUM_TRAP:
 		Vector3 look = Vector3(player->GetRotX(), 0.0f, player->GetRotZ());
 		Vector3 normal = look.Normalize();
-		Vector3 front = normal * 40.f;
+		Vector3 front = normal * 150.f;
 		it->SetPos(Vector3(player->GetPosX(), 0.f, player->GetPosZ()) + front);
 		it->SetState(ITEM_STATE::ST_SET);
+		for (int pl : room->GetObjList())
+		{
+			if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+
+			SendItemUse(pl, it->GetPos(), player->GetItem(), it->GetItemCode());
+		}
 		break;
 	}
 
@@ -1330,9 +1400,8 @@ void PacketManager::ChangePhase(int c_id)
 
 	for (int pl : room->GetObjList()) {
 		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
-		Player* cpl = MoveObjManager::GetInst()->GetPlayer(pl);
 
-		SendPhasePacket(pl);
+		SendPhasePacket(pl, c_id);
 	}
 }
 
