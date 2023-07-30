@@ -9,6 +9,8 @@
 #include "server/ptr.h"
 #include "server/main/packet_manager.h"
 #include "server/main/network_move_object.h"
+#include "SceneManager.h"
+#include "InGameScene.h"
 
 NetworkSystem::NetworkSystem() : Component(COMPONENT_TYPE::NETWORKOBJECT)
 {
@@ -34,6 +36,8 @@ void NetworkSystem::Update()
 		break;
 	case NetworkType::PLAYER:
 	{
+		auto iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetActiveScene());
+		if (!iScene->GetIsTimerStart()) break;
 		// 여기서 클라이언트의 인풋 처리도 같이 하는 것이 좋아 보임.
 		// 패킷을 전달해 주어야 하기 때문임.
 

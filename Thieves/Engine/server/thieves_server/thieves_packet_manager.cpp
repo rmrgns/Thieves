@@ -433,7 +433,12 @@ void ThievesPacketManager::ProcessHit(int c_id, unsigned char* p)
 {
 	sc_packet_stun* packet = reinterpret_cast<sc_packet_stun*>(p);
 
-	m_obj_map.find(packet->obj_id)->second->SetIsStun(true);
+	if (packet->stun_by_item)
+	{
+		m_item_map.find(packet->obj_id)->second->SetState(ITEM_STATE::IT_NONE);
+	}
+
+	m_obj_map.find(c_id)->second->SetIsStun(true);
 
 }
 
@@ -450,11 +455,11 @@ void ThievesPacketManager::ProcessGetItem(int c_id, unsigned char* p)
 
 	shared_ptr<InGameScene> iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetActiveScene());
 	
-	m_item_map.erase(packet->obj_id);
+	m_item_map.find(packet->obj_id)->second->SetState(ITEM_STATE::IT_OCCUPIED);
 
 	if (packet->player == m_game_info.GetNetworkID())
 	{
-		iScene->SetItemNum(packet->itemNum);
+		iScene->SetItemNum(packet->obj_id);
 	}
 }
 
