@@ -25,7 +25,7 @@
 #include "UsingGun.h"
 #include "PlayerShadow.h"
 #include "ItemScript.h"
-#include "ItemUI.h"
+//#include "ItemUI.h"
 
 #include "Resources.h"
 #include "ParticleSystem.h"
