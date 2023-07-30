@@ -328,12 +328,13 @@ void PacketManager::SendGameDefeat(int c_id)
 {
 }
 
-void PacketManager::SendStun(int c_id, int obj_id)
+void PacketManager::SendStun(int c_id, int obj_id, bool stun_by_item)
 {
 	sc_packet_stun packet;
 	packet.type = SC_PACKET_STUN;
 	packet.size = sizeof(packet);
 	packet.obj_id = obj_id;
+	packet.stun_by_item = stun_by_item;
 
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 	cl->DoSend(sizeof(packet), &packet);
@@ -981,7 +982,7 @@ void PacketManager::Hit(int c_id, int p_id) { //c_id가 p_id를 공격하여 맞
 	Player* pl = MoveObjManager::GetInst()->GetPlayer(p_id);
 	pl->SetAttacked(true);
 	
-	SendStun(p_id, c_id);
+	SendStun(p_id, c_id, false);
 
 	m_Timer->AddTimer(p_id, std::chrono::system_clock::now() + 3s, EVENT_TYPE::EV_STUN_END);
 }
@@ -1160,7 +1161,7 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 					if (false == MoveObjManager::GetInst()->IsPlayer(other_pl))
 						continue;
 
-					SendStun(c_id, i);
+					SendStun(c_id, i, true);
 					
 				}
 			}

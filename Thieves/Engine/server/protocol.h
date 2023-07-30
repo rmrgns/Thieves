@@ -344,6 +344,8 @@ struct sc_packet_stun {
 	unsigned char size;
 	char type;
 	int	obj_id;
+	bool stun_by_item;
+	int item_id;
 };
 struct sc_packet_interaction {
 };
@@ -514,7 +516,6 @@ struct sc_packet_attack {
 struct sc_packet_get_item {
 	unsigned char size;
 	char type;
-	int itemNum;
 	int obj_id;
 	int player;
 };

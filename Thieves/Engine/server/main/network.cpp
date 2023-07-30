@@ -81,7 +81,6 @@ void Network::Worker()
 			int err_no = WSAGetLastError();
 			Network::error_display(err_no);
 			closesocket(m_s_socket);
-			cout << "Network done" << endl;
 			if (exp_over->_comp_op == COMP_OP::OP_SEND)
 			{
 				delete exp_over;
@@ -90,7 +89,6 @@ void Network::Worker()
 		}
 		switch (exp_over->_comp_op) {
 		case COMP_OP::OP_RECV: {
-			cout << "recv" << endl;
 			OnRecv(client_id, exp_over, num_byte, m_s_socket);
 
 			break;
@@ -98,12 +96,10 @@ void Network::Worker()
 		case COMP_OP::OP_SEND: {
 			if (num_byte != exp_over->_wsa_buf.len) {
 				closesocket(m_s_socket);
-				cout << "failed send" << endl;
 				delete exp_over;
 			}
 			else
 			{
-				cout << "Completed send" << endl;
 				delete exp_over;
 			}
 			break;
@@ -111,7 +107,6 @@ void Network::Worker()
 
 		}
 	}
-	cout << "Worker End " << endl;
 }
 
 // Recv ��Ŷ ó��
