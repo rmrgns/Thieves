@@ -641,6 +641,24 @@ void PacketManager::SendItemInfo(int c_id, int item_id)
 	pl->DoSend(sizeof(packet), &packet);
 }
 
+void PacketManager::SendGetItem(int c_id, int item_id, int p_id)
+{
+	Player* pl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	Room* room = m_room_manager->GetRoom(pl->GetRoomID());
+
+	Item* it = room->GetItem(item_id);
+
+	if (it->GetState() == ITEM_STATE::ST_NOTUSED) return;
+
+	sc_packet_get_item packet;
+	packet.type = SC_PACKET_GET_ITEM;
+	packet.obj_id = item_id;
+	packet.player = p_id;
+	packet.size = sizeof(packet);
+
+	pl->DoSend(sizeof(packet), &packet);
+}
+
 //=====================DB
 void PacketManager::CreateDBThread()
 {
@@ -1103,6 +1121,53 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 		if (false == MoveObjManager::GetInst()->IsPlayer(other_pl))
 			continue;
 		SendMovePacket(other_pl, c_id);
+	}
+
+	for (int i = 0; i < MAX_ITEM; ++i)
+	{
+
+		if (room->GetItem(i) == nullptr) continue;
+
+		Item* it = room->GetItem(i);
+
+		if (it->GetState() == ITEM_STATE::ST_SPAWNED)
+		{
+			if (cl->GetItem() == -1) {
+				if (it->GetPos().Dist(cl->GetPos()) < 30.f)
+				{
+					for (auto other_pl : room->GetObjList())
+					{
+						if (false == MoveObjManager::GetInst()->IsPlayer(other_pl))
+							continue;
+
+						SendGetItem(other_pl, i, c_id);
+					}
+
+					it->SetState(ITEM_STATE::ST_OCCUPIED);
+					
+				}
+			}
+			else {
+				continue;
+			}
+		}
+		else if (it->GetState() == ITEM_STATE::ST_SET)
+		{
+			if (it->GetPos().Dist(cl->GetPos()) < 30.f)
+			{
+				for (auto other_pl : room->GetObjList())
+				{
+					if (false == MoveObjManager::GetInst()->IsPlayer(other_pl))
+						continue;
+
+					SendStun(c_id, i);
+					
+				}
+			}
+		}
+		else {
+			continue;
+		}
 	}
 }
 

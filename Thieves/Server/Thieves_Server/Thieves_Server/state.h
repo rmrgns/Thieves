@@ -110,5 +110,5 @@ enum class ITEM_STATE {
 	ST_NOTUSED,
 	ST_SPAWNED,
 	ST_OCCUPIED,
-	ST_MOVE,
+	ST_SET,
 };

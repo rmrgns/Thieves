@@ -86,6 +86,7 @@ public:
 	void EndGame(int room_id);
 
 	void SendItemInfo(int c_id, int item_id);
+	void SendGetItem(int c_id, int item_id, int p_id);
 
 	void CreateDBThread();
 	void DBThread();
