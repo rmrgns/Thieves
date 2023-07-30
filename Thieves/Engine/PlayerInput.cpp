@@ -96,10 +96,13 @@ void PlayerInput::LateUpdate()
 	// Attack
 	if (INPUT->GetButtonDown(KEY_TYPE::LBUTTON))
 	{
-		if (_mode == 1) {
+		if (_mode == 1)
+		{
 			if (_attackState == 0)
+			{
 				_action_type = (char)PL_ACTION_TYPE::ATTACK;
-			_attackState = 1;
+				_attackState = 1;
+			}
 		}
 		else if (_mode == 2) {
 
@@ -214,6 +217,15 @@ void PlayerInput::PlayerAttack()
 			Network::GetInst()->SendAttackPacket();
 			_index = 2;
 			GetAnimator()->Play(_index);
+			_attackCount = 0.f;
+			_attackState = 3;
+		}
+	}
+	else if (_attackState == 3)		// attack cooltime
+	{
+		_attackCount += DELTA_TIME;
+		if (_attackCount > _attackCoolTime)
+		{
 			_attackCount = 0.f;
 			_attackState = 0;
 		}
