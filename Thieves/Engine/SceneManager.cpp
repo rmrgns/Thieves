@@ -521,6 +521,8 @@ void SceneManager::LoadGameScene()
 
 #pragma region PoliceFBX
 	{
+		std::vector<int> occupied_id;
+
 		for (int i = 0; i < 8; i++)
 		{
 			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\PoliceMan.fbx");
@@ -529,10 +531,24 @@ void SceneManager::LoadGameScene()
 			{
 				gameObject->SetName(L"Police");
 				gameObject->SetCheckFrustum(false);
-				gameObject->SetStatic(true);
 				gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, -4000.f, 0.f));
-				//gameObject->GetTransform()->SetLocalRotation(Vec3(2.f * i, 2.f, 0.f));
 				gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+				gameObject->AddComponent(make_shared<NetworkSystem>());
+				//gameObject->GetTransform()->SetLocalRotation(Vec3(2.f * i, 2.f, 0.f));
+			
+
+				gameObject->SetStatic(true);
+				for (auto& p : Network::GetInst()->GetNetworkObjMap()) {
+					if (p.second->GetType() == NW_OBJ_TYPE::OT_PLAYER) {
+						if ((occupied_id.empty() || std::find(occupied_id.begin(), occupied_id.end(), p.first) == occupied_id.end()))
+						{
+							occupied_id.emplace_back(p.first);
+							gameObject->GetNetworkSystem()->SetNetworkId(p.first);
+							gameObject->GetNetworkSystem()->SetNetworkingType(NetworkType::NPC);
+							break;
+						}
+					}
+				}
 				scene->AddGameObject(gameObject);
 
 			}

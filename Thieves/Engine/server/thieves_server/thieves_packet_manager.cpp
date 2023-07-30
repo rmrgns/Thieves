@@ -107,10 +107,17 @@ void ThievesPacketManager::ProcessObjInfo(int c_id, unsigned char* p)
 	// �̰� ������ �ʹ� ������. �̷� ������� �����ָ� ������ -> ��������
 	// 
 	// ��Ŷ ���̵� ���� ������ ��Ʈ��ũ ���̵�� ���ٸ� ������Ʈ Ÿ���� ���� �÷��̾� Ÿ������, �ƴ϶�� ��Ŷ���� ���� ������Ʈ Ÿ������ �Ѵ�.
-	packet->id == m_game_info.GetNetworkID() ?
-		nw_type = NW_OBJ_TYPE::OT_MY_PLAYER : nw_type = NW_OBJ_TYPE::OT_PLAYER;
-	//-> ���߿� NPC ó���� �� ������ �� �κ��� ������ �־�� ��.
-
+	
+	
+	if (0 <= packet->id && packet->id < MAX_USER)
+	{
+		packet->id == m_game_info.GetNetworkID() ?
+			nw_type = NW_OBJ_TYPE::OT_MY_PLAYER : nw_type = NW_OBJ_TYPE::OT_PLAYER;
+	}
+	else if ((NPC_ID_START <= packet->id) && (packet->id < NPC_ID_END))
+	{
+		nw_type = NW_OBJ_TYPE::OT_NPC;
+	}
 	bool isNewData = true;
 	if (m_obj_map.contains(packet->id)) isNewData = false;
 
@@ -152,6 +159,10 @@ void ThievesPacketManager::ProcessObjInfo(int c_id, unsigned char* p)
 							nsys->SetNetworkingType(NetworkType::OTHER_PLAYER);
 						}
 						break;
+						case NW_OBJ_TYPE::OT_NPC:
+						{
+							nsys->SetNetworkingType(NetworkType::NPC);
+						}
 						// ���� OT_PLAYER �̿ܿ��� ���ͼ��� �ȵ�
 						case NW_OBJ_TYPE::OT_MY_PLAYER:
 						case NW_OBJ_TYPE::OT_NONE:

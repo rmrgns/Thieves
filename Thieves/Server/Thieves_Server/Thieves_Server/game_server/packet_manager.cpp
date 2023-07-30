@@ -292,7 +292,7 @@ void PacketManager::SendObjInfo(int c_id, int obj_id)
 	packet.z = obj->GetPosZ();
 	obj->SetPosZ(packet.z);
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
-	cout << "Send OBJ INFO ID : " << c_id << ", x : " << packet.x << ", y : " << packet.y << ", z : " << packet.z << endl;
+	cout << "Send OBJ INFO ID : " << obj_id << ", x : " << packet.x << ", y : " << packet.y << ", z : " << packet.z << endl;
 	cl->DoSend(sizeof(packet), &packet);
 
 }
@@ -1202,28 +1202,14 @@ void PacketManager::ProcessGameStart(int c_id, unsigned char* p)
 {
 	cs_packet_game_start* packet = reinterpret_cast<cs_packet_game_start*>(p);
 	Player* player = MoveObjManager::GetInst()->GetPlayer(c_id);
-	//Enemy* enemy = MoveObjManager::GetInst()->GetEnemy(c_id);
+	
 	if (player->GetRoomID() == -1) return;
-
-
 	Room* room = m_room_manager->GetRoom(player->GetRoomID());
-	//Room* room = m_room_manager->GetRoom(enemy->GetRoomID());
-	//if (room->IsGameStarted()) return;
-
 	room->SetGameStart();
-
 	for (int pl : room->GetObjList()) {
 
 		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
 		Player* cpl = MoveObjManager::GetInst()->GetPlayer(pl);
-
-		/*
-		player->state_lock.lock();
-		player->SetState(STATE::ST_INGAME);
-		player->SetIsActive(true);
-		player->state_lock.unlock();
-		*/
-
 		cpl->state_lock.lock();
 		cpl->SetState(STATE::ST_INGAME);
 		cpl->SetIsActive(true);
@@ -1645,6 +1631,7 @@ void PacketManager::ProcessOpenSafe(int r_id)
 
 		SendOpenSafe(pl);
 	}
+
 }
 
 void PacketManager::ProcessOpenEscape(int r_id)
@@ -1717,7 +1704,7 @@ void PacketManager::StartGame(int room_id)
 
 	std::shuffle(m_map_manager->GetNPCSpawnPos().begin(), m_map_manager->GetNPCSpawnPos().end(), dre);
 
-	for (int i = NPC_ID_START; i < NPC_ID_START + 8; ++i)
+	for (int i = NPC_ID_START; i < NPC_ID_START +8; ++i)
 	{
 		e = MoveObjManager::GetInst()->GetEnemy(i);
 
@@ -1746,11 +1733,11 @@ void PacketManager::StartGame(int room_id)
 		{
 			e = MoveObjManager::GetInst()->GetEnemy(obj_list[i]);
 
-				if (i <= (room->GetMaxUser() + 8))
-				{
-					e->InitEnemy(OBJ_TYPE::OT_POLICE, room->GetRoomID(), NPC_init_pos);
-					e->SetPos(m_map_manager->GetNPCSpawnPos()[i%8]);
-				}
+			if (i <= (room->GetMaxUser() + 8))
+			{
+				e->InitEnemy(OBJ_TYPE::OT_POLICE, room->GetRoomID(), NPC_init_pos);
+				e->SetPos(m_map_manager->GetNPCSpawnPos()[int(i%8)]);
+			}
 		}
 	}
 
@@ -1786,11 +1773,14 @@ void PacketManager::StartGame(int room_id)
 
 	for (auto c_id : room->GetObjList())
 	{
+		if (false == MoveObjManager::GetInst()->IsPlayer(c_id))
+			continue;
 		SendGameStart(c_id);
 	}
 
 	for (auto c_id : room->GetObjList())
 	{
+		
 		if (false == MoveObjManager::GetInst()->IsPlayer(c_id))
 			continue;
 
@@ -1798,11 +1788,13 @@ void PacketManager::StartGame(int room_id)
 		SendObjInfo(c_id, c_id);	// 자기자신
 		for (auto other_id : room->GetObjList())
 		{
-			if (false == MoveObjManager::GetInst()->IsPlayer(other_id))
-				continue;
+			//if (false == MoveObjManager::GetInst()->IsPlayer(other_id))
+			//	continue;
 			if (c_id == other_id)continue;
 			SendObjInfo(c_id, other_id);
 		}
+
+
 	}
 
 	for (auto c_id : room->GetObjList())
@@ -1821,6 +1813,8 @@ void PacketManager::StartGame(int room_id)
 		pl = MoveObjManager::GetInst()->GetPlayer(c_id);
 		SendObjInfoEnd(c_id);
 	}
+
+	
 }
 
 ////------NPC--------
@@ -1899,7 +1893,7 @@ void PacketManager::SpawnNPCTime(int enemy_id, int room_id)
 		if (false == MoveObjManager::GetInst()->IsPlayer(pl))continue;
 		SendObjInfo(pl, enemy_id);
 	}
-	m_Timer->AddTimer(enemy_id, std::chrono::system_clock::now(), EVENT_TYPE::EVENT_NPC_MOVE);
+	//m_Timer->AddTimer(enemy_id, std::chrono::system_clock::now(), EVENT_TYPE::EVENT_NPC_MOVE);
 }
 
 void PacketManager::DoNpcMove(int enemy_id, int room_id)
