@@ -98,10 +98,8 @@ void RoomScript::ClickRoomButton()
 		else if (point.y > height * 550.f / 900.f && point.y < height * 595.f / 900.f)
 		{
 			shared_ptr<RoomScene> rScene = static_pointer_cast<RoomScene>(GET_SINGLE(SceneManager)->GetActiveScene());
-			if (rScene->GetRoomMasterId() == Network::GetInst()->GetPacketManager()->GetID())
-			{
-				Network::GetInst()->SendStartPacket();
-			}
+			Network::GetInst()->SendStartPacket();
+			
 		}
 	}
 }

@@ -5,6 +5,7 @@
 
 class RayCasting
 {
+public:
 	RayCasting();
 	~RayCasting() {};
 

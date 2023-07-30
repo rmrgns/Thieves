@@ -138,6 +138,13 @@ void Text::Update()
 			}
 		}
 
+		if (iScene->GetIsInteractOn())
+		{
+			SetTextInfo(TEXT_FORMAT::INFO);
+			wstring mText = L"Interaction ON [F]";
+			SetText(mText, width / 2 - 300.f, 400.f, 1.f, 1.f);
+		}
+
 		int netID = Network::GetInst()->GetPacketManager()->GetGameInfo().GetNetworkID();
 		
 		if (Network::GetInst()->GetNetworkObjMap().find(netID)->second->GetIsStun())
@@ -154,6 +161,7 @@ void Text::Update()
 			SetText(mText, width / 2 - 300.f, height / 2, 1.f, 1.f);
 		}
 
+		
 		
 	}
 	else if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::LOBBY)

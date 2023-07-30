@@ -91,7 +91,7 @@ constexpr char SC_PACKET_PLAYER_ATTACK = 10;	// �÷��̾� ����
 constexpr char SC_PACKET_WIN = 11;				// win
 constexpr char SC_PACKET_DEFEAT = 12;			// defeat
 constexpr char SC_PACKET_STUN = 13;				// stun
-constexpr char SC_PAKCET_INTERACTION = 14;		// ��ȣ�ۿ�
+constexpr char SC_PACKET_INTERACTION = 14;		// ��ȣ�ۿ�
 constexpr char SC_PACKET_PHASE = 15;			// ������ ����  
 constexpr char SC_PACKET_TEST = 16;
 constexpr char SC_PACKET_OBJ_INFO = 17;		// OBJ ����
@@ -347,6 +347,9 @@ struct sc_packet_stun {
 	bool stun_by_item;
 };
 struct sc_packet_interaction {
+	unsigned char size;
+	char type;
+	bool interaction_on;
 };
 
 struct sc_packet_phase_change {

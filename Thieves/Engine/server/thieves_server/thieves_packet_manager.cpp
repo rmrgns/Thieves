@@ -61,7 +61,7 @@ void ThievesPacketManager::Init()
 	RegisterRecvFunction(SC_PACKET_INVINCIBLE_END, [this](int c_id, unsigned char* p) {ProcessInvincibleEnd(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_ITEM_USE, [this](int c_id, unsigned char* p) {ProcessItemUse(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_GAME_TIMER_START, [this](int c_id, unsigned char* p) {ProcessGameTimerStart(c_id, p); });
-
+	RegisterRecvFunction(SC_PACKET_INTERACTION, [this](int c_id, unsigned char* p) {ProcessInteract(c_id, p); });
 }
 
 void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
@@ -676,6 +676,23 @@ void ThievesPacketManager::ProcessGameTimerStart(int c_id, unsigned char* p)
 	{
 		iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetActiveScene());
 		iScene->SetIsTimerStart(true);
+	}
+}
+
+void ThievesPacketManager::ProcessInteract(int c_id, unsigned char* p)
+{
+	sc_packet_interaction* packet = reinterpret_cast<sc_packet_interaction*>(p);
+	
+	shared_ptr<InGameScene> iScene;
+	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
+	{
+		iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetLoadProgressScene());
+		iScene->SetIsInteractOn(packet->interaction_on);
+	}
+	else if (GET_SINGLE(SceneManager)->GetCurrentLoadProgressScene() == CURRENT_SCENE::GAME)
+	{
+		iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetActiveScene());
+		iScene->SetIsTimerStart(packet->interaction_on);
 	}
 }
 

@@ -50,6 +50,7 @@ void Player::ResetPlayer()
 	ZeroMemory(m_password, MAX_PASSWORD_SIZE + 1);
 	m_mach_user_size = 0;
 	m_socket = INVALID_SOCKET;
+	m_Item = -1;
 }
 
 void Player::Reset()

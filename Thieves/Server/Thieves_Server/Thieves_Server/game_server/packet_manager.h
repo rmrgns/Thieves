@@ -80,6 +80,8 @@ public:
 
 	void SendGameTimerStart(int c_id);
 
+	void SendInteract(int c_id, bool val);
+
 	void End();
 	void Disconnect(int c_id);
 	bool IsRoomInGame(int room_id);

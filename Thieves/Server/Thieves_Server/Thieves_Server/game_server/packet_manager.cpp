@@ -16,6 +16,7 @@
 #include "EVENT.h"
 #include "Timer.h"
 #include "Item.h"
+#include "ray/ray_casting.h"
 
 
 using namespace std;
@@ -30,6 +31,7 @@ PacketManager::PacketManager()
 	m_db = new DB;
 	m_db2 = new DB;
 	m_Timer = new Timer;
+	m_ray_casting = new RayCasting;
 
 }
 
@@ -764,6 +766,17 @@ void PacketManager::SendGameTimerStart(int c_id)
 	pl->DoSend(sizeof(packet), &packet);
 }
 
+void PacketManager::SendInteract(int c_id, bool val)
+{
+	sc_packet_interaction packet;
+	packet.type = SC_PACKET_INTERACTION;
+	packet.size = sizeof(packet);
+	packet.interaction_on = val;
+
+	Player* pl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	pl->DoSend(sizeof(packet), &packet);
+}
+
 // �񵿱�� DB�۾��� �����ϴ� Thread
 void PacketManager::DBThread()
 {
@@ -954,7 +967,7 @@ void PacketManager::ProcessAttack(int c_id, unsigned char* p)
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 
 	Vector3 AttackPos = cl->GetPos();
-	AttackPos.x += cl->GetRotX() * 10.f;
+	AttackPos.x += cl->GetRotX() * 50.f;
 	AttackPos.z += cl->GetRotZ() * 10.f;
 
 	Room* clRoom = m_room_manager->GetRoom(cl->GetRoomID());
@@ -969,10 +982,11 @@ void PacketManager::ProcessAttack(int c_id, unsigned char* p)
 
 	for (int pl : clRoom->GetObjList()) {
 		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
+		if (pl == c_id) continue;
 
 		Player* cpl = MoveObjManager::GetInst()->GetPlayer(pl);
 
-		if (cpl->GetPos().Dist(cl->GetPos()) > 30.f) {
+		if (cpl->GetPos().Dist(cl->GetPos() + AttackPos) > 50.f) {
 			Hit(c_id, pl);
 		}
 	}
@@ -1124,9 +1138,10 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 		SendMovePacket(other_pl, c_id);
 	}
 
+	SendInteract(c_id, m_ray_casting->CheckSafe(cl->GetPos(), Vector3(cl->GetRotX(), 0.f, cl->GetRotZ())));
+
 	for (int i = 0; i < MAX_ITEM; ++i)
 	{
-
 		if (room->GetItem(i) == nullptr) continue;
 
 		Item* it = room->GetItem(i);
@@ -1480,9 +1495,7 @@ void PacketManager::ProcessLeaveRoom(int c_id, unsigned char* p)
 	player->SetState(STATE::ST_LOGIN);
 	player->state_lock.unlock();
 
-	room->m_state_lock.lock();
 	room->LeaveRoom(c_id);
-	room->m_state_lock.unlock();
 
 	if (room->GetState() != ROOM_STATE::RT_FREE)
 	{
@@ -1621,6 +1634,11 @@ void PacketManager::ProcessOpenSafe(int r_id)
 {
 	Room* room = m_room_manager->GetRoom(r_id);
 
+	if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - room->GetRoundStartTime()).count() > 66)
+	{
+		return;
+	}
+
 	for (int pl : room->GetObjList())
 	{
 		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
@@ -1632,6 +1650,11 @@ void PacketManager::ProcessOpenSafe(int r_id)
 void PacketManager::ProcessOpenEscape(int r_id)
 {
 	Room* room = m_room_manager->GetRoom(r_id);
+
+	if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - room->GetRoundStartTime()).count() > 126)
+	{
+		return;
+	}
 
 	for (int pl : room->GetObjList())
 	{
@@ -1645,6 +1668,11 @@ void PacketManager::ProcessOpenSpecialEscape(int r_id)
 {
 	Room* room = m_room_manager->GetRoom(r_id);
 
+	if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - room->GetRoundStartTime()).count() > 186)
+	{
+		return;
+	}
+
 	for (int pl : room->GetObjList())
 	{
 		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
@@ -1656,6 +1684,11 @@ void PacketManager::ProcessOpenSpecialEscape(int r_id)
 void PacketManager::ProcessTimerStart(int r_id)
 {
 	Room* room = m_room_manager->GetRoom(r_id);
+
+	if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - room->GetRoundStartTime()).count() > 6)
+	{
+		return;
+	}
 
 	for (int pl : room->GetObjList())
 	{
@@ -1705,11 +1738,11 @@ void PacketManager::StartGame(int room_id)
 
 	for (int i = 0; i < obj_list.size(); ++i)
 	{
-		if (false == MoveObjManager::GetInst()->IsPlayer(obj_list[i])) {
+		if (MoveObjManager::GetInst()->IsPlayer(obj_list[i])) {
 			pl = MoveObjManager::GetInst()->GetPlayer(obj_list[i]);
 			pl->SetPos(m_map_manager->GetPlayerSpawnPos().at(i));
 		}
-		else if (false == MoveObjManager::GetInst()->IsNPC(obj_list[i]))
+		else if (MoveObjManager::GetInst()->IsNPC(obj_list[i]))
 		{
 			e = MoveObjManager::GetInst()->GetEnemy(obj_list[i]);
 

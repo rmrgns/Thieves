@@ -2,6 +2,10 @@
 #include "ray_casting.h"
 #include "CBox.h"
 
+RayCasting::RayCasting()
+{
+}
+
 Vector3 RayCasting::Shoot(Vector3 RayPos, Vector3 RayDir)
 {
 	CBox Raytemp;
@@ -64,7 +68,7 @@ bool RayCasting::CheckSafe(Vector3 RayPos, Vector3 RayDir)
 	CBox Raytemp;
 	MapManager _map_manager;
 	Vector3 collisionPoint;
-	int MAXRANGE = 100;
+	int MAXRANGE = 50;
 
 	//center
 	Raytemp.center[0] = RayPos.x;
@@ -72,9 +76,9 @@ bool RayCasting::CheckSafe(Vector3 RayPos, Vector3 RayDir)
 	Raytemp.center[2] = RayPos.z;
 
 	//extent
-	Raytemp.extent[0] = 1.f;
-	Raytemp.extent[1] = 1.f;
-	Raytemp.extent[2] = 1.f;
+	Raytemp.extent[0] = 200.f;
+	Raytemp.extent[1] = 200.f;
+	Raytemp.extent[2] = 200.f;
 
 	//right
 	Raytemp.axis[0][0] = 1.f;

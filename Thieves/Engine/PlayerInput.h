@@ -41,7 +41,6 @@ private:
 
 	//temp
 	bool		_checkCameraRotation = true;
-	
 	Vec3		recv_pos;
 
 	// Animation Index

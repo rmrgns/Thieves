@@ -38,6 +38,7 @@ private:
     std::atomic_int m_Item = -1;
     std::atomic_bool m_has_diamond = false;
     std::atomic_bool m_invincible = false;
+    std::atomic_bool m_isAbleToOpenSafe = false;
 
 public:
 

@@ -38,6 +38,9 @@ void NetworkSystem::Update()
 	{
 		auto iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetActiveScene());
 		if (!iScene->GetIsTimerStart()) break;
+
+		auto& myData = Network::GetInst()->GetNetworkObjMap().find(_networkId)->second;
+
 		// 여기서 클라이언트의 인풋 처리도 같이 하는 것이 좋아 보임.
 		// 패킷을 전달해 주어야 하기 때문임.
 
@@ -74,7 +77,7 @@ void NetworkSystem::Update()
 		Network::GetInst()->SendMovePacket(inputData, GetTransform()->GetLocalPosition(),
 			GetTransform()->GetLook(), DELTA_TIME, GetAnimator()->GetCurrentClipIndex());
 		// 자기 자신일 경우에는, 받은 데이터들을 바탕으로 내 위치를 정해 주어야 함. 단, 이 경우 룩 벡터는 적용하지 않아도 됨.
-		auto& myData = Network::GetInst()->GetNetworkObjMap().find(_networkId)->second;
+		
 
 		this->GetTransform()->SetLocalPosition(myData->GetPosition());
 

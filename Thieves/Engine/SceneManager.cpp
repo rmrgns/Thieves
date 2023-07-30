@@ -496,7 +496,7 @@ void SceneManager::LoadGameScene()
 				gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, -300.f, 0.f));
 				gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 				gameObject->AddComponent(make_shared<NetworkSystem>());
-
+				gameObject->SetStatic(false);
 				// 이미 존재하는 오브젝트들에 대해 NetworkSystem을 설정한다.
 				// 새로 생성되는 오브젝트들의 경우에는 ObjInfo가 왔을 때에 설정해 주면 된다.
 				for (auto& p : Network::GetInst()->GetNetworkObjMap()) {

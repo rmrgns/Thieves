@@ -11,7 +11,6 @@ bool MoveObjManager::IsNear(int a, int b)
 	return false;
 }
 
-
 float MoveObjManager::ObjDistance(int a, int b)
 {
 	return 0.0f;

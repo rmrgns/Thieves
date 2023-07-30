@@ -45,6 +45,9 @@ public:
 	void SetPhaseChangedTime(std::chrono::system_clock::time_point val) { m_PhaseChangedTime = val; }
 	std::chrono::system_clock::time_point GetPhaseChangedTime() { return m_PhaseChangedTime; }
 
+	void SetIsInteractOn(bool val) { m_isInteractOn = val; }
+	bool GetIsInteractOn() { return m_isInteractOn; }
+
 private:
 	bool m_isAllPlayerLoaded = false;
 	bool m_isGetAllObjInfo = false;
@@ -54,6 +57,7 @@ private:
 	bool m_isActiveSpecialEscape = false;
 	bool m_isTimerStart = false;
 	bool m_isPhaseChanged = false;
+	bool m_isInteractOn = false;
 	std::chrono::system_clock::time_point m_startTime;
 	std::chrono::system_clock::time_point m_openSafeTime;
 	std::chrono::system_clock::time_point m_ActiveEscapeTime;
