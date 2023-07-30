@@ -11,6 +11,7 @@
 #include "Texture.h"
 #include "RenderTargetGroup.h"
 #include "Text.h"
+#include "Sound.h"
 
 #include "server/thieves_server/thieves_packet_manager.h"
 #include "server/thieves_server/thieves_send_manager.h"
@@ -34,6 +35,7 @@ public:
 	shared_ptr<Text> GetText() { return _text; }
 	shared_ptr<ConstantBuffer> GetConstantBuffer(CONSTANT_BUFFER_TYPE type) { return _constantBuffers[static_cast<uint8>(type)]; }
 	shared_ptr<RenderTargetGroup> GetRTGroup(RENDER_TARGET_GROUP_TYPE type) { return _rtGroups[static_cast<uint8>(type)]; }
+	shared_ptr<Sound> GetSound() { return _sound; }
 
 	// Server
 	shared_ptr<ThievesPacketManager> GetThievesPacketManager() { return _thievesPacketManager; }
@@ -75,11 +77,12 @@ private:
 	shared_ptr<GraphicsDescriptorHeap> _graphicsDescHeap = make_shared<GraphicsDescriptorHeap>();
 	shared_ptr<ComputeDescriptorHeap> _computeDescHeap = make_shared<ComputeDescriptorHeap>();
 	shared_ptr<Text> _text = make_shared<Text>();
+	shared_ptr<Sound> _sound = make_shared<Sound>();
+	
 	shared_ptr<TextObject> _textObject = make_shared<TextObject>();
+
 	shared_ptr<ThievesPacketManager> _thievesPacketManager = make_shared<ThievesPacketManager>();
 	shared_ptr<ThievesSendManager> _thievesSendManager = make_shared<ThievesSendManager>();
-
-	//shared_ptr<TextObject> _TextObject = make_shared<TextObject>();
 
 	vector<shared_ptr<ConstantBuffer>> _constantBuffers;
 	array<shared_ptr<RenderTargetGroup>, RENDER_TARGET_GROUP_COUNT> _rtGroups;

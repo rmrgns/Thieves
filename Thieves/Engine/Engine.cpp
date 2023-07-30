@@ -9,6 +9,7 @@
 #include "Resources.h"
 #include "InstancingManager.h"
 #include "Text.h"
+#include "Sound.h"
 
 #include "TextObject.h"
 
@@ -28,6 +29,7 @@ void Engine::Init(const WindowInfo& info)
 	_graphicsDescHeap->Init(256);
 	_computeDescHeap->Init();
 	_text->Init();
+	_sound->Init();
 
 	CreateConstantBuffer(CBV_REGISTER::b0, sizeof(LightParams), 1);
 	CreateConstantBuffer(CBV_REGISTER::b1, sizeof(TransformParams), 256);

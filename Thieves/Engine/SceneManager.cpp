@@ -4,6 +4,7 @@
 #include "LobbyScene.h"
 #include "RoomScene.h"
 #include "InGameScene.h"
+#include "Sound.h"
 
 #include "Engine.h"
 #include "Material.h"
@@ -1024,6 +1025,12 @@ void SceneManager::LoadLoginScene()
 
 #pragma endregion
 
+#pragma region Sound
+	GEngine->GetSound()->PlaySound(0, 0);
+	GEngine->GetSound()->SetVolume(0, 0.1f);
+
+#pragma endregion
+
 	shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
 	shared_ptr<Scene> scene = make_shared<Scene>();
 
@@ -1401,7 +1408,10 @@ void SceneManager::LoadRoomScene()
 	SetLayerName(0, L"Default");
 
 #pragma endregion
+#pragma region Sound
+	GEngine->GetSound()->StopSound(0);
 
+#pragma endregion
 	shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
 	shared_ptr<RoomScene> scene = make_shared<RoomScene>();
 	

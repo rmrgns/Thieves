@@ -33,7 +33,7 @@ private:
 	// Player Attack
 	float		_attackCount = 0.f;
 	int32		_attackState = 0;	// 0=공격안함, 1=공격버튼 눌림, 2=공격 중
-
+	float		_attackCoolTime = 1.8f; // 공격 쿨타임
 	char		_mode = 1;
 
 	// Send Data to Server
