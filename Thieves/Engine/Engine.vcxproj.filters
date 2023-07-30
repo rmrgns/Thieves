@@ -283,6 +283,9 @@
     <ClCompile Include="ItemScript.cpp">
       <Filter>Object\Script</Filter>
     </ClCompile>
+    <ClCompile Include="ItemUI.cpp">
+      <Filter>Object\Script</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -530,6 +533,9 @@
       <Filter>Object\Script</Filter>
     </ClInclude>
     <ClInclude Include="ItemScript.h">
+      <Filter>Object\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemUI.h">
       <Filter>Object\Script</Filter>
     </ClInclude>
   </ItemGroup>

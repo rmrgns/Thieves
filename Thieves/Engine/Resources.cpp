@@ -363,6 +363,21 @@ void Resources::CreateDefaultShader()
 		Add<Shader>(L"Deferred", shader);
 	}
 
+	// Deferred (AlphaBlending)
+	{
+		ShaderInfo info =
+		{
+			SHADER_TYPE::DEFERRED,
+			RASTERIZER_TYPE::CULL_BACK,
+			DEPTH_STENCIL_TYPE::LESS,
+			BLEND_TYPE::ALPHA_BLEND,
+		};
+
+		shared_ptr<Shader> shader = make_shared<Shader>();
+		shader->CreateGraphicsShader(L"..\\Resources\\Shader\\deferred.fx", info);
+		Add<Shader>(L"DeferredAlpha", shader);
+	}
+
 	// Forward (Forward)
 	{
 		ShaderInfo info =
@@ -833,7 +848,7 @@ void Resources::CreateDefaultMaterial()
 	}
 
 
-	// ItemBoxUI
+	// ItemBox UI default
 	{
 		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"UI");
 		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"ItemBox", L"..\\Resources\\Texture\\Thieves_UI\\ItemBox.png");
@@ -841,61 +856,81 @@ void Resources::CreateDefaultMaterial()
 		material->SetShader(shader);
 		material->SetTexture(0, texture);
 		Add<Material>(L"ItemBox", material);
+	}
 
-		// EnterButtonUp
-		{
-			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"UI");
-			shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"EnterBtn", L"..\\Resources\\Texture\\Thieves_UI\\EnterRoomButton.png");
-			shared_ptr<Material> material = make_shared<Material>();
-			material->SetShader(shader);
-			material->SetTexture(0, texture);
-			Add<Material>(L"EnterBtn", material);
+	// ItemBox UI Gun
+	{
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"UI");
+		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"ItemBox_Gun", L"..\\Resources\\Texture\\Thieves_UI\\Item_Gun.png");
+		shared_ptr<Material> material = make_shared<Material>();
+		material->SetShader(shader);
+		material->SetTexture(0, texture);
+		Add<Material>(L"ItemBox_Gun", material);
+	}
 
-		}
+	// ItemBox UI Trap
+	{
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"UI");
+		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"ItemBox_Trap", L"..\\Resources\\Texture\\Thieves_UI\\Item_Trap.png");
+		shared_ptr<Material> material = make_shared<Material>();
+		material->SetShader(shader);
+		material->SetTexture(0, texture);
+		Add<Material>(L"ItemBox_Trap", material);
+	}
 
-		// ThiefIcon
-		{
-			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Forward");
-			shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"ThiefIcon", L"..\\Resources\\Texture\\thief_icon.jpg");
-			shared_ptr<Material> material = make_shared<Material>();
-			material->SetShader(shader);
-			material->SetTexture(0, texture);
-			Add<Material>(L"ThiefIcon", material);
-		}
+	// EnterButtonUp
+	{
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"UI");
+		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"EnterBtn", L"..\\Resources\\Texture\\Thieves_UI\\EnterRoomButton.png");
+		shared_ptr<Material> material = make_shared<Material>();
+		material->SetShader(shader);
+		material->SetTexture(0, texture);
+		Add<Material>(L"EnterBtn", material);
 
-		// Shadow
-		{
-			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Shadow");
-			shared_ptr<Material> material = make_shared<Material>();
-			material->SetShader(shader);
-			Add<Material>(L"Shadow", material);
-		}
+	}
 
-		// Tessellation
-		{
-			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Tessellation");
-			shared_ptr<Material> material = make_shared<Material>();
-			material->SetShader(shader);
-			Add<Material>(L"Tessellation", material);
-		}
+	// ThiefIcon
+	{
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Forward");
+		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"ThiefIcon", L"..\\Resources\\Texture\\thief_icon.jpg");
+		shared_ptr<Material> material = make_shared<Material>();
+		material->SetShader(shader);
+		material->SetTexture(0, texture);
+		Add<Material>(L"ThiefIcon", material);
+	}
 
-		// Terrain
-		{
-			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Terrain");
-			shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"Terrain", L"..\\Resources\\Texture\\Terrain\\terrain.png");
-			shared_ptr<Material> material = make_shared<Material>();
-			material->SetShader(shader);
-			material->SetTexture(0, texture);
-			Add<Material>(L"Terrain", material);
-		}
+	// Shadow
+	{
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Shadow");
+		shared_ptr<Material> material = make_shared<Material>();
+		material->SetShader(shader);
+		Add<Material>(L"Shadow", material);
+	}
 
-		// ComputeAnimation
-		{
-			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"ComputeAnimation");
-			shared_ptr<Material> material = make_shared<Material>();
-			material->SetShader(shader);
+	// Tessellation
+	{
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Tessellation");
+		shared_ptr<Material> material = make_shared<Material>();
+		material->SetShader(shader);
+		Add<Material>(L"Tessellation", material);
+	}
 
-			Add<Material>(L"ComputeAnimation", material);
-		}
+	// Terrain
+	{
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Terrain");
+		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"Terrain", L"..\\Resources\\Texture\\Terrain\\terrain.png");
+		shared_ptr<Material> material = make_shared<Material>();
+		material->SetShader(shader);
+		material->SetTexture(0, texture);
+		Add<Material>(L"Terrain", material);
+	}
+
+	// ComputeAnimation
+	{
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"ComputeAnimation");
+		shared_ptr<Material> material = make_shared<Material>();
+		material->SetShader(shader);
+
+		Add<Material>(L"ComputeAnimation", material);
 	}
 }

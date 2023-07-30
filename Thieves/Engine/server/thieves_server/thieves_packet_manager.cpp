@@ -471,11 +471,11 @@ void ThievesPacketManager::ProcessGetItem(int c_id, unsigned char* p)
 	
 	m_item_map.find(packet->obj_id)->second->SetState(ITEM_STATE::IT_OCCUPIED);
 
-	printf("c\n");
+	
 	// 아이템 획득시 UI
 	if (m_item_map.find(packet->obj_id)->second->GetItemType() == ITEM_NUM_GUN)
 	{
-		printf("GetItem\n");
+		//printf("GetItem\n");
 		for (auto& GameObject : iScene->GetGameObjects())
 		{
 			if (GameObject->GetName() == L"ItemBox_Gun")
@@ -490,7 +490,7 @@ void ThievesPacketManager::ProcessGetItem(int c_id, unsigned char* p)
 	}
 	else if (m_item_map.find(packet->obj_id)->second->GetItemType() == ITEM_NUM_TRAP)
 	{
-		printf("GetItem\n");
+		//printf("GetItem\n");
 		for (auto& GameObject : iScene->GetGameObjects())
 		{
 			if (GameObject->GetName() == L"ItemBox_Trap")
