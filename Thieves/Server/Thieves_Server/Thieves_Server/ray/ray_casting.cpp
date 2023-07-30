@@ -101,7 +101,7 @@ Vector3 RayCasting::CheckSafe(Vector3 RayPos, Vector3 RayDir)
 
 		if (_map_manager.checkCollisionSafe(Raytemp))
 		{
-			break;
+			return true;
 		}
 		Raytemp.center[0] = Raytemp.center[0] + RayDir.x;
 		Raytemp.center[1] = Raytemp.center[1] + RayDir.y;
@@ -112,5 +112,5 @@ Vector3 RayCasting::CheckSafe(Vector3 RayPos, Vector3 RayDir)
 	collisionPoint.y = Raytemp.center[1];
 	collisionPoint.z = Raytemp.center[2];
 	// Ãæµ¹ X
-	return collisionPoint;
+	return false;
 }

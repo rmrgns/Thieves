@@ -22,8 +22,7 @@ public:
 
 
 
-    void InitEnemy(OBJ_TYPE type, int room_id,
-        Vector3& pos);
+    void InitEnemy(OBJ_TYPE type, int room_id, Vector3& pos);
     void SetSpawnPoint(float x, float z);
     Vector3& GetLookVec() { return m_look; }
     Vector3& GetPrevPos() { return m_prev_pos; }

@@ -116,7 +116,7 @@ public:
 
 	std::mutex m_state_lock;
 
-
+	void EnterEnemyRoom(int c_id);
 private:
 
 	bool isGameStarted = false;

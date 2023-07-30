@@ -11,10 +11,6 @@ bool MoveObjManager::IsNear(int a, int b)
 	return false;
 }
 
-bool MoveObjManager::IsNPC(int id)
-{
-	return false;
-}
 
 float MoveObjManager::ObjDistance(int a, int b)
 {

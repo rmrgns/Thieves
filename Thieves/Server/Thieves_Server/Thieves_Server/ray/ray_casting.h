@@ -34,7 +34,7 @@ public:
 	
 	
 	Vector3 Shoot(Vector3 RayPos, Vector3 RayDir);
-	Vector3 CheckSafe(Vector3 RayPos, Vector3 RayDir);
+	bool CheckSafe(Vector3 RayPos, Vector3 RayDir);
 public:
 	float GetBulletX()const { return bulletPos.x; };
 	float GetBulletY()const { return bulletPos.y; };

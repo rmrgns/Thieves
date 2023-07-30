@@ -24,7 +24,7 @@ Room::~Room()
 void Room::Init(int user_num)
 {
 	max_user = user_num;
-	max_npc = max_user-user_num;
+	max_npc = max_user + 8;
 	curr_round = 0;
 }
 
@@ -39,7 +39,10 @@ void Room::EnterRoom(int c_id)
 	}
 	cl->state_lock.unlock();
 }
-
+void Room::EnterEnemyRoom(int c_id)
+{
+	m_obj_list.insert(c_id);
+}
 void Room::ResetRoom()
 {
 	max_user = 0;
