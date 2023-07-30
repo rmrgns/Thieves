@@ -8,7 +8,7 @@
 
 // FMOD
 #define SOUND_COUNT 4
-#define EFFECT_COUNT 3
+#define EFFECT_COUNT 10
 #define CHANNEL_COUNT 4
 
 

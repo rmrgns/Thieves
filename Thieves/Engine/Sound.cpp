@@ -13,6 +13,7 @@ void Sound::Init()
 	// effectsound List
 	FMOD_System_CreateSound(System, "..\\Resources\\Sound\\hit.mp3", FMOD_DEFAULT, 0, &_effectSound[0]);
 	FMOD_System_CreateSound(System, "..\\Resources\\Sound\\trap.mp3", FMOD_DEFAULT, 0, &_effectSound[1]);
+	FMOD_System_CreateSound(System, "..\\Resources\\Sound\\gun.mp3", FMOD_DEFAULT, 0, &_effectSound[2]);
 }
 
 void Sound::PlaySound(int bgmNum, int channelNum)

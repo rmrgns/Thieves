@@ -81,7 +81,8 @@ void PlayerParticle::LateUpdate()
 	}
 	else if (this->GetGameObject()->GetParticleSystem()->GetEffectNumber() == 4)	// trap
 	{
-
+		pos.y += 75.f;
+		GetTransform()->SetLocalPosition(pos);
 	}
 }
 
@@ -94,6 +95,14 @@ void PlayerParticle::PlayerAttack()
 		for (auto& gameObject : GET_SINGLE(SceneManager)->GetActiveScene()->GetGameObjects())
 		{
 			if (gameObject->GetName() == L"Particle")
+			{
+				gameObject->GetParticleSystem()->UseParticle(true);
+			}
+			if (gameObject->GetName() == L"ParticleGun")
+			{
+				gameObject->GetParticleSystem()->UseParticle(true);
+			}
+			if (gameObject->GetName() == L"ParticleTrap")
 			{
 				gameObject->GetParticleSystem()->UseParticle(true);
 			}
@@ -110,6 +119,14 @@ void PlayerParticle::PlayerAttack()
 			for (auto& gameObject : GET_SINGLE(SceneManager)->GetActiveScene()->GetGameObjects())
 			{
 				if (gameObject->GetName() == L"Particle")
+				{
+					gameObject->GetParticleSystem()->UseParticle(false);
+				}
+				if (gameObject->GetName() == L"ParticleGun")
+				{
+					gameObject->GetParticleSystem()->UseParticle(false);
+				}
+				if (gameObject->GetName() == L"ParticleTrap")
 				{
 					gameObject->GetParticleSystem()->UseParticle(false);
 				}

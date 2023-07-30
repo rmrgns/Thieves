@@ -125,15 +125,15 @@ void Engine::ShowFps()
 {
 	uint32 fps = GET_SINGLE(Timer)->GetFps();
 
-	RECT rect{};
+	/*RECT rect{};
 	GetWindowRect(GEngine->GetWindow().hwnd, &rect);
 	RECT rect1;
 	GetClientRect(GEngine->GetWindow().hwnd, &rect1);
 	POINT mousePos = {};
 	GetCursorPos(&mousePos);
-	ScreenToClient(GEngine->GetWindow().hwnd, &mousePos);
+	ScreenToClient(GEngine->GetWindow().hwnd, &mousePos);*/
 	WCHAR text[100] = L"";
-	::wsprintf(text, L"FPS : %d, x = %d, y = %d", fps, mousePos.x, mousePos.y);
+	::wsprintf(text, L"FPS : %d Thieves", fps);
 	::SetWindowText(_window.hwnd, text);
 }
 
