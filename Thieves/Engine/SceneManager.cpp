@@ -1022,12 +1022,13 @@ void SceneManager::LoadLoginScene()
 	_LoadText = L"Load Start";
 #pragma region LayerMask
 	SetLayerName(0, L"Default");
+
 #pragma endregion
 
 #pragma region Sound
-
 	GEngine->GetSound()->PlaySound(0, 0);
 	GEngine->GetSound()->SetVolume(0, 0.1f);
+
 #pragma endregion
 
 	shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
@@ -1407,7 +1408,10 @@ void SceneManager::LoadRoomScene()
 	SetLayerName(0, L"Default");
 
 #pragma endregion
+#pragma region Sound
+	GEngine->GetSound()->StopSound(0);
 
+#pragma endregion
 	shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
 	shared_ptr<RoomScene> scene = make_shared<RoomScene>();
 	

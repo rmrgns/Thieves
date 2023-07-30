@@ -7,6 +7,7 @@
 #include "SceneManager.h"
 #include "Engine.h"
 #include "Animator.h"
+#include "Sound.h"
 
 // Server
 #include "server/main/network.h"
@@ -100,6 +101,7 @@ void PlayerInput::LateUpdate()
 		{
 			if (_attackState == 0)
 			{
+				GEngine->GetSound()->PlayEffectSound(0, 1);
 				_action_type = (char)PL_ACTION_TYPE::ATTACK;
 				_attackState = 1;
 			}
@@ -208,6 +210,7 @@ void PlayerInput::PlayerAttack()
 		_index = 1;
 		GetAnimator()->Play(_index);
 		_attackState = 2;
+		
 	}
 	else if (_attackState == 2)
 	{
