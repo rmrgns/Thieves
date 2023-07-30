@@ -16,74 +16,46 @@ LightEffect::~LightEffect()
 
 void LightEffect::LateUpdate()
 {
-	if (INPUT->GetButtonDown(KEY_TYPE::Q))
-	{
-		// this->light on/off
-		/*if (_lightState == true)
-		{
-			this->GetGameObject()->GetLight()->SetLightState(false);
-			_lightState = false;
-		}
-		else
-		{
-			this->GetGameObject()->GetLight()->SetLightState(true);
-			_lightState = true;
-		}*/
 
-		for (auto& GameObject : GET_SINGLE(SceneManager)->GetActiveScene()->GetGameObjects())
-		{
-			if (GameObject->GetName() == L"Dir_Light")
-			{
-				if (_lightStateDir == true)
-				{
-					GameObject->GetLight()->SetLightState(false);
-					_lightStateDir = false;
-				}
-				else
-				{
-					GameObject->GetLight()->SetLightState(true);
-					_lightStateDir = true;
-				}
-			}
-		}
-	}
-	if (INPUT->GetButtonDown(KEY_TYPE::E))
-	{
-		for (auto& GameObject : GET_SINGLE(SceneManager)->GetActiveScene()->GetGameObjects())
-		{
-			if (GameObject->GetName() == L"Spt_Light")
-			{
-				if (_lightStateSpt == true)
-				{
-					GameObject->GetLight()->SetLightState(false);
-					_lightStateSpt = false;
-				}
-				else
-				{
-					GameObject->GetLight()->SetLightState(true);
-					_lightStateSpt = true;
-				}
-			}
-		}
-	}
+	//if (this->GetGameObject()->GetName() == L"Dir_Light")
+	//{
+	//	if (_lightState == true)
+	//	{
+	//		//this->GetGameObject()->GetLight()->SetLightState(false);
 
-	if (INPUT->GetButtonDown(KEY_TYPE::R))
-	{
-		for (auto& GameObject : GET_SINGLE(SceneManager)->GetActiveScene()->GetGameObjects())
-		{
-			if (GameObject->GetName() == L"Pnt_Light")
-			{
-				if (_lightStatePnt == true)
-				{
-					GameObject->GetLight()->SetLightState(false);
-					_lightStatePnt = false;
-				}
-				else
-				{
-					GameObject->GetLight()->SetLightState(true);
-					_lightStatePnt = true;
-				}
-			}
-		}
-	}
+	//		this->GetGameObject()->GetLight()->SetDiffuse(Vec3(0.8f, 0.8f, 0.8f));
+	//		this->GetGameObject()->GetLight()->SetAmbient(Vec3(0.5f, 0.5f, 0.5f));
+	//		this->GetGameObject()->GetLight()->SetSpecular(Vec3(0.5f, 0.5f, 0.5f));
+	//		_lightState = false;
+	//	}
+	//	else
+	//	{
+	//		//this->GetGameObject()->GetLight()->SetLightState(true);
+	//		this->GetGameObject()->GetLight()->SetDiffuse(Vec3(0.f, 0.f, 0.f));
+	//		this->GetGameObject()->GetLight()->SetAmbient(Vec3(0.2f, 0.2f, 0.2f));
+	//		this->GetGameObject()->GetLight()->SetSpecular(Vec3(0.2f, 0.2f, 0.2f));
+	//		_lightState = true;
+	//	}
+	//}
+
+
+
+	//if (this->GetGameObject()->GetName() == L"DiaRoom_Pnt_Light")
+	//{
+	//	if (_lightState == true)
+	//	{
+	//		//this->GetGameObject()->GetLight()->SetLightState(false);
+	//		this->GetGameObject()->GetLight()->SetDiffuse(Vec3(0.f, 0.f, 0.f));
+	//		this->GetGameObject()->GetLight()->SetAmbient(Vec3(0.f, 0.f, 0.f));
+	//		this->GetGameObject()->GetLight()->SetSpecular(Vec3(0.f, 0.f, 0.f));
+	//		_lightState = false;
+	//	}
+	//	else
+	//	{
+	//		//this->GetGameObject()->GetLight()->SetLightState(true);
+	//		_lightState = true;
+	//	}
+	//}
+
+
 }

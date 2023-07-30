@@ -749,7 +749,7 @@ void SceneManager::LoadGameScene()
 		light->GetLight()->SetDiffuse(Vec3(0.0f, 0.0f, 0.0f));
 		light->GetLight()->SetAmbient(Vec3(0.2f, 0.2f, 0.2f));
 		light->GetLight()->SetSpecular(Vec3(0.2f, 0.2f, 0.2f));
-
+		light->AddComponent(make_shared<LightEffect>());
 
 		scene->AddGameObject(light);
 	}
@@ -781,7 +781,7 @@ void SceneManager::LoadGameScene()
 #pragma region Point Light
 	{
 		shared_ptr<GameObject> light = make_shared<GameObject>();
-		light->SetName(L"Pnt_Light");
+		light->SetName(L"DiaRoom_Pnt_Light");
 		light->AddComponent(make_shared<Transform>());
 		light->GetTransform()->SetLocalPosition(Vec3(2000.f, 350.f, 0.f));
 		light->AddComponent(make_shared<Light>());
@@ -801,7 +801,7 @@ void SceneManager::LoadGameScene()
 #pragma region Point Light
 	{
 		shared_ptr<GameObject> light = make_shared<GameObject>();
-		light->SetName(L"Pnt_Light");
+		light->SetName(L"DiaRoom_Pnt_Light");
 		light->AddComponent(make_shared<Transform>());
 		light->GetTransform()->SetLocalPosition(Vec3(-2000.f, 350.f, 0.f));
 		light->AddComponent(make_shared<Light>());
@@ -821,7 +821,7 @@ void SceneManager::LoadGameScene()
 #pragma region Point Light
 	{
 		shared_ptr<GameObject> light = make_shared<GameObject>();
-		light->SetName(L"Pnt_Light");
+		light->SetName(L"DiaRoom_Pnt_Light");
 		light->AddComponent(make_shared<Transform>());
 		light->GetTransform()->SetLocalPosition(Vec3(0.f, 350.f, 2000.f));
 		light->AddComponent(make_shared<Light>());
@@ -841,7 +841,7 @@ void SceneManager::LoadGameScene()
 #pragma region Point Light
 	{
 		shared_ptr<GameObject> light = make_shared<GameObject>();
-		light->SetName(L"Pnt_Light");
+		light->SetName(L"DiaRoom_Pnt_Light");
 		light->AddComponent(make_shared<Transform>());
 		light->GetTransform()->SetLocalPosition(Vec3(0.f, 350.f, -2000.f));
 		light->AddComponent(make_shared<Light>());
@@ -863,7 +863,7 @@ void SceneManager::LoadGameScene()
 #pragma region Spot Light
 	{
 		shared_ptr<GameObject> light = make_shared<GameObject>();
-		light->SetName(L"Spt_Light");
+		light->SetName(L"DiaRoom_Spt_Light");
 		light->AddComponent(make_shared<Transform>());
 		light->GetTransform()->SetLocalPosition(Vec3(0.f, 500.f, -600.f));
 		light->AddComponent(make_shared<Light>());

@@ -13,8 +13,6 @@ public:
 
 private:
 	bool	_lightState = true;
-	bool	_lightStateDir = true;
-	bool	_lightStateSpt = true;
-	bool	_lightStatePnt = true;
+
 };
 

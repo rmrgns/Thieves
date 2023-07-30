@@ -36,7 +36,7 @@ void Light::Render()
 {
 	assert(_lightIndex >= 0);
 
-	if (_lightState == true)
+	//if (_lightState == true)
 	{
 		GetTransform()->PushData();
 
