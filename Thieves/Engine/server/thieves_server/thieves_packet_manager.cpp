@@ -21,6 +21,8 @@
 #include "GameObject.h"
 #include "NetworkSystem.h"
 #include "MapItem.h"
+#include "ParticleSystem.h"
+#include "Timer.h"
 
 using namespace std;
 using namespace client_fw;
@@ -475,7 +477,7 @@ void ThievesPacketManager::ProcessGetItem(int c_id, unsigned char* p)
 	// 아이템 획득시 UI
 	if (m_item_map.find(packet->obj_id)->second->GetItemType() == ITEM_NUM_GUN)
 	{
-		//printf("GetItem\n");
+		particleCheck = true;
 		for (auto& GameObject : iScene->GetGameObjects())
 		{
 			if (GameObject->GetName() == L"ItemBox_Gun")
@@ -483,14 +485,17 @@ void ThievesPacketManager::ProcessGetItem(int c_id, unsigned char* p)
 				Vec3 pos = GameObject->GetTransform()->GetLocalPosition();
 				pos.z = 499.f;
 				GameObject->GetTransform()->SetLocalPosition(pos);
-				
-				return;
+			}
+			else if (GameObject->GetName() == L"ParticleGetItem")
+			{
+				GameObject->GetParticleSystem()->UseParticle(true);
 			}
 		}
+
 	}
 	else if (m_item_map.find(packet->obj_id)->second->GetItemType() == ITEM_NUM_TRAP)
 	{
-		//printf("GetItem\n");
+		particleCheck = true;
 		for (auto& GameObject : iScene->GetGameObjects())
 		{
 			if (GameObject->GetName() == L"ItemBox_Trap")
@@ -498,11 +503,32 @@ void ThievesPacketManager::ProcessGetItem(int c_id, unsigned char* p)
 				Vec3 pos = GameObject->GetTransform()->GetLocalPosition();
 				pos.z = 499.f;
 				GameObject->GetTransform()->SetLocalPosition(pos);
-				return;
+			}
+			else if (GameObject->GetName() == L"ParticleGetItem")
+			{
+				GameObject->GetParticleSystem()->UseParticle(true);
 			}
 		}
+
 	}
 	
+	if (particleCheck == true)
+	{
+		particleTime += DELTA_TIME;
+
+		if (particleTime > 2.f)
+		{
+			for (auto& GameObject : iScene->GetGameObjects())
+			{
+				if (GameObject->GetName() == L"ParticleGetItem")
+				{
+					GameObject->GetParticleSystem()->UseParticle(false);
+				}
+			}
+			particleTime = 0.f;
+			particleCheck = false;
+		}
+	}
 
 	if (packet->player == m_game_info.GetNetworkID())
 	{

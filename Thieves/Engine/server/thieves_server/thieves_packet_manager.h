@@ -81,5 +81,8 @@ private:
 	char pl_action;
 	bool bRecv;
 	Vec3 recv_pos;
+
+	bool particleCheck = false;
+	float particleTime = 0.f;
 	//Vec3 recv_pos;
 };

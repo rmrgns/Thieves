@@ -31,23 +31,58 @@ void PlayerParticle::LateUpdate()
 		pos = Network::GetInst()->GetNetworkObjMap().find(myID)->second->GetPosition();
 		rotation = Network::GetInst()->GetNetworkObjMap().find(myID)->second->GetRotation();
 	}
-	pos.x += GetTransform()->GetLook().x * 100.f;
-	pos.z += GetTransform()->GetLook().z * 100.f;
-	pos.y += 100.f;
 
-	// Attack
-	if (INPUT->GetButtonDown(KEY_TYPE::LBUTTON))
+	if (this->GetGameObject()->GetParticleSystem()->GetEffectNumber() == 1)	// player attack
 	{
-		if (_attackState == 0)
+		
+		pos.x += GetTransform()->GetLook().x * 100.f;
+		pos.z += GetTransform()->GetLook().z * 100.f;
+		pos.y += 100.f;
+
+		// Attack
+		if (INPUT->GetButtonDown(KEY_TYPE::LBUTTON))
 		{
-			_attackState = 1;
-			_currentPos = pos;
+			if (_attackState == 0)
+			{
+				_attackState = 1;
+				_currentPos = pos;
+			}
 		}
+
+		PlayerAttack();
+		GetTransform()->SetLocalPosition(_currentPos);
+		GetTransform()->SetLocalRotation(rotation);
 	}
-	
-	PlayerAttack();
-	GetTransform()->SetLocalPosition(_currentPos);
-	GetTransform()->SetLocalRotation(rotation);
+	else if (this->GetGameObject()->GetParticleSystem()->GetEffectNumber() == 2)	// get item
+	{
+		pos.y += 75.f;
+		GetTransform()->SetLocalPosition(pos);
+
+	}
+	else if (this->GetGameObject()->GetParticleSystem()->GetEffectNumber() == 3)	// gun
+	{
+		pos.x += GetTransform()->GetLook().x * 100.f;
+		pos.z += GetTransform()->GetLook().z * 100.f;
+		pos.y += 100.f;
+
+		// Attack
+		if (INPUT->GetButtonDown(KEY_TYPE::LBUTTON))
+		{
+			if (_attackState == 0)
+			{
+				_attackState = 1;
+				_currentPos = pos;
+			}
+		}
+
+		PlayerAttack();
+		GetTransform()->SetLocalPosition(_currentPos);
+		GetTransform()->SetLocalRotation(rotation);
+	}
+	else if (this->GetGameObject()->GetParticleSystem()->GetEffectNumber() == 4)	// trap
+	{
+
+	}
 }
 
 void PlayerParticle::PlayerAttack()

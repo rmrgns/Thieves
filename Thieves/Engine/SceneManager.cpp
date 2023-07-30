@@ -684,6 +684,28 @@ void SceneManager::LoadGameScene()
 	}
 #pragma endregion
 
+#pragma region EscapeZone
+	{
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\EscapeZone.fbx");
+
+		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+
+		for (auto& gameObject : gameObjects)
+		{
+			gameObject->SetName(L"EscapeZone");
+			gameObject->SetCheckFrustum(false);
+			gameObject->GetTransform()->SetLocalPosition(Vec3(500.f, 100.f, 500.f));
+			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 1.57f, 1.57f));
+			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+			//gameObject->AddComponent(make_shared<TestObjectMove>());
+			//gameObject->AddComponent(make_shared<PlayerInput>());
+			gameObject->SetStatic(true);
+			scene->AddGameObject(gameObject);
+			//gameObject->AddComponent(make_shared<TestDragon>());
+		}
+	}
+#pragma endregion
+
 #pragma region Items
 	{
 		for (auto& item : Network::GetInst()->GetItemObjMap())
@@ -970,7 +992,23 @@ void SceneManager::LoadGameScene()
 		particle->SetCheckFrustum(false);
 		particle->AddComponent(make_shared<PlayerParticle>());
 		//particle->GetParticleSystem()->UseParticle(true);
-		particle->GetParticleSystem()->MakeParticle(L"blood", L"..\\Resources\\Texture\\Particle\\bubble.png", 4);
+		particle->GetParticleSystem()->MakeParticle(L"ptc", L"..\\Resources\\Texture\\Particle\\bubble.png", 3);
+		particle->GetTransform()->SetLocalPosition(Vec3(-100.f, -100.f, -100.f));
+		scene->AddGameObject(particle);
+	}
+#pragma endregion
+
+#pragma region ParticleSystem_GetItem
+	{
+		shared_ptr<GameObject> particle = make_shared<GameObject>();
+		particle->SetName(L"ParticleGetItem");
+		particle->AddComponent(make_shared<Transform>());
+		particle->AddComponent(make_shared<ParticleSystem>());
+		particle->SetCheckFrustum(false);
+		particle->AddComponent(make_shared<PlayerParticle>());
+		//particle->GetParticleSystem()->UseParticle(true);
+		particle->GetParticleSystem()->MakeParticle(L"ptcGetItem", L"..\\Resources\\Texture\\Particle\\bubble.png", 2);
+		particle->GetParticleSystem()->SetParticleOption(3.0f, 3.0f, 500.f, 500.f);
 		particle->GetTransform()->SetLocalPosition(Vec3(-100.f, -100.f, -100.f));
 		scene->AddGameObject(particle);
 	}

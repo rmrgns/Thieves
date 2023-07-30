@@ -28,7 +28,6 @@ ParticleSystem::~ParticleSystem()
 
 void ParticleSystem::FinalUpdate()
 {
-	ParticleLogic();
 	if (_useParticle == true)
 	{
 		_computeMaterial->SetInt(3, 1);
@@ -37,14 +36,14 @@ void ParticleSystem::FinalUpdate()
 	{
 		_computeMaterial->SetInt(3, 0);
 	}
+	ParticleLogic();
+	
 }
 
 void ParticleSystem::Render()
 {
 	//if (_useParticle == true)
 	{
-
-
 		GetTransform()->PushData();
 
 		_particleBuffer->PushGraphicsData(SRV_REGISTER::t9);

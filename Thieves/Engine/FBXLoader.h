@@ -103,6 +103,7 @@ private:
 
 	void CreateTextures();
 	void CreateMaterials();
+	void CreateMaterialsAlpha();
 
 	// Animation
 	void LoadBones(FbxNode* node) { LoadBones(node, 0, -1); }
