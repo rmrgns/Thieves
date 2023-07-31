@@ -540,7 +540,7 @@ void SceneManager::LoadGameScene()
 
 				gameObject->SetStatic(true);
 				for (auto& p : Network::GetInst()->GetNetworkObjMap()) {
-					if (p.second->GetType() == NW_OBJ_TYPE::OT_PLAYER) {
+					if (p.second->GetType() == NW_OBJ_TYPE::OT_NPC) {
 						if ((occupied_id.empty() || std::find(occupied_id.begin(), occupied_id.end(), p.first) == occupied_id.end()))
 						{
 							occupied_id.emplace_back(p.first);

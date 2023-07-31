@@ -25,7 +25,9 @@ void ItemUI::LateUpdate()
 	auto iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetActiveScene());
 	auto& map = Network::GetInst()->GetPacketManager()->GetItemObjMap();
 
-	if (map.find(iScene->GetItemNum())->second->GetItemType() == 1)
+
+
+	if (iScene->GetItemNum() == -1)
 	{
 		Vec3 pos = GetTransform()->GetLocalPosition();
 		pos.z = 501.f;

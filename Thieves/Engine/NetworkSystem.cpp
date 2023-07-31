@@ -115,10 +115,10 @@ void NetworkSystem::Update()
 
 		this->GetTransform()->SetLocalPosition(myData->GetPosition());
 		this->GetTransform()->SetLocalRotation(myData->GetRotation());
-		if (this->GetAnimator()->GetCurrentClipIndex() != myData->GetActionType() && (myData->GetActionType() > 16 || myData->GetActionType() < 0))
-		{
-			this->GetAnimator()->Play(myData->GetActionType());
-		}
+		//if (this->GetAnimator()->GetCurrentClipIndex() != myData->GetActionType() && (myData->GetActionType() > 16 || myData->GetActionType() < 0))
+		//{
+		//	this->GetAnimator()->Play(myData->GetActionType());
+		//}
 	}
 		break;
 	default:
