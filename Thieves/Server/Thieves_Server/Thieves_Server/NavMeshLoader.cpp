@@ -1,7 +1,9 @@
+#include "pch.h"
 #include "NavMeshLoader.h"
 #include <iostream>
 #include <cstring>
 #include <fstream>
+#include <vector.h>
 
 NavMeshLoader::NavMeshLoader() {
     navMesh = dtAllocNavMesh();
@@ -30,11 +32,20 @@ bool NavMeshLoader::loadNavMesh(const char* navMeshFilePath) {
         fclose(fp);
         return false;
     }
+    // NavMesh 객체 초기화
+    dtNavMesh* navMesh = dtAllocNavMesh();
+    if (!navMesh) {
+        std::cout << "Failed to allocate DetourNavMesh" << std::endl;
+        fclose(fp);
+        return -1;
+    }
+
 
     dtStatus status = navMesh->init(&header.params);
     if (dtStatusFailed(status)) {
         std::cout << "DetourNavMesh 초기화 실패" << std::endl;
         fclose(fp);
+
         return false;
     }
 
@@ -74,17 +85,20 @@ bool NavMeshLoader::loadNavMesh(const char* navMeshFilePath) {
 }
 
 
-bool NavMeshLoader::findPath(float startPos[3], float endPos[3], float halfExtents[3]) {
+bool NavMeshLoader::findPath(const Vector3& startPos, const Vector3& endPos, const Vector3& halfExtents) {
     dtQueryFilter filter;
     dtPolyRef startRef, endRef;
     float startNearest[3], endNearest[3];
 
-    navQuery->findNearestPoly(startPos, halfExtents, &filter, &startRef, startNearest);
-    navQuery->findNearestPoly(endPos, halfExtents, &filter, &endRef, endNearest);
+    navQuery->findNearestPoly(&startPos.x, &halfExtents.x, &filter, &startRef, startNearest);
+    navQuery->findNearestPoly(&endPos.x, &halfExtents.x, &filter, &endRef, endNearest);
 
     const int MAX_POLYS = 256;
     dtPolyRef path[MAX_POLYS];
     int pathCount;
+
+    
+
     navQuery->findPath(startRef, endRef, startNearest, endNearest, &filter, path, &pathCount, MAX_POLYS);
 
     if (pathCount > 0) {
@@ -95,22 +109,24 @@ bool NavMeshLoader::findPath(float startPos[3], float endPos[3], float halfExten
             const dtPoly* poly;
             navMesh->getTileAndPolyByRef(polyRef, &tile, &poly);
 
-            float pt[3] = { 0.0f, 0.0f, 0.0f };
+            Vector3 pt(0.0f, 0.0f, 0.0f);
             for (int j = 0; j < poly->vertCount; ++j) {
                 const float* v = &tile->verts[poly->verts[j] * 3];
-                pt[0] += v[0];
-                pt[1] += v[1];
-                pt[2] += v[2];
+                pt.x += v[0];
+                pt.y += v[1];
+                pt.z += v[2];
             }
 
             const float invVertCount = 1.0f / poly->vertCount;
-            pt[0] *= invVertCount;
-            pt[1] *= invVertCount;
-            pt[2] *= invVertCount;
+            pt.x *= invVertCount;
+            pt.y *= invVertCount;
+            pt.z *= invVertCount;
 
-            std::cout << "Point " << i << ": (" << pt[0] << ", " << pt[1] << ", " << pt[2] << ")" << std::endl;
+            std::cout << "Point " << i << ": (" << pt.x << ", " << pt.y << ", " << pt.z << ")" << std::endl;
         }
 
+        // pos 데이터 저장
+        
         return true;
     }
     else {
@@ -118,3 +134,9 @@ bool NavMeshLoader::findPath(float startPos[3], float endPos[3], float halfExten
         return false;
     }
 }
+
+
+
+
+
+

@@ -44,9 +44,11 @@ void PacketManager::Init()
 	m_map_manager->LoadMap();
 	m_map_manager->LoadSpawnArea();
 	m_map_manager->LoadEscapePoint();
+	m_map_manager->LoadPoliceDir();
 	m_map_manager->LoadItemSpawnPoint();
 	m_map_manager->LoadPlayerSpawnArea();
 	m_map_manager->LoadSpecialEscapePoint();
+	m_navmesh_loader->loadNavMesh("do_navmesh.bin");
 	m_db->Init();
 	m_db2->Init();
 }
@@ -2021,39 +2023,60 @@ void PacketManager::DoNpcMove(int enemy_id, int room_id)
 	Room* room = m_room_manager->GetRoom(room_id);
 	Enemy* enemy = MoveObjManager::GetInst()->GetEnemy(enemy_id);
 	if (false == enemy->GetIsActive())return;
+	Player* player = NULL;
+	
+	//처음에 저장할때 spawn pos를 통해 base pos들을 저장
+	// 1 2 3 4 를 따로 저장하여 basepos로 이동 될때 마다 1 2 3 4 함께 이동
+	
+	//NPC 현재위치
+	Vector3 npc_pos = enemy->GetPos();
 
-	//NPC POS
-	Vector3 npc_pos;
-
-	//이동하려는 pos
+	//NPC 다음 이동 위치
 	Vector3 target_pos;
 	
-	
-	const Vector3 base_pos; // 경찰 원래 이동하는 pos
+	const Vector3 base_pos; // 경찰이 원래 이동하는 pos
 
-	if (true)//적이 없으면 저장된 다음 위치로
-	{
-		//target_pos = base_pos;
-	}
-	else
-	{
-		target_pos = MoveObjManager::GetInst()->GetPlayer(enemy->GetTargetId())->GetPos();
-	}
-	Vector3 target_vec = Vector3{ target_pos - enemy->GetPos() };
-	enemy->DoMove(target_vec);
+	const Vector3 npc_min_pos{ npc_pos.x - 500.0f, npc_pos.z - 500.0f };
+	const Vector3 npc_max_pos{ npc_pos.x + 500.0f, npc_pos.z + 500.0f };
 	
+	//const Vector3 base_pos; // 경찰 원래 이동하는 pos
+	for (auto &pl : room->GetObjList())
+	{
+		if (false == MoveObjManager::GetInst()->IsPlayer(pl))continue;
+		player = MoveObjManager::GetInst()->GetPlayer(pl);
+		if (!(m_map_manager->CheckInRange2(player->GetPos().x, player->GetPos().z, npc_min_pos, npc_max_pos)))//적이 없으면 저장된 다음 위치로
+		{
+			target_pos = enemy->GetBasePos(enemy->GetBasePos_Direction()); 
+			enemy -> SetBasePos_Direction();
+		}
+		else
+		{
+			target_pos = player->GetPos();
+		}
 
+	}
+	
+	
+	//여기서 Astar 써서 이동
 	// A star
 	//target_vec으로 이동 필요한것 현재위치와 target 위치
 	// 이동방법 각각의 다음 이동 경로 좌표들을 받아와 저장하며 DO MOVE로 NPC 이동시킨다.
 	// 이거 고쳐야 돼
-	//for (;;)
-	//{
-	//	if (target_pos == npc_pos)
-	//	{
-	//		break;
-	//	}
-	//}
+
+	m_navmesh_loader->findPath()
+	Vector3 target_vec = Vector3{ target_pos - enemy->GetPos() };
+	enemy->DoMove(target_vec);
+
+	if (target_pos == npc_pos)
+	{
+		
+	}
+
+
+
+	
+
+	
 	
 
 	for (auto pl : room->GetObjList())

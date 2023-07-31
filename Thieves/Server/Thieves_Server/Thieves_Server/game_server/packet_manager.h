@@ -6,6 +6,7 @@
 #include "ray/ray_casting.h"
 #include "Timer.h"
 #include "NavMeshLoader.h"
+#include "recast_astar.h"
 
 class MoveObjManager;
 class DB;
@@ -130,8 +131,8 @@ private:
 	std::thread db_thread;
 	Timer* m_Timer;
 	float	_speed = 700.f;
-
-
+	NavMeshPathfinding* m_navmesh;
+	NavMeshLoader* m_navmesh_loader;
 	void ProcessSignIn(int c_id, unsigned char* p);
 	void ProcessSignUp(int c_id, unsigned char* p);
 	void ProcessAttack(int c_id, unsigned char* p);

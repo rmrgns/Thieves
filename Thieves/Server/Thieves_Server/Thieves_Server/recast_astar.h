@@ -25,6 +25,7 @@ public:
     bool LoadNavMesh(const char* navMeshFilePath);
     void FindAndPrintPath();
     Vector3 FindAndPrintPath(const float start[3], const float end[3]);
+    Vector3 vecFindAndPrintPath(const Vector3& startPos, const Vector3& endPos);
 private:
     dtNavMesh* navMesh;
     dtNavMeshQuery* navQuery;

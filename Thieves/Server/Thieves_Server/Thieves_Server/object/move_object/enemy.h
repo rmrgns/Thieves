@@ -40,7 +40,13 @@ public:
     void SetToPrevPos() {
          m_pos = m_prev_pos;
     }
-
+    Vector3 GetBasePos(int val) { return basepos[val]; };
+    int GetBasePos_Direction() { return basepos_direction; };
+    void SetBasePos_Direction() { 
+        if (basepos_direction == 3) { basepos_direction = 0; }
+        else { basepos_direction += 1; }
+    };
+           
     std::atomic_bool in_use;
     std::atomic_bool in_game = false;
 
@@ -53,4 +59,6 @@ private:
     Vector3 m_prev_pos{ 0.0f,0.0f,0.0f };
     Vector3 m_look;
     std::atomic_int target_id;
+    Vector3 basepos[4];
+    int basepos_direction = 0;
 };
