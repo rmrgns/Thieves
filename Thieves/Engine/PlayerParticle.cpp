@@ -35,8 +35,8 @@ void PlayerParticle::LateUpdate()
 	if (this->GetGameObject()->GetParticleSystem()->GetEffectNumber() == 1)	// player attack
 	{
 		
-		pos.x += GetTransform()->GetLook().x * 100.f;
-		pos.z += GetTransform()->GetLook().z * 100.f;
+		pos.x += GetTransform()->GetLook().x * 50.f;
+		pos.z += GetTransform()->GetLook().z * 50.f;
 		pos.y += 100.f;
 
 		// Attack

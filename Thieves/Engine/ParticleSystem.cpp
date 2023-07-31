@@ -17,9 +17,7 @@ ParticleSystem::ParticleSystem() : Component(COMPONENT_TYPE::PARTICLE_SYSTEM)
 	_computeSharedBuffer->Init(sizeof(ComputeSharedInfo), 1);
 
 	_mesh = GET_SINGLE(Resources)->LoadPointMesh();
-	_material = GET_SINGLE(Resources)->Get<Material>(L"Particle");
-
-	_computeMaterial = GET_SINGLE(Resources)->Get<Material>(L"ComputeParticle");
+	
 }
 
 ParticleSystem::~ParticleSystem()
@@ -42,7 +40,7 @@ void ParticleSystem::FinalUpdate()
 
 void ParticleSystem::Render()
 {
-	//if (_useParticle == true)
+	if (_useParticle == true)
 	{
 		GetTransform()->PushData();
 
@@ -61,11 +59,9 @@ void ParticleSystem::MakeParticle(wstring name, wstring path, int effect)
 	wstring pt_path = path;
 	_effectNumber = effect;
 
-	shared_ptr<Texture> tex = GET_SINGLE(Resources)->Load<Texture>(
-		pt_name, pt_path);
+	_material = GET_SINGLE(Resources)->Get<Material>(name);
 
-	_material->SetTexture(effect - 1, tex);
-	
+	_computeMaterial = GET_SINGLE(Resources)->Get<Material>(L"ComputeParticle");
 }
 
 void ParticleSystem::SetParticleOption(float minLifeTime, float maxLifeTime, float minSpeed, float maxSpeed)

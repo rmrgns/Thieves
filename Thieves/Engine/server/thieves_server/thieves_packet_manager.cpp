@@ -480,62 +480,62 @@ void ThievesPacketManager::ProcessGetItem(int c_id, unsigned char* p)
 		iScene->SetItemNum(packet->obj_id);
 
 
-		// 아이템 획득시 UI
-		if (m_item_map.find(packet->obj_id)->second->GetItemType() == ITEM_NUM_GUN)
-		{
-			particleCheck = true;
-			for (auto& GameObject : iScene->GetGameObjects())
-			{
-				if (GameObject->GetName() == L"ItemBox_Gun")
-				{
-					Vec3 pos = GameObject->GetTransform()->GetLocalPosition();
-					pos.z = 499.f;
-					GameObject->GetTransform()->SetLocalPosition(pos);
-				}
-				else if (GameObject->GetName() == L"ParticleGetItem")
-				{
-					GameObject->GetParticleSystem()->UseParticle(true);
-				}
-			}
+		//// 아이템 획득시 UI
+		//if (m_item_map.find(packet->obj_id)->second->GetItemType() == ITEM_NUM_GUN)
+		//{
+		//	particleCheck = true;
+		//	for (auto& GameObject : iScene->GetGameObjects())
+		//	{
+		//		if (GameObject->GetName() == L"ItemBox_Gun")
+		//		{
+		//			Vec3 pos = GameObject->GetTransform()->GetLocalPosition();
+		//			pos.z = 499.f;
+		//			GameObject->GetTransform()->SetLocalPosition(pos);
+		//		}
+		//		else if (GameObject->GetName() == L"ParticleGetItem")
+		//		{
+		//			GameObject->GetParticleSystem()->UseParticle(true);
+		//		}
+		//	}
 
-		}
-		else if (m_item_map.find(packet->obj_id)->second->GetItemType() == ITEM_NUM_TRAP)
-		{
-			particleCheck = true;
-			for (auto& GameObject : iScene->GetGameObjects())
-			{
-				if (GameObject->GetName() == L"ItemBox_Trap")
-				{
-					Vec3 pos = GameObject->GetTransform()->GetLocalPosition();
-					pos.z = 499.f;
-					GameObject->GetTransform()->SetLocalPosition(pos);
-				}
-				else if (GameObject->GetName() == L"ParticleGetItem")
-				{
-					GameObject->GetParticleSystem()->UseParticle(true);
-				}
-			}
+		//}
+		//else if (m_item_map.find(packet->obj_id)->second->GetItemType() == ITEM_NUM_TRAP)
+		//{
+		//	particleCheck = true;
+		//	for (auto& GameObject : iScene->GetGameObjects())
+		//	{
+		//		if (GameObject->GetName() == L"ItemBox_Trap")
+		//		{
+		//			Vec3 pos = GameObject->GetTransform()->GetLocalPosition();
+		//			pos.z = 499.f;
+		//			GameObject->GetTransform()->SetLocalPosition(pos);
+		//		}
+		//		else if (GameObject->GetName() == L"ParticleGetItem")
+		//		{
+		//			GameObject->GetParticleSystem()->UseParticle(true);
+		//		}
+		//	}
 
-		}
+		//}
 
 
-		if (particleCheck == true)
-		{
-			particleTime += DELTA_TIME;
+		//if (particleCheck == true)
+		//{
+		//	particleTime += DELTA_TIME;
 
-			if (particleTime > 2.f)
-			{
-				for (auto& GameObject : iScene->GetGameObjects())
-				{
-					if (GameObject->GetName() == L"ParticleGetItem")
-					{
-						GameObject->GetParticleSystem()->UseParticle(false);
-					}
-				}
-				particleTime = 0.f;
-				particleCheck = false;
-			}
-		}
+		//	if (particleTime > 2.f)
+		//	{
+		//		for (auto& GameObject : iScene->GetGameObjects())
+		//		{
+		//			if (GameObject->GetName() == L"ParticleGetItem")
+		//			{
+		//				GameObject->GetParticleSystem()->UseParticle(false);
+		//			}
+		//		}
+		//		particleTime = 0.f;
+		//		particleCheck = false;
+		//	}
+		//}
 
 	}
 }
@@ -547,6 +547,8 @@ void ThievesPacketManager::ProcessItemUse(int c_id, unsigned char* p)
 	auto mItem = m_item_map.find(packet->obj_id)->second;
 	mItem->SetState(ITEM_STATE::IT_SET);
 	mItem->SetPosition(Vec3(packet->x, packet->y, packet->z));
+
+
 }
 
 void ThievesPacketManager::ProcessItemInfo(int c_id, unsigned char* p)

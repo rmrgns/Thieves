@@ -678,12 +678,44 @@ void Resources::CreateDefaultMaterial()
 		Add<Material>(L"ComputeShader", material);
 	}
 
-	// Particle
+	// Particle Attack
+	{ 
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Particle");
+		shared_ptr<Material> material = make_shared<Material>();
+		material->SetShader(shader);
+		shared_ptr<Texture> tex = GET_SINGLE(Resources)->Load<Texture>(L"ptc1", L"..\\Resources\\Texture\\Particle\\blood.png");
+		material->SetTexture(0, tex);
+		Add<Material>(L"ptc1", material);
+	}
+
+	// Particle GetItem
 	{
 		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Particle");
 		shared_ptr<Material> material = make_shared<Material>();
 		material->SetShader(shader);
-		Add<Material>(L"Particle", material);
+		shared_ptr<Texture> tex = GET_SINGLE(Resources)->Load<Texture>(L"ptc2", L"..\\Resources\\Texture\\Particle\\getitem.png");
+		material->SetTexture(0, tex);
+		Add<Material>(L"ptc2", material);
+	}
+
+	// Particle Gun
+	{
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Particle");
+		shared_ptr<Material> material = make_shared<Material>();
+		material->SetShader(shader);
+		shared_ptr<Texture> tex = GET_SINGLE(Resources)->Load<Texture>(L"ptc3", L"..\\Resources\\Texture\\Particle\\mist.png");
+		material->SetTexture(0, tex);
+		Add<Material>(L"ptc3", material);
+	}
+
+	// Particle Trap
+	{
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Particle");
+		shared_ptr<Material> material = make_shared<Material>();
+		material->SetShader(shader);
+		shared_ptr<Texture> tex = GET_SINGLE(Resources)->Load<Texture>(L"ptc4", L"..\\Resources\\Texture\\Particle\\blood.png");
+		material->SetTexture(0, tex);
+		Add<Material>(L"ptc4", material);
 	}
 
 	// ComputeParticle
