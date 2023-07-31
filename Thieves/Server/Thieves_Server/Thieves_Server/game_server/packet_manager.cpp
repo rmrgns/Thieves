@@ -330,12 +330,13 @@ void PacketManager::SendGameDefeat(int c_id)
 {
 }
 
-void PacketManager::SendStun(int c_id, int obj_id, bool stun_by_item)
+void PacketManager::SendStun(int c_id, int attack_pl, int stun_pl, bool stun_by_item)
 {
 	sc_packet_stun packet;
 	packet.type = SC_PACKET_STUN;
 	packet.size = sizeof(packet);
-	packet.obj_id = obj_id;
+	packet.attack_player = attack_pl;
+	packet.stun_player = stun_pl;
 	packet.stun_by_item = stun_by_item;
 
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
@@ -345,7 +346,7 @@ void PacketManager::SendStun(int c_id, int obj_id, bool stun_by_item)
 void PacketManager::SendStunEnd(int c_id)
 {
 	sc_packet_stun_end packet;
-	packet.type = SC_PACKET_STUN;
+	packet.type = SC_PACKET_STUN_END;
 	packet.size = sizeof(packet);
 
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
@@ -738,7 +739,7 @@ void PacketManager::SendOpenSpecialEscapeArea(int c_id, int r_id)
 void PacketManager::SendInvincible(int c_id, int p_id)
 {
 	sc_packet_invincible packet;
-	packet.type = SC_PACKET_INVINCIBLE_END;
+	packet.type = SC_PACKET_INVINCIBLE;
 	packet.size = sizeof(packet);
 	packet.player = p_id;
 
@@ -994,8 +995,8 @@ void PacketManager::ProcessAttack(int c_id, unsigned char* p)
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
 
 	Vector3 AttackPos = cl->GetPos();
-	AttackPos.x += cl->GetRotX() * 50.f;
-	AttackPos.z += cl->GetRotZ() * 10.f;
+	AttackPos.x += cl->GetRotX() * 150.f;
+	AttackPos.z += cl->GetRotZ() * 150.f;
 
 	Room* clRoom = m_room_manager->GetRoom(cl->GetRoomID());
 
@@ -1023,7 +1024,7 @@ void PacketManager::Hit(int c_id, int p_id) { //c_id가 p_id를 공격하여 맞
 	Player* pl = MoveObjManager::GetInst()->GetPlayer(p_id);
 	pl->SetAttacked(true);
 	
-	SendStun(p_id, c_id, false);
+	SendStun(p_id, c_id, p_id, false);
 
 	if (pl->GetHasDiamond()) {
 		Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
@@ -1220,7 +1221,7 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 					if (false == MoveObjManager::GetInst()->IsPlayer(other_pl))
 						continue;
 					
-					SendStun(other_pl, i, true);
+					SendStun(other_pl, i, c_id, true);
 					
 				}
 
@@ -1248,6 +1249,48 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 		}
 		else {
 			continue;
+		}
+	}
+
+	if (cl->GetHasDiamond())
+	{
+		if (room->GetIsEscapeActive())
+		{
+			for (int i = 0; i < 3; ++i)
+			{
+				if (room->GetEscapePos(i).Dist(cl->GetPos()) < 50.f)
+				{
+					SendGameWin(c_id);
+
+					for (int other_pl : room->GetObjList())
+					{
+						if (false == MoveObjManager::GetInst()->IsPlayer(other_pl))
+							continue;
+
+						if (c_id == other_pl) continue;
+
+						SendGameDefeat(other_pl);
+					}
+				}
+			}
+		}
+
+		if (room->GetIsSpecialEscapeActive())
+		{
+			if (room->GetSpecialEscapePos().Dist(cl->GetPos()) < 50.f)
+			{
+				SendGameWin(c_id);
+
+				for (int other_pl : room->GetObjList())
+				{
+					if (false == MoveObjManager::GetInst()->IsPlayer(other_pl))
+						continue;
+
+					if (c_id == other_pl) continue;
+
+					SendGameDefeat(other_pl);
+				}
+			}
 		}
 	}
 }
@@ -1293,12 +1336,16 @@ void PacketManager::ProcessChangePhase(int c_id, unsigned char* p)
 	if (room->GetRound() != 0) return;
 
 	player->SetHasDiamond(true);
+	player->SetInvincible(true);
 
 	for (int pl : room->GetObjList()) {
 		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
 		
 		SendPhasePacket(pl, c_id);
+		SendInvincible(pl, c_id);
 	}
+
+	m_Timer->AddTimer(c_id, std::chrono::system_clock::now() + 3s, EVENT_TYPE::EV_INVINCIBLE_END);
 }
 
 void PacketManager::ProcessGetItem(int c_id, unsigned char* p)
@@ -1712,6 +1759,8 @@ void PacketManager::ProcessOpenEscape(int r_id)
 		return;
 	}
 
+	room->SetIsEscapeActive(true);
+
 	for (int pl : room->GetObjList())
 	{
 		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
@@ -1728,6 +1777,8 @@ void PacketManager::ProcessOpenSpecialEscape(int r_id)
 	{
 		return;
 	}
+
+	room->SetIsSpecialEscapeActive(true);
 
 	for (int pl : room->GetObjList())
 	{

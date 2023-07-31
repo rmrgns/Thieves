@@ -710,9 +710,71 @@ void SceneManager::LoadGameScene()
 
 		for (auto& gameObject : gameObjects)
 		{
-			gameObject->SetName(L"EscapeZone");
+			gameObject->SetName(L"EscapeZone1");
 			gameObject->SetCheckFrustum(false);
-			gameObject->GetTransform()->SetLocalPosition(Vec3(500.f, 100.f, 500.f));
+			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, -4000.f, 0.f));
+			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 1.57f, 1.57f));
+			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+			//gameObject->AddComponent(make_shared<TestObjectMove>());
+			//gameObject->AddComponent(make_shared<PlayerInput>());
+			gameObject->SetStatic(true);
+			scene->AddGameObject(gameObject);
+			//gameObject->AddComponent(make_shared<TestDragon>());
+		}
+	}
+
+	{
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\EscapeZone.fbx");
+
+		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+
+		for (auto& gameObject : gameObjects)
+		{
+			gameObject->SetName(L"EscapeZone2");
+			gameObject->SetCheckFrustum(false);
+			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, -4000.f, 0.f));
+			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 1.57f, 1.57f));
+			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+			//gameObject->AddComponent(make_shared<TestObjectMove>());
+			//gameObject->AddComponent(make_shared<PlayerInput>());
+			gameObject->SetStatic(true);
+			scene->AddGameObject(gameObject);
+			//gameObject->AddComponent(make_shared<TestDragon>());
+		}
+	}
+
+	{
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\EscapeZone.fbx");
+
+		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+
+		for (auto& gameObject : gameObjects)
+		{
+			gameObject->SetName(L"EscapeZone3");
+			gameObject->SetCheckFrustum(false);
+			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, -4000.f, 0.f));
+			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 1.57f, 1.57f));
+			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+			//gameObject->AddComponent(make_shared<TestObjectMove>());
+			//gameObject->AddComponent(make_shared<PlayerInput>());
+			gameObject->SetStatic(true);
+			scene->AddGameObject(gameObject);
+			//gameObject->AddComponent(make_shared<TestDragon>());
+		}
+	}
+#pragma endregion
+
+#pragma region SpecialEscapeZone
+	{
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SpecialEscapeZone.fbx");
+
+		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+
+		for (auto& gameObject : gameObjects)
+		{
+			gameObject->SetName(L"SpecialEscapeZone");
+			gameObject->SetCheckFrustum(false);
+			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, -4000.f, 0.f));
 			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 1.57f, 1.57f));
 			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 			//gameObject->AddComponent(make_shared<TestObjectMove>());

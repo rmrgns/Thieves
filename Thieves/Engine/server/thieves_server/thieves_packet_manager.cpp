@@ -64,6 +64,7 @@ void ThievesPacketManager::Init()
 	RegisterRecvFunction(SC_PACKET_ITEM_USE, [this](int c_id, unsigned char* p) {ProcessItemUse(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_GAME_TIMER_START, [this](int c_id, unsigned char* p) {ProcessGameTimerStart(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_INTERACTION, [this](int c_id, unsigned char* p) {ProcessInteract(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_DIAMOND_OWNER_CHANGE, [this](int c_id, unsigned char* p) {ProcessDiamondOwnerChange(c_id, p); });
 }
 
 void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
@@ -456,6 +457,7 @@ void ThievesPacketManager::ProcessPhaseChange(int c_id, unsigned char* p)
 void ThievesPacketManager::ProcessAttack(int c_id, unsigned char* p)
 {
 	sc_packet_attack* packet = reinterpret_cast<sc_packet_attack*>(p);
+	
 }
 
 void ThievesPacketManager::ProcessHit(int c_id, unsigned char* p)
@@ -464,18 +466,18 @@ void ThievesPacketManager::ProcessHit(int c_id, unsigned char* p)
 
 	if (packet->stun_by_item)
 	{
-		m_item_map.find(packet->obj_id)->second->SetState(ITEM_STATE::IT_NONE);
+		m_item_map.find(packet->attack_player)->second->SetState(ITEM_STATE::IT_NONE);
 	}
 
-	m_obj_map.find(c_id)->second->SetIsStun(true);
+	m_obj_map.find(packet->stun_player)->second->SetIsStun(true);
 
 }
 
 void ThievesPacketManager::ProcessStunEnd(int c_id, unsigned char* p)
 {
 	sc_packet_stun_end* packet = reinterpret_cast<sc_packet_stun_end*>(p);
-
-	m_obj_map.find(packet->obj_id)->second->SetIsStun(false);
+	
+	m_obj_map.find(c_id)->second->SetIsStun(false);
 }
 
 void ThievesPacketManager::ProcessGetItem(int c_id, unsigned char* p)
@@ -620,12 +622,52 @@ void ThievesPacketManager::ProcessActiveEscape(int c_id, unsigned char* p)
 		iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetLoadProgressScene());
 		iScene->SetIsActiveEscape(true);
 		iScene->SetActiveEscapeTime(std::chrono::system_clock::now());
+
+		for (auto& go : iScene->GetGameObjects())
+		{
+			if (go->GetName() == L"EscapeZone1")
+			{
+				go->GetTransform()->SetLocalPosition(Vec3(packet->x[0], packet->y[0], packet->z[0]));
+			}
+			else if (go->GetName() == L"EscapeZone2")
+			{
+				go->GetTransform()->SetLocalPosition(Vec3(packet->x[1], packet->y[1], packet->z[1]));
+			}
+			else if (go->GetName() == L"EscapeZone3")
+			{
+				go->GetTransform()->SetLocalPosition(Vec3(packet->x[2], packet->y[2], packet->z[2]));
+			}
+			else
+			{
+				continue;
+			}
+		}
 	}
 	else if (GET_SINGLE(SceneManager)->GetCurrentLoadProgressScene() == CURRENT_SCENE::GAME)
 	{
 		iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetActiveScene());
 		iScene->SetIsActiveEscape(true);
 		iScene->SetActiveEscapeTime(std::chrono::system_clock::now());
+
+		for (auto& go : iScene->GetGameObjects())
+		{
+			if (go->GetName() == L"EscapeZone1")
+			{
+				go->GetTransform()->SetLocalPosition(Vec3(packet->x[0], packet->y[0], packet->z[0]));
+			}
+			else if (go->GetName() == L"EscapeZone2")
+			{
+				go->GetTransform()->SetLocalPosition(Vec3(packet->x[1], packet->y[1], packet->z[1]));
+			}
+			else if (go->GetName() == L"EscapeZone3")
+			{
+				go->GetTransform()->SetLocalPosition(Vec3(packet->x[2], packet->y[2], packet->z[2]));
+			}
+			else
+			{
+				continue;
+			}
+		}
 	}
 	
 	// 오브젝트 활성화 처리 해야함.
@@ -643,12 +685,30 @@ void ThievesPacketManager::ProcessActiveSpecialEscape(int c_id, unsigned char* p
 		iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetLoadProgressScene());
 		iScene->SetIsActiveSpecialEscape(true);
 		iScene->SetActiveSpecialEscapeTime(std::chrono::system_clock::now());
+
+		for (auto& go : iScene->GetGameObjects())
+		{
+			if (go->GetName() == L"SpecialEscapeZone")
+			{
+				go->GetTransform()->SetLocalPosition(Vec3(packet->x, packet->y, packet->z));
+				break;
+			}
+		}
 	}
 	else if (GET_SINGLE(SceneManager)->GetCurrentLoadProgressScene() == CURRENT_SCENE::GAME)
 	{
 		iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetActiveScene());
 		iScene->SetIsActiveEscape(true);
 		iScene->SetActiveSpecialEscapeTime(std::chrono::system_clock::now());
+
+		for (auto& go : iScene->GetGameObjects())
+		{
+			if (go->GetName() == L"SpecialEscapeZone")
+			{
+				go->GetTransform()->SetLocalPosition(Vec3(packet->x, packet->y, packet->z));
+				break;
+			}
+		}
 	}
 
 	// 오브젝트 활성활 처리 해야함.
@@ -735,6 +795,13 @@ void ThievesPacketManager::ProcessInteract(int c_id, unsigned char* p)
 		iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetActiveScene());
 		iScene->SetIsTimerStart(packet->interaction_on);
 	}
+}
+
+void ThievesPacketManager::ProcessDiamondOwnerChange(int c_id, unsigned char* p)
+{
+	sc_packet_diamond_owner_change* packet = reinterpret_cast<sc_packet_diamond_owner_change*>(p);
+
+	SetDiamondPlayer(packet->new_owner);
 }
 
 ////----------------------수정이 필요

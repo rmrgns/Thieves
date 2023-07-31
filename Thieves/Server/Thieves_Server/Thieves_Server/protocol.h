@@ -344,7 +344,8 @@ struct sc_packet_defeat {
 struct sc_packet_stun {
 	unsigned char size;
 	char type;
-	int	obj_id;
+	int attack_player;
+	int	stun_player;
 	bool stun_by_item;
 };
 struct sc_packet_interaction {

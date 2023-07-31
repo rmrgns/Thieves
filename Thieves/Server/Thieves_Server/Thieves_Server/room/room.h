@@ -81,13 +81,13 @@ public:
 
 	void SetEscapePos(int index, float& x, float& y, float& z) {
 		m_escape_pos[index].x = x;
-		m_escape_pos[index].y = y;
+		m_escape_pos[index].y = 0;
 		m_escape_pos[index].z = z;
 	}
 
 	void SetEscapePos(int index, Vector3& vec) {
 		m_escape_pos[index].x = vec.x;
-		m_escape_pos[index].y = vec.y;
+		m_escape_pos[index].y = 0;
 		m_escape_pos[index].z = vec.z;
 	}
 

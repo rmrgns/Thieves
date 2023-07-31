@@ -50,6 +50,7 @@ public:
 	void ProcessInvincibleEnd(int c_id, unsigned char* p);
 	void ProcessGameTimerStart(int c_id, unsigned char* p);
 	void ProcessInteract(int c_id, unsigned char* p);
+	void ProcessDiamondOwnerChange(int c_id, unsigned char* p);
 
 	void ProcessTime(int c_id, unsigned char* p);
 	void ProcessNpcAttack(int c_id, unsigned char* p);
