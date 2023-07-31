@@ -127,6 +127,7 @@ constexpr char SC_PACKET_OPEN_SAFE = 45;
 constexpr char SC_PACKET_INVINCIBLE_END = 46;
 constexpr char SC_PACKET_INVINCIBLE = 47;
 constexpr char SC_PACKET_GET_ITEM = 48;
+constexpr char SC_PACKET_DIAMOND_OWNER_CHANGE = 49;
 
 
 constexpr char SC_PACKET_ATTACKMODE = 99;		// ���� ��� ���� 1. �ָ� 2. �� ���
@@ -343,7 +344,8 @@ struct sc_packet_defeat {
 struct sc_packet_stun {
 	unsigned char size;
 	char type;
-	int	obj_id;
+	int attack_player;
+	int	stun_player;
 	bool stun_by_item;
 };
 struct sc_packet_interaction {
@@ -571,4 +573,10 @@ struct sc_packet_invincible_end {
 struct sc_packet_game_timer_start {
 	unsigned char size;
 	char type;
+};
+
+struct sc_packet_diamond_owner_change {
+	unsigned char size;
+	char type;
+	int new_owner;
 };

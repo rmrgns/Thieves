@@ -21,7 +21,7 @@ void DiamondScript::Update()
 
 		Vec3 pos = Network::GetInst()->GetNetworkObjMap().find(occupied_id)->second->GetPosition();
 
-		this->GetTransform()->SetLocalPosition(Vec3(pos.x, pos.y + 250.f, pos.z));
+		this->GetTransform()->SetLocalPosition(Vec3(pos.x, pos.y + 200.f, pos.z));
 	}
 	else {
 		this->GetTransform()->SetLocalPosition(Vec3(0.f, 100.f, 0.f));

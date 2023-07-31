@@ -80,6 +80,9 @@ void Room::LeaveRoom(int c_id)
 		isGameStarted = false;
 		m_state_lock.unlock();
 
+		m_isEscapeActive = false;
+		m_isSpecialEscapeActive = false;
+
 		for (int i = 0; i < m_item_list.size(); ++i) {
 			m_item_list[i]->SetItemCode(-1);
 			m_item_list[i]->SetState(ITEM_STATE::ST_NOTUSED);

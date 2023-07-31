@@ -41,6 +41,8 @@ void NetworkSystem::Update()
 
 		auto& myData = Network::GetInst()->GetNetworkObjMap().find(_networkId)->second;
 
+		if (myData->GetIsStun()) break;
+
 		// 여기서 클라이언트의 인풋 처리도 같이 하는 것이 좋아 보임.
 		// 패킷을 전달해 주어야 하기 때문임.
 
