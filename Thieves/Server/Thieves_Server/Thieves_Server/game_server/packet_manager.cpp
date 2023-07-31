@@ -324,10 +324,22 @@ void PacketManager::SendAttackPacket(int c_id, int room_id)
 
 void PacketManager::SendGameWin(int c_id)
 {
+	sc_packet_win packet;
+	packet.type = SC_PACKET_WIN;
+	packet.size = sizeof(packet);
+
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
 }
 
 void PacketManager::SendGameDefeat(int c_id)
 {
+	sc_packet_defeat packet;
+	packet.type = SC_PACKET_DEFEAT;
+	packet.size = sizeof(packet);
+
+	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	cl->DoSend(sizeof(packet), &packet);
 }
 
 void PacketManager::SendStun(int c_id, int attack_pl, int stun_pl, bool stun_by_item)
@@ -1258,7 +1270,7 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 		{
 			for (int i = 0; i < 3; ++i)
 			{
-				if (room->GetEscapePos(i).Dist(cl->GetPos()) < 50.f)
+				if (room->GetEscapePos(i).Dist(cl->GetPos()) < 100.f)
 				{
 					SendGameWin(c_id);
 

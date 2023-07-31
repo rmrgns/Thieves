@@ -65,6 +65,8 @@ void ThievesPacketManager::Init()
 	RegisterRecvFunction(SC_PACKET_GAME_TIMER_START, [this](int c_id, unsigned char* p) {ProcessGameTimerStart(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_INTERACTION, [this](int c_id, unsigned char* p) {ProcessInteract(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_DIAMOND_OWNER_CHANGE, [this](int c_id, unsigned char* p) {ProcessDiamondOwnerChange(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_WIN, [this](int c_id, unsigned char* p) {ProcessWin(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_DEFEAT, [this](int c_id, unsigned char* p) {ProcessDefeat(c_id, p); });
 }
 
 void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
@@ -804,6 +806,40 @@ void ThievesPacketManager::ProcessDiamondOwnerChange(int c_id, unsigned char* p)
 	sc_packet_diamond_owner_change* packet = reinterpret_cast<sc_packet_diamond_owner_change*>(p);
 
 	SetDiamondPlayer(packet->new_owner);
+}
+
+void ThievesPacketManager::ProcessWin(int c_id, unsigned char* p)
+{
+	shared_ptr<InGameScene> iScene;
+	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
+	{
+		iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetLoadProgressScene());
+		iScene->SetIsGameEnd(true);
+		iScene->SetIsPlayerWin(true);
+	}
+	else if (GET_SINGLE(SceneManager)->GetCurrentLoadProgressScene() == CURRENT_SCENE::GAME)
+	{
+		iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetActiveScene());
+		iScene->SetIsGameEnd(true);
+		iScene->SetIsPlayerWin(true);
+	}
+}
+
+void ThievesPacketManager::ProcessDefeat(int C_id, unsigned char* p)
+{
+	shared_ptr<InGameScene> iScene;
+	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
+	{
+		iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetLoadProgressScene());
+		iScene->SetIsGameEnd(true);
+		iScene->SetIsPlayerWin(false);
+	}
+	else if (GET_SINGLE(SceneManager)->GetCurrentLoadProgressScene() == CURRENT_SCENE::GAME)
+	{
+		iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetActiveScene());
+		iScene->SetIsGameEnd(true);
+		iScene->SetIsPlayerWin(false);
+	}
 }
 
 ////----------------------수정이 필요

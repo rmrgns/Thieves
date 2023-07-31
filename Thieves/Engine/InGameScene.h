@@ -48,6 +48,12 @@ public:
 	void SetIsInteractOn(bool val) { m_isInteractOn = val; }
 	bool GetIsInteractOn() { return m_isInteractOn; }
 
+	void SetIsGameEnd(bool val) { m_isGameEnd = val; }
+	bool GetIsGameEnd() { return m_isGameEnd; }
+
+	void SetIsPlayerWin(bool val) { m_isPlayerWin = val; }
+	bool GetIsPlayerWin() { return m_isPlayerWin; }
+
 private:
 	bool m_isAllPlayerLoaded = false;
 	bool m_isGetAllObjInfo = false;
@@ -58,6 +64,8 @@ private:
 	bool m_isTimerStart = false;
 	bool m_isPhaseChanged = false;
 	bool m_isInteractOn = false;
+	bool m_isGameEnd = false;
+	bool m_isPlayerWin = false;
 	std::chrono::system_clock::time_point m_startTime;
 	std::chrono::system_clock::time_point m_openSafeTime;
 	std::chrono::system_clock::time_point m_ActiveEscapeTime;
