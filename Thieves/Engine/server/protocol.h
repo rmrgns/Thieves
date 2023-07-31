@@ -355,6 +355,7 @@ struct sc_packet_interaction {
 struct sc_packet_phase_change {
 	unsigned char size;
 	char type;
+	int diamond_player;
 };
 
 struct sc_packet_test {

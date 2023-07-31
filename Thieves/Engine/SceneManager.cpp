@@ -26,6 +26,7 @@
 #include "UsingGun.h"
 #include "PlayerShadow.h"
 #include "ItemScript.h"
+#include "DiamondScript.h"
 //#include "ItemUI.h"
 
 #include "Resources.h"
@@ -649,6 +650,7 @@ void SceneManager::LoadGameScene()
 			//gameObject->AddComponent(make_shared<TestObjectMove>());
 			//gameObject->AddComponent(make_shared<PlayerInput>());
 			gameObject->SetStatic(true);
+			gameObject->AddComponent(make_shared<DiamondScript>());
 			scene->AddGameObject(gameObject);
 			//gameObject->AddComponent(make_shared<TestDragon>());
 		}
@@ -999,7 +1001,7 @@ void SceneManager::LoadGameScene()
 	_LoadText = L"Load Particle"; // 20
 	Network::GetInst()->SendLoadProgressPacket((char)1900 / 21);
 
-#pragma region ParticleSystem
+#pragma region ParticleSystem_Attack
 	{
 		shared_ptr<GameObject> particle = make_shared<GameObject>();
 		particle->SetName(L"Particle");
@@ -1008,7 +1010,7 @@ void SceneManager::LoadGameScene()
 		particle->SetCheckFrustum(false);
 		particle->AddComponent(make_shared<PlayerParticle>());
 		//particle->GetParticleSystem()->UseParticle(true);
-		particle->GetParticleSystem()->MakeParticle(L"ptc", L"..\\Resources\\Texture\\Particle\\bubble.png", 3);
+		particle->GetParticleSystem()->MakeParticle(L"ptc", L"..\\Resources\\Texture\\Particle\\bubble.png", 1);
 		particle->GetTransform()->SetLocalPosition(Vec3(-100.f, -100.f, -100.f));
 		scene->AddGameObject(particle);
 	}
@@ -1023,8 +1025,40 @@ void SceneManager::LoadGameScene()
 		particle->SetCheckFrustum(false);
 		particle->AddComponent(make_shared<PlayerParticle>());
 		//particle->GetParticleSystem()->UseParticle(true);
-		particle->GetParticleSystem()->MakeParticle(L"ptcGetItem", L"..\\Resources\\Texture\\Particle\\bubble.png", 2);
-		particle->GetParticleSystem()->SetParticleOption(3.0f, 3.0f, 500.f, 500.f);
+		particle->GetParticleSystem()->MakeParticle(L"ptc", L"..\\Resources\\Texture\\Particle\\bubble.png", 2);
+		//particle->GetParticleSystem()->SetParticleOption(3.0f, 3.0f, 500.f, 500.f);
+		particle->GetTransform()->SetLocalPosition(Vec3(-100.f, -100.f, -100.f));
+		scene->AddGameObject(particle);
+	}
+#pragma endregion
+
+#pragma region ParticleSystem_Gun
+	{
+		shared_ptr<GameObject> particle = make_shared<GameObject>();
+		particle->SetName(L"ParticleGun");
+		particle->AddComponent(make_shared<Transform>());
+		particle->AddComponent(make_shared<ParticleSystem>());
+		particle->SetCheckFrustum(false);
+		particle->AddComponent(make_shared<PlayerParticle>());
+		//particle->GetParticleSystem()->UseParticle(true);
+		particle->GetParticleSystem()->MakeParticle(L"ptc", L"..\\Resources\\Texture\\Particle\\gun.png", 3);
+		//particle->GetParticleSystem()->SetParticleOption(3.0f, 3.0f, 500.f, 500.f);
+		particle->GetTransform()->SetLocalPosition(Vec3(-100.f, -100.f, -100.f));
+		scene->AddGameObject(particle);
+	}
+#pragma endregion
+
+#pragma region ParticleSystem_Trap
+	{
+		shared_ptr<GameObject> particle = make_shared<GameObject>();
+		particle->SetName(L"ParticleTrap");
+		particle->AddComponent(make_shared<Transform>());
+		particle->AddComponent(make_shared<ParticleSystem>());
+		particle->SetCheckFrustum(false);
+		particle->AddComponent(make_shared<PlayerParticle>());
+		//particle->GetParticleSystem()->UseParticle(true);
+		particle->GetParticleSystem()->MakeParticle(L"ptc", L"..\\Resources\\Texture\\Particle\\blood.png", 4);
+		//particle->GetParticleSystem()->SetParticleOption(3.0f, 3.0f, 500.f, 500.f);
 		particle->GetTransform()->SetLocalPosition(Vec3(-100.f, -100.f, -100.f));
 		scene->AddGameObject(particle);
 	}

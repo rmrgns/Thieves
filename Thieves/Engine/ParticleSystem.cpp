@@ -60,11 +60,11 @@ void ParticleSystem::MakeParticle(wstring name, wstring path, int effect)
 	wstring pt_name = name;
 	wstring pt_path = path;
 	_effectNumber = effect;
-	
+
 	shared_ptr<Texture> tex = GET_SINGLE(Resources)->Load<Texture>(
 		pt_name, pt_path);
 
-	_material->SetTexture(0, tex);
+	_material->SetTexture(effect - 1, tex);
 	
 }
 

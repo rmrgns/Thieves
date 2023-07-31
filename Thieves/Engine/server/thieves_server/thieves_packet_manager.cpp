@@ -432,6 +432,8 @@ void ThievesPacketManager::ProcessBullet(int c_id, unsigned char* p)
 void ThievesPacketManager::ProcessPhaseChange(int c_id, unsigned char* p)
 {
 	sc_packet_phase_change* packet = reinterpret_cast<sc_packet_phase_change*>(p);
+	
+	SetDiamondPlayer(packet->diamond_player);
 
 	shared_ptr<InGameScene> iScene;
 	if (GET_SINGLE(SceneManager)->GetCurrentScene() == CURRENT_SCENE::GAME)
@@ -484,66 +486,68 @@ void ThievesPacketManager::ProcessGetItem(int c_id, unsigned char* p)
 	
 	m_item_map.find(packet->obj_id)->second->SetState(ITEM_STATE::IT_OCCUPIED);
 
-	
-	// 아이템 획득시 UI
-	if (m_item_map.find(packet->obj_id)->second->GetItemType() == ITEM_NUM_GUN)
-	{
-		particleCheck = true;
-		for (auto& GameObject : iScene->GetGameObjects())
-		{
-			if (GameObject->GetName() == L"ItemBox_Gun")
-			{
-				Vec3 pos = GameObject->GetTransform()->GetLocalPosition();
-				pos.z = 499.f;
-				GameObject->GetTransform()->SetLocalPosition(pos);
-			}
-			else if (GameObject->GetName() == L"ParticleGetItem")
-			{
-				GameObject->GetParticleSystem()->UseParticle(true);
-			}
-		}
-
-	}
-	else if (m_item_map.find(packet->obj_id)->second->GetItemType() == ITEM_NUM_TRAP)
-	{
-		particleCheck = true;
-		for (auto& GameObject : iScene->GetGameObjects())
-		{
-			if (GameObject->GetName() == L"ItemBox_Trap")
-			{
-				Vec3 pos = GameObject->GetTransform()->GetLocalPosition();
-				pos.z = 499.f;
-				GameObject->GetTransform()->SetLocalPosition(pos);
-			}
-			else if (GameObject->GetName() == L"ParticleGetItem")
-			{
-				GameObject->GetParticleSystem()->UseParticle(true);
-			}
-		}
-
-	}
-	
-	if (particleCheck == true)
-	{
-		particleTime += DELTA_TIME;
-
-		if (particleTime > 2.f)
-		{
-			for (auto& GameObject : iScene->GetGameObjects())
-			{
-				if (GameObject->GetName() == L"ParticleGetItem")
-				{
-					GameObject->GetParticleSystem()->UseParticle(false);
-				}
-			}
-			particleTime = 0.f;
-			particleCheck = false;
-		}
-	}
-
 	if (packet->player == m_game_info.GetNetworkID())
 	{
 		iScene->SetItemNum(packet->obj_id);
+
+
+		// 아이템 획득시 UI
+		if (m_item_map.find(packet->obj_id)->second->GetItemType() == ITEM_NUM_GUN)
+		{
+			particleCheck = true;
+			for (auto& GameObject : iScene->GetGameObjects())
+			{
+				if (GameObject->GetName() == L"ItemBox_Gun")
+				{
+					Vec3 pos = GameObject->GetTransform()->GetLocalPosition();
+					pos.z = 499.f;
+					GameObject->GetTransform()->SetLocalPosition(pos);
+				}
+				else if (GameObject->GetName() == L"ParticleGetItem")
+				{
+					GameObject->GetParticleSystem()->UseParticle(true);
+				}
+			}
+
+		}
+		else if (m_item_map.find(packet->obj_id)->second->GetItemType() == ITEM_NUM_TRAP)
+		{
+			particleCheck = true;
+			for (auto& GameObject : iScene->GetGameObjects())
+			{
+				if (GameObject->GetName() == L"ItemBox_Trap")
+				{
+					Vec3 pos = GameObject->GetTransform()->GetLocalPosition();
+					pos.z = 499.f;
+					GameObject->GetTransform()->SetLocalPosition(pos);
+				}
+				else if (GameObject->GetName() == L"ParticleGetItem")
+				{
+					GameObject->GetParticleSystem()->UseParticle(true);
+				}
+			}
+
+		}
+
+
+		if (particleCheck == true)
+		{
+			particleTime += DELTA_TIME;
+
+			if (particleTime > 2.f)
+			{
+				for (auto& GameObject : iScene->GetGameObjects())
+				{
+					if (GameObject->GetName() == L"ParticleGetItem")
+					{
+						GameObject->GetParticleSystem()->UseParticle(false);
+					}
+				}
+				particleTime = 0.f;
+				particleCheck = false;
+			}
+		}
+
 	}
 }
 

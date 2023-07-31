@@ -138,7 +138,7 @@ void Text::Update()
 			}
 		}
 
-		if (iScene->GetIsInteractOn())
+		if (iScene->GetIsInteractOn() && iScene->GetIsOpenSafe() && Network::GetInst()->GetPacketManager()->GetDiamondPlayer() == -1)
 		{
 			SetTextInfo(TEXT_FORMAT::INFO);
 			wstring mText = L"Interaction ON [F]";

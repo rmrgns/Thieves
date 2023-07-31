@@ -8,6 +8,7 @@
 #include "Engine.h"
 #include "Animator.h"
 #include "Sound.h"
+#include "InGameScene.h"
 
 // Server
 #include "server/main/network.h"
@@ -111,6 +112,23 @@ void PlayerInput::LateUpdate()
 		}
 	}
 
+	auto iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetActiveScene());
+	
+	if (iScene->GetIsInteractOn() && iScene->GetIsOpenSafe() && Network::GetInst()->GetPacketManager()->GetDiamondPlayer() == -1)
+	{
+		if (INPUT->GetButtonDown(KEY_TYPE::F))
+		{
+			Network::GetInst()->SendSteelDiamond();
+		}
+	}
+
+	if (INPUT->GetButtonDown(KEY_TYPE::RBUTTON))
+	{
+		if (iScene->GetItemNum() != -1) {
+			Network::GetInst()->SendUseItem();
+			iScene->SetItemNum(-1);
+		}
+	}
 	//GET_SINGLE(SceneManager)->SetPlayerPosition(pos);
 	PlayerAttack();
 	PlayerMove();
@@ -207,17 +225,17 @@ void PlayerInput::PlayerAttack()
 	// Attack
 	if (_attackState == 1)
 	{
+
 		_index = 1;
 		GetAnimator()->Play(_index);
-		_attackState = 2;
-		
+		Network::GetInst()->SendAttackPacket();
+		_attackState = 2;	
 	}
 	else if (_attackState == 2)
 	{
 		_attackCount += DELTA_TIME;
 		if (_attackCount > 0.7f)
-		{
-			Network::GetInst()->SendAttackPacket();
+		{	
 			_index = 2;
 			GetAnimator()->Play(_index);
 			_attackCount = 0.f;

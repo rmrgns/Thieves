@@ -102,8 +102,10 @@ public:
 	void SendLogOut();
 	void SendRequestRoomsData();
 	void SendRequestInRoomData();
+	void SendSteelDiamond();
 
 	void SendBullet(Vec3, Vec3);
+	void SendUseItem();
 	void SendAttackPacket();
 
 	void SendPacket();
