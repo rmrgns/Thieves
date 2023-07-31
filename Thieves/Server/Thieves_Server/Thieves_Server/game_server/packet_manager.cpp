@@ -2063,7 +2063,7 @@ void PacketManager::DoNpcMove(int enemy_id, int room_id)
 	// 이동방법 각각의 다음 이동 경로 좌표들을 받아와 저장하며 DO MOVE로 NPC 이동시킨다.
 	// 이거 고쳐야 돼
 
-	m_navmesh_loader->findPath()
+	//m_navmesh_loader->findPath()
 	Vector3 target_vec = Vector3{ target_pos - enemy->GetPos() };
 	enemy->DoMove(target_vec);
 

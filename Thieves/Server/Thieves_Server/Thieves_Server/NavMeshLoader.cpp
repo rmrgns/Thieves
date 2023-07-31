@@ -3,7 +3,7 @@
 #include <iostream>
 #include <cstring>
 #include <fstream>
-#include <vector.h>
+#include <vector>
 
 NavMeshLoader::NavMeshLoader() {
     navMesh = dtAllocNavMesh();

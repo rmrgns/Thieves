@@ -3,6 +3,7 @@
 #include "CBox.h"
 #include "define.h"
 
+
 class MapManager
 {
 public:
