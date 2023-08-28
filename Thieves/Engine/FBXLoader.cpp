@@ -71,6 +71,7 @@ void FBXLoader::Import(const wstring& path)
 
 void FBXLoader::ParseNode(FbxNode* node)
 {
+
 	FbxNodeAttribute* attribute = node->GetNodeAttribute();
 
 	if (attribute)

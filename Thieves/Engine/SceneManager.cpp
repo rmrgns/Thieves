@@ -41,7 +41,7 @@
 #include "server/thieves_server/thieves_packet_manager.h"
 
 #include <thread>
-
+#include <fstream>
 
 
 
@@ -472,7 +472,7 @@ void SceneManager::LoadGameScene()
 
 	_LoadText = L"Load Other Player FBX Data";// 8
 	Network::GetInst()->SendLoadProgressPacket((char)700 / 21);
-
+	/*
 #pragma region OtherPlayers
 	{
 
@@ -559,6 +559,49 @@ void SceneManager::LoadGameScene()
 
 	_LoadText = L"Load Map"; // 16
 	Network::GetInst()->SendLoadProgressPacket((char)1500 / 21);
+*/
+
+
+	std::ifstream in{ "MapData.txt" };
+
+	std::vector<std::string> words{ std::istream_iterator<std::string>{in}, {} };
+
+	std::vector<Vec3> posVec{};
+	std::vector<Vec3> rotVec{};
+	std::vector<Vec3> scaleVec{};
+
+	while (!words.empty())
+	{
+		auto reader = words.begin();
+
+		//오브젝트 이름
+		reader++;
+
+		//오브젝트 포지션
+
+		Vec3 posData{};
+		Vec3 rotData{};
+		Vec3 scaleData{};
+
+		posData.x = std::stof((*reader)) * -100.0f; reader++;
+		posData.y = std::stof((*reader)) * 100.0f; reader++;
+		posData.z = std::stof((*reader)) * -100.0f; reader++;
+
+		rotData.x = (std::stof((*reader)) + 90.0f) / 180.0f * XM_PI; reader++;
+		rotData.z = std::stof((*reader)) / 180.0f * XM_PI; reader++;
+		rotData.y = (std::stof((*reader))) / 180.0f * XM_PI; reader++;
+
+		scaleData.x = std::stof((*reader)) * 1.0f; reader++;
+		scaleData.z = std::stof((*reader)) * 1.0f; reader++;
+		scaleData.y = std::stof((*reader)) * 1.0f; reader++;
+
+		posVec.push_back(posData);
+		rotVec.push_back(rotData);
+		scaleVec.push_back(scaleData);
+
+		words.erase(words.begin(), reader);
+	}
+
 
 #pragma region Map
 	{
@@ -567,18 +610,21 @@ void SceneManager::LoadGameScene()
 
 		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 
+		int cnt = 1;
+
 		for (auto& gameObject : gameObjects)
-		{
+		{	
 			gameObject->SetName(L"Map");
 			gameObject->SetCheckFrustum(false);
-			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
-			//gameObject->GetTransform()->SetLocalRotation(Vec3(0.f, 3.1415f, 0.f));
-			gameObject->GetTransform()->SetLocalScale(Vec3(40.f, 100.f, 40.f));
+			gameObject->GetTransform()->SetLocalPosition(posVec.at(cnt));
+			gameObject->GetTransform()->SetLocalRotation(rotVec.at(cnt));
+			gameObject->GetTransform()->SetLocalScale(scaleVec.at(cnt));
 			//gameObject->AddComponent(make_shared<TestObjectMove>());
 			//gameObject->AddComponent(make_shared<PlayerInput>());
-			gameObject->SetStatic(false);
+			gameObject->SetStatic(true);
 			scene->AddGameObject(gameObject);
 			//gameObject->AddComponent(make_shared<TestDragon>());
+			cnt++;
 		}
 	}
 #pragma endregion
@@ -1335,7 +1381,6 @@ void SceneManager::LoadLoginScene()
 
 void SceneManager::LoadLobbyScene()
 {
-	_LoadText = L"Load Start";
 
 #pragma region LayerMask
 	SetLayerName(0, L"Default");
