@@ -562,55 +562,98 @@ void SceneManager::LoadGameScene()
 */
 
 
-	std::ifstream in{ "MapData.txt" };
 
-	std::vector<std::string> words{ std::istream_iterator<std::string>{in}, {} };
 
-	std::vector<Vec3> posVec{};
-	std::vector<Vec3> rotVec{};
-	std::vector<Vec3> scaleVec{};
-
-	while (!words.empty())
+#pragma region MapBase
 	{
-		auto reader = words.begin();
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\MapBase.fbx");
 
-		//오브젝트 이름
-		reader++;
+		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 
-		//오브젝트 포지션
+		int cnt = 0;
 
-		Vec3 posData{};
-		Vec3 rotData{};
-		Vec3 scaleData{};
-
-		posData.x = std::stof((*reader)) * -100.0f; reader++;
-		posData.y = std::stof((*reader)) * 100.0f; reader++;
-		posData.z = std::stof((*reader)) * -100.0f; reader++;
-
-		rotData.x = (std::stof((*reader)) + 90.0f) / 180.0f * XM_PI; reader++;
-		rotData.z = std::stof((*reader)) / 180.0f * XM_PI; reader++;
-		rotData.y = (std::stof((*reader))) / 180.0f * XM_PI; reader++;
-
-		scaleData.x = std::stof((*reader)) * 1.0f; reader++;
-		scaleData.z = std::stof((*reader)) * 1.0f; reader++;
-		scaleData.y = std::stof((*reader)) * 1.0f; reader++;
-
-		posVec.push_back(posData);
-		rotVec.push_back(rotData);
-		scaleVec.push_back(scaleData);
-
-		words.erase(words.begin(), reader);
+		for (auto& gameObject : gameObjects)
+		{
+			// 첫번째에는 맵의 바닥과 벽 부분이
+			// 두번재에는 맵의 천장이 FBX 데이터 내부에 들어있음.
+			if (cnt == 0)
+			{
+				gameObject->SetName(L"Map");
+				gameObject->SetCheckFrustum(false);
+				gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+				gameObject->GetTransform()->SetLocalRotation(Vec3(0.0f, 0.0f, 0.0f));
+				gameObject->GetTransform()->SetLocalScale(Vec3(40.0f, 100.0f, 40.0f));
+				gameObject->SetStatic(false);
+				scene->AddGameObject(gameObject);
+			}
+			else
+			{
+				gameObject->SetName(L"MapC");
+				gameObject->SetCheckFrustum(false);
+				gameObject->GetTransform()->SetLocalPosition(Vec3(0.0f, 470.0f, 0.0f)); // -> y, z 변경
+				gameObject->GetTransform()->SetLocalRotation(Vec3(0.0f, 0.0f, 0.0f));
+				gameObject->GetTransform()->SetLocalScale(Vec3(120.0f, 0.5f, 120.0f)); // -> 변경 없음?
+				gameObject->SetStatic(false);
+				scene->AddGameObject(gameObject);
+			}
+			cnt++;
+		}
 	}
-
+#pragma endregion
 
 #pragma region Map
 	{
+
+		std::ifstream in{ "MapData.txt" };
+
+		std::vector<std::string> words{ std::istream_iterator<std::string>{in}, {} };
+
+		std::vector<Vec3> posVec{};
+		std::vector<Vec3> rotVec{};
+		std::vector<Vec3> scaleVec{};
+
+		while (!words.empty())
+		{
+			auto reader = words.begin();
+
+			//오브젝트 이름
+			reader++;
+
+			//오브젝트 포지션
+
+			Vec3 posData{};
+			Vec3 rotData{};
+			Vec3 scaleData{};
+
+			posData.x = std::stof((*reader)) * -100.0f; reader++;
+			posData.y = std::stof((*reader)) * 100.0f; reader++;
+			posData.z = std::stof((*reader)) * -100.0f; reader++;
+
+			rotData.x = (std::stof((*reader)) - 90.f) / 180.0f * XM_PI; reader++;
+			rotData.y = std::stof((*reader)) / 180.0f * XM_PI; reader++;
+			rotData.z = std::stof((*reader)) / 180.0f * XM_PI; reader++;
+
+			scaleData.x = std::stof((*reader)) * 1.0f; reader++;
+			scaleData.y = std::stof((*reader)) * 1.0f; reader++;
+			scaleData.z = std::stof((*reader)) * 1.0f; reader++;
+
+			posVec.push_back(posData);
+			rotVec.push_back(rotData);
+			scaleVec.push_back(scaleData);
+
+			words.erase(words.begin(), reader);
+		}
+
+		// Terrain 대용으로 사용할 맵의 경우 프러스텀 컬링을 하면 안됨
+		// Map 데이터를 두개로 나누어 적용해야 할 것으로 보임
+
+		
 
 		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Map.fbx");
 
 		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 
-		int cnt = 1;
+		int cnt = 0;
 
 		for (auto& gameObject : gameObjects)
 		{	
@@ -621,7 +664,8 @@ void SceneManager::LoadGameScene()
 			gameObject->GetTransform()->SetLocalScale(scaleVec.at(cnt));
 			//gameObject->AddComponent(make_shared<TestObjectMove>());
 			//gameObject->AddComponent(make_shared<PlayerInput>());
-			gameObject->SetStatic(true);
+			gameObject->SetStatic(false);
+			gameObject->SetCheckFrustum(true);
 			scene->AddGameObject(gameObject);
 			//gameObject->AddComponent(make_shared<TestDragon>());
 			cnt++;

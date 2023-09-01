@@ -7,7 +7,7 @@
 
 void MapManager::LoadMap()
 {
-	/*
+	
 	std::ifstream in{ ".\\ColliderData.txt" };
 
 	std::vector<std::string> words{ std::istream_iterator<std::string>{in}, {} };
@@ -66,7 +66,7 @@ void MapManager::LoadMap()
 		MapCBox.push_back(std::make_shared<CBox>(centerCBox, extentCBox,axisCBox , translation));
 		words.erase(words.begin(), next);
 	}
-	*/
+	
 }
 
 void MapManager::LoadSpawnArea()

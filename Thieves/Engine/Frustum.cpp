@@ -36,7 +36,7 @@ bool Frustum::ContainsSphere(const Vec3& pos, float radius)
 		Vec3 normal = Vec3(plane.x, plane.y, plane.z);
 
 		// ax + by + cz + d > radius
-		if (normal.Dot(pos) + plane.w > radius)
+		if (normal.Dot(pos) + plane.w > radius * 1000.f)
 			return false;
 	}
 
