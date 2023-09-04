@@ -472,7 +472,7 @@ void SceneManager::LoadGameScene()
 
 	_LoadText = L"Load Other Player FBX Data";// 8
 	Network::GetInst()->SendLoadProgressPacket((char)700 / 21);
-	/*
+	
 #pragma region OtherPlayers
 	{
 
@@ -519,7 +519,7 @@ void SceneManager::LoadGameScene()
 		}
 	}
 #pragma endregion
-
+	/*
 #pragma region PoliceFBX
 	{
 		std::vector<int> occupied_id;
@@ -556,10 +556,10 @@ void SceneManager::LoadGameScene()
 		}
 	}
 #pragma endregion
-
+*/
 	_LoadText = L"Load Map"; // 16
 	Network::GetInst()->SendLoadProgressPacket((char)1500 / 21);
-*/
+
 
 
 
