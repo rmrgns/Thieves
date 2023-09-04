@@ -54,8 +54,12 @@ public:
 	void InitNPC();
 	void DestroyObject();
 
+
+
 private:
 	std::array <MoveObj*, MAX_USER + MAX_NPC>m_moveobj_arr;
+
+
 
 	int m_id;
 };

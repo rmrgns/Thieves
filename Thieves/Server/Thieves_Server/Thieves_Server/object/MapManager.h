@@ -23,6 +23,7 @@ public:
 	std::vector<Vector3>& GetSpecialEscapePos() { return SpecialEscapePos; }
 	std::vector<Vector3>& GetPlayerSpawnPos() { return PlayerSpawnPos; }
 	std::vector<Vector3>& GetNPCSpawnPos() { return PoliceSpawnCBox; }
+
 	Vector3 checkCollision(CBox& playerBox, Vector3& playerOldPos);
 	bool checkCollisionRay(CBox&);
 	bool checkCollisionSafe(CBox& ray_temp);

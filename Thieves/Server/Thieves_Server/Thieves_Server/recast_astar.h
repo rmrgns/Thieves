@@ -8,11 +8,11 @@
 #include <cstring>
 #include <cstdio>
 #include <fstream>
+#include <vector>
 
 class NavMeshPathfinding {
 public:
-    NavMeshPathfinding();
-    //NavMeshPathfinding() : navMesh(nullptr), navQuery(nullptr), navData(nullptr), navDataSize(0) {};
+    NavMeshPathfinding() {};
     ~NavMeshPathfinding() {
         if (navMesh)
             dtFreeNavMesh(navMesh);
@@ -23,7 +23,6 @@ public:
     }
 
     bool LoadNavMesh(const char* navMeshFilePath);
-    void FindAndPrintPath();
     Vector3 FindAndPrintPath(const float start[3], const float end[3]);
 private:
     dtNavMesh* navMesh;

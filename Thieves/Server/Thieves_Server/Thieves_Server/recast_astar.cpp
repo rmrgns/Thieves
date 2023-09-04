@@ -54,6 +54,7 @@ bool NavMeshPathfinding::LoadNavMesh(const char* navMeshFilePath) {
 
     return true;
 }
+
 Vector3 NavMeshPathfinding::FindAndPrintPath(const float startPos[3], const float endPos[3]) {
     // 시작점과 끝점 설정
         // 시작점과 끝점에서 가장 가까운 네비게이션 메시 지점 찾기

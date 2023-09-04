@@ -39,14 +39,26 @@ void Enemy::SetMoveTime(int val)
 
 void Enemy::DoMove(const Vector3& target_pos)
 {
-	Vector3& nlook = m_look;
-	Vector3& curr_pos = m_pos;
-	m_prev_pos = m_pos;
-	nlook = target_pos;//Vector3{ target_pos - curr_pos };
-//	Vector3 move_vec = nlook.Normalrize();
-//	Vector3 npos = curr_pos + (move_vec);
-//	m_pos = npos;
+	//// 현재 위치와 시선을 변수로 저장합니다.
+	//Vector3& nlook = m_look;
+	//Vector3& curr_pos = m_pos;
 
+	//// 이전 위치를 저장합니다.
+	//m_prev_pos = curr_pos; // "m_prev_pos = m_pos"를 "m_prev_pos = curr_pos"로 수정합니다.
+
+	//// 시선을 새로운 대상 위치로 설정합니다.
+	//nlook = target_pos;
+
+	//// 대상 위치로부터의 이동 벡터를 계산합니다.
+	//Vector3 move_vec = nlook - curr_pos; // "Vector3{ target_pos - curr_pos };"를 "Vector3 move_vec = nlook - curr_pos;"로 수정합니다.
+
+	//// 이동 벡터를 정규화합니다.
+	//move_vec.Normalize(); // "move_vec.Normalrize();"를 "move_vec.Normalize();"로 수정합니다.
+
+	//// 현재 위치를 이동 벡터만큼 업데이트합니다.
+	//Vector3 new_pos = curr_pos + move_vec;
+
+	//m_pos = new_pos;
 }
 
 void Enemy::DoPrevMove(const Vector3& target_pos)
