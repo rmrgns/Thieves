@@ -3,13 +3,15 @@
 #include "Detour/Include/DetourNavMesh.h"
 #include "Detour/Include/DetourNavMeshQuery.h"
 
+class MoveObjManager;
+
 class NavMeshLoader {
 public:
     NavMeshLoader();
     ~NavMeshLoader();
 
     bool loadNavMesh(const char* navMeshFilePath);
-    bool findPath(const Vector3& startPos, const Vector3& endPos, const Vector3& halfExtents);
+    bool findPath(int enemy_id, const Vector3& startPos, const Vector3& endPos, const Vector3& halfExtents);
     
 
 private:

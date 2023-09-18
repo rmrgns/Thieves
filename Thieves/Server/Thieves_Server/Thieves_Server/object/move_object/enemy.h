@@ -52,6 +52,7 @@ public:
 
     Vector3 m_prev_test_pos{ 0.0f,0.0f,0.0f };
     std::chrono::system_clock::time_point	m_move_time;
+    std::vector<Vector3> enemy_astar;
 private:
     std::chrono::system_clock::time_point	m_attack_time;
     std::chrono::system_clock::time_point	m_check_time;
@@ -61,4 +62,6 @@ private:
     std::atomic_int target_id;
     Vector3 basepos[4];
     int basepos_direction = 0;
+
+ 
 };
