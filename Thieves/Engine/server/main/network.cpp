@@ -16,7 +16,7 @@ bool Network::Init(client_fw::UPtr<ThievesPacketManager>&& packet_manager, clien
 	m_packet_manager = move(packet_manager);
 	m_send_manager = move(send_manager);
 	m_packet_manager->Init();
-
+	 
 	WSADATA WSAData;
 
 	if (WSAStartup(MAKEWORD(2, 2), &WSAData) != 0) {

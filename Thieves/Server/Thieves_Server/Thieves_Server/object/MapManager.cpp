@@ -99,6 +99,249 @@ void MapManager::LoadSpawnArea()
 	}
 
 }
+void MapManager::LoadPoliceDir1()
+{
+	std::ifstream in{ ".\\PoliceDirPos1.txt" };
+
+	std::vector<std::string> words{ std::istream_iterator<std::string>{in}, {} };
+
+	while (!words.empty())
+	{
+		auto next = std::find(words.begin(), words.end(), "end");
+		next++;
+
+		auto reader = words.begin();
+
+		//start �� end
+		reader++;
+		reader++;
+
+
+		float centerCBox[3]{};
+
+		//center		
+		float x = std::stof((*reader)) * -100.0f; reader++;
+		float y = std::stof((*reader)) * 100.0f; reader++;
+		float z = std::stof((*reader)) * -100.0f; reader++;
+
+		PoliceDirCBox1.emplace_back(x, y, z);
+		words.erase(words.begin(), next);
+	}
+
+}
+
+void MapManager::LoadPoliceDir2()
+{
+	std::ifstream in{ ".\\PoliceDirPos2.txt" };
+
+	std::vector<std::string> words{ std::istream_iterator<std::string>{in}, {} };
+
+	while (!words.empty())
+	{
+		auto next = std::find(words.begin(), words.end(), "end");
+		next++;
+
+		auto reader = words.begin();
+
+		//start �� end
+		reader++;
+		reader++;
+
+
+		float centerCBox[3]{};
+
+		//center		
+		float x = std::stof((*reader)) * -100.0f; reader++;
+		float y = std::stof((*reader)) * 100.0f; reader++;
+		float z = std::stof((*reader)) * -100.0f; reader++;
+
+		PoliceDirCBox2.emplace_back(x, y, z);
+		words.erase(words.begin(), next);
+	}
+
+}
+void MapManager::LoadPoliceDir3()
+{
+	std::ifstream in{ ".\\PoliceDirPos3.txt" };
+
+	std::vector<std::string> words{ std::istream_iterator<std::string>{in}, {} };
+
+	while (!words.empty())
+	{
+		auto next = std::find(words.begin(), words.end(), "end");
+		next++;
+
+		auto reader = words.begin();
+
+		//start �� end
+		reader++;
+		reader++;
+
+
+		float centerCBox[3]{};
+
+		//center		
+		float x = std::stof((*reader)) * -100.0f; reader++;
+		float y = std::stof((*reader)) * 100.0f; reader++;
+		float z = std::stof((*reader)) * -100.0f; reader++;
+
+		PoliceDirCBox3.emplace_back(x, y, z);
+		words.erase(words.begin(), next);
+	}
+
+}
+void MapManager::LoadPoliceDir4()
+{
+	std::ifstream in{ ".\\PoliceDirPos4.txt" };
+
+	std::vector<std::string> words{ std::istream_iterator<std::string>{in}, {} };
+
+	while (!words.empty())
+	{
+		auto next = std::find(words.begin(), words.end(), "end");
+		next++;
+
+		auto reader = words.begin();
+
+		//start �� end
+		reader++;
+		reader++;
+
+
+		float centerCBox[3]{};
+
+		//center		
+		float x = std::stof((*reader)) * -100.0f; reader++;
+		float y = std::stof((*reader)) * 100.0f; reader++;
+		float z = std::stof((*reader)) * -100.0f; reader++;
+
+		PoliceDirCBox4.emplace_back(x, y, z);
+		words.erase(words.begin(), next);
+	}
+
+}
+void MapManager::LoadPoliceDir5()
+{
+	std::ifstream in{ ".\\PoliceDirPos5.txt" };
+
+	std::vector<std::string> words{ std::istream_iterator<std::string>{in}, {} };
+
+	while (!words.empty())
+	{
+		auto next = std::find(words.begin(), words.end(), "end");
+		next++;
+
+		auto reader = words.begin();
+
+		//start �� end
+		reader++;
+		reader++;
+
+
+		float centerCBox[3]{};
+
+		//center		
+		float x = std::stof((*reader)) * -100.0f; reader++;
+		float y = std::stof((*reader)) * 100.0f; reader++;
+		float z = std::stof((*reader)) * -100.0f; reader++;
+
+		PoliceDirCBox5.emplace_back(x, y, z);
+		words.erase(words.begin(), next);
+	}
+
+}
+void MapManager::LoadPoliceDir6()
+{
+	std::ifstream in{ ".\\PoliceDirPos6.txt" };
+
+	std::vector<std::string> words{ std::istream_iterator<std::string>{in}, {} };
+
+	while (!words.empty())
+	{
+		auto next = std::find(words.begin(), words.end(), "end");
+		next++;
+
+		auto reader = words.begin();
+
+		//start �� end
+		reader++;
+		reader++;
+
+
+		float centerCBox[3]{};
+
+		//center		
+		float x = std::stof((*reader)) * -100.0f; reader++;
+		float y = std::stof((*reader)) * 100.0f; reader++;
+		float z = std::stof((*reader)) * -100.0f; reader++;
+
+		PoliceDirCBox6.emplace_back(x, y, z);
+		words.erase(words.begin(), next);
+	}
+
+}
+void MapManager::LoadPoliceDir7()
+{
+	std::ifstream in{ ".\\PoliceDirPos7.txt" };
+
+	std::vector<std::string> words{ std::istream_iterator<std::string>{in}, {} };
+
+	while (!words.empty())
+	{
+		auto next = std::find(words.begin(), words.end(), "end");
+		next++;
+
+		auto reader = words.begin();
+
+		//start �� end
+		reader++;
+		reader++;
+
+
+		float centerCBox[3]{};
+
+		//center		
+		float x = std::stof((*reader)) * -100.0f; reader++;
+		float y = std::stof((*reader)) * 100.0f; reader++;
+		float z = std::stof((*reader)) * -100.0f; reader++;
+
+		PoliceDirCBox7.emplace_back(x, y, z);
+		words.erase(words.begin(), next);
+	}
+
+}
+void MapManager::LoadPoliceDir8()
+{
+	std::ifstream in{ ".\\PoliceDirPos8.txt" };
+
+	std::vector<std::string> words{ std::istream_iterator<std::string>{in}, {} };
+
+	while (!words.empty())
+	{
+		auto next = std::find(words.begin(), words.end(), "end");
+		next++;
+
+		auto reader = words.begin();
+
+		//start �� end
+		reader++;
+		reader++;
+
+
+		float centerCBox[3]{};
+
+		//center		
+		float x = std::stof((*reader)) * -100.0f; reader++;
+		float y = std::stof((*reader)) * 100.0f; reader++;
+		float z = std::stof((*reader)) * -100.0f; reader++;
+
+		PoliceDirCBox8.emplace_back(x, y, z);
+		words.erase(words.begin(), next);
+	}
+}
+
+
+
 
 void MapManager::LoadPoliceDir()
 {

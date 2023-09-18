@@ -12,6 +12,7 @@ class Enemy :
 {
 public:
     Enemy(int i) :in_use(false){
+        npc_dir_num = 0;
         m_id = i;
         m_attack_time = std::chrono::system_clock::now();
         m_check_time = std::chrono::system_clock::now();
@@ -41,11 +42,23 @@ public:
          m_pos = m_prev_pos;
     }
 
+    void SetNpcDirNum(int val) {
+        npc_dir_num = val;
+    }
+    int GetNpcDirNum() {
+        return npc_dir_num;
+    }
+
     std::atomic_bool in_use;
     std::atomic_bool in_game = false;
 
     Vector3 m_prev_test_pos{ 0.0f,0.0f,0.0f };
     std::chrono::system_clock::time_point	m_move_time;
+    bool look_temp = TRUE;
+    float look_x = 0;
+    float look_z = 0;
+    float e_dir_pos_x = 0;
+    float e_dir_pos_z = 0;
 private:
     std::chrono::system_clock::time_point	m_attack_time;
     std::chrono::system_clock::time_point	m_check_time;
@@ -53,4 +66,6 @@ private:
     Vector3 m_prev_pos{ 0.0f,0.0f,0.0f };
     Vector3 m_look;
     std::atomic_int target_id;
+    
+    int npc_dir_num;
 };

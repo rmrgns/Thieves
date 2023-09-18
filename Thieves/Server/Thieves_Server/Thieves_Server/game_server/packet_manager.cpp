@@ -47,6 +47,16 @@ void PacketManager::Init()
 	m_map_manager->LoadItemSpawnPoint();
 	m_map_manager->LoadPlayerSpawnArea();
 	m_map_manager->LoadSpecialEscapePoint();
+
+	m_map_manager->LoadPoliceDir1();
+	m_map_manager->LoadPoliceDir2();
+	m_map_manager->LoadPoliceDir3();
+	m_map_manager->LoadPoliceDir4();
+	m_map_manager->LoadPoliceDir5();
+	m_map_manager->LoadPoliceDir6();
+	m_map_manager->LoadPoliceDir7();
+	m_map_manager->LoadPoliceDir8();
+
 	m_db->Init();
 	m_db2->Init();
 }
@@ -1173,6 +1183,213 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 
 	cl->SetPos(m_map_manager->checkCollision(PlayerBox, oldPos));
 
+	// NPC MOVE
+	int dir_num = 0;
+	for (int npc_enemy_id = 64; npc_enemy_id < 72; npc_enemy_id++) {
+		Enemy* npc_enemy = MoveObjManager::GetInst()->GetEnemy(npc_enemy_id);
+
+		if (npc_enemy_id == 64) {
+			if (npc_enemy->look_temp == TRUE)
+			{
+				npc_enemy->e_dir_pos_x = (m_map_manager->GetNPCDirPos1()[npc_enemy_id - 64 + npc_enemy->GetNpcDirNum()]).x;
+				npc_enemy->e_dir_pos_z = (m_map_manager->GetNPCDirPos1()[npc_enemy_id - 64 + npc_enemy->GetNpcDirNum()]).z;
+				npc_enemy->look_x = (npc_enemy->e_dir_pos_x - npc_enemy->GetPosX()) / 1000;
+				npc_enemy->look_z = (npc_enemy->e_dir_pos_z - npc_enemy->GetPosZ()) / 1000;
+				npc_enemy->look_temp = FALSE;
+			}
+			npc_enemy->SetPosX(npc_enemy->GetPosX() + npc_enemy->look_x);
+			npc_enemy->SetPosZ(npc_enemy->GetPosZ() + npc_enemy->look_z);
+			if ((npc_enemy->GetPosX() < (npc_enemy->e_dir_pos_x+1))&& (npc_enemy->GetPosX() > (npc_enemy->e_dir_pos_x - 1)) && (npc_enemy->GetPosZ() > (npc_enemy->e_dir_pos_z - 1)) &&(npc_enemy->GetPosZ() < (npc_enemy->e_dir_pos_z+1)))
+			{
+				npc_enemy->look_temp = TRUE;
+				npc_enemy->SetPosX(npc_enemy->e_dir_pos_x);
+				npc_enemy->SetPosZ(npc_enemy->e_dir_pos_z);
+				if (npc_enemy->GetNpcDirNum() == 3) {
+					npc_enemy->SetNpcDirNum(0);
+					
+				}
+				else {
+					npc_enemy->SetNpcDirNum(npc_enemy->GetNpcDirNum() + 1);
+				}
+			}
+		}
+		else if (npc_enemy_id == 65) {
+			if (npc_enemy->look_temp == TRUE)
+			{
+				npc_enemy->e_dir_pos_x = (m_map_manager->GetNPCDirPos2()[npc_enemy_id - 65 + npc_enemy->GetNpcDirNum()]).x;
+				npc_enemy->e_dir_pos_z = (m_map_manager->GetNPCDirPos2()[npc_enemy_id - 65 + npc_enemy->GetNpcDirNum()]).z;
+				npc_enemy->look_x = (npc_enemy->e_dir_pos_x - npc_enemy->GetPosX()) / 1000;
+				npc_enemy->look_z = (npc_enemy->e_dir_pos_z - npc_enemy->GetPosZ()) / 1000;
+				npc_enemy->look_temp = FALSE;
+			}
+			npc_enemy->SetPosX(npc_enemy->GetPosX() + npc_enemy->look_x);
+			npc_enemy->SetPosZ(npc_enemy->GetPosZ() + npc_enemy->look_z);
+			if ((npc_enemy->GetPosX() < (npc_enemy->e_dir_pos_x + 1)) && (npc_enemy->GetPosX() > (npc_enemy->e_dir_pos_x - 1)) && (npc_enemy->GetPosZ() > (npc_enemy->e_dir_pos_z - 1)) && (npc_enemy->GetPosZ() < (npc_enemy->e_dir_pos_z + 1)))
+			{
+				npc_enemy->look_temp = TRUE;
+				npc_enemy->SetPosX(npc_enemy->e_dir_pos_x);
+				npc_enemy->SetPosZ(npc_enemy->e_dir_pos_z);
+				if (npc_enemy->GetNpcDirNum() == 3) {
+					npc_enemy->SetNpcDirNum(0);
+
+				}
+				else {
+					npc_enemy->SetNpcDirNum(npc_enemy->GetNpcDirNum() + 1);
+				}
+			}
+		}
+		else if (npc_enemy_id == 66) {
+			if (npc_enemy->look_temp == TRUE)
+			{
+				npc_enemy->e_dir_pos_x = (m_map_manager->GetNPCDirPos3()[npc_enemy_id - 66 + npc_enemy->GetNpcDirNum()]).x;
+				npc_enemy->e_dir_pos_z = (m_map_manager->GetNPCDirPos3()[npc_enemy_id - 66 + npc_enemy->GetNpcDirNum()]).z;
+				npc_enemy->look_x = (npc_enemy->e_dir_pos_x - npc_enemy->GetPosX()) / 1000;
+				npc_enemy->look_z = (npc_enemy->e_dir_pos_z - npc_enemy->GetPosZ()) / 1000;
+				npc_enemy->look_temp = FALSE;
+			}
+			npc_enemy->SetPosX(npc_enemy->GetPosX() + npc_enemy->look_x);
+			npc_enemy->SetPosZ(npc_enemy->GetPosZ() + npc_enemy->look_z);
+			if ((npc_enemy->GetPosX() < (npc_enemy->e_dir_pos_x + 1)) && (npc_enemy->GetPosX() > (npc_enemy->e_dir_pos_x - 1)) && (npc_enemy->GetPosZ() > (npc_enemy->e_dir_pos_z - 1)) && (npc_enemy->GetPosZ() < (npc_enemy->e_dir_pos_z + 1)))
+			{
+				npc_enemy->look_temp = TRUE;
+				npc_enemy->SetPosX(npc_enemy->e_dir_pos_x);
+				npc_enemy->SetPosZ(npc_enemy->e_dir_pos_z);
+				if (npc_enemy->GetNpcDirNum() == 3) {
+					npc_enemy->SetNpcDirNum(0);
+
+				}
+				else {
+					npc_enemy->SetNpcDirNum(npc_enemy->GetNpcDirNum() + 1);
+				}
+			}
+		}
+		else if (npc_enemy_id == 67) {
+			if (npc_enemy->look_temp == TRUE)
+			{
+				npc_enemy->e_dir_pos_x = (m_map_manager->GetNPCDirPos4()[npc_enemy_id - 67 + npc_enemy->GetNpcDirNum()]).x;
+				npc_enemy->e_dir_pos_z = (m_map_manager->GetNPCDirPos4()[npc_enemy_id - 67 + npc_enemy->GetNpcDirNum()]).z;
+				npc_enemy->look_x = (npc_enemy->e_dir_pos_x - npc_enemy->GetPosX()) / 1000;
+				npc_enemy->look_z = (npc_enemy->e_dir_pos_z - npc_enemy->GetPosZ()) / 1000;
+				npc_enemy->look_temp = FALSE;
+			}
+			npc_enemy->SetPosX(npc_enemy->GetPosX() + npc_enemy->look_x);
+			npc_enemy->SetPosZ(npc_enemy->GetPosZ() + npc_enemy->look_z);
+			if ((npc_enemy->GetPosX() < (npc_enemy->e_dir_pos_x + 1)) && (npc_enemy->GetPosX() > (npc_enemy->e_dir_pos_x - 1)) && (npc_enemy->GetPosZ() > (npc_enemy->e_dir_pos_z - 1)) && (npc_enemy->GetPosZ() < (npc_enemy->e_dir_pos_z + 1)))
+			{
+				npc_enemy->look_temp = TRUE;
+				npc_enemy->SetPosX(npc_enemy->e_dir_pos_x);
+				npc_enemy->SetPosZ(npc_enemy->e_dir_pos_z);
+				if (npc_enemy->GetNpcDirNum() == 3) {
+					npc_enemy->SetNpcDirNum(0);
+
+				}
+				else {
+					npc_enemy->SetNpcDirNum(npc_enemy->GetNpcDirNum() + 1);
+				}
+			}
+		}
+		else if (npc_enemy_id == 68) {
+			if (npc_enemy->look_temp == TRUE)
+			{
+				npc_enemy->e_dir_pos_x = (m_map_manager->GetNPCDirPos5()[npc_enemy_id - 68 + npc_enemy->GetNpcDirNum()]).x;
+				npc_enemy->e_dir_pos_z = (m_map_manager->GetNPCDirPos5()[npc_enemy_id - 68 + npc_enemy->GetNpcDirNum()]).z;
+				npc_enemy->look_x = (npc_enemy->e_dir_pos_x - npc_enemy->GetPosX()) / 1000;
+				npc_enemy->look_z = (npc_enemy->e_dir_pos_z - npc_enemy->GetPosZ()) / 1000;
+				npc_enemy->look_temp = FALSE;
+			}
+			npc_enemy->SetPosX(npc_enemy->GetPosX() + npc_enemy->look_x);
+			npc_enemy->SetPosZ(npc_enemy->GetPosZ() + npc_enemy->look_z);
+			if ((npc_enemy->GetPosX() < (npc_enemy->e_dir_pos_x + 1)) && (npc_enemy->GetPosX() > (npc_enemy->e_dir_pos_x - 1)) && (npc_enemy->GetPosZ() > (npc_enemy->e_dir_pos_z - 1)) && (npc_enemy->GetPosZ() < (npc_enemy->e_dir_pos_z + 1)))
+			{
+				npc_enemy->look_temp = TRUE;
+				npc_enemy->SetPosX(npc_enemy->e_dir_pos_x);
+				npc_enemy->SetPosZ(npc_enemy->e_dir_pos_z);
+				if (npc_enemy->GetNpcDirNum() == 3) {
+					npc_enemy->SetNpcDirNum(0);
+
+				}
+				else {
+					npc_enemy->SetNpcDirNum(npc_enemy->GetNpcDirNum() + 1);
+				}
+			}
+		}
+		else if (npc_enemy_id == 69) {
+			if (npc_enemy->look_temp == TRUE)
+			{
+				npc_enemy->e_dir_pos_x = (m_map_manager->GetNPCDirPos6()[npc_enemy_id - 69 + npc_enemy->GetNpcDirNum()]).x;
+				npc_enemy->e_dir_pos_z = (m_map_manager->GetNPCDirPos6()[npc_enemy_id - 69 + npc_enemy->GetNpcDirNum()]).z;
+				npc_enemy->look_x = (npc_enemy->e_dir_pos_x - npc_enemy->GetPosX()) / 1000;
+				npc_enemy->look_z = (npc_enemy->e_dir_pos_z - npc_enemy->GetPosZ()) / 1000;
+				npc_enemy->look_temp = FALSE;
+			}
+			npc_enemy->SetPosX(npc_enemy->GetPosX() + npc_enemy->look_x);
+			npc_enemy->SetPosZ(npc_enemy->GetPosZ() + npc_enemy->look_z);
+			if ((npc_enemy->GetPosX() < (npc_enemy->e_dir_pos_x + 1)) && (npc_enemy->GetPosX() > (npc_enemy->e_dir_pos_x - 1)) && (npc_enemy->GetPosZ() > (npc_enemy->e_dir_pos_z - 1)) && (npc_enemy->GetPosZ() < (npc_enemy->e_dir_pos_z + 1)))
+			{
+				npc_enemy->look_temp = TRUE;
+				npc_enemy->SetPosX(npc_enemy->e_dir_pos_x);
+				npc_enemy->SetPosZ(npc_enemy->e_dir_pos_z);
+				if (npc_enemy->GetNpcDirNum() == 3) {
+					npc_enemy->SetNpcDirNum(0);
+
+				}
+				else {
+					npc_enemy->SetNpcDirNum(npc_enemy->GetNpcDirNum() + 1);
+				}
+			}
+		}
+		else if (npc_enemy_id == 70) {
+			if (npc_enemy->look_temp == TRUE)
+			{
+				npc_enemy->e_dir_pos_x = (m_map_manager->GetNPCDirPos7()[npc_enemy_id - 70 + npc_enemy->GetNpcDirNum()]).x;
+				npc_enemy->e_dir_pos_z = (m_map_manager->GetNPCDirPos7()[npc_enemy_id - 70 + npc_enemy->GetNpcDirNum()]).z;
+				npc_enemy->look_x = (npc_enemy->e_dir_pos_x - npc_enemy->GetPosX()) / 1000;
+				npc_enemy->look_z = (npc_enemy->e_dir_pos_z - npc_enemy->GetPosZ()) / 1000;
+				npc_enemy->look_temp = FALSE;
+			}
+			npc_enemy->SetPosX(npc_enemy->GetPosX() + npc_enemy->look_x);
+			npc_enemy->SetPosZ(npc_enemy->GetPosZ() + npc_enemy->look_z);
+			if ((npc_enemy->GetPosX() < (npc_enemy->e_dir_pos_x + 1)) && (npc_enemy->GetPosX() > (npc_enemy->e_dir_pos_x - 1)) && (npc_enemy->GetPosZ() > (npc_enemy->e_dir_pos_z - 1)) && (npc_enemy->GetPosZ() < (npc_enemy->e_dir_pos_z + 1)))
+			{
+				npc_enemy->look_temp = TRUE;
+				npc_enemy->SetPosX(npc_enemy->e_dir_pos_x);
+				npc_enemy->SetPosZ(npc_enemy->e_dir_pos_z);
+				if (npc_enemy->GetNpcDirNum() == 3) {
+					npc_enemy->SetNpcDirNum(0);
+
+				}
+				else {
+					npc_enemy->SetNpcDirNum(npc_enemy->GetNpcDirNum() + 1);
+				}
+			}
+		}
+		else if (npc_enemy_id == 71) {
+			if (npc_enemy->look_temp == TRUE)
+			{
+				npc_enemy->e_dir_pos_x = (m_map_manager->GetNPCDirPos8()[npc_enemy_id - 71 + npc_enemy->GetNpcDirNum()]).x;
+				npc_enemy->e_dir_pos_z = (m_map_manager->GetNPCDirPos8()[npc_enemy_id - 71 + npc_enemy->GetNpcDirNum()]).z;
+				npc_enemy->look_x = (npc_enemy->e_dir_pos_x - npc_enemy->GetPosX()) / 100;
+				npc_enemy->look_z = (npc_enemy->e_dir_pos_z - npc_enemy->GetPosZ()) / 100;
+				npc_enemy->look_temp = FALSE;
+			}
+			npc_enemy->SetPosX(npc_enemy->GetPosX() + npc_enemy->look_x);
+			npc_enemy->SetPosZ(npc_enemy->GetPosZ() + npc_enemy->look_z);
+			if ((npc_enemy->GetPosX() < (npc_enemy->e_dir_pos_x + 1)) && (npc_enemy->GetPosX() > (npc_enemy->e_dir_pos_x - 1)) && (npc_enemy->GetPosZ() > (npc_enemy->e_dir_pos_z - 1)) && (npc_enemy->GetPosZ() < (npc_enemy->e_dir_pos_z + 1)))
+			{
+				npc_enemy->look_temp = TRUE;
+				npc_enemy->SetPosX(npc_enemy->e_dir_pos_x);
+				npc_enemy->SetPosZ(npc_enemy->e_dir_pos_z);
+				if (npc_enemy->GetNpcDirNum() == 3) {
+					npc_enemy->SetNpcDirNum(0);
+
+				}
+				else {
+					npc_enemy->SetNpcDirNum(npc_enemy->GetNpcDirNum() + 1);
+				}
+			}
+		}
+	}
+
 	cl->state_lock.lock();
 	if (cl->GetState() != STATE::ST_INGAME)
 	{
@@ -1305,6 +1522,8 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 			}
 		}
 	}
+
+
 }
 
 void PacketManager::ProcessMatching(int c_id, unsigned char* p)
@@ -1753,6 +1972,12 @@ void PacketManager::ProcessOpenSafe(int r_id)
 		return;
 	}
 
+	for (int i = 64; i < 72; i++)
+	{
+		Enemy* e = MoveObjManager::GetInst()->GetEnemy(i);
+		e->SetPosY(0);
+	}
+
 	for (int pl : room->GetObjList())
 	{
 		if (false == MoveObjManager::GetInst()->IsPlayer(pl)) continue;
@@ -1834,8 +2059,6 @@ void PacketManager::StartGame(int room_id)
 	std::shuffle(m_map_manager->GetEscapePos().begin(), m_map_manager->GetEscapePos().end(), dre);
 	std::shuffle(m_map_manager->GetSpecialEscapePos().begin(), m_map_manager->GetSpecialEscapePos().end(), dre);
 
-	std::shuffle(m_map_manager->GetNPCSpawnPos().begin(), m_map_manager->GetNPCSpawnPos().end(), dre);
-
 	for (int i = NPC_ID_START; i < NPC_ID_START +8; ++i)
 	{
 		e = MoveObjManager::GetInst()->GetEnemy(i);
@@ -1852,11 +2075,11 @@ void PacketManager::StartGame(int room_id)
 	//npc아이디 넣어주기
 
 
-
-
-
+	// NPC 스폰 pos
+	int spawn_pos_num = 0;
 	for (int i = 0; i < obj_list.size(); ++i)
 	{
+		
 		if (MoveObjManager::GetInst()->IsPlayer(obj_list[i])) {
 			pl = MoveObjManager::GetInst()->GetPlayer(obj_list[i]);
 			pl->SetPos(m_map_manager->GetPlayerSpawnPos().at(i));
@@ -1868,10 +2091,13 @@ void PacketManager::StartGame(int room_id)
 			if (i <= (room->GetMaxUser() + 8))
 			{
 				e->InitEnemy(OBJ_TYPE::OT_POLICE, room->GetRoomID(), NPC_init_pos);
-				e->SetPos(m_map_manager->GetNPCSpawnPos()[int(i%8)]);
+				e->SetPos(m_map_manager->GetNPCSpawnPos()[spawn_pos_num]);
+				
+				spawn_pos_num++;
 			}
 		}
 	}
+	// NPC Dir pos
 
 	for (int i = 0; i < MAX_ITEM; ++i) {
 		if (room->GetItem(i) == nullptr) continue;
