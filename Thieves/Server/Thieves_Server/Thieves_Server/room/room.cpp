@@ -70,9 +70,17 @@ void Room::LeaveRoom(int c_id)
 		m_obj_list.erase(c_id);	
 	}
 
+	bool isPlayerEmpty = false;
 
+	for (int obj : m_obj_list) {
+		if (!MoveObjManager::GetInst()->IsPlayer(obj)) {
+			isPlayerEmpty = true;
+			break;
+		}
+		else continue;
+	}
 	
-	if (m_obj_list.empty())
+	if (isPlayerEmpty)
 	{
 		m_state_lock.lock();
 		m_room_state = ROOM_STATE::RT_FREE;
