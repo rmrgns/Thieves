@@ -9,7 +9,7 @@ public:
     ~NavMeshLoader();
 
     bool loadNavMesh(const char* navMeshFilePath);
-    bool findPath(float startPos[3], float endPos[3], float halfExtents[3]);
+    bool findPath(int enemy_id, float startPos[3], float endPos[3], float halfExtents[3]);
     
 
 private:

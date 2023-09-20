@@ -41,7 +41,7 @@ void PacketManager::Init()
 	MoveObjManager::GetInst()->InitNPC();
 	m_Lobby->Init();
 	m_room_manager->InitRoom();
-	m_map_manager->LoadMap();
+	//m_map_manager->LoadMap();
 	m_map_manager->LoadSpawnArea();
 	m_map_manager->LoadEscapePoint();
 	m_map_manager->LoadItemSpawnPoint();
@@ -1189,29 +1189,88 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 		Enemy* npc_enemy = MoveObjManager::GetInst()->GetEnemy(npc_enemy_id);
 
 		if (npc_enemy_id == 64) {
-			if (npc_enemy->look_temp == TRUE)
-			{
-				npc_enemy->e_dir_pos_x = (m_map_manager->GetNPCDirPos1()[npc_enemy_id - 64 + npc_enemy->GetNpcDirNum()]).x;
-				npc_enemy->e_dir_pos_z = (m_map_manager->GetNPCDirPos1()[npc_enemy_id - 64 + npc_enemy->GetNpcDirNum()]).z;
-				npc_enemy->look_x = (npc_enemy->e_dir_pos_x - npc_enemy->GetPosX()) / 1000;
-				npc_enemy->look_z = (npc_enemy->e_dir_pos_z - npc_enemy->GetPosZ()) / 1000;
-				npc_enemy->look_temp = FALSE;
-			}
-			npc_enemy->SetPosX(npc_enemy->GetPosX() + npc_enemy->look_x);
-			npc_enemy->SetPosZ(npc_enemy->GetPosZ() + npc_enemy->look_z);
-			if ((npc_enemy->GetPosX() < (npc_enemy->e_dir_pos_x+1))&& (npc_enemy->GetPosX() > (npc_enemy->e_dir_pos_x - 1)) && (npc_enemy->GetPosZ() > (npc_enemy->e_dir_pos_z - 1)) &&(npc_enemy->GetPosZ() < (npc_enemy->e_dir_pos_z+1)))
-			{
-				npc_enemy->look_temp = TRUE;
-				npc_enemy->SetPosX(npc_enemy->e_dir_pos_x);
-				npc_enemy->SetPosZ(npc_enemy->e_dir_pos_z);
-				if (npc_enemy->GetNpcDirNum() == 3) {
-					npc_enemy->SetNpcDirNum(0);
-					
-				}
-				else {
-					npc_enemy->SetNpcDirNum(npc_enemy->GetNpcDirNum() + 1);
-				}
-			}
+			
+			//near 있다.
+			//if (npc_enemy->near_player) {
+			//	if (npc_enemy->look_temp == TRUE)
+			//	{
+			//		npc_enemy->astar_base_pos.x = (npc_enemy->enemy_astar.begin()->x);
+			//		npc_enemy->astar_base_pos.z = (npc_enemy->enemy_astar.begin()->z);
+			//		npc_enemy->enemy_astar.erase(npc_enemy->enemy_astar.begin());
+			//		npc_enemy->look_x = (npc_enemy->astar_base_pos.x - npc_enemy->GetPosX()) / 1000;
+			//		npc_enemy->look_z = (npc_enemy->astar_base_pos.z - npc_enemy->GetPosZ()) / 1000;
+			//		npc_enemy->look_temp = FALSE;
+			//	}
+			//	npc_enemy->SetPosX(npc_enemy->GetPosX() + npc_enemy->look_x);
+			//	npc_enemy->SetPosZ(npc_enemy->GetPosZ() + npc_enemy->look_z);
+			//	if ((npc_enemy->GetPosX() < (npc_enemy->astar_base_pos.x + 1)) &&
+			//		(npc_enemy->GetPosX() > (npc_enemy->astar_base_pos.x - 1)) &&
+			//		(npc_enemy->GetPosZ() > (npc_enemy->astar_base_pos.z - 1)) &&
+			//		(npc_enemy->GetPosZ() < (npc_enemy->astar_base_pos.z + 1)))
+			//	{
+			//		if (npc_enemy->enemy_astar.size() == NULL)
+			//		{
+			//			npc_enemy->enemy_astar.clear();
+			//			npc_enemy->look_temp = TRUE;
+			//			npc_enemy->near_player = FALSE;
+			//		}
+			//		else {
+			//			npc_enemy->look_temp = TRUE;
+			//			npc_enemy->SetPosX(npc_enemy->astar_base_pos.x);
+			//			npc_enemy->SetPosZ(npc_enemy->astar_base_pos.z);
+			//		}
+			//	}
+			//}
+			//else {
+				////near 확인
+				//Player* player = NULL;
+				//Room* room = m_room_manager->GetRoom(cl->GetRoomID());
+				//for (auto pl : room->GetObjList())
+				//{
+				//	if (false == MoveObjManager::GetInst()->IsPlayer(pl))continue;
+
+				//	if (true == MoveObjManager::GetInst()->IsNear(pl, npc_enemy_id))//이거는 시야범위안에 있는지 확인
+				//	{
+				//		player = MoveObjManager::GetInst()->GetPlayer(pl);
+				//		if (false == m_map_manager->CheckInRange2(player->GetPosX(), 
+				//			player->GetPosZ(), npc_enemy->GetPos() + Vector3(-100.0f, 0.0f, -100.0f),
+				//			npc_enemy->GetPos() + Vector3(100.0f, 0.0f, 100.0f))) continue;
+
+				//		//플레이어가 가까우면 target_id 플레이어로
+				//		npc_enemy->SetTargetID(pl);
+				//		npc_enemy->near_player = TRUE;
+
+				//		// astar 호출
+
+				//	}
+				//}
+				// enemy_astar size 0이면
+				//if (npc_enemy->enemy_astar.size() == 0) {
+					if (npc_enemy->look_temp == TRUE)
+					{
+						npc_enemy->e_dir_pos_x = (m_map_manager->GetNPCDirPos1()[npc_enemy_id - 64 + npc_enemy->GetNpcDirNum()]).x;
+						npc_enemy->e_dir_pos_z = (m_map_manager->GetNPCDirPos1()[npc_enemy_id - 64 + npc_enemy->GetNpcDirNum()]).z;
+						npc_enemy->look_x = (npc_enemy->e_dir_pos_x - npc_enemy->GetPosX()) / 1000;
+						npc_enemy->look_z = (npc_enemy->e_dir_pos_z - npc_enemy->GetPosZ()) / 1000;
+						npc_enemy->look_temp = FALSE;
+					}
+					npc_enemy->SetPosX(npc_enemy->GetPosX() + npc_enemy->look_x);
+					npc_enemy->SetPosZ(npc_enemy->GetPosZ() + npc_enemy->look_z);
+					if ((npc_enemy->GetPosX() < (npc_enemy->e_dir_pos_x + 1)) && (npc_enemy->GetPosX() > (npc_enemy->e_dir_pos_x - 1)) && (npc_enemy->GetPosZ() > (npc_enemy->e_dir_pos_z - 1)) && (npc_enemy->GetPosZ() < (npc_enemy->e_dir_pos_z + 1)))
+					{
+						npc_enemy->look_temp = TRUE;
+						npc_enemy->SetPosX(npc_enemy->e_dir_pos_x);
+						npc_enemy->SetPosZ(npc_enemy->e_dir_pos_z);
+						if (npc_enemy->GetNpcDirNum() == 3) {
+							npc_enemy->SetNpcDirNum(0);
+
+						}
+						else {
+							npc_enemy->SetNpcDirNum(npc_enemy->GetNpcDirNum() + 1);
+						}
+					}
+				//}
+			//}
 		}
 		else if (npc_enemy_id == 65) {
 			if (npc_enemy->look_temp == TRUE)
@@ -2059,13 +2118,16 @@ void PacketManager::StartGame(int room_id)
 	std::shuffle(m_map_manager->GetEscapePos().begin(), m_map_manager->GetEscapePos().end(), dre);
 	std::shuffle(m_map_manager->GetSpecialEscapePos().begin(), m_map_manager->GetSpecialEscapePos().end(), dre);
 
+
+	//// 수정////////
 	for (int i = NPC_ID_START; i < NPC_ID_START +8; ++i)
 	{
 		e = MoveObjManager::GetInst()->GetEnemy(i);
-
+		
 		if (false == e->in_use)
 		{
 			e->in_use = true;
+			e->SetIsActive(true);
 			e->SetRoomID(room_id);
 			obj_list.push_back(e->GetID());
 		}
@@ -2305,10 +2367,6 @@ void PacketManager::DoNpcMove(int enemy_id, int room_id)
 }
 
 
-// 1. 적개체 가져옴
-// 2. room 객체를 가져옴
-// 3. distance_map에 기준 위치로 부터 플레이어 또는 기지까지의 거리와 ID를 저장
-// 4. 일정시간마다 주변 플레이어를 체크하고 저의 타겟을 설정
 void PacketManager::CallStateMachine(int enemy_id, int room_id, const Vector3& base_pos)
 {
 	//Enemy* enemy = MoveObjManager::GetInst()->GetEnemy(enemy_id);

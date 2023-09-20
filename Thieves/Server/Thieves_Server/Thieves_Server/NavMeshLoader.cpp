@@ -1,4 +1,5 @@
 #include "NavMeshLoader.h"
+#include "object/moveobj_manager.h"
 #include <iostream>
 #include <cstring>
 #include <fstream>
@@ -74,7 +75,9 @@ bool NavMeshLoader::loadNavMesh(const char* navMeshFilePath) {
 }
 
 
-bool NavMeshLoader::findPath(float startPos[3], float endPos[3], float halfExtents[3]) {
+bool NavMeshLoader::findPath(int enemy_id, float startPos[3], float endPos[3], float halfExtents[3]) {
+    Enemy* e = MoveObjManager::GetInst()->GetEnemy(enemy_id);
+    
     dtQueryFilter filter;
     dtPolyRef startRef, endRef;
     float startNearest[3], endNearest[3];
@@ -107,6 +110,9 @@ bool NavMeshLoader::findPath(float startPos[3], float endPos[3], float halfExten
             pt[0] *= invVertCount;
             pt[1] *= invVertCount;
             pt[2] *= invVertCount;
+            Vector3 astar_pos(pt[0], 0, pt[2]);
+
+            e->enemy_astar.emplace_back(astar_pos);
 
             std::cout << "Point " << i << ": (" << pt[0] << ", " << pt[1] << ", " << pt[2] << ")" << std::endl;
         }

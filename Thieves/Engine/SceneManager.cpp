@@ -519,7 +519,7 @@ void SceneManager::LoadGameScene()
 		}
 	}
 #pragma endregion
-
+*/
 #pragma region PoliceFBX
 	{
 		std::vector<int> occupied_id;
@@ -559,7 +559,7 @@ void SceneManager::LoadGameScene()
 
 	_LoadText = L"Load Map"; // 16
 	Network::GetInst()->SendLoadProgressPacket((char)1500 / 21);
-*/
+//*/
 
 
 

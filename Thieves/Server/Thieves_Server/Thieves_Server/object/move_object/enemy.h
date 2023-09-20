@@ -48,7 +48,12 @@ public:
     int GetNpcDirNum() {
         return npc_dir_num;
     }
-
+    int GetTargetID() {
+        return target_id;
+    }
+    void SetTargetID(int val) {
+        target_id = val;
+    }
     std::atomic_bool in_use;
     std::atomic_bool in_game = false;
 
@@ -57,8 +62,18 @@ public:
     bool look_temp = TRUE;
     float look_x = 0;
     float look_z = 0;
+    // base pos 저장됨.
     float e_dir_pos_x = 0;
     float e_dir_pos_z = 0;
+    // astar 가야되는 경로 좌표들 저장됨.
+    std::vector<Vector3> enemy_astar{};
+    // 가야되는 경로좌표 저장 위치
+    Vector3 astar_base_pos{};
+
+    // 주변에 플레이어 있어?
+    bool near_player = FALSE;
+    
+  
 private:
     std::chrono::system_clock::time_point	m_attack_time;
     std::chrono::system_clock::time_point	m_check_time;
@@ -68,4 +83,7 @@ private:
     std::atomic_int target_id;
     
     int npc_dir_num;
+    // target_id
+    int astar_target_id = 9999;
+    
 };

@@ -16,7 +16,7 @@ constexpr int MAX_ITEM = 20;
 // �� �ϳ��� �ִ� �ο�
 constexpr int USER_NUM = 8;
 // ����
-constexpr float FOV_RANGE = 0.f;
+constexpr float FOV_RANGE = 500.f;
 
 constexpr int MAX_NPC = MAX_ROOM_SIZE * 8;
 
