@@ -22,18 +22,18 @@
 - Unity
 
 
-<img src="https://github.com/rmrgns/Thieves/assets/70666642/64769fad-4819-430e-ac99-999be8afb81f" width="350" height="600"/>
-<img src="https://github.com/rmrgns/Thieves/assets/70666642/5739b276-d037-41c4-9a42-a40a96a0bb96" width="350" height="600"/>
+<img src="https://github.com/rmrgns/Thieves/assets/70666642/64769fad-4819-430e-ac99-999be8afb81f" width="650" height="350"/>
+<img src="https://github.com/rmrgns/Thieves/assets/70666642/5739b276-d037-41c4-9a42-a40a96a0bb96" width="650" height="350"/>
 
-### 쓰레드구조
-## worker Thread
+## 쓰레드구조
+### worker Thread
 GQCS를 호출해 얻은 확장 Overlapped 구조체의 결과에 따라 처리 수행
 
 - 서버 시작시 worker thread 생성
 - OnRecv(): 패킷 재조립 및 처리 함수 실행
 - OnAccept() 세션 생성 후 AcceptEX 호출
 
-## Timer Thread
+### Timer Thread
 Worker Thread에서 요청한 timer_event 만큼 기다린후 worker thread에 다시 처리를 요청
 
 - Worker Thread에서 ID, 시간, 이벤트타입을 담아 Timer에 전달 
