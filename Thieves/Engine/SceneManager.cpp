@@ -244,6 +244,7 @@ void SceneManager::BuildPlayer()
 
 void SceneManager::LoadGameScene()
 {
+	
 	_LoadText = L"Load Start"; // 1
 	Network::GetInst()->SendLoadProgressPacket((char)0);
 #pragma region LayerMask
@@ -304,6 +305,40 @@ void SceneManager::LoadGameScene()
 
 	_LoadText = L"Load UI Camera"; // 4
 	Network::GetInst()->SendLoadProgressPacket((char)300 / 21);
+
+//#pragma region UI_Test
+//	for (int32 i = 0; i < 6; i++)
+//	{
+//		shared_ptr<GameObject> obj = make_shared<GameObject>();
+//		obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
+//		obj->AddComponent(make_shared<Transform>());
+//		obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
+//		obj->GetTransform()->SetLocalPosition(Vec3(-350.f + (i * 120), 250.f, 500.f));
+//		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+//		{
+//			shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+//			meshRenderer->SetMesh(mesh);
+//		}
+//		{
+//			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Texture");
+//
+//			shared_ptr<Texture> texture;
+//			if (i < 3)
+//				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->GetRTTexture(i);
+//			else if (i < 5)
+//				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::LIGHTING)->GetRTTexture(i - 3);
+//			else
+//				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::SHADOW)->GetRTTexture(0);
+//
+//			shared_ptr<Material> material = make_shared<Material>();
+//			material->SetShader(shader);
+//			material->SetTexture(0, texture);
+//			meshRenderer->SetMaterial(material);
+//		}
+//		obj->AddComponent(meshRenderer);
+//		scene->AddGameObject(obj);
+//	}
+//#pragma endregion
 
 #pragma region UI_Camera
 	{
@@ -440,7 +475,7 @@ void SceneManager::LoadGameScene()
 	_LoadText = L"Load Player FBX Data"; // 7
 	Network::GetInst()->SendLoadProgressPacket((char)600 / 21);
 
-#pragma region FBX
+#pragma region Player
 	{
 		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Thief.fbx");
 
@@ -674,13 +709,14 @@ void SceneManager::LoadGameScene()
 #pragma endregion
 
 //#pragma region Object
+//	for (int i{};i<50;i++)
 //	{
 //		shared_ptr<GameObject> obj = make_shared<GameObject>();
 //		obj->SetName(L"OBJ");
 //		obj->AddComponent(make_shared<Transform>());
 //		//obj->AddComponent(make_shared<SphereCollider>());
-//		obj->GetTransform()->SetLocalScale(Vec3(100.f, 1.f, 1.f));
-//		obj->GetTransform()->SetLocalPosition(Vec3(0, 50.f, 0.f));
+//		obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
+//		obj->GetTransform()->SetLocalPosition(Vec3(200.f * i, 100.f, 0.f));
 //		obj->SetStatic(true);
 //		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
 //		{

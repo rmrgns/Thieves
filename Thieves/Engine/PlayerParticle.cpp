@@ -7,6 +7,7 @@
 #include "SceneManager.h"
 #include "Transform.h"
 #include "Scene.h"
+#include "InGameScene.h"
 
 #include "server/main/network.h"
 #include "server/thieves_server/thieves_packet_manager.h"
@@ -49,6 +50,7 @@ void PlayerParticle::LateUpdate()
 			}
 		}
 
+		//PlayerShot();
 		PlayerAttack();
 		GetTransform()->SetLocalPosition(_currentPos);
 		GetTransform()->SetLocalRotation(rotation);
@@ -61,29 +63,46 @@ void PlayerParticle::LateUpdate()
 	}
 	else if (this->GetGameObject()->GetParticleSystem()->GetEffectNumber() == 3)	// gun
 	{
-		pos.x += GetTransform()->GetLook().x * 100.f;
-		pos.z += GetTransform()->GetLook().z * 100.f;
-		pos.y += 100.f;
+		auto iScene = static_pointer_cast<InGameScene>(GET_SINGLE(SceneManager)->GetActiveScene());
 
-		// Attack
-		if (INPUT->GetButtonDown(KEY_TYPE::LBUTTON))
-		{
-			if (_attackState == 0)
+		if (iScene->GetItemNum() == -1) {
+
+
+
+
+
+			pos.x += GetTransform()->GetLook().x * 100.f;
+			pos.z += GetTransform()->GetLook().z * 100.f;
+			pos.y += 125.f;
+
+			// Shot
+
+
+			if (INPUT->GetButtonDown(KEY_TYPE::RBUTTON))
 			{
-				_attackState = 1;
-				_currentPos = pos;
+				if (_attackState == 0)
+				{
+					_attackState = 1;
+					_currentPos = pos;
+				}
 			}
-		}
 
-		PlayerAttack();
-		GetTransform()->SetLocalPosition(_currentPos);
-		GetTransform()->SetLocalRotation(rotation);
+			PlayerShot();
+			GetTransform()->SetLocalPosition(_currentPos);
+			GetTransform()->SetLocalRotation(rotation);
+		}
+		
 	}
 	else if (this->GetGameObject()->GetParticleSystem()->GetEffectNumber() == 4)	// trap
 	{
 		pos.y += 75.f;
+
+
+		PlayerTrapped();
 		GetTransform()->SetLocalPosition(pos);
 	}
+		
+	
 }
 
 void PlayerParticle::PlayerAttack()
@@ -98,14 +117,10 @@ void PlayerParticle::PlayerAttack()
 			{
 				gameObject->GetParticleSystem()->UseParticle(true);
 			}
-			if (gameObject->GetName() == L"ParticleGun")
+			/*if (gameObject->GetName() == L"ParticleGun")
 			{
 				gameObject->GetParticleSystem()->UseParticle(true);
-			}
-			if (gameObject->GetName() == L"ParticleTrap")
-			{
-				gameObject->GetParticleSystem()->UseParticle(true);
-			}
+			}*/
 		}
 
 		_attackState = 2;
@@ -122,11 +137,53 @@ void PlayerParticle::PlayerAttack()
 				{
 					gameObject->GetParticleSystem()->UseParticle(false);
 				}
-				if (gameObject->GetName() == L"ParticleGun")
+			}
+
+			_attackCount = 0.f;
+			_attackState = 0;
+		}
+	}
+	else
+		return;
+}
+
+void PlayerParticle::PlayerGetitem()
+{
+
+}
+
+void PlayerParticle::PlayerShot()
+{
+	if (_attackState == 1)
+	{
+		// ontrigger
+		for (auto& gameObject : GET_SINGLE(SceneManager)->GetActiveScene()->GetGameObjects())
+		{
+			/*if (gameObject->GetName() == L"Particle")
+			{
+				gameObject->GetParticleSystem()->UseParticle(true);
+			}*/
+			if (gameObject->GetName() == L"ParticleGun")
+			{
+				gameObject->GetParticleSystem()->UseParticle(true);
+			}
+		}
+
+		_attackState = 2;
+	}
+	else if (_attackState == 2)
+	{
+		_attackCount += DELTA_TIME;
+		if (_attackCount > 2.5f)
+		{
+			// offtrigger
+			for (auto& gameObject : GET_SINGLE(SceneManager)->GetActiveScene()->GetGameObjects())
+			{
+				/*if (gameObject->GetName() == L"Particle")
 				{
 					gameObject->GetParticleSystem()->UseParticle(false);
-				}
-				if (gameObject->GetName() == L"ParticleTrap")
+				}*/
+				if (gameObject->GetName() == L"ParticleGun")
 				{
 					gameObject->GetParticleSystem()->UseParticle(false);
 				}
@@ -139,3 +196,49 @@ void PlayerParticle::PlayerAttack()
 	else
 		return;
 }
+
+void PlayerParticle::PlayerTrapped()
+{
+	if (_trappedState == 1)
+	{
+		// ontrigger
+		for (auto& gameObject : GET_SINGLE(SceneManager)->GetActiveScene()->GetGameObjects())
+		{
+			/*if (gameObject->GetName() == L"Particle")
+			{
+				gameObject->GetParticleSystem()->UseParticle(true);
+			}*/
+			if (gameObject->GetName() == L"ParticleTrap")
+			{
+				gameObject->GetParticleSystem()->UseParticle(true);
+			}
+		}
+
+		_trappedState = 2;
+	}
+	else if (_trappedState == 2)
+	{
+		_attackCount += DELTA_TIME;
+		if (_attackCount > 2.5f)
+		{
+			// offtrigger
+			for (auto& gameObject : GET_SINGLE(SceneManager)->GetActiveScene()->GetGameObjects())
+			{
+				/*if (gameObject->GetName() == L"Particle")
+				{
+					gameObject->GetParticleSystem()->UseParticle(false);
+				}*/
+				if (gameObject->GetName() == L"ParticleTrap")
+				{
+					gameObject->GetParticleSystem()->UseParticle(false);
+				}
+			}
+
+			_attackCount = 0.f;
+			_trappedState = 0;
+		}
+	}
+	else
+		return;
+}
+

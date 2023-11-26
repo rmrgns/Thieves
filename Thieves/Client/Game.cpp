@@ -17,10 +17,11 @@ void Game::Init(const WindowInfo& info)
 
 	Network::GetInst()->Init(client_fw::CreateUPtr<ThievesPacketManager>(), client_fw::CreateUPtr<ThievesSendManager>());
 	Network::GetInst()->CreateWorker();
-
+	ShowCursor(FALSE);
 }
 
 void Game::Update()
 {
+
 	GEngine->Update();
 }

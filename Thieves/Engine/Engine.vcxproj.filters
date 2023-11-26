@@ -189,9 +189,6 @@
     <ClCompile Include="TextObject.cpp">
       <Filter>Object</Filter>
     </ClCompile>
-    <ClCompile Include="Text.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerInput.cpp">
       <Filter>Object\Script</Filter>
     </ClCompile>
@@ -286,10 +283,13 @@
     <ClCompile Include="ItemUI.cpp">
       <Filter>Object\Script</Filter>
     </ClCompile>
-    <ClCompile Include="Sound.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
     <ClCompile Include="DiamondScript.cpp" />
+    <ClCompile Include="Sound.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -427,9 +427,6 @@
     <ClInclude Include="TextObject.h">
       <Filter>Object</Filter>
     </ClInclude>
-    <ClInclude Include="Text.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerInput.h">
       <Filter>Object\Script</Filter>
     </ClInclude>
@@ -545,10 +542,13 @@
     <ClInclude Include="..\Library\Include\inc\fmod.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Sound.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
     <ClInclude Include="DiamondScript.h" />
+    <ClInclude Include="Sound.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
