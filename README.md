@@ -18,7 +18,7 @@
 - C/C++, Lua
 - DirectX 12
 - IOCP
-- MS SQL
+- My SQL
 - Unity
 
 
