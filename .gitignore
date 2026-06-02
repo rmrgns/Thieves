@@ -413,3 +413,7 @@ Server/bin-int/
 
 Output/
 *.cso
+
+Thieves/Source
+Thieves/Thieves_TestServer
+Thieves/Zips
