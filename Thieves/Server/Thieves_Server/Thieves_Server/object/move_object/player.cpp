@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "player.h"
 #include "iocp_server/iocp_server.h"
+#include "../../SendContext.h"
 
 void Player::DoRecv()
 {
@@ -19,10 +20,13 @@ void Player::DoRecv()
 void Player::DoSend(int num_bytes, void* mess)
 {
 	if (m_socket == INVALID_SOCKET) return;
-	EXP_OVER* ex_over = new EXP_OVER(COMP_OP::OP_SEND, num_bytes, mess);
+
+	SendContext* sData = new SendContext{ reinterpret_cast<char*>(mess) };
+
+	//EXP_OVER* ex_over = new EXP_OVER(COMP_OP::OP_SEND, num_bytes, mess);
 	//std::cout <<"send_size : "<< (int)(((char*)mess)[0]) << std::endl;
 
-	int ret = WSASend(m_socket, &ex_over->_wsa_buf, 1, 0, 0, &ex_over->_wsa_over, NULL);
+	int ret = WSASend(m_socket, sData->GetWsaBuf(), 1, 0, 0, sData->GetOverLapped(), 0);
 	if (SOCKET_ERROR == ret) {
 		int error_num = WSAGetLastError();
 		if (ERROR_IO_PENDING != error_num)

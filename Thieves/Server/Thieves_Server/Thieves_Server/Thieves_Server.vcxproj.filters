@@ -133,6 +133,13 @@
     <ClCompile Include="PathFinder.cpp">
       <Filter>astar</Filter>
     </ClCompile>
+    <ClCompile Include="IOContext.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="AsyncRecv.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="SendContext.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CBox.h" />
@@ -212,6 +219,16 @@
     <ClInclude Include="PathFinder.h">
       <Filter>astar</Filter>
     </ClInclude>
+    <ClInclude Include="IOContext.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="AsyncRecv.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="Task.h">
+      <Filter>coroutine</Filter>
+    </ClInclude>
+    <ClInclude Include="SendContext.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CBox.h" />
@@ -344,6 +361,9 @@
     </Filter>
     <Filter Include="object\NPC">
       <UniqueIdentifier>{e94ff246-26df-476e-a352-38134454b265}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="coroutine">
+      <UniqueIdentifier>{9ebdb57d-cd73-40aa-bb49-53c50aac2801}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

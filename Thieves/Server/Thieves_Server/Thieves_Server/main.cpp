@@ -1,7 +1,10 @@
-
-#include "pch.h"
-
 #include "game_server/ingame_server.h"
+#include <clocale>
+#include <iostream>
+#include <locale>
+#include <ostream>
+#include "protocol.h"
+
 using namespace std;
 const int MAX_THREAD = 8;
 
@@ -11,13 +14,13 @@ int main() {
 	wcout.imbue(locale("korean"));
 	InGameServer server;
 	server.Init(MAX_THREAD);
-	cout << "�ʱ�ȭ �Ϸ�" << endl;
+	cout << "Server Init End" << endl;
 
 	server.BindListen(SERVER_PORT);
-	cout << "���ε� ���� ��" << endl;
+	cout << "Server Bind and Listen" << endl;
 
 	server.Run();
-	cout << "���� ��" << endl;
+	cout << "Start Server" << endl;
 	server.End();
 
 	return 0;

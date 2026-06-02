@@ -3,7 +3,7 @@
 #pragma comment (lib, "MSWSock.LIB")
 
 #include "define.h"
-
+#include "IOContext.h"
 #include <thread>
 #include <vector>
 #include <array>
@@ -35,6 +35,7 @@ public:
 	void Worker();
 
 protected:
+	IOContext acceptCtx;
 	EXP_OVER	accept_ex;
 	SOCKET		m_s_socket;
 	HANDLE		m_hiocp;

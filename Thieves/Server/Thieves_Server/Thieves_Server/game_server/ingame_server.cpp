@@ -1,37 +1,42 @@
 #include "pch.h"
 #include "ingame_server.h"
 #include "packet_manager.h"
+#include <Windows.h>
+#include <WinSock2.h>
+#include <memory>
+#include <thread>
+#include "../define.h"
+#include "../state.h"
 
 using namespace std;
 
-// ������ �Լ� PacketManager�� �ʱ�ȭ
+// PacketManager 초기화
 InGameServer::InGameServer()
 {
 	m_PacketManager = std::make_unique<PacketManager>();
 	m_PacketManager->Init();
 }
 
-// �Ҹ��� �Լ�
+// PacketManager 소멸자
 InGameServer::~InGameServer()
 {
 }
 
-// Ŭ���̾�Ʈ�� ������ �����ҽ� ȣ���ϴ� �Լ� PacketManager�� ����� Ŭ�� ���� ����
+// 클라이언트가 연결되었을 때 호출되는 함수로, PacketManager의 ProcessAccept 함수를 호출하여 클라이언트 연결을 처리한다.q
 bool InGameServer::OnAccept(EXP_OVER* exp_over)
 {
 	m_PacketManager->ProcessAccept(m_hiocp, m_s_socket, exp_over);
 	return true;
 }
 
-// Ŭ�� �����͸� ���Ž� ȣ��Ǵ� �Լ� ���ŵ� ������ PacketManager�� ���ŵ� ������ ����
+// 클라이언트로부터 데이터를 수신했을 때 호출되는 함수로, PacketManager의 ProcessRecv 함수를 호출하여 수신된 데이터를 처리한다.
 bool InGameServer::OnRecv(int c_id, EXP_OVER* exp_over, DWORD num_bytes)
 {
 	m_PacketManager->ProcessRecv(c_id, exp_over, num_bytes);
 	return true;
 }
 
-// �񵿱� ����� �Ϸ� ��ƾ���� �̺�Ʈ �߻��� ȣ��Ǵ� �Լ�
-// �̺�Ʈ ������ ���� �ٸ��� ����
+// 타이머로부터 이벤트가 발생했을 때 호출되는 함수로, PacketManager의 다양한 함수를 호출하여 이벤트를 처리한다.
 void InGameServer::OnEvent(int c_id, EXP_OVER* exp_over)
 {
 	
@@ -97,28 +102,23 @@ void InGameServer::OnEvent(int c_id, EXP_OVER* exp_over)
 	
 }
 
-// Ŭ�� ������ ���� �� ȣ��Ǵ� �Լ�
-// PacketManager�� ������ ���� Ŭ�� ������ ����
 void InGameServer::Disconnect(int c_id)
 {
 	m_PacketManager->Disconnect(c_id);
 }
 
-// Ÿ�̸� �����忡�� �ֱ������� ȣ��Ǵ� �Լ�
-// PacketManager���� Ÿ�̸� �̺�Ʈ ó��
 void InGameServer::DoTimer(HANDLE hiocp)
 {
 	m_PacketManager->ProcessTimer(hiocp);
 }
 
-// Ÿ�̸� ������ ���� �Լ�
 void InGameServer::CreateTimer()
 {
 	m_worker_threads.emplace_back(std::thread(&InGameServer::DoTimer, this, m_hiocp));
 
 }
 
-// ���� ������ �����ϴ� �Լ� ��������, Ÿ�̸Ӿ����� ����, DB������ ����, ������ ���� ����
+
 void InGameServer::Run()
 {
 	StartServer();
@@ -128,7 +128,6 @@ void InGameServer::Run()
 	m_PacketManager->JoinDBThread();
 }
 
-// ���� ���� �Լ�
 void InGameServer::End()
 {
 	m_PacketManager->End();
