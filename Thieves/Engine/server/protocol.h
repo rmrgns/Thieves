@@ -128,6 +128,7 @@ constexpr char SC_PACKET_INVINCIBLE_END = 46;
 constexpr char SC_PACKET_INVINCIBLE = 47;
 constexpr char SC_PACKET_GET_ITEM = 48;
 constexpr char SC_PACKET_DIAMOND_OWNER_CHANGE = 49;
+constexpr char SC_PACKET_GAME_END = 50;
 
 
 constexpr char SC_PACKET_ATTACKMODE = 99;		// ���� ��� ���� 1. �ָ� 2. �� ���
@@ -579,4 +580,9 @@ struct sc_packet_diamond_owner_change {
 	unsigned char size;
 	char type;
 	int new_owner;
+};
+
+struct sc_packet_game_end {
+	unsigned char size;
+	char type;
 };

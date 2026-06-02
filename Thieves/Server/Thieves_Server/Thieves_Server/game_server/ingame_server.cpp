@@ -82,12 +82,15 @@ void InGameServer::OnEvent(int c_id, EXP_OVER* exp_over)
 		m_PacketManager->ProcessOpenSpecialEscape(c_id);
 		delete exp_over;
 		break;
-	case COMP_OP::OP_NPC_TIMER_SPAWN: {
+	case COMP_OP::OP_NPC_TIMER_SPAWN: 
 		m_PacketManager->SpawnNPCTime(c_id, exp_over->room_id);
 		delete exp_over;
 		break;
-	}
-
+	
+	case COMP_OP::OP_ROOM_END: 
+		m_PacketManager->PlayerMoveToLobby(c_id);
+		delete exp_over;
+	
 	defalut:
 		break;
 	}

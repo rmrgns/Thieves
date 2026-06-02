@@ -67,6 +67,7 @@ void ThievesPacketManager::Init()
 	RegisterRecvFunction(SC_PACKET_DIAMOND_OWNER_CHANGE, [this](int c_id, unsigned char* p) {ProcessDiamondOwnerChange(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_WIN, [this](int c_id, unsigned char* p) {ProcessWin(c_id, p); });
 	RegisterRecvFunction(SC_PACKET_DEFEAT, [this](int c_id, unsigned char* p) {ProcessDefeat(c_id, p); });
+	RegisterRecvFunction(SC_PACKET_GAME_END, [this](int c_id, unsigned char* p) {ProcessGameEnd(c_id, p); });
 }
 
 void ThievesPacketManager::ProcessMove(int c_id, unsigned char* p)
@@ -840,6 +841,12 @@ void ThievesPacketManager::ProcessDefeat(int C_id, unsigned char* p)
 		iScene->SetIsGameEnd(true);
 		iScene->SetIsPlayerWin(false);
 	}
+}
+
+void ThievesPacketManager::ProcessGameEnd(int c_id, unsigned char* p)
+{
+	GET_SINGLE(SceneManager)->SetCheckChangeScene(true);
+	GEngine->SetChangeScene(L"Lobby");
 }
 
 ////----------------------수정이 필요

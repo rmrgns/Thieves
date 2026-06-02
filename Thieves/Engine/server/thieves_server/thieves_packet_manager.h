@@ -53,6 +53,7 @@ public:
 	void ProcessDiamondOwnerChange(int c_id, unsigned char* p);
 	void ProcessWin(int c_id, unsigned char* p);
 	void ProcessDefeat(int C_id, unsigned char* p);
+	void ProcessGameEnd(int c_id, unsigned char* p);
 
 	void ProcessTime(int c_id, unsigned char* p);
 	void ProcessNpcAttack(int c_id, unsigned char* p);

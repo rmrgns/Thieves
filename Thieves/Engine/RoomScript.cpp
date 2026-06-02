@@ -75,7 +75,6 @@ void RoomScript::ClickRoomButton()
 
 			GET_SINGLE(SceneManager)->SetCheckChangeScene(true);
 			GEngine->SetChangeScene(L"Lobby");
-			//Network::GetInst()->SendSignInPacket();
 		}
 		else if (point.y > height * 430.f / 900.f && point.y < height * 480.f / 900.f)
 		{
@@ -85,8 +84,6 @@ void RoomScript::ClickRoomButton()
 				static_pointer_cast<RoomScene>(GET_SINGLE(SceneManager)->GetActiveScene());
 
 			bool isPlayerReady = rScene->GetPlayerReady(playerId);
-
-			//rScene->SetPlayerReady(playerId, !isPlayerReady);
 
 			if (rScene->GetPlayerReady(playerId)) {
 				Network::GetInst()->SendReady();

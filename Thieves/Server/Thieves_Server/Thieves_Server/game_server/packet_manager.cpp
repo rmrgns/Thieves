@@ -629,7 +629,30 @@ void PacketManager::EndGame(int room_id)
 
 	for (auto obj_id : room->GetObjList())
 	{
+
 		MoveObjManager::GetInst()->GetMoveObj(obj_id)->Reset();
+	}
+}
+
+void PacketManager::PlayerMoveToLobby(int room_id)
+{
+	
+	Room* room = m_room_manager->GetRoom(room_id);
+
+	if (room->IsGameEnd()) return;
+
+	for (auto obj_id : room->GetObjList()) {
+		if (MoveObjManager::GetInst()->IsPlayer(obj_id)) {
+			Player* pl = MoveObjManager::GetInst()->GetPlayer(obj_id);
+			pl->SetAttacked(false);
+			pl->SetHasDiamond(false);
+			pl->SetItem(-1);
+			pl->SetIsReady(false);
+
+			SendGameEnd(obj_id);
+		}
+
+		room->LeaveRoom(obj_id);
 	}
 }
 
@@ -817,6 +840,17 @@ void PacketManager::SendItemUse(int c_id, Vector3 pos, int item_id, int item_typ
 	pl->DoSend(sizeof(packet), &packet);
 }
 
+void PacketManager::SendGameEnd(int c_id)
+{
+	//새로운 패킷 정의하자
+	sc_packet_game_end packet;
+	packet.type = SC_PACKET_GAME_END;
+	packet.size = sizeof(packet);
+
+	Player* pl = MoveObjManager::GetInst()->GetPlayer(c_id);
+	pl->DoSend(sizeof(packet), &packet);
+}
+
 // �񵿱�� DB�۾��� �����ϴ� Thread
 void PacketManager::DBThread()
 {
@@ -967,6 +1001,9 @@ void PacketManager::ProcessTimer(HANDLE hiocp)
 		else if (tEvent.GetEventType() == EVENT_TYPE::EVENT_TIME) {
 			exover->_comp_op = COMP_OP::OP_STUN_END;
 		}		
+		else if (tEvent.GetEventType() == EVENT_TYPE::EV_ROOM_END) {
+			exover->_comp_op = COMP_OP::OP_ROOM_END;
+		}
 		
 
 		Player* pl = MoveObjManager::GetInst()->GetPlayer(tEvent.GetObjId());
@@ -1061,8 +1098,15 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 {
 	cs_packet_move* packet = reinterpret_cast<cs_packet_move*>(p);
 	Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
-	
+
+
 	if (cl->GetAttacked()) {
+		return;
+	}
+
+	Room* room = m_room_manager->GetRoom(cl->GetRoomID());
+
+	if (room->IsGameEnd()) {
 		return;
 	}
 
@@ -1181,8 +1225,6 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 	}
 	else cl->state_lock.unlock();
 
-	Room* room = m_room_manager->GetRoom(cl->GetRoomID());
-
 	if (isnan(cl->GetPosX()) || isnan(cl->GetPosY()) || isnan(cl->GetPosZ())) {
 		return;
 	}
@@ -1283,6 +1325,11 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 
 						SendGameDefeat(other_pl);
 					}
+					
+					m_Timer->AddTimer(room->GetRoomID(), std::chrono::system_clock::now() + 5s, EVENT_TYPE::EV_ROOM_END);
+					room->m_state_lock.lock();
+					room->SetGameEnd(true);
+					room->m_state_lock.unlock();
 				}
 			}
 		}
@@ -1302,6 +1349,11 @@ void PacketManager::ProcessMove(int c_id, unsigned char* p)
 
 					SendGameDefeat(other_pl);
 				}
+
+				m_Timer->AddTimer(room->GetRoomID(), std::chrono::system_clock::now() + 5s, EVENT_TYPE::EV_ROOM_END);
+				room->m_state_lock.lock();
+				room->SetGameEnd(true);
+				room->m_state_lock.unlock();
 			}
 		}
 	}

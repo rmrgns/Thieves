@@ -63,9 +63,12 @@ void Room::LeaveRoom(int c_id)
 	
 	if (m_obj_list.contains(c_id))
 	{
-		Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
-		if (cl->GetState() == STATE::ST_INROOMREDDY || cl->GetState() == STATE::ST_INGAME) {
-			PlayerCancleReady(c_id);
+		if (MoveObjManager::GetInst()->IsPlayer(c_id))
+		{
+			Player* cl = MoveObjManager::GetInst()->GetPlayer(c_id);
+			if (cl->GetState() == STATE::ST_INROOMREDDY || cl->GetState() == STATE::ST_INGAME) {
+				PlayerCancleReady(c_id);
+			}
 		}
 		m_obj_list.erase(c_id);	
 	}
@@ -86,6 +89,7 @@ void Room::LeaveRoom(int c_id)
 		m_room_state = ROOM_STATE::RT_FREE;
 		m_room_master_id = -1;
 		isGameStarted = false;
+		isGameEnd = false;
 		m_state_lock.unlock();
 
 		m_isEscapeActive = false;
@@ -95,10 +99,16 @@ void Room::LeaveRoom(int c_id)
 			m_item_list[i]->SetItemCode(-1);
 			m_item_list[i]->SetState(ITEM_STATE::ST_NOTUSED);
 		}
+
 	}
 	else {
 		if (m_room_master_id == c_id) {
-			m_room_master_id = *(m_obj_list.begin());
+			if (!m_obj_list.empty()) {
+				m_room_master_id = *(m_obj_list.begin());
+			}
+			else {
+				m_room_master_id = -1;
+			}
 		}
 	}
 	

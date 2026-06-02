@@ -86,10 +86,13 @@ public:
 
 	void SendItemUse(int c_id, Vector3 pos, int item_id, int item_type);
 
+	void SendGameEnd(int c_id);
+
 	void End();
 	void Disconnect(int c_id);
 	bool IsRoomInGame(int room_id);
 	void EndGame(int room_id);
+	void PlayerMoveToLobby(int room_id); // NPC는 없애고, 플레이어들은 초기화 해 주어야 함.
 
 	void SendItemInfo(int c_id, int item_id);
 	void SendGetItem(int c_id, int item_id, int p_id);

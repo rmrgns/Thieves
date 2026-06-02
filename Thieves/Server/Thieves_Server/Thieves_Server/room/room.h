@@ -49,6 +49,9 @@ public:
 
 	int IsGameStarted() { return isGameStarted; }
 
+	void SetGameEnd(bool value) { isGameEnd = value; }
+	bool IsGameEnd() { return isGameEnd; }
+
 	int GetNumberOfPlayer();
 	int GetNumberOfReadyPlayer();
 
@@ -140,4 +143,6 @@ private:
 	std::atomic_bool m_isSpecialEscapeActive;
 
 	Vector3 m_player_spawn;
+
+	bool isGameEnd = false;
 };
