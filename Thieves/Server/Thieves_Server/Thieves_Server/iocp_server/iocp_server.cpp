@@ -75,7 +75,7 @@ bool IOCPServer::BindListen(const int port_num)
 
 	// sizeof(SOCKADDR_IN) 는 주소의 크기.
 
-	AcceptEx(m_s_socket, c_socket, reinterpret_cast<SendContext*>(&acceptCtx)->GetBuffer(), 0, sizeof(SOCKADDR_IN) + 16,
+	AcceptEx(m_s_socket, c_socket, reinterpret_cast<SendContext*>(&acceptCtx)->GetSendBuffer(), 0, sizeof(SOCKADDR_IN) + 16,
 		sizeof(SOCKADDR_IN) + 16, 0, acceptCtx.GetOverLapped());
 	cout << "Aceept Called\n";
 	return true;
@@ -132,8 +132,18 @@ void IOCPServer::Worker()
 		// 함수 하나로 통일 가능.
 
 		if (ctx == &acceptCtx) {
-			OnAccept(reinterpret_cast<EXP_OVER*>(ctx));
-			cout << "Accept Completed.\n";
+			OnAccept(&acceptCtx);
+			cout << "Accept End.\n";
+		}
+
+		if (ctx->IsSend()) {
+			delete reinterpret_cast<SendContext*>(ctx);
+			continue;
+		}
+
+		if (ctx->GetHandle() != nullptr) {
+			ctx->setBytesTransferred(num_byte);
+			ctx->GetHandle()->resume();
 		}
 
 		/* 이전 코드

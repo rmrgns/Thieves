@@ -21,7 +21,7 @@ public:
 	bool BindListen(const int);
 
 	// accept
-	virtual bool OnAccept(EXP_OVER* exp_over) { return false; };
+	virtual bool OnAccept(IOContext* exp_over) { return false; };
 	
 	
 	virtual bool OnRecv(int c_id, EXP_OVER* exp_over, DWORD num_bytes) { return true; };

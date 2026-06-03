@@ -27,6 +27,8 @@ public:
 
 	DWORD GetBytesTransferred() const {	return bytesTransferred;}
 
+	bool IsSend() const { return isSend; }
+
 	void SetHandle(std::coroutine_handle<>& handle) { m_Handle = handle; }
 
 	void setBytesTransferred(DWORD bytes) {

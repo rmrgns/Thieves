@@ -6,6 +6,12 @@
 #include "ray/ray_casting.h"
 #include "Timer.h"
 #include "NavMeshLoader.h"
+#include <Windows.h>
+#include <WinSock2.h>
+#include <chrono>
+#include "../IOContext.h"
+#include "../state.h"
+#include <vec/vec3.h>
 
 class MoveObjManager;
 class DB;
@@ -22,7 +28,7 @@ public:
 
 	void Init();
 	void ProcessPacket(int c_id, unsigned char* p);
-	void ProcessAccept(HANDLE, SOCKET&, EXP_OVER*);
+	void ProcessAccept(HANDLE, SOCKET&, IOContext*);
 	void ProcessRecv(int, EXP_OVER*, DWORD);	
 	void ProcessStunEnd(int c_id);
 	void ProcessInvincibleEnd(int c_id);

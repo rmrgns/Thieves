@@ -9,7 +9,7 @@ public:
 	InGameServer();
 	virtual ~InGameServer();
 
-	virtual bool OnAccept(EXP_OVER* exp_over) override;
+	virtual bool OnAccept(IOContext* exp_over) override;
 	virtual bool OnRecv(int c_id, EXP_OVER* exp_over, DWORD num_byte) override;
 	virtual void OnEvent(int c_id, EXP_OVER* exp_over)override;
 	virtual void Disconnect(int c_id) override;
