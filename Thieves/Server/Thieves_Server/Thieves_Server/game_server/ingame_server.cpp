@@ -23,9 +23,9 @@ InGameServer::~InGameServer()
 }
 
 // 클라이언트가 연결되었을 때 호출되는 함수로, PacketManager의 ProcessAccept 함수를 호출하여 클라이언트 연결을 처리한다.q
-bool InGameServer::OnAccept(EXP_OVER* exp_over)
+bool InGameServer::OnAccept(IOContext* ctx)
 {
-	m_PacketManager->ProcessAccept(m_hiocp, m_s_socket, exp_over);
+	m_PacketManager->ProcessAccept(m_hiocp, m_s_socket, ctx);
 	return true;
 }
 

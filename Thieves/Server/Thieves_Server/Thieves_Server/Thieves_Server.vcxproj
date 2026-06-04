@@ -189,6 +189,7 @@
     <ClCompile Include="room\room.cpp" />
     <ClCompile Include="room\room_manager.cpp" />
     <ClCompile Include="SendContext.cpp" />
+    <ClCompile Include="Session.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -232,6 +233,7 @@
     <ClInclude Include="room\room.h" />
     <ClInclude Include="room\room_manager.h" />
     <ClInclude Include="SendContext.h" />
+    <ClInclude Include="Session.h" />
     <ClInclude Include="state.h" />
     <ClInclude Include="header.h" />
     <ClInclude Include="protocol.h" />

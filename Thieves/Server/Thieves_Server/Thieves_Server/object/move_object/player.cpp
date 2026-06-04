@@ -1,24 +1,15 @@
 #include "pch.h"
 #include "player.h"
+#include "iocp_server/iocp_server.h"
+#include "../../SendContext.h"
 #include <Windows.h>
 #include <WinSock2.h>
 #include "../../protocol.h"
+#include "../../state.h"
 #include "../../Task.h"
 #include "../../AsyncRecv.h"
-
-Task Player::StartPlayerLoop()
-{
-
-	m_prev_size = 0;
-
-	while (true) {
-		WSABUF wsabuf;
-		wsabuf.len = BUFSIZE - m_prev_size;
-		wsabuf.buf = reinterpret_cast<char*>(m_RecvBuf + m_prev_size);
-
-		int numBytes = co_await AsyncRecv{ m_socket, wsabuf, &m_RecvContext };
-
-}
+#include "../../game_server/packet_manager.h"
+#include <span>
 
 void Player::DoRecv()
 {

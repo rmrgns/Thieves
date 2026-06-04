@@ -12,7 +12,7 @@ class AsyncRecv
 	IOContext* ioContext;
 public:
 
-	AsyncRecv() = default;
+	AsyncRecv(SOCKET, WSABUF, IOContext*) noexcept;
 	// 코루틴 규약을 만족하기 위해 필요한 멤버 함수들
 	// await_ready는 코루틴이 대기할 필요가 있는지를 결정하는 함수.
 	bool await_ready() const noexcept;

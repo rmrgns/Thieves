@@ -57,7 +57,7 @@ public:
 
     Task StartPlayerLoop();
 
-    // DoRecv 부분은 Deprecated 됨.
+    // DoRecv 부분은 Deprecated 될 예정
     void DoRecv();
     void DoSend(int num_bytes, void* mess);
     SOCKET& GetSock() { return m_socket; }

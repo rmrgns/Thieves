@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Thieves_Server_Refactored/Thieves_Server_Refactored.vcxproj" Id="285bc68c-c367-4f62-940f-dcd93272e39d" />
+</Solution>

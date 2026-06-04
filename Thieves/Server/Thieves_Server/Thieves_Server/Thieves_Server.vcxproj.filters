@@ -140,6 +140,9 @@
       <Filter>server</Filter>
     </ClCompile>
     <ClCompile Include="SendContext.cpp" />
+    <ClCompile Include="Session.cpp">
+      <Filter>Session</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CBox.h" />
@@ -229,6 +232,9 @@
       <Filter>coroutine</Filter>
     </ClInclude>
     <ClInclude Include="SendContext.h" />
+    <ClInclude Include="Session.h">
+      <Filter>Session</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CBox.h" />
@@ -364,6 +370,9 @@
     </Filter>
     <Filter Include="coroutine">
       <UniqueIdentifier>{9ebdb57d-cd73-40aa-bb49-53c50aac2801}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Session">
+      <UniqueIdentifier>{bcd73fac-e87b-4d35-bc1a-ff096cb48c98}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
