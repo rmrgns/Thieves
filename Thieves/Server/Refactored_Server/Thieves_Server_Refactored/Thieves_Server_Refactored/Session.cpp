@@ -16,6 +16,8 @@ void Session::SetStateCallback(std::function<void(int)> callback)
 
 void Session::Init(int id, SOCKET socket)
 {
+	m_State.store(static_cast<int>(S_STATE::ST_ALLOC));
+
 	m_SessionId = id;
 	m_Socket = socket;
 
@@ -27,8 +29,9 @@ void Session::Init(int id, SOCKET socket)
 Task Session::Run()
 {
 	int remainBytes = 0;
-	std::cout << "Session Start " << m_SessionId << "\n";
-	while (m_State)
+	std::cout << "Session Start " << m_SessionId << ", State is " << m_State.load() << "\n";
+
+	while (m_State.load())
 	{
 		WSABUF wsaBuf;
 		wsaBuf.len = BUFSIZE - remainBytes;

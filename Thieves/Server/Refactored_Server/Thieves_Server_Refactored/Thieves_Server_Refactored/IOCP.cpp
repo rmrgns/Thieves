@@ -215,7 +215,9 @@ void IOCP::WorkerThread()
 
 		std::cout << ctx << "\n";
 
-		if (FALSE == result || (numBytes == 0 && ctx && false == ctx->IsSend()))
+		bool isAccept = (ctx >= &acceptCtxs.front() && ctx <= &acceptCtxs.back());
+
+		if (FALSE == result || (numBytes == 0 && ctx && false == ctx->IsSend() && !isAccept))
 		{
 			// 에러가 났거나 통신이 끊겼으면, disconnect 해줘야 함.
 			// 여기서 각 세션으로 가는게 아니라,
@@ -243,7 +245,7 @@ void IOCP::WorkerThread()
 			continue;
 		}
 
-		if (ctx >= &acceptCtxs.front() && ctx <= &acceptCtxs.back())
+		if (isAccept)
 		{
 			AcceptContext* curAcceptCtx = static_cast<AcceptContext*>(ctx);
 			int newId = GetEmptySessionId();

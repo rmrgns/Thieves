@@ -50,7 +50,7 @@ public:
 
 	void SetSend(bool value) { isSend = value; }
 
-	void SetHandle(std::coroutine_handle<>& handle) { m_Handle = handle; }
+	void SetHandle(std::coroutine_handle<>* handle) { m_Handle = *handle; }
 
 	void InitHandle() { m_Handle = nullptr; }
 
@@ -99,7 +99,7 @@ public:
 	// await_suspend는 코루틴이 중단 되었을 때 호출되는 함수.
 	void await_suspend(std::coroutine_handle<> handle)
 	{
-		m_Ctx->SetHandle(handle);
+		m_Ctx->SetHandle(&handle);
 		DWORD flags = 0;
 		WSARecv(m_Socket, &m_RecvBuffer, 1, 0, &flags, m_Ctx->GetOverLapped(), 0);
 	}
