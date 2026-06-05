@@ -1,4 +1,5 @@
 #include "Server.hpp"
+#include "IOCP.hpp"
 #include "define.hpp"
 #include <clocale>
 #include <iostream>
@@ -13,6 +14,10 @@ int main()
 	setlocale(LC_ALL, "korean");
 
 	wcout.imbue(locale("korean"));
-	Server server;
+	IOCP server;
 
+	server.Init(MAX_THREADS, SERVER_PORT);
+	server.Start();
+
+	server.JoinThreads();
 }

@@ -49,6 +49,8 @@ public:
 
 	void SetHandle(std::coroutine_handle<>& handle) { m_Handle = handle; }
 
+	void InitHandle() { m_Handle = nullptr; }
+
 	void setBytesTransferred(DWORD bytes) {
 		bytesTransferred = bytes;
 	}
@@ -101,7 +103,21 @@ public:
 	int await_resume() const noexcept { return m_Ctx->GetBytesTransferred(); }
 };
 
+// Accept 전용 문맥 구조체를 따로 정의
+class AcceptContext : public IOContext {
+	SOCKET clientSocket;
+	char acceptBuf[1024];
+public:
+	AcceptContext() : IOContext(false), clientSocket(INVALID_SOCKET) {}
 
+	SOCKET* GetSocket() { return &clientSocket; };
+	char* GetBuffer() { return acceptBuf; }
 
+	void SetSocket(SOCKET* sock) { clientSocket = *sock; }
+	void MakeNewSocket() {
+		clientSocket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, nullptr, 0, WSA_FLAG_OVERLAPPED);
+	}
+	
+};
 
 

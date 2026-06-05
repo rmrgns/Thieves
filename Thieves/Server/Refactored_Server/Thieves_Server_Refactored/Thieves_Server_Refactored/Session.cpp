@@ -9,14 +9,19 @@
 #include "PacketManager.hpp"
 #include "State.hpp"
 
+void Session::SetStateCallback(std::function<void(int)> callback)
+{
+	stateCallback = callback;
+}
+
 void Session::Init(int id, SOCKET socket)
 {
-	m_State.store(static_cast<int>(S_STATE::ST_ALLOC));
-
 	m_SessionId = id;
 	m_Socket = socket;
 
-	ZeroMemory(m_RecvCtx.GetOverLapped(), sizeof(m_RecvCtx.GetOverLapped()));
+	ZeroMemory(m_RecvCtx.GetOverLapped(), sizeof(*m_RecvCtx.GetOverLapped()));
+	m_RecvCtx.InitHandle();
+	ZeroMemory(m_RecvBuf, sizeof(m_RecvBuf));
 }
 
 Task Session::Run()
@@ -80,7 +85,7 @@ void Session::Send(void* packet, int size)
 	{
 		int errorCode = WSAGetLastError();
 		if (errorCode != WSA_IO_PENDING) {
-			std::cout << "Session " << GetId() << " SomeThing Wrong.\n";
+			std::cout << "Session " << GetId() << " Something Wrong.\n";
 			delete sendCtx;
 			Disconnect();
 		}
@@ -99,5 +104,9 @@ void Session::Disconnect()
 
 		// TODO:
 		// 패킷매니저에서도 뭔가 해줘야 함.
+
+		if (stateCallback) {
+			stateCallback(m_SessionId);
+		}
 	}
 }
