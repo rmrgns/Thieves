@@ -127,11 +127,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Server.h" />
+    <ClInclude Include="CoroutineTypes.h" />
+    <ClInclude Include="define.hpp" />
+    <ClInclude Include="IOCP.hpp" />
+    <ClInclude Include="PacketManager.hpp" />
+    <ClInclude Include="protocol.hpp" />
+    <ClInclude Include="Server.hpp" />
+    <ClInclude Include="Session.hpp" />
+    <ClInclude Include="State.hpp" />
+    <ClInclude Include="vec2.h" />
+    <ClInclude Include="vec3.h" />
+    <ClInclude Include="vec4.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="IOCP.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PacketManager.cpp" />
     <ClCompile Include="Server.cpp" />
+    <ClCompile Include="Session.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".editorconfig" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

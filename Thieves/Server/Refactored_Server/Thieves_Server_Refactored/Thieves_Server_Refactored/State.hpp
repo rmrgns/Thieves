@@ -1,0 +1,100 @@
+#pragma once
+
+enum class S_STATE
+{
+	ST_FREE,
+	ST_ALLOC,
+};
+ 
+// game state
+enum class P_STATE {
+	ST_NONE,
+	ST_LOGIN,
+	ST_INROOM,
+	ST_INROOMREDDY,
+	ST_INGAME
+};
+
+enum class ROOM_STATE
+{
+	RT_FREE,
+	RT_USED,
+	RT_INGAME,
+	RT_RESET
+};
+
+// Room state
+enum class ROOM_TYPE {
+	RT_FREE,
+	RT_USED,
+	RE_INGAME,
+	RT_RESET
+};
+
+// Object type
+enum class OBJ_TYPE
+{
+	OT_MAPOBJ,
+	OT_SPAWN_AREA,
+	OT_ACTIViTY_AREA,
+	OT_BASE,
+	OT_PLAYER,
+	OT_POLICE
+};
+
+enum class ENEMY_STATE {
+
+};
+
+//enum class OBJ_TYPE {
+//	OT_MAPOBJ,
+//	OT_SPAWN_AREA,
+//
+//};
+
+// Login type
+enum class LOGINFAIL_TYPE {
+	OK,
+	DB_ERROR,
+	FULL,
+	AREADY_SIGHN_IN,
+	WRONG_PASSWORD,
+	NO_ID
+};
+
+// DB
+enum class DB_TASK_TYPE {
+	SIGN_IN,
+	SIGN_UP
+};
+
+// Player action 
+enum class PL_ACTION_TYPE {
+	NONE,
+	MOVE,
+	JUMP,
+	ATTACK
+};
+
+enum class EVENT_TYPE {
+	EVENT_NPC_SPAWN,
+	EVENT_TIMER_NPC_SPAWN,
+	EVENT_NPC_MOVE,
+	EVENT_NPC_ATTACK,
+	EVENT_TIME,
+	EV_STUN_END,
+	EV_INVINCIBLE_END,
+	EV_MOVE,
+	EV_TIMER_START,
+	EV_OPEN_SAFE,
+	EV_OPEN_ESCAPE_AREA,
+	EV_OPEN_SPECIAL_ESCAPE_AREA,
+	EV_ROOM_END,
+};
+
+enum class ITEM_STATE {
+	ST_NOTUSED,
+	ST_SPAWNED,
+	ST_OCCUPIED,
+	ST_SET,
+};
