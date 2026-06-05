@@ -4,6 +4,7 @@
 #include <Windows.h>
 #include <WinSock2.h>
 #include <iostream>
+#include <span>
 #include "CoroutineTypes.h"
 #include "define.hpp"
 #include "PacketManager.hpp"
@@ -44,11 +45,12 @@ Task Session::Run()
 		if (numBytes <= 0) break;
 
 		remainBytes += numBytes;
-		char* p = m_RecvBuf;
+
+		std::span<char> dataView(m_RecvBuf, remainBytes);
 
 		while (remainBytes > 0)
 		{
-			int packetSize = static_cast<unsigned char>(p[0]); // 패킷의 첫 번째 바이트는 패킷의 크기를 나타냄
+			int packetSize = static_cast<unsigned char>(dataView[0]); // 패킷의 첫 번째 바이트는 패킷의 크기를 나타냄
 
 			// 이상한 패킷 오면 막아줘야 함
 			if (packetSize == 0 || packetSize > BUFSIZE)
@@ -59,10 +61,15 @@ Task Session::Run()
 
 			if (packetSize <= remainBytes)
 			{
-				PacketManager::GetInst().ProcessPacket(m_SessionId, (unsigned char*)p);
+				// 패킷 크기만큼만 자른 span 만들기.
+				std::span<char> packetView = dataView.subspan(0, packetSize);
 
-				p += packetSize;
-				remainBytes -= packetSize;
+				// 딱 span만 보내기
+				PacketManager::GetInst().ProcessPacket(m_SessionId, packetView);
+
+				// 처리한 거 만큼 view를 아예 뒤로 밀어버리기
+				// 그럼 += 같은거 할 이유 없음
+				dataView = dataView.subspan(packetSize);
 
 			}
 			else {

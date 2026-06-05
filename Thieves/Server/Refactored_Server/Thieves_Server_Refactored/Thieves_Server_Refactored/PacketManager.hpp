@@ -1,5 +1,5 @@
 #pragma once
-
+#include <span>
 
 class PacketManager
 {
@@ -12,11 +12,12 @@ private:
 public:
 	static PacketManager& GetInst()
 	{
+		// Instance를 요청했을 때 생성한다!
 		static PacketManager s;
 		return s;
 	}
 
 	void Init();
-	void ProcessPacket(int sessionId, unsigned char* packet);
+	void ProcessPacket(int sessionId, std::span<char> packet);
 };
 
