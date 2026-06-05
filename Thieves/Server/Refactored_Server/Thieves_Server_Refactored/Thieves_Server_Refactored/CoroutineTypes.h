@@ -50,7 +50,7 @@ public:
 
 	void SetSend(bool value) { isSend = value; }
 
-	void SetHandle(std::coroutine_handle<>* handle) { m_Handle = *handle; }
+	void SetHandle(std::coroutine_handle<>& handle) { m_Handle = handle; }
 
 	void InitHandle() { m_Handle = nullptr; }
 
@@ -91,7 +91,7 @@ class AsyncRecv
 	IOContext* m_Ctx;
 public:
 
-	AsyncRecv(SOCKET, WSABUF, IOContext*) noexcept {};
+	AsyncRecv(SOCKET sock, WSABUF wsaBuf, IOContext* ioCtx) noexcept : m_Socket(sock), m_RecvBuffer(wsaBuf), m_Ctx(ioCtx) {};
 	// 코루틴 규약을 만족하기 위해 필요한 멤버 함수들
 	// await_ready는 코루틴이 대기할 필요가 있는지를 결정하는 함수.
 	bool await_ready() const noexcept { return false; };
@@ -99,7 +99,7 @@ public:
 	// await_suspend는 코루틴이 중단 되었을 때 호출되는 함수.
 	void await_suspend(std::coroutine_handle<> handle)
 	{
-		m_Ctx->SetHandle(&handle);
+		m_Ctx->SetHandle(handle);
 		DWORD flags = 0;
 		WSARecv(m_Socket, &m_RecvBuffer, 1, 0, &flags, m_Ctx->GetOverLapped(), 0);
 	}

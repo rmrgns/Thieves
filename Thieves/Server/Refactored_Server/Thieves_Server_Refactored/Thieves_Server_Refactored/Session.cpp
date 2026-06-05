@@ -15,14 +15,15 @@ void Session::SetStateCallback(std::function<void(int)> callback)
 }
 
 void Session::Init(int id, SOCKET socket)
-{
-	m_State.store(static_cast<int>(S_STATE::ST_ALLOC));
-
+{	
 	m_SessionId = id;
 	m_Socket = socket;
 
-	ZeroMemory(m_RecvCtx.GetOverLapped(), sizeof(*m_RecvCtx.GetOverLapped()));
+	m_State.store(static_cast<int>(S_STATE::ST_ALLOC));
+
 	m_RecvCtx.InitHandle();
+	ZeroMemory(m_RecvCtx.GetOverLapped(), sizeof(*m_RecvCtx.GetOverLapped()));
+
 	ZeroMemory(m_RecvBuf, sizeof(m_RecvBuf));
 }
 
@@ -31,12 +32,14 @@ Task Session::Run()
 	int remainBytes = 0;
 	std::cout << "Session Start " << m_SessionId << ", State is " << m_State.load() << "\n";
 
-	while (m_State.load())
+	while (m_State.load() == static_cast<int>(S_STATE::ST_ALLOC))
 	{
 		WSABUF wsaBuf;
 		wsaBuf.len = BUFSIZE - remainBytes;
 		wsaBuf.buf = m_RecvBuf + remainBytes;
 		
+		std::cout << "Session " << m_SessionId << ", " << m_Socket << ", " << &m_RecvCtx << "\n";
+
 		int numBytes = co_await AsyncRecv{ m_Socket, wsaBuf , &m_RecvCtx };
 
 		std::cout << "[" << m_SessionId << "] awake. \n";
@@ -48,7 +51,7 @@ Task Session::Run()
 
 		while (remainBytes > 0)
 		{
-			int packetSize = p[0]; // 패킷의 첫 번째 바이트는 패킷의 크기를 나타냄
+			int packetSize = static_cast<unsigned char>(p[0]); // 패킷의 첫 번째 바이트는 패킷의 크기를 나타냄
 
 			// 이상한 패킷 오면 막아줘야 함
 			if (packetSize == 0 || packetSize > BUFSIZE)
@@ -107,7 +110,6 @@ void Session::Disconnect()
 	if (m_State.compare_exchange_strong(expected, static_cast<int>(S_STATE::ST_FREE)))
 	{
 		closesocket(m_Socket);
-		m_Socket = INVALID_SOCKET;
 
 		// TODO:
 		// 패킷매니저에서도 뭔가 해줘야 함.
