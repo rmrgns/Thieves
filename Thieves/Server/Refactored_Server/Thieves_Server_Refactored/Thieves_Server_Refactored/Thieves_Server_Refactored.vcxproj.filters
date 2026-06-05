@@ -42,8 +42,12 @@
     <ClInclude Include="vec4.h">
       <Filter>System\Vector</Filter>
     </ClInclude>
-    <ClInclude Include="Session.hpp" />
-    <ClInclude Include="PacketManager.hpp" />
+    <ClInclude Include="Session.hpp">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketManager.hpp">
+      <Filter>Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Server.cpp">
@@ -53,8 +57,12 @@
     <ClCompile Include="IOCP.cpp">
       <Filter>Network</Filter>
     </ClCompile>
-    <ClCompile Include="Session.cpp" />
-    <ClCompile Include="PacketManager.cpp" />
+    <ClCompile Include="Session.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="PacketManager.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
