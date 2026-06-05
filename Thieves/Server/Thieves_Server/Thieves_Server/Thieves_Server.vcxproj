@@ -146,7 +146,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Astar.cpp" />
-    <ClCompile Include="AsyncRecv.cpp" />
     <ClCompile Include="CBox.cpp" />
     <ClCompile Include="collision_checker.cpp" />
     <ClCompile Include="database\db.cpp" />
@@ -160,7 +159,6 @@
     <ClCompile Include="EVENT.cpp" />
     <ClCompile Include="game_server\ingame_server.cpp" />
     <ClCompile Include="game_server\packet_manager.cpp" />
-    <ClCompile Include="IOContext.cpp" />
     <ClCompile Include="iocp_server\iocp_server.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="main.cpp" />
@@ -188,13 +186,10 @@
     <ClCompile Include="recast_astar.cpp" />
     <ClCompile Include="room\room.cpp" />
     <ClCompile Include="room\room_manager.cpp" />
-    <ClCompile Include="SendContext.cpp" />
-    <ClCompile Include="Session.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Astar.h" />
-    <ClInclude Include="AsyncRecv.h" />
     <ClInclude Include="CBox.h" />
     <ClInclude Include="collision_checker.h" />
     <ClInclude Include="database\db.h" />
@@ -211,7 +206,6 @@
     <ClInclude Include="EVENT.h" />
     <ClInclude Include="game_server\ingame_server.h" />
     <ClInclude Include="game_server\packet_manager.h" />
-    <ClInclude Include="IOContext.h" />
     <ClInclude Include="iocp_server\iocp_server.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="map_object.h" />
@@ -232,12 +226,9 @@
     <ClInclude Include="recast_astar.h" />
     <ClInclude Include="room\room.h" />
     <ClInclude Include="room\room_manager.h" />
-    <ClInclude Include="SendContext.h" />
-    <ClInclude Include="Session.h" />
     <ClInclude Include="state.h" />
     <ClInclude Include="header.h" />
     <ClInclude Include="protocol.h" />
-    <ClInclude Include="Task.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="vec\vec2.h" />
     <ClInclude Include="vec\vec3.h" />

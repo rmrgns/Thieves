@@ -1,13 +1,5 @@
 #pragma once
 #include "move_object.h"
-#include <Windows.h>
-#include <WinSock2.h>
-#include <atomic>
-#include <mutex>
-#include "../../define.h"
-#include "../../protocol.h"
-#include "../../state.h"
-#include "../../Task.h"
 
 class Player :
     public MoveObj
@@ -20,7 +12,7 @@ public:
         m_type = OBJ_TYPE::OT_PLAYER;
         m_state = STATE::ST_FREE;
         m_room_id = 0;
-        ZeroMemory(m_password, sizeof(m_password));
+
     }
     virtual ~Player() = default;
     std::mutex state_lock;
@@ -29,8 +21,7 @@ public:
 
 
 private:
-    IOContext m_RecvContext;
-    unsigned char m_RecvBuf[BUFSIZE];
+
     EXP_OVER m_recv_over;
     SOCKET  m_socket;
     STATE m_state;
@@ -54,10 +45,6 @@ public:
 
     STATE GetState()const { return m_state; }
     void SetState(STATE val) { m_state = val; }
-
-    Task StartPlayerLoop();
-
-    // DoRecv 부분은 Deprecated 될 예정
     void DoRecv();
     void DoSend(int num_bytes, void* mess);
     SOCKET& GetSock() { return m_socket; }

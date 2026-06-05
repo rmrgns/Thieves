@@ -3,7 +3,7 @@
 #pragma comment (lib, "MSWSock.LIB")
 
 #include "define.h"
-#include "IOContext.h"
+
 #include <thread>
 #include <vector>
 #include <array>
@@ -21,7 +21,7 @@ public:
 	bool BindListen(const int);
 
 	// accept
-	virtual bool OnAccept(IOContext* exp_over) { return false; };
+	virtual bool OnAccept(EXP_OVER* exp_over) { return false; };
 	
 	
 	virtual bool OnRecv(int c_id, EXP_OVER* exp_over, DWORD num_bytes) { return true; };
@@ -35,7 +35,6 @@ public:
 	void Worker();
 
 protected:
-	IOContext acceptCtx;
 	EXP_OVER	accept_ex;
 	SOCKET		m_s_socket;
 	HANDLE		m_hiocp;

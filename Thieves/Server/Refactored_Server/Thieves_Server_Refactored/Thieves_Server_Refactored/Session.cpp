@@ -27,14 +27,16 @@ void Session::Init(int id, SOCKET socket)
 Task Session::Run()
 {
 	int remainBytes = 0;
-
+	std::cout << "Session Start " << m_SessionId << "\n";
 	while (m_State)
 	{
 		WSABUF wsaBuf;
 		wsaBuf.len = BUFSIZE - remainBytes;
 		wsaBuf.buf = m_RecvBuf + remainBytes;
-
+		
 		int numBytes = co_await AsyncRecv{ m_Socket, wsaBuf , &m_RecvCtx };
+
+		std::cout << "[" << m_SessionId << "] awake. \n";
 
 		if (numBytes <= 0) break;
 
@@ -94,6 +96,8 @@ void Session::Send(void* packet, int size)
 
 void Session::Disconnect()
 {
+
+	std::cout << "[" << m_SessionId << "] Disconnect. \n";
 	int expected = static_cast<int>(S_STATE::ST_ALLOC);
 
 	// 멀티 스레드 환경에서 문제가 있을 수 있으므로, CAS 연산으로 확실하게 확인.

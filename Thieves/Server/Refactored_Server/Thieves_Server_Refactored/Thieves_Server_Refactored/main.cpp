@@ -11,9 +11,9 @@ const int MAX_THREADS = 8;
 
 int main()
 {
-	setlocale(LC_ALL, "korean");
+	setlocale(LC_ALL, "");
+	wcout.imbue(locale(""));
 
-	wcout.imbue(locale("korean"));
 	IOCP server;
 
 	server.Init(MAX_THREADS, SERVER_PORT);

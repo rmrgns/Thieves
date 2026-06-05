@@ -17,8 +17,6 @@
 #include "Timer.h"
 #include "Item.h"
 #include "ray/ray_casting.h"
-#include "../IOContext.h"
-#include "../SendContext.h"
 
 
 using namespace std;
@@ -147,12 +145,13 @@ void PacketManager::ProcessPacket(int c_id, unsigned char* p)
 	}
 }
 
-void PacketManager::ProcessAccept(HANDLE hiocp, SOCKET& s_socket, IOContext* ctx)
+void PacketManager::ProcessAccept(HANDLE hiocp, SOCKET& s_socket, EXP_OVER* exp_over)
 {
 	std::cout << "Accept process" << std::endl;
-	SOCKET c_socket = *(reinterpret_cast<SendContext*>(&ctx)->GetSendBuffer());
+	SOCKET c_socket = *(reinterpret_cast<SOCKET*>(exp_over->_net_buf));
 
 	int new_id = MoveObjManager::GetInst()->GetNewID();
+	
 	
 	if (-1 == new_id) {
 		std::cout << "Maxmum user overflow. Accept aborted.\n";
@@ -163,7 +162,7 @@ void PacketManager::ProcessAccept(HANDLE hiocp, SOCKET& s_socket, IOContext* ctx
 		cl->SetID(new_id);
 		cl->Init(c_socket);
 		CreateIoCompletionPort(reinterpret_cast<HANDLE>(c_socket), hiocp, new_id, 0);
-		cl->StartPlayerLoop();
+		cl->DoRecv();
 	}
 	ZeroMemory(&exp_over->_wsa_over, sizeof(exp_over->_wsa_over));
 	c_socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED);

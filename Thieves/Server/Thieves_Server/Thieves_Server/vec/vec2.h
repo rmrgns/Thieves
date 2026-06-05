@@ -1,5 +1,5 @@
 #pragma once
-const float EPSILON = 0.0001f;
+const float EPSILON = 0.0001;
 
 class Vector2 {
 public:

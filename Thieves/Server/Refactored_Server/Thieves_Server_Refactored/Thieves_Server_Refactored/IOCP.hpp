@@ -43,7 +43,6 @@ protected:
 	int m_WokerNum;
 	std::vector <std::thread> m_WorkerThreads;
 
-	IOContext acceptCtx;
 	SOCKET c_Socket;
 
 	LPFN_ACCEPTEX acceptFunc = nullptr;

@@ -133,16 +133,6 @@
     <ClCompile Include="PathFinder.cpp">
       <Filter>astar</Filter>
     </ClCompile>
-    <ClCompile Include="IOContext.cpp">
-      <Filter>server</Filter>
-    </ClCompile>
-    <ClCompile Include="AsyncRecv.cpp">
-      <Filter>server</Filter>
-    </ClCompile>
-    <ClCompile Include="SendContext.cpp" />
-    <ClCompile Include="Session.cpp">
-      <Filter>Session</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CBox.h" />
@@ -221,19 +211,6 @@
     </ClInclude>
     <ClInclude Include="PathFinder.h">
       <Filter>astar</Filter>
-    </ClInclude>
-    <ClInclude Include="IOContext.h">
-      <Filter>server</Filter>
-    </ClInclude>
-    <ClInclude Include="AsyncRecv.h">
-      <Filter>server</Filter>
-    </ClInclude>
-    <ClInclude Include="Task.h">
-      <Filter>coroutine</Filter>
-    </ClInclude>
-    <ClInclude Include="SendContext.h" />
-    <ClInclude Include="Session.h">
-      <Filter>Session</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

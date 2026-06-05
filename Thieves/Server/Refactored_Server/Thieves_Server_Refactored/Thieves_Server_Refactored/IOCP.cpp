@@ -6,6 +6,9 @@
 #include <ostream>
 #include <MSWSock.h>
 #include "CoroutineTypes.h"
+#include <thread>
+#include "protocol.hpp"
+#include "State.hpp"
 
 IOCP::IOCP() : m_Handle(INVALID_HANDLE_VALUE), m_Socket(INVALID_SOCKET) 
 {
@@ -23,16 +26,17 @@ bool IOCP::Init(const int workerNum, const int portNum)
 	if (WSAStartup(MAKEWORD(2, 2), &WSAData) != 0)
 		return false;
 
+	m_Handle = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, NULL, 0); // iocp 초기화
+
 	// Listen을 하기위한 소켓
 	m_Socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED);
+	CreateIoCompletionPort(reinterpret_cast<HANDLE>(m_Socket), m_Handle, 0, 0); // iocp 생성
 
 	if (INVALID_SOCKET == m_Socket)
 	{
 		ErrorDisplay(WSAGetLastError());
 		return false;
 	}
-
-	m_WokerNum = workerNum;
 
 	SOCKADDR_IN serverAddr;
 	ZeroMemory(&serverAddr, sizeof(serverAddr));
@@ -49,19 +53,14 @@ bool IOCP::Init(const int workerNum, const int portNum)
 	}
 
 	result = listen(m_Socket, SOMAXCONN);
+
 	if (0 != result) {
 		ErrorDisplay(WSAGetLastError());
 		return false;
 	}
 
-	m_Handle = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, NULL, 0); // iocp 초기화
-
-	CreateIoCompletionPort(reinterpret_cast<HANDLE>(m_Socket), m_Handle, 0, 0); // iocp 생성
-
 	DWORD bytes = 0;
-
 	GUID guidAcceptEx = WSAID_ACCEPTEX;
-
 	result = WSAIoctl(
 		m_Socket,
 		SIO_GET_EXTENSION_FUNCTION_POINTER,
@@ -75,7 +74,43 @@ bool IOCP::Init(const int workerNum, const int portNum)
 		return false;
 	}
 
+	InitializeSessions();
+
+
+	m_WokerNum = std::thread::hardware_concurrency();
+
 	return true;
+}
+
+void IOCP::PostAccept(AcceptContext* ctx)
+{
+	std::cout << "Post Accept Start.\n";
+
+	ctx->MakeNewSocket();
+
+	std::cout << "AcceptContext Make New Socket. : " << *ctx->GetSocket() << "\n";
+
+	ZeroMemory(ctx->GetOverLapped(), sizeof(*ctx->GetOverLapped()));
+
+	DWORD bytes = 0;
+	int addrSize = sizeof(SOCKADDR_IN) + 16;
+
+	if (FALSE == acceptFunc(
+		m_Socket,
+		*ctx->GetSocket(),
+		ctx->GetBuffer(),
+		0, addrSize, addrSize,
+		&bytes, ctx->GetOverLapped()
+	))
+	{
+		if (WSAGetLastError() != WSA_IO_PENDING)
+		{
+			std::cout << "PostAcceptError. \n";
+		}
+	}
+
+	std::wcout << "accept Complete.\n";
+
 }
 
 void IOCP::ErrorDisplay(int errNum)
@@ -95,7 +130,7 @@ bool IOCP::Start()
 {
 	CreateWorker();
 
-	for (int i = 0; i < 50; ++i)
+	for (int i = 0; i < acceptCtxs.size(); ++i)
 	{
 		PostAccept(&acceptCtxs[i]);
 	}
@@ -117,17 +152,24 @@ void IOCP::InitializeSessions()
 
 		InterlockedPushEntrySList(&freeSessionList, &(sessionNodes[i].ItemEntry));
 	}
+
+	std::cout << "Session Initialized. \n";
 }
 
 int IOCP::GetEmptySessionId()
 {
+
 	PSLIST_ENTRY entry = InterlockedPopEntrySList(&freeSessionList);
+
+	std::cout << "GetEmptySessionId. \n";
 
 	if (entry == nullptr) {
 		return -1; // 꽉 찼음
 	}
 
 	SessionNode* node = reinterpret_cast<SessionNode*>(entry);
+	
+	std::cout << "EmptySessionId is " << node->SessionId << "\n";
 
 	return node->SessionId;
 }
@@ -137,6 +179,8 @@ void IOCP::ReturnSessionId(int id)
 	sessions[id].SetState(static_cast<int>(S_STATE::ST_FREE));
 
 	InterlockedPushEntrySList(&freeSessionList, &(sessionNodes[id].ItemEntry));
+
+	std::cout << "ReturnSessionId " << id << "\n";
 }
 
 void IOCP::JoinThreads()
@@ -160,20 +204,29 @@ void IOCP::CreateWorker()
 void IOCP::WorkerThread()
 {
 	while (true) {
-		DWORD numBytes;
-		LONG64 iocpKey;
-		WSAOVERLAPPED* pOver;
+		DWORD numBytes = 0;
+		LONG64 iocpKey = 0;
+		WSAOVERLAPPED* pOver = nullptr;
 
 		BOOL result = GetQueuedCompletionStatus(m_Handle, &numBytes, (PULONG_PTR)&iocpKey, &pOver, INFINITE);
 		IOContext* ctx = reinterpret_cast<IOContext*>(pOver);
 
+		std::cout << "GQCS END. Key is " << iocpKey << ".\n";
+
+		std::cout << ctx << "\n";
+
 		if (FALSE == result || (numBytes == 0 && ctx && false == ctx->IsSend()))
 		{
+			// 에러가 났거나 통신이 끊겼으면, disconnect 해줘야 함.
+			// 여기서 각 세션으로 가는게 아니라,
+			// 받은 bytes 수를 0으로 설정해주는 것으로
+			// 코루틴 내부에서 스스로 멈추도록 설정해 줌
+
 			int errNum = WSAGetLastError();
 			std::cout << "GQCS ERROR : ";
 			if (numBytes == 0)
 			{
-				std::cout << " numBytes is 0";
+				std::cout << " numBytes is 0 ";
 			}
 			else
 			{
@@ -181,14 +234,7 @@ void IOCP::WorkerThread()
 			}
 			std::cout << "\n";
 
-
-
-			// 에러가 났거나 통신이 끊겼으면, disconnect 해줘야 함.
-			// 여기서 각 세션으로 가는게 아니라,
-			// 받은 bytes 수를 0으로 설정해주는 것으로
-			// 코루틴 내부에서 스스로 멈추도록 설정해 줌
-
-			if (ctx && ctx->GetHandle())
+			if (ctx != nullptr && *ctx->GetHandle())
 			{
 				ctx->setBytesTransferred(0);
 				ctx->GetHandle()->resume();
@@ -197,9 +243,9 @@ void IOCP::WorkerThread()
 			continue;
 		}
 
-		if (ctx >= &acceptCtxs[0] && ctx <= &acceptCtxs[acceptCtxs.size() - 1])
+		if (ctx >= &acceptCtxs.front() && ctx <= &acceptCtxs.back())
 		{
-			AcceptContext* curAcceptCtx = reinterpret_cast<AcceptContext*>(ctx);
+			AcceptContext* curAcceptCtx = static_cast<AcceptContext*>(ctx);
 			int newId = GetEmptySessionId();
 
 			if (newId != -1)
@@ -208,32 +254,26 @@ void IOCP::WorkerThread()
 				sessions[newId].Init(newId, *curAcceptCtx->GetSocket());
 				sessions[newId].Run();
 			}
+			else
+			{
+				closesocket(*curAcceptCtx->GetSocket());
+			}
 
 			PostAccept(curAcceptCtx);
 			continue;
 		}
-	}
-}
 
-void IOCP::PostAccept(AcceptContext* ctx)
-{
-	ctx->MakeNewSocket();
-	ZeroMemory(ctx->GetOverLapped(), sizeof(*ctx->GetOverLapped()));
-
-	DWORD bytes = 0;
-	int addrSize = sizeof(SOCKADDR_IN) + 16;
-
-	if (FALSE == acceptFunc(
-		m_Socket,
-		*ctx->GetSocket(),
-		ctx->GetBuffer(),
-		0, addrSize, addrSize,
-		&bytes, ctx->GetOverLapped()
-	))
-	{
-		if (WSAGetLastError() != WSA_IO_PENDING)
+		if (ctx->IsSend())
 		{
-			std::cout << "PosAcceptError. \n";
+			delete reinterpret_cast<SendContext*>(ctx);
+		}
+
+		if (*ctx->GetHandle())
+		{
+			ctx->setBytesTransferred(numBytes);
+			ctx->GetHandle()->resume();
 		}
 	}
 }
+
+

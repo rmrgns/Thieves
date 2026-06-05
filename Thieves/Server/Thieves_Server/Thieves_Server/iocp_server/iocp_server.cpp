@@ -3,20 +3,7 @@
 
 #include "pch.h"
 #include "iocp_server.h"
-#include <ws2def.h>
-#include <MSWSock.h>
-#include <Windows.h>
-#include <WinSock2.h>
-#include <iostream>
-#include <ostream>
-#include <coroutine>
-#include <span>
-#include "../define.h"
-#include "../state.h"
-#include "../IOContext.h"
-#include "../SendContext.h"
 using namespace std;
-
 IOCPServer::IOCPServer()
 {
 }
@@ -67,16 +54,14 @@ bool IOCPServer::BindListen(const int port_num)
 	CreateIoCompletionPort(reinterpret_cast<HANDLE>(m_s_socket), m_hiocp, 0, 0);
 
 	SOCKET c_socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED);
+	char	accept_buf[sizeof(SOCKADDR_IN) * 2 + 32 + 100];
 
-	// Accept도 IOContext를 활용해, 코루틴으로 처리할 수 있도록 변경.
+	ZeroMemory(&accept_ex._wsa_over, sizeof(accept_ex._wsa_over));
+	*(reinterpret_cast<SOCKET*>(&accept_ex._net_buf)) = c_socket;
+	accept_ex._comp_op = COMP_OP::OP_ACCEPT;
 
-	// accept용 데이터 초기화
-	ZeroMemory(acceptCtx.GetOverLapped(), sizeof(acceptCtx.GetOverLapped()));
-
-	// sizeof(SOCKADDR_IN) 는 주소의 크기.
-
-	AcceptEx(m_s_socket, c_socket, reinterpret_cast<SendContext*>(&acceptCtx)->GetSendBuffer(), 0, sizeof(SOCKADDR_IN) + 16,
-		sizeof(SOCKADDR_IN) + 16, 0, acceptCtx.GetOverLapped());
+	AcceptEx(m_s_socket, c_socket, accept_buf, 0, sizeof(SOCKADDR_IN) + 16,
+		sizeof(SOCKADDR_IN) + 16, NULL, &accept_ex._wsa_over);
 	cout << "Aceept Called\n";
 	return true;
 }
@@ -91,62 +76,26 @@ void IOCPServer::CreateWorker()
 // IOCP 쓰레드
 void IOCPServer::Worker()
 {
-	// iocp 대기중인 작업
-
-
-	while (true) {
+	for (;;) {
+		// iocp 대기중인 작업
 		DWORD num_byte;
 		LONG64 iocp_key;
 		WSAOVERLAPPED* p_over;
 		BOOL ret = GetQueuedCompletionStatus(m_hiocp, &num_byte, (PULONG_PTR)&iocp_key, &p_over, INFINITE);
 
 		int client_id = static_cast<int>(iocp_key);
-		
+		EXP_OVER* exp_over = reinterpret_cast<EXP_OVER*>(p_over);
 		if (FALSE == ret) {
 			int err_no = WSAGetLastError();
 			cout << "GQCS Error : ";
 			error_display(err_no);
 			cout << endl;
 			Disconnect(client_id);
+			if (exp_over->_comp_op == COMP_OP::OP_SEND)
+				delete exp_over;
 			continue;
 		}
 
-		
-		// C++ 17 이전까지는 코루틴이 없었기 때문에 switch-case문으로
-		// 작업을 구분해서 처리했으나, C++20 이후 부터 코루틴을 활용하는 것이 좋아보임.
-
-		// IOContext가 생김으로서, 기존의 exp_over 구조체를 대신해줌.
-		// IOContext는 WSAOVERLAPPED 구조체를 포함하고 있기 때문에,
-		// exp_over 대신 IOContext로 reinterpret_cast해서 사용하면 됨.
-		auto* ctx = reinterpret_cast<IOContext*>(p_over);
-
-		ctx->setBytesTransferred(num_byte);
-
-		// 아래와 같이 resume만 호출하면, IOContext에 저장된 코루틴 핸들을 통해 해당 코루틴이 다시 실행됨.
-		if (ctx->GetHandle() != nullptr) { ctx->GetHandle()->resume(); }
-
-		// 이전에는 아래에서 OP 타입을 나누어 일일이 확인해야 했지만,
-		// IOContext를 활용하면, 코루틴 핸들만 resume해주면 되기 때문에, 코드가 훨씬 간결해짐.
-
-		// 기존에 하던 Recv, ProcessPacket, OpRecv 등은
-		// 함수 하나로 통일 가능.
-
-		if (ctx == &acceptCtx) {
-			OnAccept(&acceptCtx);
-			cout << "Accept End.\n";
-		}
-
-		if (ctx->IsSend()) {
-			delete reinterpret_cast<SendContext*>(ctx);
-			continue;
-		}
-
-		if (ctx->GetHandle() != nullptr) {
-			ctx->setBytesTransferred(num_byte);
-			ctx->GetHandle()->resume();
-		}
-
-		/* 이전 코드
 		switch (exp_over->_comp_op) {
 		case COMP_OP::OP_RECV: {
 			if (false == OnRecv(client_id, exp_over, num_byte))
@@ -171,7 +120,6 @@ void IOCPServer::Worker()
 			OnEvent(client_id, exp_over);
 			break;
 		}
-		*/
 	}
 	cout << "Worker" << endl;
 
@@ -180,7 +128,7 @@ void IOCPServer::Worker()
 // 에러확인
 void IOCPServer::error_display(int err_no)
 {
-	WCHAR* lpMsgBuf = nullptr;
+	WCHAR* lpMsgBuf;
 	FormatMessage(
 		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
 		NULL, err_no,

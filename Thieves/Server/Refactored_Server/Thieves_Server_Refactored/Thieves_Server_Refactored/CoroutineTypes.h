@@ -33,6 +33,9 @@ private:
 
 public:
 	IOContext(bool isSend = false) : bytesTransferred(0), isSend(isSend) {
+
+		std::cout << "New IOContext! " << this << "\n";
+
 		ZeroMemory(&m_Overlapped, sizeof(m_Overlapped));
 		m_Handle = nullptr;
 	}
@@ -64,6 +67,9 @@ class SendContext : IOContext
 
 public:
 	SendContext(void* packet, int size) : IOContext(true) {
+
+		std::cout << "New SendContext! " << this << "\n";
+
 		wsaBuf.len = size;
 		wsaBuf.buf = sendBuf;
 
@@ -108,7 +114,9 @@ class AcceptContext : public IOContext {
 	SOCKET clientSocket;
 	char acceptBuf[1024];
 public:
-	AcceptContext() : IOContext(false), clientSocket(INVALID_SOCKET) {}
+	AcceptContext() : IOContext(false), clientSocket(INVALID_SOCKET) {
+		std::cout << "New AcceptContext! " << this << "\n";
+	}
 
 	SOCKET* GetSocket() { return &clientSocket; };
 	char* GetBuffer() { return acceptBuf; }
