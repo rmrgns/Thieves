@@ -38,12 +38,12 @@ bool IOCP::Init(const int workerNum, const int portNum)
 		return false;
 	}
 
-	SOCKADDR_IN serverAddr;
-	ZeroMemory(&serverAddr, sizeof(serverAddr));
-	serverAddr.sin_family = AF_INET;
-	serverAddr.sin_port = htons(portNum);
-	serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
-
+	SOCKADDR_IN serverAddr{
+		.sin_family = AF_INET,
+		.sin_port = htons(portNum),
+		.sin_addr = {.S_un = {.S_addr = htonl(INADDR_ANY)}}
+	};
+		
 	int result = bind(m_Socket, reinterpret_cast<sockaddr*>(&serverAddr), sizeof(serverAddr));
 
 	if (0 != result)
@@ -156,7 +156,7 @@ void IOCP::InitializeSessions()
 	std::cout << "Session Initialized. \n";
 }
 
-int IOCP::GetEmptySessionId()
+std::optional<int> IOCP::GetEmptySessionId()
 {
 
 	PSLIST_ENTRY entry = InterlockedPopEntrySList(&freeSessionList);
@@ -164,7 +164,7 @@ int IOCP::GetEmptySessionId()
 	std::cout << "GetEmptySessionId. \n";
 
 	if (entry == nullptr) {
-		return -1; // 꽉 찼음
+		return std::nullopt; // 꽉 찼음
 	}
 
 	SessionNode* node = reinterpret_cast<SessionNode*>(entry);
@@ -181,14 +181,6 @@ void IOCP::ReturnSessionId(int id)
 	InterlockedPushEntrySList(&freeSessionList, &(sessionNodes[id].ItemEntry));
 
 	std::cout << "ReturnSessionId " << id << "\n";
-}
-
-void IOCP::JoinThreads()
-{
-	for (auto& worker : m_WorkerThreads)
-	{
-		worker.join();
-	}
 }
 
 void IOCP::CreateWorker()
@@ -248,13 +240,12 @@ void IOCP::WorkerThread()
 		if (isAccept)
 		{
 			AcceptContext* curAcceptCtx = static_cast<AcceptContext*>(ctx);
-			int newId = GetEmptySessionId();
 
-			if (newId != -1)
+			if (auto newId = GetEmptySessionId(); newId.has_value())
 			{
-				CreateIoCompletionPort(reinterpret_cast<HANDLE>(*curAcceptCtx->GetSocket()), m_Handle, newId, 0);
-				sessions[newId].Init(newId, *curAcceptCtx->GetSocket());
-				sessions[newId].Run();
+				CreateIoCompletionPort(reinterpret_cast<HANDLE>(*curAcceptCtx->GetSocket()), m_Handle, newId.value(), 0);
+				sessions[newId.value()].Init(newId.value(), *curAcceptCtx->GetSocket());
+				sessions[newId.value()].Run();
 			}
 			else
 			{

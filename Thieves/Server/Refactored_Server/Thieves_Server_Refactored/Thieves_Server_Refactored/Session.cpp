@@ -23,7 +23,6 @@ void Session::Init(int id, SOCKET socket)
 
 	m_RecvCtx.InitHandle();
 	ZeroMemory(m_RecvCtx.GetOverLapped(), sizeof(*m_RecvCtx.GetOverLapped()));
-
 	ZeroMemory(m_RecvBuf, sizeof(m_RecvBuf));
 }
 
@@ -34,10 +33,8 @@ Task Session::Run()
 
 	while (m_State.load() == static_cast<int>(S_STATE::ST_ALLOC))
 	{
-		WSABUF wsaBuf;
-		wsaBuf.len = BUFSIZE - remainBytes;
-		wsaBuf.buf = m_RecvBuf + remainBytes;
-		
+		WSABUF wsaBuf { .len = static_cast<ULONG>(BUFSIZE - remainBytes), .buf = m_RecvBuf + remainBytes };
+
 		std::cout << "Session " << m_SessionId << ", " << m_Socket << ", " << &m_RecvCtx << "\n";
 
 		int numBytes = co_await AsyncRecv{ m_Socket, wsaBuf , &m_RecvCtx };

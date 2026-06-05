@@ -6,6 +6,7 @@
 #include <Windows.h>
 #include <WinSock2.h>
 #include <vector>
+#include <optional>
 #include "protocol.hpp"
 
 __declspec(align(16)) struct SessionNode {
@@ -26,14 +27,13 @@ public:
 	static void ErrorDisplay(int errNum);
 	virtual bool Start();
 
-	void JoinThreads();
 	void CreateWorker();
 	void WorkerThread();
 
 	void PostAccept(AcceptContext*);
 
 	void InitializeSessions();
-	int GetEmptySessionId();
+	std::optional<int> GetEmptySessionId();
 	void ReturnSessionId(int id);
 
 protected:
@@ -41,7 +41,7 @@ protected:
 	SOCKET m_Socket;
 	HANDLE m_Handle;
 	int m_WokerNum;
-	std::vector <std::thread> m_WorkerThreads;
+	std::vector <std::jthread> m_WorkerThreads;
 
 	SOCKET c_Socket;
 

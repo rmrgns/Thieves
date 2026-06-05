@@ -18,6 +18,4 @@ int main()
 
 	server.Init(MAX_THREADS, SERVER_PORT);
 	server.Start();
-
-	server.JoinThreads();
 }
