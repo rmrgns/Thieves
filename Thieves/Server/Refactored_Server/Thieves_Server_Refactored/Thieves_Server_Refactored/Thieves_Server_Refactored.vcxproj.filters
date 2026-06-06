@@ -63,6 +63,9 @@
     <ClCompile Include="PacketManager.cpp">
       <Filter>Network</Filter>
     </ClCompile>
+    <ClCompile Include="PacketList.def">
+      <Filter>System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

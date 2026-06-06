@@ -142,6 +142,7 @@
   <ItemGroup>
     <ClCompile Include="IOCP.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PacketList.def" />
     <ClCompile Include="PacketManager.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="Session.cpp" />

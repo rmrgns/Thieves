@@ -87,13 +87,16 @@ Task Session::Run()
 	Disconnect();
 }
 
-void Session::Send(void* packet, int size)
+void Session::SendRaw(void* packet, int size)
 {
 	if (m_State.load() != static_cast<int>(S_STATE::ST_ALLOC)) return;
 
 	SendContext* sendCtx = new SendContext(packet, size);
 
-	if (WSASend(m_Socket, sendCtx->GetWsaBuf(), 1, 0, 0, sendCtx->GetOverLapped(), 0) == SOCKET_ERROR)
+	DWORD sentBytes = 0;
+	int result = WSASend(m_Socket, sendCtx->GetWsaBuf(), 1, 0, 0, sendCtx->GetOverLapped(), 0);
+
+	if (result == SOCKET_ERROR)
 	{
 		int errorCode = WSAGetLastError();
 		if (errorCode != WSA_IO_PENDING) {

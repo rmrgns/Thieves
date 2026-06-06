@@ -29,6 +29,14 @@ private:
 
 public:
 
+	template <typename T>
+	void SendPacket(unsigned char packetId, T& packetData) {
+		packetData.size = static_cast<unsigned char>(sizeof(T));
+		packetData.type = packetId;
+
+		this->SendRaw(&packetData, sizeof(T));
+	}
+
 	Session() : m_SessionId(-1), m_Socket(INVALID_SOCKET), m_State(static_cast<int>(S_STATE::ST_FREE)) {};
 
 	void SetStateCallback(std::function<void(int)>);
@@ -36,13 +44,17 @@ public:
 	void Init(int id, SOCKET socket);
 
 	int GetId() const { return m_SessionId; };
-	int GetState() const { return m_State; }
+	int GetState() const { return m_State; };
 
-	void SetState(int value) { m_State.store(value); }
+	void SetState(int value) { m_State.store(value); };
+
+
 
 	Task Run();
-	void Send(void* packet, int size);
 	void Disconnect();
+
+private:
+	void SendRaw(void* packet, int size);
 
 };
 

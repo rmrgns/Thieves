@@ -60,25 +60,36 @@ public:
 };
 
 // Send 전용 버퍼를 가진 클래스 (기존의 EXP_OVER의 역할)
-class SendContext : IOContext
+// SList 활용해서 미리 많이 만들어 놓고 순서대로 꺼내 놓는 방식으로 진행할 거기 때문에,
+// SList를 활용하기 위해 16바이트 단위로 정렬해두기.
+class alignas(16) SendContext : SLIST_ENTRY, IOContext
 {
 	WSABUF wsaBuf;
-	char sendBuf[BUFSIZE];
+	std::vector<char> sendBuf;
 
 public:
-	SendContext(void* packet, int size) : IOContext(true) {
+	SendContext() : IOContext(true) {
+		// 1024는 일단 정한 수치이므로, 나중에 변경해 주어야 함.
+		sendBuf.reserve(1024);
+	}
 
-		std::cout << "New SendContext! " << this << "\n";
+	void Setup(void* packet, int size)
+	{
+		char* p = static_cast<char*>(packet);
 
-		wsaBuf.len = size;
-		wsaBuf.buf = sendBuf;
+		sendBuf.assign(p, p + size);
 
-		if (size <= BUFSIZE) memcpy(sendBuf, packet, size);
+		wsaBuf = {
+			.len = static_cast<ULONG>(size),
+			.buf = sendBuf.data()
+		};
+
+		ZeroMemory(GetOverLapped(), sizeof(*GetOverLapped()));
 	}
 
 	WSABUF* GetWsaBuf() { return &wsaBuf; }
 
-	char* GetSendBuffer() { return sendBuf; }
+	std::vector<char>* GetSendBuffer() { return &sendBuf; }
 
 	WSAOVERLAPPED* GetOverLapped() { return IOContext::GetOverLapped(); }
 
