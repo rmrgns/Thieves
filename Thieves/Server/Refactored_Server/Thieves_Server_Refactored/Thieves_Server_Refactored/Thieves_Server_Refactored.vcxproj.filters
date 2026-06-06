@@ -51,7 +51,22 @@
     <ClInclude Include="SendContextManager.h">
       <Filter>Network</Filter>
     </ClInclude>
-    <ClInclude Include="TimerManager.h">
+    <ClInclude Include="TimerManager.hpp">
+      <Filter>GameLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveObjManager.h">
+      <Filter>GameLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="SessionManager.hpp">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveObj.h">
+      <Filter>GameLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>GameLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC.h">
       <Filter>GameLogic</Filter>
     </ClInclude>
   </ItemGroup>
@@ -73,6 +88,21 @@
       <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="TimerManager.cpp">
+      <Filter>GameLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveObjManager.cpp">
+      <Filter>GameLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="SessionManager.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveObj.cpp">
+      <Filter>GameLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>GameLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="NPC.cpp">
       <Filter>GameLogic</Filter>
     </ClCompile>
   </ItemGroup>

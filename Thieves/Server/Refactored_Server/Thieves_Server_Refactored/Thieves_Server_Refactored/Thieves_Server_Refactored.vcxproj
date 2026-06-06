@@ -130,13 +130,18 @@
     <ClInclude Include="CoroutineTypes.h" />
     <ClInclude Include="define.hpp" />
     <ClInclude Include="IOCP.hpp" />
+    <ClInclude Include="MoveObj.h" />
+    <ClInclude Include="MoveObjManager.h" />
+    <ClInclude Include="NPC.h" />
     <ClInclude Include="PacketManager.hpp" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="protocol.hpp" />
     <ClInclude Include="SendContextManager.h" />
     <ClInclude Include="Server.hpp" />
     <ClInclude Include="Session.hpp" />
+    <ClInclude Include="SessionManager.hpp" />
     <ClInclude Include="State.hpp" />
-    <ClInclude Include="TimerManager.h" />
+    <ClInclude Include="TimerManager.hpp" />
     <ClInclude Include="vec2.h" />
     <ClInclude Include="vec3.h" />
     <ClInclude Include="vec4.h" />
@@ -144,13 +149,18 @@
   <ItemGroup>
     <ClCompile Include="IOCP.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MoveObj.cpp" />
+    <ClCompile Include="MoveObjManager.cpp" />
+    <ClCompile Include="NPC.cpp" />
     <ClCompile Include="PacketList.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="PacketManager.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="Session.cpp" />
+    <ClCompile Include="SessionManager.cpp" />
     <ClCompile Include="TimerManager.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,5 @@
 #include "PacketManager.hpp"
-#include "SendContextManager.h"
+#include "SessionManager.hpp"
 #include <span>
 #include <iostream>
 
@@ -27,6 +27,13 @@ void PacketManager::ProcessPacket(int sessionId, std::span<char> packet)
 
 void PacketManager::ProcessSignIn(int sessionId, cs_packet_sign_in* packet)
 {
+	sc_packet_sign_in_ok p = {
+		.size = sizeof(p),
+		.type = SC_PACKET_SIGN_IN_OK,
+		.id = sessionId
+	};
+
+	SessionManager::GetInst().GetSession(sessionId)->SendPacket(SC_PACKET_SIGN_IN_OK, p);
 }
 
 void PacketManager::ProcessSignUp(int sessionId, cs_packet_sign_up* packet)

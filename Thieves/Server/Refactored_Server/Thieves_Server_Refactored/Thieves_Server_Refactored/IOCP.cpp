@@ -7,8 +7,6 @@
 #include <MSWSock.h>
 #include "CoroutineTypes.h"
 #include <thread>
-#include "protocol.hpp"
-#include "State.hpp"
 #include "SendContextManager.h"
 
 IOCP::IOCP() : m_Handle(INVALID_HANDLE_VALUE), m_Socket(INVALID_SOCKET) 
@@ -75,8 +73,7 @@ bool IOCP::Init(const int workerNum, const int portNum)
 		return false;
 	}
 
-	InitializeSessions();
-
+	SessionManager::GetInst().InitializeSessions();
 
 	m_WokerNum = std::thread::hardware_concurrency();
 
@@ -133,49 +130,6 @@ bool IOCP::Start()
 	return true;
 }
 
-void IOCP::InitializeSessions()
-{
-	InitializeSListHead(&freeSessionList);
-
-	for (int i = 0; i < MAX_USER; ++i)
-	{
-		sessionNodes[i].SessionId = i;
-
-		sessions[i].SetStateCallback([this](int id) {
-			this->ReturnSessionId(id);
-		});
-
-		InterlockedPushEntrySList(&freeSessionList, &(sessionNodes[i].ItemEntry));
-	}
-
-	std::cout << "Session Initialized. \n";
-}
-
-std::optional<int> IOCP::GetEmptySessionId()
-{
-
-	PSLIST_ENTRY entry = InterlockedPopEntrySList(&freeSessionList);
-
-	if (entry == nullptr) {
-		return std::nullopt; // 꽉 찼음
-	}
-
-	SessionNode* node = reinterpret_cast<SessionNode*>(entry);
-	
-	std::cout << "Pop [" << node->SessionId << "]. \n";
-
-	return node->SessionId;
-}
-
-void IOCP::ReturnSessionId(int id)
-{
-	sessions[id].SetState(static_cast<int>(S_STATE::ST_FREE));
-
-	InterlockedPushEntrySList(&freeSessionList, &(sessionNodes[id].ItemEntry));
-
-	std::cout << "Push [" << id << "] \n";
-}
-
 void IOCP::CreateWorker()
 {
 	for (int i = 0; i < m_WokerNum; ++i)
@@ -223,11 +177,11 @@ void IOCP::WorkerThread()
 		{
 			AcceptContext* curAcceptCtx = static_cast<AcceptContext*>(ctx);
 
-			if (auto newId = GetEmptySessionId(); newId.has_value())
+			if (auto newId = SessionManager::GetInst().GetEmptySessionId(); newId.has_value())
 			{
 				CreateIoCompletionPort(reinterpret_cast<HANDLE>(*curAcceptCtx->GetSocket()), m_Handle, newId.value(), 0);
-				sessions[newId.value()].Init(newId.value(), *curAcceptCtx->GetSocket());
-				sessions[newId.value()].Run();
+				SessionManager::GetInst().GetSession(newId.value())->Init(newId.value(), *curAcceptCtx->GetSocket());
+				SessionManager::GetInst().GetSession(newId.value())->Run();
 				std::cout << "[" << newId.value() << "] is Accepted. \n";
 			}
 			else
