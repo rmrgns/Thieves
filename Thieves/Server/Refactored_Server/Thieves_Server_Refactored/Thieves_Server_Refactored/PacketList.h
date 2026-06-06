@@ -1,3 +1,7 @@
+#ifndef BIND_PACKET
+#define BIND_PACKET(PKT_ID, PKT_TYPE, HANDLER_FUNC)
+#endif
+
 BIND_PACKET(CS_PACKET_SIGN_IN, cs_packet_sign_in, ProcessSignIn);
 BIND_PACKET(CS_PACKET_SIGN_UP, cs_packet_sign_up, ProcessSignUp);
 BIND_PACKET(CS_PACKET_MOVE, cs_packet_move, ProcessMove);

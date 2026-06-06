@@ -9,6 +9,7 @@
 #include "define.hpp"
 #include "PacketManager.hpp"
 #include "State.hpp"
+#include "SendContextManager.h"
 
 void Session::SetStateCallback(std::function<void(int)> callback)
 {
@@ -30,13 +31,11 @@ void Session::Init(int id, SOCKET socket)
 Task Session::Run()
 {
 	int remainBytes = 0;
-	std::cout << "Session Start " << m_SessionId << ", State is " << m_State.load() << "\n";
+	std::cout << "[" << m_SessionId << "] Start, State is " << m_State.load() << "\n";
 
 	while (m_State.load() == static_cast<int>(S_STATE::ST_ALLOC))
 	{
 		WSABUF wsaBuf { .len = static_cast<ULONG>(BUFSIZE - remainBytes), .buf = m_RecvBuf + remainBytes };
-
-		std::cout << "Session " << m_SessionId << ", " << m_Socket << ", " << &m_RecvCtx << "\n";
 
 		int numBytes = co_await AsyncRecv{ m_Socket, wsaBuf , &m_RecvCtx };
 
@@ -48,7 +47,7 @@ Task Session::Run()
 
 		std::span<char> dataView(m_RecvBuf, remainBytes);
 
-		while (remainBytes > 0)
+		while (!dataView.empty())
 		{
 			int packetSize = static_cast<unsigned char>(dataView[0]); // 패킷의 첫 번째 바이트는 패킷의 크기를 나타냄
 
@@ -78,9 +77,11 @@ Task Session::Run()
 			}
 		}
 
+		remainBytes = static_cast<int>(dataView.size());
+
 		if (remainBytes > 0)
 		{
-			memmove(m_RecvBuf, p, remainBytes);
+			memmove(m_RecvBuf, dataView.data(), remainBytes);
 		}
 	}
 
@@ -91,7 +92,7 @@ void Session::SendRaw(void* packet, int size)
 {
 	if (m_State.load() != static_cast<int>(S_STATE::ST_ALLOC)) return;
 
-	SendContext* sendCtx = new SendContext(packet, size);
+	SendContext* sendCtx = SendContextManager::GetInst().Pop(packet, size);
 
 	DWORD sentBytes = 0;
 	int result = WSASend(m_Socket, sendCtx->GetWsaBuf(), 1, 0, 0, sendCtx->GetOverLapped(), 0);
@@ -100,8 +101,8 @@ void Session::SendRaw(void* packet, int size)
 	{
 		int errorCode = WSAGetLastError();
 		if (errorCode != WSA_IO_PENDING) {
-			std::cout << "Session " << GetId() << " Something Wrong.\n";
-			delete sendCtx;
+			std::cout << "[" << GetId() << "] Something Wrong.\n";
+			SendContextManager::GetInst().Push(sendCtx);
 			Disconnect();
 		}
 	}

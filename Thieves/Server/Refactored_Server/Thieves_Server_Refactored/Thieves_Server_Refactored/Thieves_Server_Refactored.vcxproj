@@ -132,6 +132,7 @@
     <ClInclude Include="IOCP.hpp" />
     <ClInclude Include="PacketManager.hpp" />
     <ClInclude Include="protocol.hpp" />
+    <ClInclude Include="SendContextManager.h" />
     <ClInclude Include="Server.hpp" />
     <ClInclude Include="Session.hpp" />
     <ClInclude Include="State.hpp" />
@@ -142,7 +143,10 @@
   <ItemGroup>
     <ClCompile Include="IOCP.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="PacketList.def" />
+    <ClCompile Include="PacketList.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="PacketManager.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="Session.cpp" />

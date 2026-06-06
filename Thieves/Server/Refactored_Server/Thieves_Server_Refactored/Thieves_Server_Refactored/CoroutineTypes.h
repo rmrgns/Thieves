@@ -33,9 +33,6 @@ private:
 
 public:
 	IOContext(bool isSend = false) : bytesTransferred(0), isSend(isSend) {
-
-		std::cout << "New IOContext! " << this << "\n";
-
 		ZeroMemory(&m_Overlapped, sizeof(m_Overlapped));
 		m_Handle = nullptr;
 	}
@@ -62,7 +59,7 @@ public:
 // Send 전용 버퍼를 가진 클래스 (기존의 EXP_OVER의 역할)
 // SList 활용해서 미리 많이 만들어 놓고 순서대로 꺼내 놓는 방식으로 진행할 거기 때문에,
 // SList를 활용하기 위해 16바이트 단위로 정렬해두기.
-class alignas(16) SendContext : SLIST_ENTRY, IOContext
+class alignas(16) SendContext : public _SLIST_ENTRY, public IOContext
 {
 	WSABUF wsaBuf;
 	std::vector<char> sendBuf;
@@ -126,7 +123,6 @@ class AcceptContext : public IOContext {
 	char acceptBuf[1024];
 public:
 	AcceptContext() : IOContext(false), clientSocket(INVALID_SOCKET) {
-		std::cout << "New AcceptContext! " << this << "\n";
 	}
 
 	SOCKET* GetSocket() { return &clientSocket; };

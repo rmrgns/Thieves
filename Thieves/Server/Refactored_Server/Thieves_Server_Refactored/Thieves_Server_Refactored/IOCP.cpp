@@ -9,6 +9,7 @@
 #include <thread>
 #include "protocol.hpp"
 #include "State.hpp"
+#include "SendContextManager.h"
 
 IOCP::IOCP() : m_Handle(INVALID_HANDLE_VALUE), m_Socket(INVALID_SOCKET) 
 {
@@ -84,12 +85,7 @@ bool IOCP::Init(const int workerNum, const int portNum)
 
 void IOCP::PostAccept(AcceptContext* ctx)
 {
-	std::cout << "Post Accept Start.\n";
-
 	ctx->MakeNewSocket();
-
-	std::cout << "AcceptContext Make New Socket. : " << *ctx->GetSocket() << "\n";
-
 	ZeroMemory(ctx->GetOverLapped(), sizeof(*ctx->GetOverLapped()));
 
 	DWORD bytes = 0;
@@ -105,12 +101,11 @@ void IOCP::PostAccept(AcceptContext* ctx)
 	{
 		if (WSAGetLastError() != WSA_IO_PENDING)
 		{
-			std::cout << "PostAcceptError. \n";
+			std::cout << "PostAcceptError : ";
+			ErrorDisplay(WSAGetLastError());
+			std::cout << "\n";
 		}
 	}
-
-	std::wcout << "accept Complete.\n";
-
 }
 
 void IOCP::ErrorDisplay(int errNum)
@@ -121,7 +116,7 @@ void IOCP::ErrorDisplay(int errNum)
 		NULL, errNum,
 		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
 		(LPTSTR)&lpMsgBuf, 0, 0);
-	std::wcout << lpMsgBuf << std::endl;
+	std::wcout << lpMsgBuf;
 	//while (true);
 	LocalFree(lpMsgBuf);
 }
@@ -161,15 +156,13 @@ std::optional<int> IOCP::GetEmptySessionId()
 
 	PSLIST_ENTRY entry = InterlockedPopEntrySList(&freeSessionList);
 
-	std::cout << "GetEmptySessionId. \n";
-
 	if (entry == nullptr) {
 		return std::nullopt; // 꽉 찼음
 	}
 
 	SessionNode* node = reinterpret_cast<SessionNode*>(entry);
 	
-	std::cout << "EmptySessionId is " << node->SessionId << "\n";
+	std::cout << "Pop [" << node->SessionId << "]. \n";
 
 	return node->SessionId;
 }
@@ -180,7 +173,7 @@ void IOCP::ReturnSessionId(int id)
 
 	InterlockedPushEntrySList(&freeSessionList, &(sessionNodes[id].ItemEntry));
 
-	std::cout << "ReturnSessionId " << id << "\n";
+	std::cout << "Push [" << id << "] \n";
 }
 
 void IOCP::CreateWorker()
@@ -203,10 +196,6 @@ void IOCP::WorkerThread()
 		BOOL result = GetQueuedCompletionStatus(m_Handle, &numBytes, (PULONG_PTR)&iocpKey, &pOver, INFINITE);
 		IOContext* ctx = reinterpret_cast<IOContext*>(pOver);
 
-		std::cout << "GQCS END. Key is " << iocpKey << ".\n";
-
-		std::cout << ctx << "\n";
-
 		bool isAccept = (ctx >= &acceptCtxs.front() && ctx <= &acceptCtxs.back());
 
 		if (FALSE == result || (numBytes == 0 && ctx && false == ctx->IsSend() && !isAccept))
@@ -217,16 +206,9 @@ void IOCP::WorkerThread()
 			// 코루틴 내부에서 스스로 멈추도록 설정해 줌
 
 			int errNum = WSAGetLastError();
-			std::cout << "GQCS ERROR : ";
-			if (numBytes == 0)
-			{
-				std::cout << " numBytes is 0 ";
-			}
-			else
-			{
-				ErrorDisplay(errNum);
-			}
-			std::cout << "\n";
+			std::cout << "GQCS ERROR [" << errNum << "] : ";
+			ErrorDisplay(errNum);
+			if(numBytes == 0) std::cout << "and numBytes is 0 \n";
 
 			if (ctx != nullptr && *ctx->GetHandle())
 			{
@@ -246,6 +228,7 @@ void IOCP::WorkerThread()
 				CreateIoCompletionPort(reinterpret_cast<HANDLE>(*curAcceptCtx->GetSocket()), m_Handle, newId.value(), 0);
 				sessions[newId.value()].Init(newId.value(), *curAcceptCtx->GetSocket());
 				sessions[newId.value()].Run();
+				std::cout << "[" << newId.value() << "] is Accepted. \n";
 			}
 			else
 			{
@@ -258,7 +241,9 @@ void IOCP::WorkerThread()
 
 		if (ctx->IsSend())
 		{
-			delete reinterpret_cast<SendContext*>(ctx);
+			SendContext* sendCtx = static_cast<SendContext*>(ctx);
+			SendContextManager::GetInst().Push(sendCtx);
+			continue;
 		}
 
 		if (*ctx->GetHandle())

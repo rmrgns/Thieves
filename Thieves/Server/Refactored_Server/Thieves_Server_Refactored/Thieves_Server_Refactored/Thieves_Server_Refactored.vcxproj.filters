@@ -48,6 +48,9 @@
     <ClInclude Include="PacketManager.hpp">
       <Filter>Network</Filter>
     </ClInclude>
+    <ClInclude Include="SendContextManager.h">
+      <Filter>Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Server.cpp">
@@ -63,7 +66,7 @@
     <ClCompile Include="PacketManager.cpp">
       <Filter>Network</Filter>
     </ClCompile>
-    <ClCompile Include="PacketList.def">
+    <ClCompile Include="PacketList.h">
       <Filter>System</Filter>
     </ClCompile>
   </ItemGroup>
