@@ -35,7 +35,10 @@ Task Session::Run()
 
 	while (m_State.load() == static_cast<int>(S_STATE::ST_ALLOC))
 	{
-		WSABUF wsaBuf { .len = static_cast<ULONG>(BUFSIZE - remainBytes), .buf = m_RecvBuf + remainBytes };
+		WSABUF wsaBuf { 
+			.len = static_cast<ULONG>(BUFSIZE - remainBytes), 
+			.buf = m_RecvBuf + remainBytes 
+		};
 
 		int numBytes = co_await AsyncRecv{ m_Socket, wsaBuf , &m_RecvCtx };
 
