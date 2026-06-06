@@ -29,7 +29,7 @@ public:
 
 		this->SendRaw(&packetData, sizeof(T));
 
-		std::cout << "[" << packetId << " Packet ] Send \n";
+		DEBUG_LOG("[" << packetId << " Packet ] Send \n");
 	}
 
 	template <typename T>

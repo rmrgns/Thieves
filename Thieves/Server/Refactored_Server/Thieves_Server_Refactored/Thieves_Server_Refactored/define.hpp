@@ -16,6 +16,12 @@
 
 const int BUFSIZE = 2048;
 
+#ifdef _DEBUG
+#define DEBUG_LOG(msg) std::cout << "[DEBUG] " << msg << std::endl;
+#else
+#define DEBUG_LOG(msg)
+#endif
+
 struct timer_event {
 	int obj_id;
 	int room_id;

@@ -29,7 +29,7 @@ std::optional<int> SessionManager::GetEmptySessionId()
 
 	SessionNode* node = reinterpret_cast<SessionNode*>(entry);
 
-	std::cout << "Pop [" << node->SessionId << "]. \n";
+	DEBUG_LOG("Pop [" << node->SessionId << "]. \n");
 
 	return node->SessionId;
 }
@@ -40,5 +40,5 @@ void SessionManager::ReturnSessionId(int id)
 
 	InterlockedPushEntrySList(&freeSessionList, &(sessionNodes[id].ItemEntry));
 
-	std::cout << "Push [" << id << "] \n";
+	DEBUG_LOG("Push [" << id << "] \n");
 }

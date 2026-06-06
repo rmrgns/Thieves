@@ -3,13 +3,13 @@
 
 constexpr short SERVER_PORT = 8471;
 
-constexpr int MAX_NAME_SIZE = 20;		
-constexpr int MAX_PASSWORD_SIZE = 20;	
-constexpr int MAX_CHAT_SIZE = 100;		
+constexpr int MAX_NAME_SIZE = 20;
+constexpr int MAX_PASSWORD_SIZE = 20;
+constexpr int MAX_CHAT_SIZE = 100;
 
-constexpr int MAX_ROOM_SIZE = 8;		
+constexpr int MAX_ROOM_SIZE = 8;
 
-constexpr int MAX_USER = MAX_ROOM_SIZE * 3000;		
+constexpr int MAX_USER = MAX_ROOM_SIZE * 8;
 constexpr int MAX_ITEM = 20;
 constexpr int USER_NUM = 8;
 constexpr float FOV_RANGE = 0.f;
@@ -19,13 +19,13 @@ constexpr int MAX_NPC = MAX_ROOM_SIZE * 8;
 constexpr int NPC_ID_END = MAX_USER + MAX_NPC - 1;
 constexpr int BASE_ID = NPC_ID_END + 2;
 constexpr int PLAYER_HP = 5;
-constexpr int PLAYER_DAMAGE = 1;	
+constexpr int PLAYER_DAMAGE = 1;
 
 // ERROR CODE
 
-constexpr int ERROR_GAME_IN_PROGRESS = 1;		
-constexpr int ERROR_ROOM_IS_FULL = 2;			
-constexpr int ERROR_ROOM_NOT_EXIST = 3;			
+constexpr int ERROR_GAME_IN_PROGRESS = 1;
+constexpr int ERROR_ROOM_IS_FULL = 2;
+constexpr int ERROR_ROOM_NOT_EXIST = 3;
 constexpr int ERROR_PLAYER_NOT_READY = 4;
 
 // ITEM CODE
@@ -305,7 +305,7 @@ struct sc_packet_chat {
 struct sc_packet_login_fail {
 	unsigned char size;
 	char type;
-	char reason;		
+	char reason;
 };
 struct sc_packet_time {
 	unsigned char size;
@@ -392,7 +392,7 @@ struct sc_packet_leave_room {
 	unsigned char size;
 	char type;
 	int id;
-	int master_id; 
+	int master_id;
 };
 
 struct sc_packet_player_ready {
@@ -443,7 +443,7 @@ struct sc_packet_rooms_data_for_room {
 struct sc_packet_rooms_data_for_room_end {
 	unsigned char size;
 	char type;
-	int master_id; 
+	int master_id;
 };
 
 struct sc_packet_error {
@@ -466,7 +466,7 @@ struct sc_packet_obj_info_end {
 struct sc_packet_bullet {
 	unsigned char size;
 	char type;
-	float p_x, p_y, p_z;	
+	float p_x, p_y, p_z;
 	//	float d_x, d_y, d_z;	
 };
 

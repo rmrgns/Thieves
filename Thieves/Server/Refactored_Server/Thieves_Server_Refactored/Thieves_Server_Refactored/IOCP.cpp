@@ -182,7 +182,7 @@ void IOCP::WorkerThread()
 				CreateIoCompletionPort(reinterpret_cast<HANDLE>(*curAcceptCtx->GetSocket()), m_Handle, newId.value(), 0);
 				SessionManager::GetInst().GetSession(newId.value())->Init(newId.value(), *curAcceptCtx->GetSocket());
 				SessionManager::GetInst().GetSession(newId.value())->Run();
-				std::cout << "[" << newId.value() << "] is Accepted. \n";
+				DEBUG_LOG("[" << newId.value() << "] is Accepted. \n");
 			}
 			else
 			{

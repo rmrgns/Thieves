@@ -21,7 +21,7 @@ void PacketManager::ProcessPacket(int sessionId, std::span<char> packet)
 	}
 	else
 	{
-		std::cout << "Unknown packet type: " << (int)packetType << "\n";
+		//std::cout << "Unknown packet type: " << (int)packetType << "\n";
 	}
 }
 
