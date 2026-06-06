@@ -55,6 +55,23 @@ public:
 		return ctx;
 	}
 
+	SendContext* PopBroadcast(BroadcastBuffer bBuf) {
+		PSLIST_ENTRY entry = InterlockedPopEntrySList(&sListHeader);
+		SendContext* ctx = nullptr;
+
+		if (entry) {
+			ctx = static_cast<SendContext*>(entry);
+		}
+		else
+		{
+			ctx = new SendContext();
+		}
+
+		ctx->SetupBroadcast(bBuf);
+
+		return ctx;
+	}
+
 	void Push(SendContext* ctx)
 	{
 		InterlockedPushEntrySList(&sListHeader, ctx);

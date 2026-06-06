@@ -51,6 +51,9 @@
     <ClInclude Include="SendContextManager.h">
       <Filter>Network</Filter>
     </ClInclude>
+    <ClInclude Include="TimerManager.h">
+      <Filter>GameLogic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Server.cpp">
@@ -68,6 +71,9 @@
     </ClCompile>
     <ClCompile Include="PacketList.h">
       <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="TimerManager.cpp">
+      <Filter>GameLogic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

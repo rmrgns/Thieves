@@ -59,10 +59,15 @@ public:
 // Send 전용 버퍼를 가진 클래스 (기존의 EXP_OVER의 역할)
 // SList 활용해서 미리 많이 만들어 놓고 순서대로 꺼내 놓는 방식으로 진행할 거기 때문에,
 // SList를 활용하기 위해 16바이트 단위로 정렬해두기.
+
+using BroadcastBuffer = std::shared_ptr<std::vector<char>>; // 타이핑 길어지니까 이름 바꿔두기
+
 class alignas(16) SendContext : public _SLIST_ENTRY, public IOContext
 {
 	WSABUF wsaBuf;
 	std::vector<char> sendBuf;
+	
+	BroadcastBuffer broadcastBuf;
 
 public:
 	SendContext() : IOContext(true) {
@@ -82,6 +87,28 @@ public:
 		};
 
 		ZeroMemory(GetOverLapped(), sizeof(*GetOverLapped()));
+	}
+
+	// 접속한 사람들에게 브로드캐스팅 해야 할때.
+	// TCP의 특성상 다 한번씩 돌면서 send를 해줘야 하는데,
+	// send 할때마다 데이터 만들어 버리면 그거도 그거대로 오버헤드임.
+	// 그래서 shared_ptr 써서 데이터 하나로 유지하고, 아무도 안쓰면 스마트 포인터가 자동으로 삭제되게 하기
+	void SetupBroadcast(BroadcastBuffer bBuf)
+	{
+		broadcastBuf = bBuf;
+
+		wsaBuf = {
+			.len = static_cast<ULONG>(broadcastBuf->size()),
+			.buf = broadcastBuf->data()
+		};
+
+		ZeroMemory(GetOverLapped(), sizeof(*GetOverLapped()));
+	}
+
+	void Clear()
+	{
+		// 레퍼런스 카운트 감소 시켜줌.
+		broadcastBuf.reset();
 	}
 
 	WSABUF* GetWsaBuf() { return &wsaBuf; }

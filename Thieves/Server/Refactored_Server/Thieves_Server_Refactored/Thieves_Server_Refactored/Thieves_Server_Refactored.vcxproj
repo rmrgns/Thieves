@@ -136,6 +136,7 @@
     <ClInclude Include="Server.hpp" />
     <ClInclude Include="Session.hpp" />
     <ClInclude Include="State.hpp" />
+    <ClInclude Include="TimerManager.h" />
     <ClInclude Include="vec2.h" />
     <ClInclude Include="vec3.h" />
     <ClInclude Include="vec4.h" />
@@ -150,6 +151,7 @@
     <ClCompile Include="PacketManager.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="Session.cpp" />
+    <ClCompile Include="TimerManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

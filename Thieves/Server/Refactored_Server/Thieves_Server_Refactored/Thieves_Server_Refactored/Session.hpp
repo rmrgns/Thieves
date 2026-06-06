@@ -37,6 +37,11 @@ public:
 		this->SendRaw(&packetData, sizeof(T));
 	}
 
+	template <typename T>
+	void SendBroadcast(BroadcastBuffer bBuf) {
+		
+	}
+
 	Session() : m_SessionId(-1), m_Socket(INVALID_SOCKET), m_State(static_cast<int>(S_STATE::ST_FREE)) {};
 
 	void SetStateCallback(std::function<void(int)>);

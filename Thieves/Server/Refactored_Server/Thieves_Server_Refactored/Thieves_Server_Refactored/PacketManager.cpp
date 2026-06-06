@@ -1,4 +1,5 @@
 #include "PacketManager.hpp"
+#include "SendContextManager.h"
 #include <span>
 #include <iostream>
 
@@ -26,7 +27,6 @@ void PacketManager::ProcessPacket(int sessionId, std::span<char> packet)
 
 void PacketManager::ProcessSignIn(int sessionId, cs_packet_sign_in* packet)
 {
-	
 }
 
 void PacketManager::ProcessSignUp(int sessionId, cs_packet_sign_up* packet)
