@@ -17,7 +17,7 @@ public:
 	void SetState(P_STATE val) { m_state = val; }
 
 	// 네트워크 기능(DoRecv, DoSend, Init(SOCKET), m_socket 등)은 
-	// Session 클래스가 담당하므로 전부 지워주었어요...!
+	// Session 클래스가 담당하므로 전부 지우기.
 
 	void ResetPlayer();
 	virtual void Reset() override;

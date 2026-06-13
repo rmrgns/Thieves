@@ -27,7 +27,7 @@ void MoveObjManager::ActivePlayer(int sessionId)
 	if (auto cl = GetPlayer(sessionId))
 	{
 		std::lock_guard<std::mutex> lock(cl->state_lock);
-		cl->SetState(STATE::ST_ACCEPT);
+		cl->SetState(P_STATE::ST_LOGIN);
 	}
 }
 
@@ -37,7 +37,7 @@ void MoveObjManager::RemovePlayer(int sessionId)
 	{
 		std::lock_guard<std::mutex> lock(cl->state_lock);
 		cl->ResetPlayer();
-		cl->SetState(STATE::ST_FREE);
+		cl->SetState(P_STATE::ST_NONE);
 	}
 }
 
@@ -51,10 +51,12 @@ void MoveObjManager::InitPlayer()
 
 void MoveObjManager::InitNPC()
 {
+	/*
 	for (int i = NPC_ID_START; i <= NPC_ID_END; ++i)
 	{
 		m_moveobj_arr[i] = std::make_shared<Enemy>(i);
 	}
+	*/
 }
 
 void MoveObjManager::ClearObjects()

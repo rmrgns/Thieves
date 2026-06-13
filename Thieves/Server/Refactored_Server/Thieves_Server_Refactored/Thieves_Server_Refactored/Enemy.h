@@ -1,4 +1,6 @@
 #pragma once
-class Enemy :
+#include "MoveObj.h"
+
+class Enemy : public MoveObj
 {};
 
