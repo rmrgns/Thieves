@@ -1,5 +1,6 @@
 #pragma once
 #include "protocol.hpp"
+#include "define.hpp"
 #include <span>
 #include <array>
 #include <functional>
@@ -10,7 +11,7 @@ class PacketManager
 // 싱글톤 구현.
 private:
 	using HandlerFunc = std::function<void(int, std::span<char>)>;
-	std::array<HandlerFunc, 100> handlers; // 100은 최대 패킷 수.
+	std::array<HandlerFunc, 256> handlers; // 256은 최대 패킷 수.
 
 	PacketManager() {
 		// 일일이 레지스터 하는거 너무 힘드니까, 그냥 BIND_PACKET 이라는 걸 미리 정의 한뒤에, 나중에 전부 레지스터로 만들어 버리도록 하는 X-Macro 방식을 채용.
@@ -21,8 +22,7 @@ private:
 
 
 #undef BIND_PACKET
-
-		std::cout << "PacketManager Created and Registered Functions.\n";
+		DEBUG_LOG ("PacketManager Created and Registered Functions.\n")
 	};
 
 	~PacketManager() = default;

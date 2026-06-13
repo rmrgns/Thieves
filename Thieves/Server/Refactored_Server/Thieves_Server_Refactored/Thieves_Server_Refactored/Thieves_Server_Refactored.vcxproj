@@ -129,10 +129,12 @@
   <ItemGroup>
     <ClInclude Include="CoroutineTypes.h" />
     <ClInclude Include="define.hpp" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="IOCP.hpp" />
     <ClInclude Include="MoveObj.h" />
     <ClInclude Include="MoveObjManager.h" />
     <ClInclude Include="NPC.h" />
+    <ClInclude Include="Object.h" />
     <ClInclude Include="PacketManager.hpp" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="protocol.hpp" />
@@ -147,11 +149,13 @@
     <ClInclude Include="vec4.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="IOCP.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MoveObj.cpp" />
     <ClCompile Include="MoveObjManager.cpp" />
     <ClCompile Include="NPC.cpp" />
+    <ClCompile Include="Object.cpp" />
     <ClCompile Include="PacketList.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>

@@ -69,6 +69,12 @@
     <ClInclude Include="NPC.h">
       <Filter>GameLogic</Filter>
     </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>GameLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>GameLogic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Server.cpp">
@@ -103,6 +109,12 @@
       <Filter>GameLogic</Filter>
     </ClCompile>
     <ClCompile Include="NPC.cpp">
+      <Filter>GameLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>GameLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
       <Filter>GameLogic</Filter>
     </ClCompile>
   </ItemGroup>
