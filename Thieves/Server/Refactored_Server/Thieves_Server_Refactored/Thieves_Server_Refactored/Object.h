@@ -1,6 +1,6 @@
 #pragma once
 #include "vec3.h"
-#include "State.hpp"
+#include "State.h"
 
 class Object
 {

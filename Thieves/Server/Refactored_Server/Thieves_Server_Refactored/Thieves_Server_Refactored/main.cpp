@@ -1,7 +1,7 @@
-#include "Server.hpp"
-#include "IOCP.hpp"
-#include "define.hpp"
-#include "protocol.hpp"
+#include "Server.h"
+#include "IOCP.h"
+#include "define.h"
+#include "protocol.h"
 #include <clocale>
 #include <iostream>
 #include <locale>

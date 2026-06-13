@@ -34,6 +34,13 @@ public:
 		a.z += b.z;
 	}
 
+	friend void operator-=(Vector3& a, const Vector3& b)
+	{
+		a.x -= b.x;
+		a.y -= b.y;
+		a.z -= b.z;
+	}
+
 	friend bool operator==(const Vector3& a, const Vector3& b)
 	{
 		return (a.x == b.x && a.y == b.y && a.z == b.z);

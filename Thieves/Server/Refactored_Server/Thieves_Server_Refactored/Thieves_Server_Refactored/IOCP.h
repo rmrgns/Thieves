@@ -1,14 +1,14 @@
 #pragma once
 #include "CoroutineTypes.h"
-#include "Session.hpp"
+#include "Session.h"
 #include <thread>
 #include <array>
 #include <Windows.h>
 #include <WinSock2.h>
 #include <vector>
 #include <optional>
-#include "protocol.hpp"
-#include "SessionManager.hpp"
+#include "protocol.h"
+#include "SessionManager.h"
 
 
 

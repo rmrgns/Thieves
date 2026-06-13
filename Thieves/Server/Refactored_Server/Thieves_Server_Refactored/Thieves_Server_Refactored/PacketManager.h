@@ -1,6 +1,7 @@
 #pragma once
-#include "protocol.hpp"
-#include "define.hpp"
+#include "protocol.h"
+#include "define.h"
+#include "Room.h"
 #include <span>
 #include <array>
 #include <functional>
@@ -22,7 +23,9 @@ private:
 
 
 #undef BIND_PACKET
-		DEBUG_LOG ("PacketManager Created and Registered Functions.\n")
+		DEBUG_LOG("PacketManager Created and Registered Functions.\n")
+
+		Init();
 	};
 
 	~PacketManager() = default;
@@ -68,7 +71,7 @@ private:
 
 	void ProcessMove(int sessionId, cs_packet_move* packet);
 
-	void ProcessHit(int sessionId, cs_packet_hit* packet);
+	void Hit(int attackerId, int victimId, Room* room);
 
 	void ProcessGameStart(int sessionId, cs_packet_game_start* packet);
 

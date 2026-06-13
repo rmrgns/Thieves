@@ -2,7 +2,7 @@
 #include <WinSock2.h>
 #include <coroutine>
 #include <ws2def.h>
-#include "define.hpp"
+#include "define.h"
 #include <string.h>
 #include <Windows.h>
 #include <exception>

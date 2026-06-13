@@ -1,8 +1,8 @@
-#include "TimerManager.hpp"
+#include "TimerManager.h"
 
-void TimerManager::Push(int delay, std::function<void()> task)
+void TimerManager::Push(int delayms, std::function<void()> task)
 {
-	std::chrono::system_clock::time_point execTime = std::chrono::system_clock::now() + std::chrono::milliseconds(delay);
+	std::chrono::system_clock::time_point execTime = std::chrono::system_clock::now() + std::chrono::milliseconds(delayms);
 
 	{
 		std::lock_guard<std::shared_mutex> lock(m_Lock);

@@ -1,7 +1,7 @@
 #pragma once
 #include "vec3.h"
 #include "Object.h"
-#include "protocol.hpp"
+#include "protocol.h"
 #include <Windows.h>
 #include <atomic>
 

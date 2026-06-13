@@ -5,8 +5,8 @@
 #include <concurrent_priority_queue.h>
 #include <random>
 
-#include "protocol.hpp"
-#include "state.hpp"
+#include "protocol.h"
+#include "state.h"
 #include "vec2.h"
 #include "vec3.h"
 #include "vec4.h"
@@ -14,7 +14,8 @@
 #pragma comment(lib, "mswsock.lib")
 #pragma comment(lib, "ws2_32.lib")
 
-const int BUFSIZE = 2048;
+constexpr int BUFSIZE = 2048;
+constexpr float	_speed = 700.f;
 
 #ifdef _DEBUG
 #define DEBUG_LOG(msg) std::cout << "[DEBUG] " << msg << std::endl;

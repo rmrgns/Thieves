@@ -6,7 +6,6 @@ BIND_PACKET(CS_PACKET_SIGN_IN, cs_packet_sign_in, ProcessSignIn);
 BIND_PACKET(CS_PACKET_SIGN_UP, cs_packet_sign_up, ProcessSignUp);
 BIND_PACKET(CS_PACKET_MOVE, cs_packet_move, ProcessMove);
 BIND_PACKET(CS_PACKET_ATTACK, cs_packet_attack, ProcessAttack);
-BIND_PACKET(CS_PACKET_HIT, cs_packet_hit, ProcessHit);
 BIND_PACKET(CS_PACKET_GAME_START, cs_packet_game_start, ProcessGameStart);
 BIND_PACKET(CS_PACKET_LOAD_PROGRESSING, cs_packet_load_progressing, ProcessLoadProgressing);
 BIND_PACKET(CS_PACKET_LOAD_END, cs_packet_load_end, ProcessLoadEnd);

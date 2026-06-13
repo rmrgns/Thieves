@@ -1,9 +1,9 @@
 #pragma once
 #include <array>
-#include "Session.hpp"
+#include "Session.h"
 #include <Windows.h>
 #include <optional>
-#include "protocol.hpp"
+#include "protocol.h"
 
 
 __declspec(align(16)) struct SessionNode {

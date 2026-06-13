@@ -1,4 +1,4 @@
-#include "SessionManager.hpp"
+#include "SessionManager.h"
 
 void SessionManager::InitializeSessions()
 {

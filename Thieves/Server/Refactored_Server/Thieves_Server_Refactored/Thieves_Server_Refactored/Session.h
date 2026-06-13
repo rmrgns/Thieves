@@ -2,9 +2,9 @@
 #include <WinSock2.h>
 #include "CoroutineTypes.h"
 #include <atomic>
-#include "define.hpp"
+#include "define.h"
 #include <functional>
-#include "State.hpp"
+#include "State.h"
 
 class Session
 {

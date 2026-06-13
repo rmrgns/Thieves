@@ -5,7 +5,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "MoveObj.h"
-#include "protocol.hpp"
+#include "protocol.h"
 
 class MoveObjManager
 {

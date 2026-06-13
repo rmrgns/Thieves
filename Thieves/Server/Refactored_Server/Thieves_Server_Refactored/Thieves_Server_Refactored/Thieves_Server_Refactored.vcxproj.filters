@@ -13,24 +13,27 @@
     <Filter Include="System\Vector">
       <UniqueIdentifier>{ba566782-586c-4f4d-a15d-d1697f94baf4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameLogic\Objects">
+      <UniqueIdentifier>{3259ceb2-d0b7-41c9-8d70-153abfd0db70}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Server.hpp">
+    <ClInclude Include="Server.h">
       <Filter>Network</Filter>
     </ClInclude>
-    <ClInclude Include="protocol.hpp">
+    <ClInclude Include="protocol.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="IOCP.hpp">
+    <ClInclude Include="IOCP.h">
       <Filter>Network</Filter>
     </ClInclude>
     <ClInclude Include="CoroutineTypes.h">
       <Filter>Network</Filter>
     </ClInclude>
-    <ClInclude Include="define.hpp">
+    <ClInclude Include="define.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="State.hpp">
+    <ClInclude Include="State.h">
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="vec2.h">
@@ -42,38 +45,56 @@
     <ClInclude Include="vec4.h">
       <Filter>System\Vector</Filter>
     </ClInclude>
-    <ClInclude Include="Session.hpp">
+    <ClInclude Include="Session.h">
       <Filter>Network</Filter>
     </ClInclude>
-    <ClInclude Include="PacketManager.hpp">
+    <ClInclude Include="PacketManager.h">
       <Filter>Network</Filter>
     </ClInclude>
     <ClInclude Include="SendContextManager.h">
       <Filter>Network</Filter>
     </ClInclude>
-    <ClInclude Include="TimerManager.hpp">
+    <ClInclude Include="TimerManager.h">
       <Filter>GameLogic</Filter>
     </ClInclude>
-    <ClInclude Include="MoveObjManager.h">
-      <Filter>GameLogic</Filter>
-    </ClInclude>
-    <ClInclude Include="SessionManager.hpp">
+    <ClInclude Include="SessionManager.h">
       <Filter>Network</Filter>
     </ClInclude>
-    <ClInclude Include="MoveObj.h">
+    <ClInclude Include="RoomManager.h">
       <Filter>GameLogic</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>GameLogic</Filter>
-    </ClInclude>
-    <ClInclude Include="NPC.h">
-      <Filter>GameLogic</Filter>
-    </ClInclude>
-    <ClInclude Include="Object.h">
+    <ClInclude Include="Room.h">
       <Filter>GameLogic</Filter>
     </ClInclude>
     <ClInclude Include="Enemy.h">
+      <Filter>GameLogic\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveObj.h">
+      <Filter>GameLogic\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC.h">
+      <Filter>GameLogic\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>GameLogic\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>GameLogic\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>GameLogic\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="CBox.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="MapManager.h">
       <Filter>GameLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveObjManager.h">
+      <Filter>GameLogic\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="RayCasting.h">
+      <Filter>System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -96,26 +117,44 @@
     <ClCompile Include="TimerManager.cpp">
       <Filter>GameLogic</Filter>
     </ClCompile>
-    <ClCompile Include="MoveObjManager.cpp">
-      <Filter>GameLogic</Filter>
-    </ClCompile>
     <ClCompile Include="SessionManager.cpp">
       <Filter>Network</Filter>
     </ClCompile>
-    <ClCompile Include="MoveObj.cpp">
+    <ClCompile Include="RoomManager.cpp">
       <Filter>GameLogic</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>GameLogic</Filter>
-    </ClCompile>
-    <ClCompile Include="NPC.cpp">
-      <Filter>GameLogic</Filter>
-    </ClCompile>
-    <ClCompile Include="Object.cpp">
+    <ClCompile Include="Room.cpp">
       <Filter>GameLogic</Filter>
     </ClCompile>
     <ClCompile Include="Enemy.cpp">
+      <Filter>GameLogic\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveObj.cpp">
+      <Filter>GameLogic\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="NPC.cpp">
+      <Filter>GameLogic\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>GameLogic\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>GameLogic\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>GameLogic\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="CBox.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="MapManager.cpp">
       <Filter>GameLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveObjManager.cpp">
+      <Filter>GameLogic\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="RayCasting.cpp">
+      <Filter>System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,4 @@
-#include "Session.hpp"
+#include "Session.h"
 #include <ws2def.h>
 #include <string.h>
 #include <Windows.h>
@@ -6,9 +6,9 @@
 #include <iostream>
 #include <span>
 #include "CoroutineTypes.h"
-#include "define.hpp"
-#include "PacketManager.hpp"
-#include "State.hpp"
+#include "define.h"
+#include "PacketManager.h"
+#include "State.h"
 #include "SendContextManager.h"
 
 void Session::SetStateCallback(std::function<void(int)> callback)
