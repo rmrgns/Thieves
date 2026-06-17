@@ -10,6 +10,7 @@
 #include "PacketManager.h"
 #include "State.h"
 #include "SendContextManager.h"
+#include "SessionManager.h"
 
 void Session::SetStateCallback(std::function<void(int)> callback)
 {
@@ -120,6 +121,7 @@ void Session::Disconnect()
 
 		// TODO:
 		// 패킷매니저에서도 뭔가 해줘야 함.
+		// 캐릭터 지우는 패킷 보내주세요 같은거.
 
 		if (stateCallback) {
 			stateCallback(m_SessionId);

@@ -75,6 +75,10 @@ private:
 
 	void ProcessGameStart(int sessionId, cs_packet_game_start* packet);
 
+	void StartGame(int room_id);
+
+	void SendObjInfo(int c_id, int obj_id);
+
 	void ProcessGetItem(int sessionId, cs_packet_get_item* packet);
 
 	void ProcessUseItem(int sessionId, cs_packet_use_item* packet);
@@ -105,6 +109,6 @@ private:
 
 
 
-	void StartGame(int room_id);
+	
 };
 

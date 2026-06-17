@@ -3,7 +3,6 @@
 #include <memory>
 #include "CBox.h"
 #include "vec3.h"
-
 class MapManager
 {
 public:

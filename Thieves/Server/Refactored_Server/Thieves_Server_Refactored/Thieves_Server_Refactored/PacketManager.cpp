@@ -9,6 +9,7 @@
 #include <span>
 #include <iostream>
 
+#define SendToSession(S_ID, PCK_TYP, PCK) SessionManager::GetInst().GetSession(S_ID)->SendPacket(PCK_TYP, PCK);
 
 void PacketManager::Init()
 {
@@ -50,7 +51,7 @@ void PacketManager::ProcessSignIn(int sessionId, cs_packet_sign_in* packet)
 		.id = sessionId
 	};
 
-	SessionManager::GetInst().GetSession(sessionId)->SendPacket(SC_PACKET_SIGN_IN_OK, p);
+	SendToSession(sessionId, SC_PACKET_SIGN_IN_OK, p);
 }
 
 void PacketManager::ProcessSignUp(int sessionId, cs_packet_sign_up* packet)
@@ -69,7 +70,6 @@ void PacketManager::ProcessAttack(int sessionId, cs_packet_attack* packet)
 	std::vector<int> broadcast_targets;
 	std::vector<int> hit_targets;
 
-	// 🔒 [락 스코프 시작]
 	{
 		std::lock_guard<std::recursive_mutex> lock(room->m_state_lock);
 
@@ -83,13 +83,12 @@ void PacketManager::ProcessAttack(int sessionId, cs_packet_attack* packet)
 			auto target = MoveObjManager::GetInst().GetPlayer(pl);
 			if (target && target->GetPos().Dist(AttackPos) < 50.f) {
 				hit_targets.push_back(pl);
-				Hit(sessionId, pl, room); // 이 안에서 안전하게 락 의존 로직 처리
+				Hit(sessionId, pl, room);
 			}
 		}
 
 		broadcast_targets.assign(room->GetObjList().begin(), room->GetObjList().end());
 	}
-	// 🔓 [락 스코프 종료]
 
 	sc_packet_attack atkPkt{ SC_PACKET_ATTACK, sizeof(atkPkt) };
 	for (int pl : broadcast_targets) {
@@ -202,12 +201,15 @@ void PacketManager::ProcessMove(int sessionId, cs_packet_move* packet)
 		PlayerBox.translation[1] = player->GetPosY() - oldPos.y;
 		PlayerBox.translation[2] = player->GetPosZ() - oldPos.z;
 
+		player->SetPos(MapManager::GetInst().checkCollision(PlayerBox, oldPos));
+
 		movePacket.posX = player->GetPosX();
 		movePacket.posY = player->GetPosY();
 		movePacket.posZ = player->GetPosZ();
 		movePacket.rotX = player->GetRotX();
 		movePacket.rotZ = player->GetRotZ();
 		movePacket.action_type = player->GetAnimationNumber();
+
 		// 금고(SafeZone) 상호작용 검사
 		bool isSafeZone = RayCasting::GetInst().CheckSafe(player->GetPos(), Vector3(player->GetRotX(), 0.f, player->GetRotZ()));
 
@@ -265,7 +267,7 @@ void PacketManager::ProcessMove(int sessionId, cs_packet_move* packet)
 							.obj_id = sessionId,
 						};
 						
-						SessionManager::GetInst().GetSession(sessionId)->SendPacket(SC_PACKET_STUN_END, stunEndPkt);
+						SendToSession(sessionId, SC_PACKET_STUN_END, stunEndPkt);
 
 						});
 				}
@@ -299,7 +301,7 @@ void PacketManager::ProcessMove(int sessionId, cs_packet_move* packet)
 										.type = SC_PACKET_GAME_END
 									};
 
-									SessionManager::GetInst().GetSession(pl->GetID())->SendPacket(SC_PACKET_GAME_END, gameEndPkt);
+									SendToSession(pl->GetID(), SC_PACKET_GAME_END, gameEndPkt);
 								}
 
 								room->LeaveRoom(obj_id);
@@ -333,7 +335,7 @@ void PacketManager::ProcessMove(int sessionId, cs_packet_move* packet)
 									.type = SC_PACKET_GAME_END
 								};
 
-								SessionManager::GetInst().GetSession(pl->GetID())->SendPacket(SC_PACKET_GAME_END, gameEndPkt);
+								SendToSession(pl->GetID(), SC_PACKET_GAME_END, gameEndPkt);
 							}
 
 							room->LeaveRoom(obj_id);
@@ -352,7 +354,6 @@ void PacketManager::ProcessMove(int sessionId, cs_packet_move* packet)
 
 	for (auto other_id : broadcast_targets)
 	{
-		if (other_id == sessionId) continue;
 		if (auto session = SessionManager::GetInst().GetSession(other_id))
 		{
 			session->SendPacket(SC_PACKET_MOVE, movePacket);
@@ -376,29 +377,214 @@ void PacketManager::ProcessMove(int sessionId, cs_packet_move* packet)
 
 void PacketManager::Hit(int attackerId, int victimId, Room* room)
 {
-	// ※ 이미 호출자가 room->m_state_lock을 잡고 있는 상태예요!
+	// ※ 이미 호출자가 room->m_state_lock을 잡고 있는 상태
 	auto victim = MoveObjManager::GetInst().GetPlayer(victimId);
 	if (!victim) return;
 
 	victim->SetAttacked(true);
 
-	// 스턴 처리 등 내부 로직 (전송은 밖으로 빼는 것이 좋지만, 
-	// Hit가 너무 복잡해질 경우 Room 락을 잠시 풀어주는 기법을 쓸 수도 있어요...)
+	// 스턴 처리 등 내부 로직 
 	// 다이아몬드 스틸 로직
 	if (victim->GetHasDiamond()) {
 		auto attacker = MoveObjManager::GetInst().GetPlayer(attackerId);
 		if (attacker) {
 			victim->SetHasDiamond(false);
 			attacker->SetHasDiamond(true);
-			// ... 타이머 이벤트 추가 등 ...
 		}
 	}
 }
 
 void PacketManager::ProcessGameStart(int sessionId, cs_packet_game_start* packet)
 {
+	DEBUG_LOG("[" << sessionId << "]" << "Send Game Start.");
+
+	auto player = MoveObjManager::GetInst().GetPlayer(sessionId);
+
+	if (player->GetRoomID() == -1) return;
+	Room* room = RoomManager::GetInst().GetRoom(player->GetRoomID());
+	room->SetGameStart();
+
+	for (auto pl : room->GetObjList())
+	{
+		if (auto session = SessionManager::GetInst().GetSession(pl)) {
+			auto cpl = MoveObjManager::GetInst().GetPlayer(pl);
+			cpl->state_lock.lock();
+			cpl->SetState(P_STATE::ST_INGAME);
+			cpl->SetIsActive(true);
+			cpl->state_lock.unlock();
+		}
+	}
+
+	StartGame(room->GetRoomID());
 
 }
+
+void PacketManager::StartGame(int room_id)
+{
+	Room* room = RoomManager::GetInst().GetRoom(room_id);
+	
+	Vector3 NPC_init_pos{ 0.0f, 300.0f, 0.0f };
+
+	std::random_device rd;
+	std::default_random_engine dre(rd());
+	auto playerSpawnPos = MapManager::GetInst().GetPlayerSpawnPos();
+	std::shuffle(playerSpawnPos.begin(), playerSpawnPos.end(), dre);
+
+	auto itemPos = MapManager::GetInst().GetItemPos();
+	std::shuffle(itemPos.begin(), itemPos.end(), dre);
+
+	auto escapePos = MapManager::GetInst().GetEscapePos();
+	std::shuffle(escapePos.begin(), escapePos.end(), dre);
+
+	auto specialEscapePos = MapManager::GetInst().GetSpecialEscapePos();
+	std::shuffle(specialEscapePos.begin(), specialEscapePos.end(), dre);
+
+	auto npcPos = MapManager::GetInst().GetNPCSpawnPos();
+	std::shuffle(npcPos.begin(), npcPos.end(), dre);
+
+	// NPC 루프 생략
+	/*
+	for (int i = NPC_ID_START; i < NPC_ID_START + 8; ++i)
+	{
+		auto e = MoveObjManager::GetInst().GetEnemy(i);
+
+		if (false == e->)
+		{
+			e->in_use = true;
+			e->SetRoomID(room_id);
+			obj_list.push_back(e->GetID());
+		}
+
+		room->EnterEnemyRoom(i);
+	}
+	*/
+	int i = 0;
+	for (auto c_id : room->GetObjList())
+	{
+		if (auto session = SessionManager::GetInst().GetSession(c_id))
+		{
+			MoveObjManager::GetInst().GetPlayer(c_id)->SetPos(MapManager::GetInst().GetPlayerSpawnPos().at(i));
+			i++;
+		}
+	}
+
+	for (int i = 0; i < MAX_ITEM; ++i) {
+		if (room->GetItem(i) == nullptr) continue;
+
+		Item* it = room->GetItem(i);
+
+		if (i > MAX_ITEM / 2)
+		{
+			it->SetItemCode(ITEM_NUM_TRAP);
+		}
+		else
+		{
+			it->SetItemCode(ITEM_NUM_GUN);
+		}
+
+		it->SetState(ITEM_STATE::ST_SPAWNED);
+		it->SetPos(MapManager::GetInst().GetItemPos().at(i));
+
+	}
+
+	// 탈출 위치
+
+	for (int i = 0; i < 3; ++i)
+	{
+		room->SetEscapePos(i, MapManager::GetInst().GetEscapePos().at(i));
+	}
+
+	// 특별 탈출 위치
+
+	room->SetSpecialEscapePos(MapManager::GetInst().GetSpecialEscapePos().at(0));
+
+	sc_packet_game_start gsPck{
+		.size = sizeof(sc_packet_game_start),
+		.type = SC_PACKET_GAME_START
+	};
+
+	for (auto c_id : room->GetObjList())
+	{
+		if (auto session = SessionManager::GetInst().GetSession(c_id))
+		{
+			session->SendPacket(SC_PACKET_GAME_START, gsPck);
+		}
+		
+	}
+
+	for (auto c_id : room->GetObjList())
+	{
+		if (auto session = SessionManager::GetInst().GetSession(c_id))
+		{
+			SendObjInfo(c_id, c_id);	// 자기자신
+			for (auto other_id : room->GetObjList())
+			{
+				//if (false == MoveObjManager::GetInst()->IsPlayer(other_id))
+				//	continue;
+				if (c_id == other_id) continue;
+				SendObjInfo(c_id, other_id);
+			}
+		}
+	}
+
+	for (auto c_id : room->GetObjList())
+	{
+		if (auto session = SessionManager::GetInst().GetSession(c_id))
+		{
+			for (int i = 0; i < MAX_ITEM; ++i)
+			{
+				sc_packet_item_info ipck{
+					.size = sizeof(sc_packet_item_info),
+					.type = SC_PACKET_ITEM_INFO,
+					.id = room->GetItem(i)->GetID(),
+					.x = room->GetItem(i)->GetPosX(),
+					.y = room->GetItem(i)->GetPosY(),
+					.z = room->GetItem(i)->GetPosZ(),
+					.item_type = static_cast<char>(room->GetItem(i)->GetItemCode())
+				};
+
+				SendToSession(c_id, SC_PACKET_ITEM_INFO, ipck);
+			}
+		}
+	}
+
+	for (auto c_id : room->GetObjList())
+	{
+		if (auto session = SessionManager::GetInst().GetSession(c_id))
+		{
+			sc_packet_obj_info_end endPck{
+				.size = sizeof(sc_packet_obj_info_end),
+				.type = SC_PACKET_OBJ_INFO_END
+			};
+
+			SendToSession(c_id, SC_PACKET_OBJ_INFO_END, endPck);
+		}
+	}
+}
+
+void PacketManager::SendObjInfo(int c_id, int obj_id)
+{
+	auto obj = MoveObjManager::GetInst().GetMoveObj(obj_id);
+
+	sc_packet_obj_info pck{
+		.size = sizeof(sc_packet_obj_info),
+		.type = SC_PACKET_OBJ_INFO,
+		.id = obj_id,
+		.x = obj->GetPosX(),
+		.y = obj->GetPosY(),
+		.z = obj->GetPosZ(),
+		.start = true,
+		.object_type = static_cast<char>(obj->GetType()),
+	};
+
+	obj->SetPosZ(pck.z);
+
+	DEBUG_LOG("[" << c_id << "] Send Obj Info : " << pck.x << ", " << pck.y << ", " << pck.z);
+
+	SendToSession(c_id, SC_PACKET_OBJ_INFO, pck);
+}
+
+
 
 void PacketManager::ProcessGetItem(int sessionId, cs_packet_get_item* packet)
 {
@@ -412,23 +598,383 @@ void PacketManager::ProcessUseItem(int sessionId, cs_packet_use_item* packet)
 
 void PacketManager::ProcessLoadProgressing(int sessionId, cs_packet_load_progressing* packet)
 {
+	
+	auto player = MoveObjManager::GetInst().GetPlayer(sessionId);
 
+	if (player->GetRoomID() == -1) return;
+	Room* room = RoomManager::GetInst().GetRoom(player->GetRoomID());
+
+	player->state_lock.lock();
+	player->SetLoadProgressed(packet->progressed);
+	player->state_lock.unlock();
+
+	for (auto pl : room->GetObjList())
+	{
+		if (auto session = SessionManager::GetInst().GetSession(pl))
+		{
+			sc_packet_load_progress_percent pck{
+				.size = sizeof(sc_packet_load_progress_percent),
+				.type = SC_PACKET_LOAD_PROGRESS_PERCENT,
+				.id = sessionId,
+				.percent = packet->progressed
+			};
+
+			session->SendPacket(SC_PACKET_LOAD_PROGRESS_PERCENT, pck);
+		}
+	}
 }
 
 void PacketManager::ProcessLoadEnd(int sessionId, cs_packet_load_end* packet)
-{}
+{
+
+	auto player = MoveObjManager::GetInst().GetPlayer(sessionId);
+
+	if (player->GetRoomID() == -1) return;
+	Room* room = RoomManager::GetInst().GetRoom(player->GetRoomID());
+
+	if (player->GetState() == P_STATE::ST_INGAME)
+	{
+
+		player->state_lock.lock();
+		player->SetLoadProgressed(100);
+		player->state_lock.unlock();
+
+		for (auto pl : room->GetObjList())
+		{
+			if (pl == sessionId) continue;
+			if (auto session = SessionManager::GetInst().GetSession(pl))
+			{
+				sc_packet_load_end loadEndPck{
+					.size = sizeof(sc_packet_load_end),
+					.type = SC_PACKET_LOAD_END,
+					.id = sessionId
+				};
+
+				session->SendPacket(SC_PACKET_LOAD_END, loadEndPck);
+			}
+		}
+
+		// 모두 끝났는지 체크해보자
+
+		for (auto pl : room->GetObjList())
+		{
+			if (auto session = SessionManager::GetInst().GetSession(pl))
+			{
+
+				MoveObjManager::GetInst().GetPlayer(pl)->state_lock.lock();
+				if (MoveObjManager::GetInst().GetPlayer(pl)->GetLoadProgressed() != 100) {
+					MoveObjManager::GetInst().GetPlayer(pl)->state_lock.unlock();
+					return;
+				}
+				MoveObjManager::GetInst().GetPlayer(pl)->state_lock.unlock();
+			}
+
+		}
+
+	}
+
+	for (auto pl : room->GetObjList())
+	{
+		if (auto session = SessionManager::GetInst().GetSession(pl))
+		{
+			sc_packet_all_player_load_end allEndPck{
+				.size = sizeof(sc_packet_all_player_load_end),
+				.type = SC_PACKET_ALL_PLAYER_LOAD_END
+			};
+
+			session->SendPacket(SC_PACKET_ALL_PLAYER_LOAD_END, allEndPck);
+		}
+	}
+
+	room->SetRoundStartTime();
+
+	for (auto pl : room->GetObjList())
+	{
+		if (auto session = SessionManager::GetInst().GetSession(pl))
+		{
+			sc_packet_timer_start tsPck{
+				.size = sizeof(sc_packet_timer_start),
+				.type = SC_PACKET_TIMER_START,
+				.start_time = room->GetRoundStartTime()
+			};
+
+			session->SendPacket(SC_PACKET_TIMER_START, tsPck);
+		}
+	}
+
+	// 타이머 관련 나중에 하기.
+	/*
+	m_Timer->AddTimer(room->GetRoomID(), room->GetRoundStartTime() + 5s, EVENT_TYPE::EV_TIMER_START); // objID를 룸 넘버로 사용하면 될 것으로 보임.
+	m_Timer->AddTimer(room->GetRoomID(), room->GetRoundStartTime() + 65s, EVENT_TYPE::EV_OPEN_SAFE);
+	m_Timer->AddTimer(room->GetRoomID(), room->GetRoundStartTime() + 125s, EVENT_TYPE::EV_OPEN_ESCAPE_AREA);
+	m_Timer->AddTimer(room->GetRoomID(), room->GetRoundStartTime() + 185s, EVENT_TYPE::EV_OPEN_SPECIAL_ESCAPE_AREA);
+	*/
+
+	TimerManager::GetInst().Push(5000, [room]() {
+
+		for (int pl : room->GetObjList())
+		{
+			if (auto session = SessionManager::GetInst().GetSession(pl))
+			{
+				sc_packet_game_timer_start gtsPck{
+					.size = sizeof(sc_packet_game_timer_start),
+					.type = SC_PACKET_GAME_TIMER_START
+				};
+
+				session->SendPacket(SC_PACKET_GAME_TIMER_START, gtsPck);
+			}
+		}
+		});
+
+	TimerManager::GetInst().Push(65000, [room]() {
+
+		for (int pl : room->GetObjList())
+		{
+			if (auto session = SessionManager::GetInst().GetSession(pl))
+			{
+				sc_packet_open_safe osPck{
+					.size = sizeof(sc_packet_open_safe),
+					.type = SC_PACKET_OPEN_SAFE
+				};
+
+				session->SendPacket(SC_PACKET_OPEN_SAFE, osPck);
+			}
+		}
+		});
+
+	TimerManager::GetInst().Push(125000, [room]() {
+
+		room->SetIsEscapeActive(true);
+
+		for (int pl : room->GetObjList())
+		{
+			if (auto session = SessionManager::GetInst().GetSession(pl))
+			{
+				sc_packet_active_escape aePck{
+					.size = sizeof(sc_packet_active_escape),
+					.type = SC_PACKET_ACTIVE_ESCAPE
+				};
+
+				session->SendPacket(SC_PACKET_ACTIVE_ESCAPE, aePck);
+			}
+		}
+		});
+
+	TimerManager::GetInst().Push(185000, [room]() {
+
+		room->SetIsSpecialEscapeActive(true);
+		for (int pl : room->GetObjList())
+		{
+			if (auto session = SessionManager::GetInst().GetSession(pl))
+			{
+				sc_packet_active_special_escape asePck{
+					.size = sizeof(sc_packet_active_special_escape),
+					.type = SC_PACKET_ACTIVE_SPECIAL_ESCAPE
+				};
+
+				session->SendPacket(SC_PACKET_ACTIVE_SPECIAL_ESCAPE, asePck);
+			}
+		}
+		});
+}
 
 void PacketManager::ProcessEnterRoom(int sessionId, cs_packet_enter_room * packet)
-{}
+{
+
+	auto player = MoveObjManager::GetInst().GetPlayer(sessionId);
+
+	Room* room;
+
+	if (packet->room_id == -1)
+	{
+		auto newRoomNum = RoomManager::GetInst().GetEmptyRoom();
+		if (newRoomNum.has_value())
+		{
+			room = RoomManager::GetInst().GetRoom(newRoomNum.value());
+		}
+		else
+		{
+			return;
+		}
+	}
+	else
+	{
+		room = RoomManager::GetInst().GetRoom(packet->room_id);
+
+		if (room->GetState() == ROOM_STATE::RT_FREE) {
+
+			sc_packet_error pk{
+				.size = sizeof(sc_packet_error),
+				.type = SC_PACKET_ERROR,
+				.err_type = ERROR_ROOM_NOT_EXIST,
+				.err_val = -1
+			};
+
+			SendToSession(sessionId, SC_PACKET_ERROR, pk);
+		}
+		else if (room->GetState() == ROOM_STATE::RT_INGAME) {
+
+			sc_packet_error pk{
+				.size = sizeof(sc_packet_error),
+				.type = SC_PACKET_ERROR,
+				.err_type = ERROR_GAME_IN_PROGRESS,
+				.err_val = -1
+			};
+
+			SendToSession(sessionId, SC_PACKET_ERROR, pk);
+		}
+		else if (room->GetNumberOfPlayer() >= USER_NUM)	{
+
+			sc_packet_error pk{
+				.size = sizeof(sc_packet_error),
+				.type = SC_PACKET_ERROR,
+				.err_type = ERROR_ROOM_IS_FULL,
+				.err_val = -1
+			};
+
+			SendToSession(sessionId, SC_PACKET_ERROR, pk);
+		}
+	}
+
+	player->state_lock.lock();
+	player->SetRoomID(room->GetRoomID());
+	player->state_lock.unlock();
+
+	room->m_state_lock.lock();
+	room->EnterRoom(sessionId);
+	room->m_state_lock.unlock();
+
+	sc_packet_enter_room_ok enterRoomOk{
+		.size = sizeof(sc_packet_enter_room_ok),
+		.type = SC_PACKET_ENTER_ROOM_OK,
+		.room_id = room->GetRoomID()
+	};
+
+	SendToSession(sessionId, SC_PACKET_ENTER_ROOM_OK, enterRoomOk);
+
+	std::vector<int> broadcast_targets;
+
+	broadcast_targets.assign(room->GetObjList().begin(), room->GetObjList().end());
+
+	sc_packet_enter_room enterRoom{
+		.size = sizeof(sc_packet_enter_room),
+		.type = SC_PACKET_ENTER_ROOM,
+		.id = sessionId,
+		.userName = "test"
+	};
+
+	for (auto pl : broadcast_targets) {
+		if (auto session = SessionManager::GetInst().GetSession(pl)) {
+			session->SendPacket(SC_PACKET_ENTER_ROOM, enterRoom);
+		}
+	}
+
+}
 
 void PacketManager::ProcessLeaveRoom(int sessionId, cs_packet_leave_room * packet)
-{}
+{
+	auto player = MoveObjManager::GetInst().GetPlayer(sessionId);
+
+	if (player->GetRoomID() == -1) return;
+
+	Room* room = RoomManager::GetInst().GetRoom(player->GetRoomID());
+
+	if (!room->GetObjList().contains(sessionId)) return;
+
+	player->state_lock.lock();
+	player->SetRoomID(-1);
+	player->SetState(P_STATE::ST_LOGIN);
+	player->state_lock.unlock();
+
+	room->LeaveRoom(sessionId);
+
+	sc_packet_leave_room leaveRoomPck{
+		.size = sizeof(sc_packet_leave_room),
+		.type = SC_PACKET_LEAVE_ROOM,
+		.id = sessionId,
+		.master_id = room->GetRoomMasterId()
+	};
+
+	if (room->GetState() != ROOM_STATE::RT_FREE)
+	{
+		for (auto pl : room->GetObjList())
+		{
+			if (auto session = SessionManager::GetInst().GetSession(pl)) {
+				session->SendPacket(SC_PACKET_LEAVE_ROOM, leaveRoomPck);
+			}
+		}
+	}
+}
 
 void PacketManager::ProcessPlayerReady(int sessionId, cs_packet_player_ready * packet)
-{}
+{
+	auto player = MoveObjManager::GetInst().GetPlayer(sessionId);
+
+	Room* room = RoomManager::GetInst().GetRoom(player->GetRoomID());
+
+	DEBUG_LOG("[" << sessionId << "]" << "Player Ready is " << room->IsPlayerReady(sessionId) << ". This Process is PlayerReady.");
+
+	if (false == room->IsPlayerReady(sessionId)) {
+		
+		room->m_state_lock.lock();
+		room->PlayerReady(sessionId);
+		room->m_state_lock.unlock();
+
+		player->state_lock.lock();
+		player->SetState(P_STATE::ST_INROOMREDDY);
+		player->state_lock.unlock();
+	}
+
+	sc_packet_player_ready readyPck{
+		.size = sizeof(sc_packet_player_ready),
+		.type = SC_PACKET_PLAYER_READY,
+		.id = sessionId
+	};
+
+
+	for (auto pl : room->GetObjList())
+	{
+		if (auto session = SessionManager::GetInst().GetSession(pl)) {
+			session->SendPacket(SC_PACKET_PLAYER_READY, readyPck);
+		}
+	}
+	
+}
 
 void PacketManager::ProcessPlayerCancleReady(int sessionId, cs_packet_player_cancle_ready * packet)
-{}
+{
+
+	auto player = MoveObjManager::GetInst().GetPlayer(sessionId);
+
+	Room* room = RoomManager::GetInst().GetRoom(player->GetRoomID());
+
+	DEBUG_LOG("[" << sessionId << "]" << "Player Ready is " << room->IsPlayerReady(sessionId) << ". This Process is PlayerCancleReady.");
+
+	if (room->IsPlayerReady(sessionId)) {
+		room->m_state_lock.lock();
+		room->PlayerCancleReady(sessionId);
+		room->m_state_lock.unlock();
+
+		player->state_lock.lock();
+		player->SetState(P_STATE::ST_INROOM);
+		player->state_lock.unlock();
+	}
+
+	sc_packet_player_cancle_ready readyPck{
+		.size = sizeof(sc_packet_player_cancle_ready),
+		.type = SC_PACKET_PLAYER_CANCLE_READY,
+		.id = sessionId,
+	};
+
+
+	for (auto pl : room->GetObjList())
+	{
+		if (auto session = SessionManager::GetInst().GetSession(pl)) {
+			session->SendPacket(SC_PACKET_PLAYER_CANCLE_READY, readyPck);
+		}
+	}
+
+}
 
 void PacketManager::ProcessLogOut(int sessionId, cs_packet_player_log_out * packet)
 {}
@@ -448,7 +994,7 @@ void PacketManager::ProcessRoomsDataInLobby(int sessionId, cs_packet_request_roo
 			.isInGame = room->GetState() == ROOM_STATE::RT_INGAME ? true : false
 		};
 
-		SessionManager::GetInst().GetSession(sessionId)->SendPacket(SC_PACKET_ROOMS_DATA_FOR_LOBBY, dPacket);
+		SendToSession(sessionId, SC_PACKET_ROOMS_DATA_FOR_LOBBY, dPacket);
 	}
 
 	sc_packet_rooms_data_for_lobby_end endPacket{
@@ -456,11 +1002,50 @@ void PacketManager::ProcessRoomsDataInLobby(int sessionId, cs_packet_request_roo
 		.type = SC_PACKET_ROOMS_DATA_FOR_LOBBY_END
 	};
 
-	SessionManager::GetInst().GetSession(sessionId)->SendPacket(SC_PACKET_ROOMS_DATA_FOR_LOBBY_END, endPacket);
+	SendToSession(sessionId, SC_PACKET_ROOMS_DATA_FOR_LOBBY_END, endPacket);
 }
 
 void PacketManager::ProcessRoomsDataInRoom(int sessionId, cs_packet_request_rooms_data_for_room * packet)
-{}
+{
+
+	auto player = MoveObjManager::GetInst().GetPlayer(sessionId);
+
+	Room* room = RoomManager::GetInst().GetRoom(player->GetRoomID());
+
+	std::vector<int> broadcast_targets;
+	broadcast_targets.assign(room->GetObjList().begin(), room->GetObjList().end());
+
+	for (auto pl : broadcast_targets) {
+
+		if (auto session = SessionManager::GetInst().GetSession(pl)) {
+			sc_packet_rooms_data_for_room data{
+				.size = sizeof(sc_packet_rooms_data_for_room),
+				.type = SC_PACKET_ROOMS_DATA_FOR_ROOM,
+				.userId = MoveObjManager::GetInst().GetPlayer(session->GetId())->GetID(),
+				.isReady = MoveObjManager::GetInst().GetPlayer(session->GetId())->GetIsReady(),
+			};
+
+			char* name = MoveObjManager::GetInst().GetPlayer(session->GetId())->GetName();
+
+			for (int i = 0; i < MAX_NAME_SIZE; ++i)
+			{
+				data.userName[i] = name[i];
+				if (name[i] == '\0') break; 
+			}
+
+			session->SendPacket(SC_PACKET_ROOMS_DATA_FOR_ROOM, data);
+		}
+	}
+
+	sc_packet_rooms_data_for_room_end endData{
+		.size = sizeof(sc_packet_rooms_data_for_room_end),
+		.type = SC_PACKET_ROOMS_DATA_FOR_ROOM_END,
+		.master_id = room->GetRoomMasterId()
+	};
+
+	SendToSession(sessionId, SC_PACKET_ROOMS_DATA_FOR_ROOM_END, endData);
+
+}
 
 void PacketManager::ProcessDamageCheat(int sessionId)
 {}

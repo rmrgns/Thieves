@@ -1,4 +1,5 @@
 #include "MapManager.h"
+
 #include <fstream>
 #include <string>
 #include <algorithm>
@@ -11,7 +12,10 @@ namespace {
 	void LoadVector3Data(const std::string& filePath, std::vector<Vector3>& outList)
 	{
 		std::ifstream in{ filePath };
-		if (!in.is_open()) return; // 파일 없으면 죽기
+		if (!in.is_open()) {
+
+			return; // 파일 없으면 죽기
+		}
 
 		std::vector<std::string> words{ std::istream_iterator<std::string>{in}, {} };
 
@@ -42,7 +46,7 @@ void MapManager::LoadSpawnArea() { LoadVector3Data(".\\PoliceSpawn.txt", PoliceS
 void MapManager::LoadItemSpawnPoint() { LoadVector3Data(".\\ItemBoxData.txt", ItemPos); }
 void MapManager::LoadEscapePoint() { LoadVector3Data(".\\ESCAPE_AREA.txt", EscapePos); }
 void MapManager::LoadSpecialEscapePoint() { LoadVector3Data(".\\SPECIAL_ESCAPE_AREA.txt", SpecialEscapePos); }
-void MapManager::LoadPlayerSpawnArea() { LoadVector3Data(".\\PLAYER_SPAWN_AREA.txt", PlayerSpawnPos); }
+void MapManager::LoadPlayerSpawnArea() { LoadVector3Data("PLAYER_SPAWN_AREA.txt", PlayerSpawnPos); }
 
 
 void MapManager::LoadMap()

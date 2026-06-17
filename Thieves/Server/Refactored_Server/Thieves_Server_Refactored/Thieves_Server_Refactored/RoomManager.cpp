@@ -33,6 +33,6 @@ std::optional<int> RoomManager::GetEmptyRoom()
 		}
 	}
 
-	std::cout << "모든 방이 꽉 찼습니다!" << std::endl;
+	std::cout << "All Room Full." << std::endl;
 	return std::nullopt;
 }

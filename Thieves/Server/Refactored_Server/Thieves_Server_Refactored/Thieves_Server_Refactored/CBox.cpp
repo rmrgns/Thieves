@@ -181,7 +181,7 @@ bool CBox::BoxBoxIntersection2(const CBox& box0)
 		return false;
 	}
 
-	// 모든 축과 외적 및 내적 검사를 통과한 경우, 두 상자는 교차합니다.
+	// 모든 축과 외적 및 내적 검사를 통과한 경우, 두 상자는 교차
 	return true;
 }
 
@@ -204,7 +204,7 @@ bool CBox::Intersection2(const CBox& playerbox, int& collisionDirection)
 		else {
 			float collisionDepthZ = sumZ - dz; // z 충돌 면의 깊이
 
-			// 충돌 면의 깊이를 이용하여 충돌 방향과 이동 벡터를 설정합니다.
+			// 충돌 면의 깊이를 이용하여 충돌 방향과 이동 벡터를 설정
 			if (collisionDepthX < collisionDepthZ) {
 				// x 축에서 충돌한 경우
 				collisionDirection = 0; // 충돌 방향 설정 (적절한 값으로 변경)

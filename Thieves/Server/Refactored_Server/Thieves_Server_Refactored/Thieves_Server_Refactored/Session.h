@@ -29,7 +29,7 @@ public:
 
 		this->SendRaw(&packetData, sizeof(T));
 
-		DEBUG_LOG("[" << packetId << " Packet ] Send \n");
+		DEBUG_LOG("[" << (int)packetId << " Packet ] Send \n");
 	}
 
 	template <typename T>

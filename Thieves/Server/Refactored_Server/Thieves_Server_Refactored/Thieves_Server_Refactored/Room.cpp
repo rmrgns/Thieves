@@ -84,7 +84,6 @@ void Room::LeaveRoom(int c_id)
 		m_obj_list.erase(c_id);
 	}
 
-	// [수정된 버그 포인트 1] NPC가 아니라, 실제 플레이어 수만 세어서 방이 비었는지 확인해요!
 	bool isPlayerEmpty = (GetNumberOfPlayer() == 0);
 
 	if (isPlayerEmpty)
@@ -103,7 +102,6 @@ void Room::LeaveRoom(int c_id)
 	}
 	else
 	{
-		// [수정된 버그 포인트 2] 방장이 나갔다면, 남은 오브젝트 중 '플레이어'를 찾아서 방장을 넘겨주어요!
 		if (m_room_master_id == c_id)
 		{
 			m_room_master_id = -1; // 임시 초기화
